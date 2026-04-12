@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>治安管理处罚法学习 - 辅警备考</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: linear-gradient(135deg, #e8f6f3 0%, #d5e5e3 100%); min-height: 100vh; color: #333; }
+        .progress-bar { position: fixed; top: 0; left: 0; width: 100%; height: 4px; background: rgba(255,255,255,0.3); z-index: 1000; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #1abc9c, #16a085); width: 0%; transition: width 0.3s ease; }
+        .top-nav { position: fixed; top: 4px; left: 0; right: 0; background: rgba(26, 188, 156, 0.95); backdrop-filter: blur(10px); padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 999; border-bottom: 1px solid rgba(255,255,255,0.2); }
+        .logo { color: #fff; font-size: 18px; font-weight: bold; display: flex; align-items: center; gap: 8px; }
+        .score-display { background: rgba(255,255,255,0.2); color: #fff; padding: 8px 16px; border-radius: 20px; font-size: 14px; }
+        .sidebar { position: fixed; left: 0; top: 50px; width: 260px; height: calc(100vh - 50px); background: rgba(255,255,255,0.98); overflow-y: auto; padding: 20px 0; box-shadow: 2px 0 10px rgba(0,0,0,0.1); z-index: 998; }
+        .sidebar-title { color: #16a085; padding: 0 20px 15px; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid #eee; margin-bottom: 15px; }
+        .nav-item { padding: 12px 20px; color: #666; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 10px; font-size: 14px; border-left: 3px solid transparent; text-decoration: none; }
+        .nav-item:hover { background: rgba(26, 188, 156, 0.1); color: #1abc9c; }
+        .nav-item.active { background: rgba(26, 188, 156, 0.15); color: #16a085; border-left-color: #1abc9c; font-weight: bold; }
+        .main-content { margin-left: 260px; padding: 70px 30px 30px; max-width: 900px; }
+        .section-header { text-align: center; margin-bottom: 40px; }
+        .section-header h1 { font-size: 38px; color: #16a085; margin-bottom: 10px; text-shadow: 0 0 30px rgba(22, 160, 133, 0.2); }
+        .section-header p { color: #666; font-size: 16px; }
+        .knowledge-card { background: #fff; border-radius: 20px; padding: 30px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); scroll-margin-top: 80px; }
+        .knowledge-card h2 { font-size: 22px; color: #16a085; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; border-bottom: 2px solid #1abc9c; padding-bottom: 15px; }
+        .knowledge-card h3 { font-size: 17px; color: #333; margin: 20px 0 10px; padding-left: 15px; border-left: 4px solid #1abc9c; }
+        .knowledge-content p { line-height: 1.9; color: #555; margin-bottom: 15px; font-size: 15px; }
+        .highlight-red { color: #e74c3c; font-weight: bold; background: rgba(231, 76, 60, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .highlight-blue { color: #3498db; font-weight: bold; background: rgba(52, 152, 219, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .highlight-green { color: #27ae60; font-weight: bold; background: rgba(39, 174, 96, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .highlight-orange { color: #e67e22; font-weight: bold; background: rgba(230, 126, 34, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .highlight-purple { color: #9b59b6; font-weight: bold; background: rgba(155, 89, 182, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .example { background: linear-gradient(135deg, #fff9e6, #fff3cd); border-left: 4px solid #f39c12; padding: 15px 20px; border-radius: 0 10px 10px 0; margin: 15px 0; }
+        .example p { color: #856404; margin: 8px 0; font-size: 14px; }
+        .memory-tip { background: linear-gradient(135deg, #e8f8f5, #d1f2eb); border-left: 4px solid #1abc9c; padding: 15px 20px; border-radius: 0 10px 10px 0; margin: 15px 0; }
+        .memory-tip p { color: #16a085; margin: 0; font-size: 14px; }
+        .warning { background: linear-gradient(135deg, #fdeaea, #f8d7da); border-left: 4px solid #e74c3c; padding: 15px 20px; border-radius: 0 10px 10px 0; margin: 15px 0; }
+        .warning p { color: #c0392b; margin: 0; font-size: 14px; }
+        .quiz-container { margin-top: 25px; }
+        .quiz-card { background: #f8f9fa; border-radius: 15px; padding: 20px; margin-bottom: 20px; border: 1px solid #e9ecef; }
+        .question { font-size: 15px; color: #333; margin-bottom: 15px; font-weight: 500; line-height: 1.6; }
+        .question-num { display: inline-block; background: #1abc9c; color: #fff; width: 26px; height: 26px; border-radius: 50%; text-align: center; line-height: 26px; margin-right: 10px; font-size: 13px; }
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .option-btn { padding: 12px 18px; background: #fff; border: 2px solid #e9ecef; border-radius: 10px; cursor: pointer; text-align: left; font-size: 14px; color: #555; transition: all 0.3s ease; }
+        .option-btn:hover { border-color: #1abc9c; background: rgba(26, 188, 156, 0.05); }
+        .option-letter { display: inline-block; width: 24px; height: 24px; background: #e9ecef; border-radius: 50%; text-align: center; line-height: 24px; margin-right: 10px; font-weight: bold; color: #1abc9c; font-size: 13px; }
+        .option-btn.correct { background: #d4edda; border-color: #28a745; }
+        .option-btn.correct .option-letter { background: #28a745; color: #fff; }
+        .option-btn.wrong { background: #f8d7da; border-color: #dc3545; }
+        .option-btn.wrong .option-letter { background: #dc3545; color: #fff; }
+        .option-btn.disabled { cursor: not-allowed; opacity: 0.7; }
+        .explanation { background: linear-gradient(135deg, #eaf2f8, #d4e6f1); border-radius: 10px; padding: 15px 20px; margin-top: 15px; display: none; line-height: 1.8; font-size: 14px; }
+        .explanation .result { font-size: 17px; font-weight: bold; margin-bottom: 10px; }
+        .explanation .result.correct { color: #27ae60; }
+        .explanation .result.wrong { color: #e74c3c; }
+        .framework-section { background: #fff; border-radius: 20px; padding: 30px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
+        .framework-section h2 { font-size: 26px; color: #16a085; margin-bottom: 25px; text-align: center; border-bottom: 2px solid #1abc9c; padding-bottom: 15px; }
+        .framework-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .framework-card { background: linear-gradient(135deg, #f8f9fa, #ecf0f1); border-radius: 15px; padding: 18px; border-left: 4px solid #1abc9c; }
+        .framework-card h3 { font-size: 16px; color: #16a085; margin-bottom: 10px; }
+        .framework-card p { color: #666; font-size: 13px; margin: 5px 0; line-height: 1.6; }
+        .practice-section { background: #fff; border-radius: 20px; padding: 30px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
+        .practice-section h2 { font-size: 26px; color: #16a085; margin-bottom: 25px; text-align: center; border-bottom: 2px solid #16a085; padding-bottom: 15px; }
+        @media (max-width: 768px) { .sidebar { width: 100%; height: auto; position: relative; margin-top: 50px; } .main-content { margin-left: 0; } }
+    </style>
+</head>
+<body>
+    <div class="progress-bar"><div class="progress-fill" id="mainProgress"></div></div>
+    <nav class="top-nav">
+        <div class="logo">🏛️ 治安管理处罚法学习</div>
+        <div class="score-display" id="totalScore">已答: 0/0</div>
+    </nav>
+    <aside class="sidebar">
+        <div class="sidebar-title">📖 目录导航</div>
+        <a href="#module1" class="nav-item active" onclick="scrollToSection(this, event)">📌 模块1: 处罚种类</a>
+        <a href="#module2" class="nav-item" onclick="scrollToSection(this, event)">🤝 模块2: 治安调解</a>
+        <a href="#module3" class="nav-item" onclick="scrollToSection(this, event)">⏰ 模块3: 追诉时效</a>
+        <a href="#module4" class="nav-item" onclick="scrollToSection(this, event)">👶 模块4: 未成年人</a>
+        <a href="#module5" class="nav-item" onclick="scrollToSection(this, event)">🌍 模块5: 外国人处罚</a>
+        <a href="#module6" class="nav-item" onclick="scrollToSection(this, event)">📅 模块6: 拘留合并</a>
+        <a href="#module7" class="nav-item" onclick="scrollToSection(this, event)">⚖️ 模块7: 一事不再罚</a>
+        <a href="#module8" class="nav-item" onclick="scrollToSection(this, event)">🎧 模块8: 听证程序</a>
+        <a href="#module9" class="nav-item" onclick="scrollToSection(this, event)">⚡ 模块9: 简易程序</a>
+        <a href="#module10" class="nav-item" onclick="scrollToSection(this, event)">🏢 模块10: 派出所权限</a>
+        <a href="#framework" class="nav-item" onclick="scrollToSection(this, event)">📋 知识框架总览</a>
+        <a href="#practice" class="nav-item" onclick="scrollToSection(this, event)">📝 练习专区</a>
+    </aside>
+    <main class="main-content">
+        <div class="section-header">
+            <h1>🏛️ 治安管理处罚法</h1>
+            <p>系统学习治安管理处罚法，轻松应对辅警考试</p>
+        </div>
+        
+        <section id="module1" class="knowledge-card">
+            <h2>📌 模块1: 治安管理处罚的种类</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">核心概念</span>：治安管理处罚就是公安机关对违反治安管理的人进行的一种"惩罚"，目的是维护社会秩序。</p>
+                
+                <h3>📌 五种处罚种类（重点！）</h3>
+                <p>1. <span class="highlight-blue">警告</span>：最轻的处罚，就是"口头批评教育"，说你做错了，下次别这样了。</p>
+                <p>2. <span class="highlight-blue">罚款</span>：让你交钱，金额从几十到几千不等。</p>
+                <p>3. <span class="highlight-blue">行政拘留</span>：把你关起来，<span class="highlight-red">最长15天</span>。这是最严厉的处罚！</p>
+                <p>4. <span class="highlight-blue">吊销公安机关发放的许可证</span>：比如吊销你的驾驶证、营业执照等。</p>
+                <p>5. <span class="highlight-blue">限期出境/驱逐出境</span>：专门针对外国人的，让他们离开中国。</p>
+                
+                <div class="example">
+                    <p><strong>🌰 举例：</strong>张三在地铁站摆摊卖早餐，被城管抓到。城管先给警告，让他走。张三不听继续摆，城管没收了他的摆摊工具（吊销许可证）。张三还闹事打人，被行政拘留5天。</p>
+                    <p><strong>🔍 为什么这样举例：</strong>这个例子展示了三种处罚的递进关系：警告→吊销许可证→行政拘留。说明处罚是从轻到重的。</p>
+                </div>
+                
+                <p class="memory-tip"><strong>💡 <span class='highlight-purple'>小白记忆口诀：</span></strong>治安处罚五种：警告罚款拘留证，外国人要赶出境！</p>
+                
+                <p class="warning">⚠️ <strong>易错点：</strong>治安管理处罚只能由公安机关做出！其他部门（如城管）只能警告和罚款500元以下，不能拘留！</p>
+            </div>
+            <div id="quiz-module1" class="quiz-container"></div>
+        </section>
+        
+        <section id="module2" class="knowledge-card">
+            <h2>🤝 模块2: 治安调解</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">核心概念</span>：治安调解就是让双方自己商量解决，不用处罚。前提是大家自愿，不能强迫。</p>
+                
+                <h3>📌 可以调解的情况（重点！）</h3>
+                <p>因<span class="highlight-blue">民间纠纷</span>引起的：</p>
+                <p>• 打架斗殴（但不能太严重，没达到犯罪程度）</p>
+                <p>• 损毁他人财物（把别人东西弄坏了）</p>
+                <p>• 侮辱、诽谤等</p>
+                <p><span class="highlight-green">关键点：情节较轻的，可以调解！</span></p>
+                
+                <h3>📌 调解成功的结果</h3>
+                <p>双方达成协议，<span class="highlight-blue">签了调解书</span>，公安<span class="highlight-red">不予处罚</span>！</p>
+                
+                <h3>📌 调解失败/反悔的后果</h3>
+                <p>如果达成协议后<span class="highlight-orange">不履行</span>，公安还是要处罚！而且民事赔偿要去法院起诉，不能行政复议！</p>
+                
+                <div class="example">
+                    <p><strong>🌰 举例：</strong>邻居李四把王五的电动车刮花了，两人吵起来，王五打了李四一巴掌。经鉴定只是轻微伤（没到轻伤，不构成犯罪）。警察说："你们商量一下怎么赔，不行再调解。"最后李四赔了200元维修费，双方和解，公安不予处罚。</p>
+                    <p><strong>🔍 为什么这样举例：</strong>因为这是民间纠纷（邻居矛盾）引起的损毁财物和轻微打架，情节较轻，所以可以调解。如果打成了轻伤，就要负刑事责任，不能调解了。</p>
+                </div>
+                
+                <p class="memory-tip"><strong>💡 <span class='highlight-purple'>小白记忆口诀：</span></strong>民间纠纷打架损物，情节较轻可调解，调解成功不处罚，调解失败要处罚！</p>
+                
+                <p class="warning">⚠️ <strong>易错点：</strong>调解是自愿的！任何一方不愿意就不能调解。而且调解后不能行政复议或诉讼！</p>
+            </div>
+            <div id="quiz-module2" class="quiz-container"></div>
+        </section>
+        
+        <section id="module3" class="knowledge-card">
+            <h2>⏰ 模块3: 追诉时效</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">核心概念</span>：追诉时效就是"过期不候"！违法行为发生后，如果超过一定时间没被发现，就不能再处罚了。</p>
+                
+                <h3>📌 治安管理的追诉时效（重点！）</h3>
+                <p>违反治安管理行为在<span class="highlight-blue">6个月</span>内没有被公安机关发现的，<span class="highlight-red">不再处罚</span>！</p>
+                
+                <h3>📌 6个月怎么算？</h3>
+                <p>• 从<span class="highlight-blue">违法行为发生之日</span>起算</p>
+                <p>• 如果违法行为一直持续（如持续卖假货），从<span class="highlight-blue">行为结束之日</span>起算</p>
+                
+                <div class="example">
+                    <p><strong>🌰 举例：</strong>2023年1月1日，张三在小区里偷了一辆自行车。车主没发现，过了6个月张三也没再偷。到2023年7月2日车主才发现报警，这时已经超过6个月，公安机关<span class="highlight-red">不能再处罚张三</span>了！</p>
+                    <p><strong>🔍 为什么这样举例：</strong>关键看"发现"的时间。违法行为发生了，但如果没人知道、没被公安机关发现，过了6个月就"过期"了。注意：是6个月，不是6年！</p>
+                </div>
+                
+                <p class="memory-tip"><strong>💡 <span class='highlight-purple'>小白记忆口诀：</span></strong>治安追诉6个月，过期不候真要命！违法行为发生时算，持续行为结束时算！</p>
+                
+                <p class="warning">⚠️ <strong>易错点：</strong>6个月内"被发现"是关键！如果第5个月才发现，那还能处罚。不是从发现开始算6个月！</p>
+            </div>
+            <div id="quiz-module3" class="quiz-container"></div>
+        </section>
+        
+        <section id="module4" class="knowledge-card">
+            <h2>👶 模块4: 未成年人处罚规则</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">核心概念</span>：法律对未成年人和特殊人群有"特殊照顾"，有些情况下即使违法也不执行拘留。</p>
+                
+                <h3>📌 不执行拘留的四种情况（重点！）</h3>
+                <p>1. <span class="highlight-blue">已满14周岁不满16周岁</span>：就算要拘留，也不执行！</p>
+                <p>2. <span class="highlight-blue">已满16周岁不满18周岁，初次违反治安管理</span>：第一次违法，拘留不执行！</p>
+                <p>3. <span class="highlight-blue">70周岁以上</span>：老人不执行拘留！</p>
+                <p>4. <span class="highlight-blue">怀孕或哺乳自己不满一周岁婴儿</span>的妇女</p>
+                
+                <div class="example">
+                    <p><strong>🌰 举例：</strong>17岁的小明（第一次违法）参与打架，按规定要拘留10天，但因为他是16-18岁且初次违法，<span class="highlight-red">不执行拘留</span>。而15岁的小刚同样打架，因为年龄不满16岁，也<span class="highlight-red">不执行拘留</span>。</p>
+                    <p><strong>🔍 为什么这样举例：</strong>两个都是未成年人不执行拘留，但原因不同：小刚是因为年龄太小（14-16岁），小明是因为初次违法（16-18岁+初次）。注意：如果是第二次违法，16-18岁也要执行拘留！</p>
+                </div>
+                
+                <p class="memory-tip"><strong>💡 <span class='highlight-purple'>小白记忆口诀：</span></strong>不执行拘留：14-16绝对不，16-18初次不，老人70不，孕妇哺乳不！</p>
+                
+                <p class="warning">⚠️ <strong>易错点：</strong>是"不执行拘留"，不是"不处罚"！只是不把人关起来，该警告罚款还是有的。而且16-18岁必须是"初次"！</p>
+            </div>
+            <div id="quiz-module4" class="quiz-container"></div>
+        </section>
+        
+        <section id="module5" class="knowledge-card">
+            <h2>🌍 模块5: 外国人附加处罚</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">核心概念</span>：外国人在中国违反治安管理，除了正常处罚外，还可能被"赶出去"。</p>
+                
+                <h3>📌 两种特殊处罚（重点！）</h3>
+                <p>1. <span class="highlight-blue">限期出境</span>：给你一个期限（比如10天），在这个期限内你自己离开中国。</p>
+                <p>2. <span class="highlight-blue">驱逐出境</span>：强制把你送出国，<span class="highlight-red">比限期出境更严厉</span>。通常用于严重的违法犯罪。</p>
+                
+                <h3>📌 谁可以决定？</h3>
+                <p>由<span class="highlight-red">公安部</span>决定。普通警察没有这个权力！</p>
+                
+                <div class="example">
+                    <p><strong>🌰 举例：</strong>美国公民Jack在中国签证过期后还非法居留，还打架斗殴。公安机关对他罚款500元，同时公安部决定对他<span class="highlight-red">限期出境</span>，限10日内离开中国。如果Jack之前就有多次违法记录，可能直接被<span class="highlight-red">驱逐出境</span>，这辈子都难再进中国了。</p>
+                    <p><strong>🔍 为什么这样举例：</strong>签证过期是非法居留，打架是治安违法，都适用治安管理处罚法。限期出境vs驱逐出境的区别：限期给机会自己走，驱逐是强制赶走。屡教不改的用驱逐！</p>
+                </div>
+                
+                <p class="memory-tip"><strong>💡 <span class='highlight-purple'>小白记忆口诀：</span></strong>外国人违法可驱逐，限期出境让你走，强制驱除强制走，公安部才有权！</p>
+                
+                <p class="warning">⚠️ <strong>易错点：</strong>限期出境和驱逐出境是<span class="highlight-orange">附加处罚</span>，不是独立处罚！前面必须有罚款、拘留等主处罚。而且只有公安部能决定！</p>
+            </div>
+            <div id="quiz-module5" class="quiz-container"></div>
+        </section>
+        
+        <section id="module6" class="knowledge-card">
+            <h2>📅 模块6: 行政拘留合并执行</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">核心概念</span>：如果一个人同时犯了多个违法行为，公安机关可以分别处罚后合并执行，但有最长期限限制。</p>
+                
+                <h3>📌 合并执行规则（重点！）</h3>
+                <p>有两种以上违反治安管理行为的，<span class="highlight-blue">分别决定，合并执行</span>。</p>
+                <p>行政拘留合并执行最长不超过<span class="highlight-red">20日</span>！</p>
+                
+                <h3>📌 单独拘留的期限</h3>
+                <p>• 5日以下</p>
+                <p>• 5日以上10日以下</p>
+                <p>• 10日以上15日以下</p>
+                <p>三个档次，单独最多<span class="highlight-blue">15天</span>！</p>
+                
+                <div class="example">
+                    <p><strong>🌰 举例：</strong>张三偷东西（拘留5天）后逃跑（拘留10天）又打架（拘留5天），三个行为分别决定，合并执行。按理是5+10+5=20天，但因为有上限，最多<span class="highlight-red">只能关20天</span>。</p>
+                    <p><strong>🔍 为什么这样举例：</strong>张三犯了三个违法行为，每个都有对应的拘留天数。分别决定后合并执行，但加起来不能超过20天上限。这叫"数过并罚"，类似刑法里的"数罪并罚"。</p>
+                </div>
+                
+                <p class="memory-tip"><strong>💡 <span class='highlight-purple'>小白记忆口诀：</span></strong>拘留合并分别算，单独最多15天，合并最多20天！</p>
+                
+                <p class="warning">⚠️ <strong>易错点：</strong>20日是<span class="highlight-orange">上限</span>！就算你犯了10个违法行为，加起来也最多关20天。而且这是<span class="highlight-orange">行政拘留</span>的上限，不是罚款！罚款没有20万的说法！</p>
+            </div>
+            <div id="quiz-module6" class="quiz-container"></div>
+        </section>
+        
+        <section id="module7" class="knowledge-card">
+            <h2>⚖️ 模块7: 一事不再罚原则</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">核心概念</span>：对同一个违法行为，<span class="highlight-red">不能罚两次以上</span>！特别是不能罚两次以上<span class="highlight-blue">罚款</span>！</p>
+                
+                <h3>📌 一事不再罚的含义（重点！）</h3>
+                <p>1. <span class="highlight-blue">同一个违法行为</span>，不能被两个机关各罚一次</p>
+                <p>2. <span class="highlight-blue">罚款只能罚一次</span>！同一个违法行为，不能被罚两次款</p>
+                <p>3. 如果违反多个法律，按<span class="highlight-red">罚款数额最高的</span>规定处罚</p>
+                
+                <h3>📌 什么情况可以再罚？</h3>
+                <p>• 不同的违法行为可以分别处罚</p>
+                <p>• 不同种类的处罚可以并用（如罚款+拘留）</p>
+                
+                <div class="example">
+                    <p><strong>🌰 举例：</strong>某企业排放污水，违反了水污染防治法（要罚50万）和大气污染防治法（要罚10万）。因为是同一个行为（排污），按一事不再罚原则，<span class="highlight-red">只能罚一次，按最高的50万罚</span>。</p>
+                    <p><strong>🔍 为什么这样举例：</strong>企业虽然同时违反了两个法律，但只有一个违法行为（排污）。如果按每个法律各罚一次，就是"一罪两罚"，不合理。所以按罚款最高的那个来！这也叫"择一从重"原则。</p>
+                </div>
+                
+                <p class="memory-tip"><strong>💡 <span class='highlight-purple'>小白记忆口诀：</span></strong>一事不再罚：同个行为不两罚，罚款只能罚一次，多个法条按高的！</p>
+                
+                <p class="warning">⚠️ <strong>易错点：</strong>一事不再罚原则针对的是<span class="highlight-orange">"同一个违法行为"</span>！如果张三偷东西又打人，那是两个违法行为，可以分别处罚！</p>
+            </div>
+            <div id="quiz-module7" class="quiz-container"></div>
+        </section>
+        
+        <section id="module8" class="knowledge-card">
+            <h2>🎧 模块8: 听证程序</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">核心概念</span>：听证就是让你"说说话"，在做出重大处罚前，听听你的意见。这是一种权利，不是义务。</p>
+                
+                <h3>📌 必须告知听证的情况（重点！）</h3>
+                <p>公安机关做出以下处罚决定前，<span class="highlight-red">应当告知</span>当事人有权要求听证：</p>
+                <p>1. <span class="highlight-blue">吊销许可证</span>（比如驾驶证、营业执照）</p>
+                <p>2. <span class="highlight-blue">2000元以上罚款</span></p>
+                
+                <h3>📌 听证的特点</h3>
+                <p>• 当事人<span class="highlight-green">可以要求听证</span>，不是必须</p>
+                <p>• 公安机关<span class="highlight-green">不能收费</span></p>
+                <p>• 听证是<span class="highlight-green">公开进行的</span>（涉及国家秘密、商业秘密、个人隐私的除外）</p>
+                
+                <div class="example">
+                    <p><strong>🌰 举例：</strong>张三因醉酒驾驶被交警查到，要吊销他的驾驶证。交警在做出吊销决定前，必须告知张三有权要求听证。如果张三说"我要听证"，交警就必须组织听证会，让张三说说为什么不该吊销。</p>
+                    <p><strong>🔍 为什么这样举例：</strong>吊销驾驶证是吊销许可证，属于必须告知听证的处罚。张三可以为自己辩护，听证会上公安不能因为他要求听证就加重处罚。听证免费，不去白不去！</p>
+                </div>
+                
+                <p class="memory-tip"><strong>💡 <span class='highlight-purple'>小白记忆口诀：</span></strong>听证告知两千上，吊销证件要听证，当事人不收费，听证公开保权益！</p>
+                
+                <p class="warning">⚠️ <strong>易错点：</strong>治安管理处罚法规定的听证标准是<span class="highlight-orange">2000元以上罚款</span>，而行政处罚法是"较大数额罚款"。注意区分！</p>
+            </div>
+            <div id="quiz-module8" class="quiz-container"></div>
+        </section>
+        
+        <section id="module9" class="knowledge-card">
+            <h2>⚡ 模块9: 简易程序</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">核心概念</span>：简易程序就是"快速处理"，事实清楚、证据确凿的小违法，当场就给你一个处罚决定，不用走复杂流程。</p>
+                
+                <h3>📌 简易程序的条件（重点！）</h3>
+                <p>同时满足以下条件：</p>
+                <p>1. <span class="highlight-blue">事实清楚、证据确凿</span></p>
+                <p>2. <span class="highlight-blue">情节轻微</span></p>
+                <p>3. <span class="highlight-blue">处警告或200元以下罚款</span></p>
+                
+                <h3>📌 简易程序的要求</h3>
+                <p>• <span class="highlight-green">人民警察当场作出决定</span></p>
+                <p>• <span class="highlight-green">24小时内报所属公安机关备案</span></p>
+                <p>• 当场收缴罚款的，要<span class="highlight-green">出具罚款收据</span></p>
+                
+                <div class="example">
+                    <p><strong>🌰 举例：</strong>张三过马路闯红灯，被交警拦住。事实清楚（监控拍到），情节轻微，罚款200元。交警当场给他开了一张罚单，这就是简易程序。如果张三当场交钱（50元），交警要给他开收据。</p>
+                    <p><strong>🔍 为什么这样举例：</strong>闯红灯是典型的情节轻微、事实清楚的违法行为。罚款200元刚好在简易程序的范围内。交警当场开单、24小时内备案，流程简化了但还是要备案！</p>
+                </div>
+                
+                <p class="memory-tip"><strong>💡 <span class='highlight-purple'>小白记忆口诀：</span></strong>简易程序三条件：事实清楚情节轻，警告或罚两百下！</p>
+                
+                <p class="warning">⚠️ <strong>易错点：</strong>简易程序只适用<span class="highlight-orange">警告或200元以下罚款</span>！201元就不能当场决定了。而且要24小时内备案，不是7天！</p>
+            </div>
+            <div id="quiz-module9" class="quiz-container"></div>
+        </section>
+        
+        <section id="module10" class="knowledge-card">
+            <h2>🏢 模块10: 派出所权限</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">核心概念</span>：派出所是公安系统的"基层组织"，权力有限，不能做所有的处罚决定。</p>
+                
+                <h3>📌 派出所可以做的（重点！）</h3>
+                <p>派出所可以独立做出：</p>
+                <p>1. <span class="highlight-blue">警告</span></p>
+                <p>2. <span class="highlight-blue">500元以下罚款</span></p>
+                
+                <h3>📌 派出所不能做的</h3>
+                <p>• 行政拘留（需要县级以上公安机关决定）</p>
+                <p>• 500元以上罚款</p>
+                <p>• 吊销许可证</p>
+                
+                <div class="example">
+                    <p><strong>🌰 举例：</strong>张三在小区里打架，派出所民警到场处理。因张三把李四打成了轻微伤，要拘留10天。派出所<span class="highlight-red">无权决定</span>拘留！必须报县级以上公安机关审批。但如果只是罚款300元，派出所可以当场决定。</p>
+                    <p><strong>🔍 为什么这样举例：</strong>派出所的权力有限。警告和500元以下罚款可以自己做主，其他重的处罚要上报。这体现了公安系统的层级管理，避免基层滥用权力。</p>
+                </div>
+                
+                <p class="memory-tip"><strong>💡 <span class='highlight-purple'>小白记忆口诀：</span></strong>派出所权力有大小，警告五百我能办，拘留罚款五百上，要找县局来审批！</p>
+                
+                <p class="warning">⚠️ <strong>易错点：</strong>派出所<span class="highlight-orange">没有拘留权</span>！即使只拘留1天，也必须县级以上公安机关决定。所以电视剧里派出所直接把人关了是违法的！</p>
+            </div>
+            <div id="quiz-module10" class="quiz-container"></div>
+        </section>
+        
+        <section id="framework" class="framework-section">
+            <h2>📋 治安管理处罚法知识框架总览</h2>
+            <div class="framework-grid">
+                <div class="framework-card"><h3>1. 处罚种类</h3><p>警告、罚款、拘留、吊销许可证、限期/驱逐出境</p><p>口诀：五种处罚记清楚</p></div>
+                <div class="framework-card"><h3>2. 治安调解</h3><p>民间纠纷引起的情节较轻的可调解</p><p>调解成功不处罚，失败要处罚</p></div>
+                <div class="framework-card"><h3>3. 追诉时效</h3><p>6个月内未被发现不再处罚</p><p>从行为发生之日起算</p></div>
+                <div class="framework-card"><h3>4. 未成年人</h3><p>14-16岁：绝对不执行拘留</p><p>16-18岁初次：不执行拘留</p><p>70岁以上/孕妇/哺乳：不执行</p></div>
+                <div class="framework-card"><h3>5. 外国人处罚</h3><p>限期出境、驱逐出境</p><p>公安部决定</p></div>
+                <div class="framework-card"><h3>6. 拘留合并</h3><p>分别决定，合并执行</p><p>最长不超过20日</p></div>
+                <div class="framework-card"><h3>7. 一事不再罚</h3><p>同一违法行为只能罚一次款</p><p>多法条按最高数额处罚</p></div>
+                <div class="framework-card"><h3>8. 听证程序</h3><p>吊销许可证、2000元以上罚款</p><p>应当告知有权听证</p></div>
+                <div class="framework-card"><h3>9. 简易程序</h3><p>警告或200元以下罚款</p><p>事实清楚可当场决定</p></div>
+                <div class="framework-card"><h3>10. 派出所权限</h3><p>警告、500元以下罚款</p><p>拘留要县局批准</p></div>
+            </div>
+        </section>
+        
+        <section id="practice" class="practice-section">
+            <h2>📝 练习专区（50道综合题）</h2>
+            <div id="quiz-practice" class="quiz-container"></div>
+        </section>
+    </main>
+
+    <script>
+    const quizData = {
+        'module1': [
+            {
+                question: "治安管理处罚的种类不包括以下哪一项？",
+                options: ["A. 警告", "B. 罚款", "C. 管制", "D. 行政拘留"],
+                answer: 2,
+                explanation: "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>警告是治安管理处罚的种类之一，是最轻的处罚方式。<br><br><strong>B. 错误！</strong>罚款也是治安管理处罚的种类之一，让违法者交钱。<br><br><strong>C. 正确！</strong>管制是<span class='highlight-orange'>刑事处罚</span>的种类之一，由法院判决，用于犯罪行为。治安管理处罚是行政处罚，管制不属于这个范畴！<br><br><strong>D. 错误！</strong>行政拘留是治安管理处罚的种类之一，是最严厉的处罚，把人关起来。<br><br>💡 <strong>小白记忆：</strong>治安处罚五种：警告罚款拘留证，外国人要赶出境！管是刑事的，治安没有管！"
+            },
+            {
+                question: "根据治安管理处罚法，以下哪种处罚只能由公安机关决定？",
+                options: ["A. 警告", "B. 罚款500元", "C. 行政拘留", "D. 吊销营业执照"],
+                answer: 2,
+                explanation: "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>警告是最轻的处罚，派出所都可以做，不需要县级以上公安机关。<br><br><strong>B. 错误！</strong>罚款500元属于派出所的权限范围内，派出所可以直接决定。<br><br><strong>C. 正确！</strong>行政拘留是<span class='highlight-red'>最严厉</span>的治安管理处罚，必须由<span class='highlight-blue'>县级以上公安机关</span>决定，派出所无权单独决定！<br><br><strong>D. 错误！</strong>吊销营业执照是市场监督管理局的权限，不是公安机关的。<br><br>💡 <strong>小白记忆：</strong>拘留最重，必须县局批！警告五百下放权！"
+            },
+            {
+                question: "对外国人可以适用的附加处罚是？",
+                options: ["A. 行政拘留", "B. 罚金", "C. 驱逐出境", "D. 管制"],
+                answer: 2,
+                explanation: "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>行政拘留是对所有人的处罚，不是专门针对外国人的附加处罚。<br><br><strong>B. 错误！</strong>罚金是<span class='highlight-orange'>刑事处罚</span>，由法院判决，用于犯罪行为。<br><br><strong>C. 正确！</strong>驱逐出境（或限期出境）是<span class='highlight-red'>专门针对外国人</span>的附加处罚，由公安部决定，强制外国人离开中国！<br><br><strong>D. 错误！</strong>管制是刑事处罚的种类，由法院判决。<br><br>💡 <strong>小白记忆：</strong>驱逐出境是外国人专属，其他处罚中外平等！"
+            },
+            {
+                question: "治安管理处罚中，最轻的处罚是？",
+                options: ["A. 罚款", "B. 警告", "C. 吊销许可证", "D. 行政拘留"],
+                answer: 1,
+                explanation: "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>罚款虽然也比较轻，但需要交钱，比警告重一些。<br><br><strong>B. 正确！</strong>警告是<span class='highlight-red'>最轻</span>的治安管理处罚，就是口头批评教育，说你做错了。<br><br><strong>C. 错误！</strong>吊销许可证是比较重的处罚，让你失去某种资格。<br><br><strong>D. 错误！</strong>行政拘留是最重的处罚，把人关起来，最多15天或20天。<br><br>💡 <strong>小白记忆：</strong>处罚轻重：警告→罚款→吊证→拘留，就像批评→罚站→叫家长→打手心！"
+            },
+            {
+                question: "以下关于治安管理处罚的说法，正确的是？",
+                options: ["A. 治安管理处罚只能由人民法院决定", "B. 吊销公安机关发放的许可证是一种治安管理处罚", "C. 治安管理处罚不包括罚款", "D. 限期出境适用于所有违法人员"],
+                answer: 1,
+                explanation: "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>治安管理处罚由<span class='highlight-orange'>公安机关</span>决定，不是法院。法院判决的是刑事处罚。<br><br><strong>B. 正确！</strong>吊销公安机关发放的许可证（如驾驶证）是<span class='highlight-red'>五种治安管理处罚之一</span>！<br><br><strong>C. 错误！</strong>罚款是治安管理处罚的<span class='highlight-orange'>主要种类</span>之一，包括罚款！<br><br><strong>D. 错误！</strong>限期出境<span class='highlight-orange'>只适用于外国人</span>，不适用于中国人。<br><br>💡 <strong>小白记忆：</strong>记住五种处罚：警告罚款拘留证，出境只对老外！"
+            }
+        ],
+        'module2': [
+            {
+                question: "下列哪种情况可以适用治安调解？",
+                options: ["A. 张三盗窃了邻居的电动车", "B. 李四因民间纠纷打架造成轻微伤", "C. 王五多次故意伤害他人", "D. 赵六因报复放火烧毁他人房屋"],
+                answer: 1,
+                explanation: "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>盗窃是财产类违法，<span class='highlight-orange'>不属于民间纠纷</span>，不能调解。<br><br><strong>B. 正确！</strong>因<span class='highlight-blue'>民间纠纷</span>引起的打架斗殴，情节较轻的，可以治安调解。这是调解的典型适用情形！<br><br><strong>C. 错误！</strong>多次实施违反治安管理行为，<span class='highlight-orange'>情节严重</span>，不能调解。<br><br><strong>D. 错误！</strong>放火烧毁他人房屋涉嫌<span class='highlight-orange'>刑事犯罪</span>，构成放火罪，不能调解。<br><br>💡 <strong>小白记忆：</strong>调解范围：民间纠纷+打架/损物+情节轻！"
+            },
+            {
+                question: "治安调解达成协议后，一方不履行的，公安机关应当？",
+                options: ["A. 继续调解", "B. 不予处罚", "C. 依照本法规定对违反治安管理行为人给予处罚", "D. 强制执行调解协议"],
+                answer: 2,
+                explanation: "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>调解一般只有一次，继续调解不符合规定。<br><br><strong>B. 错误！</strong>只有调解<span class='highlight-orange'>达成协议并履行</span>才不予处罚。不履行就要处罚！<br><br><strong>C. 正确！</strong>经调解<span class='highlight-red'>未达成协议</span>或者达成协议后<span class='highlight-red'>不履行的</span>，公安机关应当依照本法规定对违反治安管理行为人给予处罚！<br><br><strong>D. 错误！</strong>调解协议是自愿签订的，公安机关<span class='highlight-orange'>不能强制执行</span>。民事赔偿部分要去法院起诉。<br><br>💡 <strong>小白记忆：</strong>调解成功不处罚，调解失败/反悔要处罚！"
+            },
+            {
+                question: "治安调解必须遵循的原则是？",
+                options: ["A. 强制原则", "B. 自愿原则", "C. 公开原则", "D. 公正原则"],
+                answer: 1,
+                explanation: "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>治安调解<span class='highlight-orange'>不能强制</span>，必须是双方自愿的。<br><br><strong>B. 正确！</strong>治安调解必须遵循<span class='highlight-red'>自愿原则</span>！双方当事人都同意调解才能进行，如果有一方不愿意，就不能调解。<br><br><strong>C. 错误！</strong>治安调解不是必须公开进行的。<br><br><strong>D. 错误！</strong>公正原则是所有执法活动的基本要求，不是调解特有的原则。<br><br>💡 <strong>小白记忆：</strong>调解是\"商量\"，不是\"命令\"，必须自愿！"
+            },
+            {
+                question: "关于治安调解的说法，错误的是？",
+                options: ["A. 调解达成协议后，公安机关不予处罚", "B. 调解是治安管理的必经程序", "C. 调解不成或不履行的，应当处罚", "D. 民间纠纷引起的打架可以调解"],
+                answer: 1,
+                explanation: "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>这是正确的表述，不是本题要找的错误选项。调解达成协议后不予处罚。<br><br><strong>B. 正确！</strong>治安调解<span class='highlight-red'>不是必经程序</span>！它是可选的，必须符合条件且双方自愿才能进行。公安机关可以直接处罚！<br><br><strong>C. 错误！</strong>这是正确的表述。调解不成或不履行的，应当依法处罚。<br><br><strong>D. 错误！</strong>这是正确的表述。民间纠纷引起的打架斗殴，情节较轻的，可以调解。<br><br>💡 <strong>小白记忆：</strong>调解不是\"必须\"，是\"可以\"！符合条件的才调解！"
+            },
+            {
+                question: "治安调解的适用范围是？",
+                options: ["A. 所有治安案件", "B. 因民间纠纷引起的打架斗殴或损毁财物等违反治安管理行为，情节较轻的", "C. 所有打架斗殴案件", "D. 所有财产损失案件"],
+                answer: 1,
+                explanation: "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>不是所有治安案件都能调解，<span class='highlight-orange'>有条件限制</span>！<br><br><strong>B. 正确！</strong>治安调解的适用范围是：<span class='highlight-blue'>因民间纠纷引起</span>的<span class='highlight-blue'>打架斗殴或损毁财物</span>等违反治安管理行为，<span class='highlight-red'>情节较轻</span>的！三个条件缺一不可！<br><br><strong>C. 错误！</strong>只有<span class='highlight-orange'>因民间纠纷引起</span>的打架才能调解，雇凶伤人、结伙斗殴等不能调解。<br><br><strong>D. 错误！</strong>只有<span class='highlight-orange'>民间纠纷引起的</span>财产损失才能调解，盗窃等不能调解。<br><br>💡 <strong>小白记忆：</strong>调解三条件：民间纠纷+打架/损物+情节轻！"
+            }
+        ],
+        'module3': [
+            {
+                question: "违反治安管理行为的追诉时效是多久？",
+                options: ["A. 3个月", "B. 6个月", "C. 1年", "D. 2年"],
+                answer: 1,
+                explanation: "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>3个月太短了，不符合规定。<br><br><strong>B. 正确！</strong>违反治安管理行为在<span class='highlight-red'>6个月</span>内没有被公安机关发现的，不再处罚！<br><br><strong>C. 错误！</strong>1年是行政处罚的追诉时效，不是治安管理处罚的。<br><br><strong>D. 错误！</strong>2年也是行政处罚的追诉时效，治安管理处罚是6个月！<br><br>💡 <strong>小白记忆：</strong>治安追诉6个月，行政追诉2年！治安短、处罚轻，6个月够了！"
+            },
+            {
+                question: "违反治安管理行为超过6个月后才被发现，公安机关应当？",
+                options: ["A. 从重处罚", "B. 正常处罚", "C. 不再处罚", "D. 警告处理"],
+                answer: 2,
+                explanation: "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>超过追诉时效不是从重处罚的理由。<br><br><strong>B. 错误！</strong>超过追诉时效，<span class='highlight-orange'>不能再处罚</span>！<br><br><strong>C. 正确！</strong>违反治安管理行为在<span class='highlight-red'>6个月内没有被公安机关发现</span>的，<span class='highlight-red'>不再处罚</span>！这就是追诉时效的意义。<br><br><strong>D. 错误！</strong>超过时效后，警告也不行，已经丧失处罚权了。<br><br>💡 <strong>小白记忆：</strong>过期不候！6个月没人发现，就当这事没发生过！"
+            },
+            {
+                question: "追诉时效的起算点是？",
+                options: ["A. 公安机关立案之日", "B. 违法行为发生之日", "C. 受害人报警之日", "D. 公安机关发现之日"],
+                answer: 1,
+                explanation: "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>立案之日不是起算点，违法行为可能早于立案。<br><br><strong>B. 正确！</strong>追诉时效从<span class='highlight-red'>违反治安管理行为发生之日</span>起算。如果行为有连续或继续状态，从行为<span class='highlight-blue'>终了之日</span>起算！<br><br><strong>C. 错误！</strong>受害人报警之日不是起算点，可能很晚才报警。<br><br><strong>D. 错误！</strong>公安机关发现之日是用来判断是否\"超过\"的截止点，不是起算点。<br><br>💡 <strong>小白记忆：</strong>从\"干坏事\"那天开始算！持续干坏事从\"干完\"那天算！"
+            },
+            {
+                question: "关于追诉时效的说法，正确的是？",
+                options: ["A. 只要受害人没报警，公安机关就不能处罚", "B. 6个月内被发现就不受处罚限制", "C. 超过6个月后即使被发现也不能处罚", "D. 追诉时效对所有违法行为都适用"],
+                answer: 2,
+                explanation: "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>关键是公安机关\"发现\"，不是受害人报警。公安机关通过其他方式发现也可以。<br><br><strong>B. 错误！</strong>6个月内被发现，说明<span class='highlight-orange'>时效未过</span>，可以正常处罚，不是不受处罚限制。<br><br><strong>C. 正确！</strong>超过<span class='highlight-red'>6个月未被公安机关发现</span>的，不再处罚！这就是追诉时效的规定。<br><br><strong>D. 错误！</strong>追诉时效有期限限制，如果6个月内被发现，就不受时效限制，可以处罚。<br><br>💡 <strong>小白记忆：</strong>6个月是\"保护期\"，过了这个期限，干了坏事也没人管你了！"
+            },
+            {
+                question: "违法行为有连续状态的，追诉时效从何时起算？",
+                options: ["A. 第一次行为发生之日", "B. 每次行为发生之日", "C. 行为终了之日", "D. 受害人发现之日"],
+                answer: 2,
+                explanation: "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>连续状态不是从第一次算。<br><br><strong>B. 错误！</strong>如果从每次算，时效会不断延长，不利于追究。<br><br><strong>C. 正确！</strong>违法行为有<span class='highlight-red'>连续或者继续状态</span>的，从行为<span class='highlight-blue'>终了之日起计算</span>追诉时效！<br><br><strong>D. 错误！</strong>受害人发现之日不是时效起算点。<br><br>💡 <strong>小白记忆：</strong>持续干坏事，从\"干完\"那天算！比如持续卖假货，从停止卖的那天算6个月！"
+            }
+        ],
+        'module4': [
+            {
+                question: "已满14周岁不满16周岁的人违反治安管理的，应当？",
+                options: ["A. 从重处罚", "B. 正常处罚", "C. 不执行行政拘留", "D. 不予处罚"],
+                answer: 2,
+                explanation: "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>14-16岁是应当从轻或减轻处罚的年龄段，不是从重。<br><br><strong>B. 错误！</strong>这个年龄段有特殊保护，不执行拘留，但其他处罚可以有。<br><br><strong>C. 正确！</strong>已满<span class='highlight-red'>14周岁不满16周岁</span>的人违反治安管理的，<span class='highlight-red'>不执行行政拘留处罚</span>！这是法律对未成年人的特殊保护。<br><br><strong>D. 错误！</strong>不满14周岁的人才不予处罚，14-16岁是要处罚的，只是不执行拘留。<br><br>💡 <strong>小白记忆：</strong>14-16岁：处罚但不关！16-18岁初次：处罚但不关！70岁以上：处罚但不关！"
+            },
+            {
+                question: "下列哪种情况下，行政拘留应当执行？",
+                options: ["A. 17岁学生初次盗窃", "B. 71岁老人打架", "C. 怀孕妇女故意伤害他人", "D. 18岁青年第三次殴打他人"],
+                answer: 3,
+                explanation: "✅ 正确答案是 <strong>D</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>16-18岁<span class='highlight-orange'>初次</span>违反治安管理，不执行拘留。这是<span class='highlight-blue'>初次</span>，所以不执行！<br><br><strong>B. 错误！</strong>70周岁以上的人，不执行行政拘留。<br><br><strong>C. 错误！</strong>怀孕或哺乳自己不满一周岁婴儿的妇女，不执行行政拘留。<br><br><strong>D. 正确！</strong>18岁青年<span class='highlight-red'>第三次</span>殴打他人，不属于\"初次\"违反治安管理，<span class='highlight-red'>应当执行行政拘留</span>！关键点是\"初次\"二字！<br><br>💡 <strong>小白记忆：</strong>16-18岁不执行的前提是\"初次\"！第三次就不是初次了，要关！"
+            },
+            {
+                question: "不执行行政拘留处罚的情形不包括？",
+                options: ["A. 已满14周岁不满16周岁", "B. 已满16周岁不满18周岁再次违反治安管理", "C. 70周岁以上", "D. 哺乳自己婴儿的妇女"],
+                answer: 1,
+                explanation: "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>这是法条规定的情形之一，不选。<br><br><strong>B. 正确！</strong>已满16周岁不满18周岁，<span class='highlight-orange'>初次</span>违反治安管理的，才不执行拘留。<span class='highlight-red'>再次违反的不适用</span>！这是本题的陷阱！<br><br><strong>C. 错误！</strong>这是法条规定的情形之一，不选。<br><br><strong>D. 错误！</strong>这是法条规定的情形之一，不选。<br><br>💡 <strong>小白记忆：</strong>16-18岁必须有\"初次\"加持才能不关，第二次就要关！"
+            },
+            {
+                question: "关于未成年人治安管理处罚的说法，正确的是？",
+                options: ["A. 不满14周岁的人违反治安管理，不予处罚", "B. 14-16岁的人违反治安管理，应当拘留", "C. 16-18岁的人违反治安管理，一律拘留", "D. 18岁以下的人违反治安管理，不予处罚"],
+                answer: 0,
+                explanation: "✅ 正确答案是 <strong>A</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 正确！</strong>不满14周岁的未成年人违反治安管理的，<span class='highlight-red'>不予行政处罚</span>，但应当责令监护人加以管教！<br><br><strong>B. 错误！</strong>14-16岁的人违反治安管理的，应当处罚，但<span class='highlight-orange'>不执行行政拘留</span>。<br><br><strong>C. 错误！</strong>16-18岁的人如果<span class='highlight-orange'>初次</span>违反治安管理，不执行拘留。<br><br><strong>D. 错误！</strong>18岁以下只是部分情况不执行拘留，不是都不处罚。警告、罚款还是可以给的！<br><br>💡 <strong>小白记忆：</strong>14岁以下：不处罚；14-16岁：不关；16-18岁初次：不关！"
+            },
+            {
+                question: "已满16周岁不满18周岁的人初次违反治安管理的，法律后果是？",
+                options: ["A. 不予处罚", "B. 从轻处罚", "C. 不执行行政拘留", "D. 加重处罚"],
+                answer: 2,
+                explanation: "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>不予处罚适用于不满14周岁的人。<br><br><strong>B. 错误！</strong>从轻处罚是另外的规定，不是16-18岁初次的直接后果。<br><br><strong>C. 正确！</strong>已满16周岁不满18周岁，<span class='highlight-red'>初次</span>违反治安管理的，<span class='highlight-red'>不执行行政拘留</span>！注意是\"初次\"！<br><br><strong>D. 错误！</strong>初次违法是减轻处罚的情节，不会加重。<br><br>💡 <strong>小白记忆：</strong>16-18初次不关，但还是要处罚！初次是关键词！"
+            }
+        ],
+        'module5': [
+            {
+                question: "对外国人可以适用的附加处罚是？",
+                options: ["A. 行政拘留", "B. 罚金", "C. 限期出境", "D. 管制"],
+                answer: 2,
+                explanation: "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>行政拘留是对所有人的处罚，不是专门针对外国人的附加处罚。<br><br><strong>B. 错误！</strong>罚金是<span class='highlight-orange'>刑事处罚</span>，由法院判决，治安管理处罚中没有罚金！<br><br><strong>C. 正确！</strong>限期出境（或驱逐出境）是<span class='highlight-red'>专门针对外国人</span>的附加处罚，适用于违反治安管理的外国人！<br><br><strong>D. 错误！</strong>管制是<span class='highlight-orange'>刑事处罚</span>，由法院判决。<br><br>💡 <strong>小白记忆：</strong>外国人专属：限期出境和驱逐出境！"
+            },
+            {
+                question: "限期出境和驱逐出境的决定机关是？",
+                options: ["A. 派出所", "B. 县级公安机关", "C. 公安部", "D. 人民法院"],
+                answer: 2,
+                explanation: "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>派出所权力有限，只能决定警告和500元以下罚款。<br><br><strong>B. 错误！</strong>县级公安机关可以决定行政拘留，但没有限期出境/驱逐出境的权力。<br><br><strong>C. 正确！</strong>限期出境和驱逐出境由<span class='highlight-red'>公安部</span>决定！这体现了对外国人出境管理的严格控制！<br><br><strong>D. 错误！</strong>驱逐出境如果是刑事处罚由法院判决，但治安管理处罚中的由公安部决定。<br><br>💡 <strong>小白记忆：</strong>赶人出国是大事件，只有公安部说了算！"
+            },
+            {
+                question: "关于外国人附加处罚的说法，正确的是？",
+                options: ["A. 限期出境可以单独适用", "B. 驱逐出境比限期出境更轻", "C. 驱逐出境后可以再次入境", "D. 限期出境由公安部决定"],
+                answer: 3,
+                explanation: "✅ 正确答案是 <strong>D</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>限期出境是<span class='highlight-orange'>附加处罚</span>，不是独立处罚，前面必须有警告、罚款、拘留等主处罚！<br><br><strong>B. 错误！</strong>驱逐出境比限期出境<span class='highlight-orange'>更严厉</span>！限期是让你自己走，驱逐是强制赶走！<br><br><strong>C. 错误！</strong>被驱逐出境的人，<span class='highlight-orange'>通常在一定期限内禁止再入境</span>！<br><br><strong>D. 正确！</strong>限期出境和驱逐出境由<span class='highlight-red'>公安部</span>决定！<br><br>💡 <strong>小白记忆：</strong>限期让你走，驱逐强制走，公安部才能赶人走！"
+            },
+            {
+                question: "下列说法正确的是？",
+                options: ["A. 所有外国人都可以限期出境", "B. 驱逐出境是最轻的附加处罚", "C. 限期出境必须附加在其他处罚之后", "D. 外国人不适用行政拘留"],
+                answer: 2,
+                explanation: "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>限期出境是附加处罚，需要先有其他违法行为作为前提！<br><br><strong>B. 错误！</strong>驱逐出境是<span class='highlight-orange'>更严厉</span>的处罚，比限期出境重！<br><br><strong>C. 正确！</strong>限期出境是<span class='highlight-red'>附加处罚</span>，必须附加在警告、罚款、拘留等主处罚之后，不能单独适用！<br><br><strong>D. 错误！</strong>外国人同样适用行政拘留！限期出境和驱逐出境是额外的处罚。<br><br>💡 <strong>小白记忆：</strong>附加处罚不能单飞，必须跟着主处罚！"
+            },
+            {
+                question: "限期出境与驱逐出境的主要区别是？",
+                options: ["A. 限期出境是处罚，驱逐出境不是处罚", "B. 限期出境让当事人自己走，驱逐出境强制送走", "C. 两者没有区别", "D. 限期出境更严厉"],
+                answer: 1,
+                explanation: "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>两者都是治安管理处罚的附加处罚！<br><br><strong>B. 正确！</strong>限期出境：给你一个期限（如10天），你自己在这个期限内离开中国；驱逐出境：<span class='highlight-red'>强制</span>把你送出国，强行带走！<br><br><strong>C. 错误！</strong>两者有明显区别，驱逐出境更严厉！<br><br><strong>D. 错误！</strong>驱逐出境更严厉，不是限期出境！限期是给你机会，驱逐是强制！<br><br>💡 <strong>小白记忆：</strong>限期：给你机会自己走；驱逐：不给你机会，强制赶走！"
+            }
+        ],
+        'module6': [
+            {
+                question: "有两种以上违反治安管理行为的，行政拘留合并执行最长不超过多少日？",
+                options: ["A. 10日", "B. 15日", "C. 20日", "D. 30日"],
+                answer: 2,
+                explanation: "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>10日是单个拘留处罚的期限档次之一，不是合并执行的上限。<br><br><strong>B. 错误！</strong>15日是单个拘留处罚的最高期限，不是合并执行的上限。<br><br><strong>C. 正确！</strong>有两种以上违反治安管理行为的，行政拘留合并执行最长不超过<span class='highlight-red'>20日</span>！<br><br><strong>D. 错误！</strong>30日超过法律规定了，合并执行最多20日！<br><br>💡 <strong>小白记忆：</strong>单独最多15天，合并最多20天！记住了！"
+            },
+            {
+                question: "张三有两个违法行为，分别被处以行政拘留5日和10日，合并执行时应当拘留多少天？",
+                options: ["A. 10日", "B. 15日", "C. 20日", "D. 5+10=15日"],
+                answer: 2,
+                explanation: "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>取较小的那个是错误理解，合并执行是相加的！<br><br><strong>B. 错误！</strong>虽然没超过20日，但5+10=15日不是最优答案。<br><br><strong>C. 正确！</strong>分别决定，合并执行，5+10=<span class='highlight-red'>15日</span>。但注意：合并执行最长不超过20日，所以15日可以全部执行！<br><br><strong>D. 错误！</strong>这就是简单相加，但C选项更准确地回答了问题。<br><br>💡 <strong>小白记忆：</strong>分别决定相加，合并执行！但加起来不能超过20天！"
+            },
+            {
+                question: "关于行政拘留合并执行的说法，正确的是？",
+                options: ["A. 可以超过20日", "B. 分别决定，合并执行，最长不超过20日", "C. 只能拘留一次", "D. 合并执行没有上限"],
+                answer: 1,
+                explanation: "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>合并执行最长不超过<span class='highlight-red'>20日</span>，不能超过！<br><br><strong>B. 正确！</strong>有两种以上违反治安管理行为的，应当<span class='highlight-red'>分别决定，合并执行</span>，行政拘留合并执行最长不超过<span class='highlight-red'>20日</span>！<br><br><strong>C. 错误！</strong>可以拘留多次，但合并执行有上限20日！<br><br><strong>D. 错误！</strong>有上限，就是20日！<br><br>💡 <strong>小白记忆：</strong>合并执行分别算，最多20天不能超！"
+            },
+            {
+                question: "单个行政拘留的最长期限是？",
+                options: ["A. 10日", "B. 15日", "C. 20日", "D. 30日"],
+                answer: 1,
+                explanation: "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>10日是一个期限档次，不是最长期限。<br><br><strong>B. 正确！</strong>行政拘留的期限分为三档：<span class='highlight-blue'>5日以下、5日以上10日以下、10日以上15日以下</span>。最长期限是<span class='highlight-red'>15日</span>！<br><br><strong>C. 错误！</strong>20日是<span class='highlight-orange'>合并执行</span>的最长期限，不是单个拘留的最长期限！<br><br><strong>D. 错误！</strong>30日超过法律规定了。<br><br>💡 <strong>小白记忆：</strong>单个最多15天，合并最多20天！别搞混了！"
+            },
+            {
+                question: "张三有三种违法行为，分别要拘留5日、10日、8日，合并执行应当拘留多少天？",
+                options: ["A. 15日", "B. 20日", "C. 23日", "D. 10日"],
+                answer: 1,
+                explanation: "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>不是取中间值或最小值！<br><br><strong>B. 正确！</strong>分别决定，合并执行，5+10+8=<span class='highlight-blue'>23日</span>。但因为合并执行最长不超过<span class='highlight-red'>20日</span>，所以实际执行<span class='highlight-red'>20日</span>！<br><br><strong>C. 错误！</strong>虽然计算正确是23日，但超过20日的上限，要减为20日！<br><br><strong>D. 错误！</strong>不是只拘留10日！<br><br>💡 <strong>小白记忆：</strong>加起来超20天，就按20天算！这是上限！"
+            }
+        ],
+        'module7': [
+            {
+                question: "一事不再罚原则是指？",
+                options: ["A. 同一个违法行为不能被处罚两次", "B. 同一个违法行为不能被罚两次款", "C. 同一个人不能被处罚两次", "D. 同一个案件不能审理两次"],
+                answer: 1,
+                explanation: "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>不是\"不能被处罚两次\"，而是<span class='highlight-orange'>不能被罚两次款</span>！其他种类的处罚（如罚款+拘留）可以并用！<br><br><strong>B. 正确！</strong>一事不再罚原则的核心是：对当事人的<span class='highlight-red'>同一个违法行为，不得给予两次以上罚款的行政处罚</span>！<br><br><strong>C. 错误！</strong>如果是不同的违法行为，当然可以分别处罚！<br><br><strong>D. 错误！</strong>这是\"两审终审制\"的内容，不是治安管理处罚的一事不再罚！<br><br>💡 <strong>小白记忆：</strong>一事不再罚\"罚\"指的是罚款，不是处罚！罚款只能一次，其他处罚可以叠加！"
+            },
+            {
+                question: "张三因同一行为违反多个法律，罚款数额不同的，应当？",
+                options: ["A. 按最低数额处罚", "B. 按最高数额处罚", "C. 各罚一次", "D. 不处罚"],
+                answer: 1,
+                explanation: "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>按最低数额不能体现法律的严肃性！<br><br><strong>B. 正确！</strong>同一个违法行为违反多个法律规范应当给予罚款处罚的，按照<span class='highlight-red'>罚款数额较高的规定处罚</span>！这就是\"择一从重\"原则！<br><br><strong>C. 错误！</strong>这违反了一事不再罚原则！不能各罚一次！<br><br><strong>D. 错误！</strong>违法行为还是要处罚的！<br><br>💡 <strong>小白记忆：</strong>多法条选高的，体现\"择一从重\"！"
+            },
+            {
+                question: "一事不再罚原则的适用对象是？",
+                options: ["A. 同一机关对同一违法行为", "B. 不同机关对同一违法行为", "C. 同一机关对不同违法行为", "D. 不同机关对不同违法行为"],
+                answer: 0,
+                explanation: "✅ 正确答案是 <strong>A</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 正确！</strong>一事不再罚主要适用于<span class='highlight-red'>同一行政机关对当事人的同一个违法行为</span>不得给予两次以上罚款！<br><br><strong>B. 错误！</strong>不同机关对同一违法行为的罚款，要看谁先发现，先到先得！<br><br><strong>C. 错误！</strong>不同违法行为当然可以分别处罚，不适用一事不再罚！<br><br><strong>D. 错误！</strong>不同违法行为、不同机关，明显是不同的案子！<br><br>💡 <strong>小白记忆：</strong>一事不再罚：一个机关对一个行为一次款！"
+            },
+            {
+                question: "关于一事不再罚原则的理解，正确的是？",
+                options: ["A. 同一违法行为不能被拘留两次", "B. 同一违法行为不能被警告两次", "C. 同一违法行为不能被罚两次款", "D. 同一违法行为不能被任何处罚"],
+                answer: 2,
+                explanation: "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>一事不再罚针对的是<span class='highlight-orange'>罚款</span>，不是拘留！<br><br><strong>B. 错误！</strong>也不是针对警告！<br><br><strong>C. 正确！</strong>一事不再罚原则是指：对当事人的<span class='highlight-red'>同一个违法行为，不得给予两次以上罚款</span>！<br><br><strong>D. 错误！</strong>不同种类的处罚可以并用，如罚款+拘留！<br><br>💡 <strong>小白记忆：</strong>一事不再\"款\"，罚款只能一次！其他处罚可以并用！"
+            },
+            {
+                question: "某企业排放污水，同时违反水污染防治法和大气污染防治法，两个法律规定的罚款分别是50万和10万，应当罚多少？",
+                options: ["A. 50万", "B. 10万", "C. 60万", "D. 不处罚"],
+                answer: 0,
+                explanation: "✅ 正确答案是 <strong>A</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 正确！</strong>虽然企业只有一个行为（排污），但违反了两个法律。按一事不再罚原则，按照<span class='highlight-red'>罚款数额较高的规定处罚</span>，即50万！<br><br><strong>B. 错误！</strong>按最低数额不符合法律精神，也不公平！<br><br><strong>C. 错误！</strong>不能两个都罚，那样就违反一事不再罚了！<br><br><strong>D. 错误！</strong>违法行为必须处罚！<br><br>💡 <strong>小白记忆：</strong>一行为多法条，按高不按低！"
+            }
+        ],
+        'module8': [
+            {
+                question: "公安机关做出吊销许可证或者多少元以上罚款决定前，应当告知当事人有权要求听证？",
+                options: ["A. 1000元", "B. 2000元", "C. 3000元", "D. 5000元"],
+                answer: 1,
+                explanation: "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>1000元太低了，治安管理处罚法的标准是2000元！<br><br><strong>B. 正确！</strong>根据治安管理处罚法，公安机关做出<span class='highlight-red'>吊销许可证、2000元以上罚款</span>的治安管理处罚决定前，应当告知违反治安管理行为人有权要求举行听证！<br><br><strong>C. 错误！</strong>3000元是行政处罚法中部分省市的标准，不是治安管理处罚法的！<br><br><strong>D. 错误！</strong>5000元超过标准了！<br><br>💡 <strong>小白记忆：</strong>治安听证两千上，吊销证件要告知！"
+            },
+            {
+                question: "听证的费用由谁承担？",
+                options: ["A. 当事人", "B. 公安机关", "C. 双方分担", "D. 败诉方"],
+                answer: 1,
+                explanation: "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>听证费用<span class='highlight-orange'>不由当事人承担</span>！<br><br><strong>B. 正确！</strong>当事人<span class='highlight-red'>不承担</span>行政机关组织听证的费用！这是保护当事人权益的规定。<br><br><strong>C. 错误！</strong>不是双方分担！<br><br><strong>D. 错误！</strong>听证不是诉讼，没有败诉方！<br><br>💡 <strong>小白记忆：</strong>听证免费！不去白不去！"
+            },
+            {
+                question: "关于治安管理处罚听证的说法，正确的是？",
+                options: ["A. 拘留决定要听证", "B. 吊销许可证要听证", "C. 200元罚款要听证", "D. 所有处罚都要听证"],
+                answer: 1,
+                explanation: "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>拘留<span class='highlight-orange'>不需要听证</span>！听证只适用于吊销许可证和2000元以上罚款！<br><br><strong>B. 正确！</strong>吊销许可证是应当告知听证的处罚之一！<br><br><strong>C. 错误！</strong>200元罚款<span class='highlight-orange'>达不到听证标准</span>！听证标准是2000元以上！<br><br><strong>D. 错误！</strong>不是所有处罚都要听证！只有法定情形才要！<br><br>💡 <strong>小白记忆：</strong>听证范围：吊证+两千上！拘留不用听证！"
+            },
+            {
+                question: "听证应当公开举行的例外情况是？",
+                options: ["A. 所有案件", "B. 涉及国家秘密、商业秘密、个人隐私的案件", "C. 仅涉及商业秘密的案件", "D. 仅涉及个人隐私的案件"],
+                answer: 1,
+                explanation: "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>不是所有案件都公开！<br><br><strong>B. 正确！</strong>听证应当公开举行，但<span class='highlight-red'>涉及国家秘密、商业秘密、个人隐私</span>的案件，<span class='highlight-orange'>不公开举行</span>！<br><br><strong>C. 错误！</strong>商业秘密只是其中之一，还有其他情形！<br><br><strong>D. 错误！</strong>个人隐私也只是其中之一！<br><br>💡 <strong>小白记忆：</strong>听证公开三不公开：国密、商秘、个秘！"
+            },
+            {
+                question: "当事人要求听证的，公安机关应当？",
+                options: ["A. 拒绝", "B. 收费后举行", "C. 及时依法举行听证", "D. 加重处罚"],
+                answer: 2,
+                explanation: "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>当事人有权要求听证，公安机关<span class='highlight-orange'>不能拒绝</span>！<br><br><strong>B. 错误！</strong>听证<span class='highlight-orange'>不收费</span>！<br><br><strong>C. 正确！</strong>当事人要求听证的，公安机关<span class='highlight-red'>应当及时依法举行听证</span>！<br><br><strong>D. 错误！</strong>不能因当事人要求听证而加重处罚！<br><br>💡 <strong>小白记忆：</strong>要听证就得办，免费还不能加重！"
+            }
+        ],
+        'module9': [
+            {
+                question: "适用简易程序当场作出治安管理处罚决定的条件是？",
+                options: ["A. 处警告或500元以下罚款", "B. 处警告或200元以下罚款", "C. 处行政拘留", "D. 处吊销许可证"],
+                answer: 1,
+                explanation: "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>500元以下是<span class='highlight-orange'>派出所的权限范围</span>，不是简易程序的适用范围！简易程序是警告或200元以下！<br><br><strong>B. 正确！</strong>违反治安管理行为事实清楚，证据确凿，<span class='highlight-red'>处警告或者200元以下罚款</span>的，可以当场作出治安管理处罚决定！<br><br><strong>C. 错误！</strong>行政拘留<span class='highlight-orange'>不能适用简易程序</span>！<br><br><strong>D. 错误！</strong>吊销许可证<span class='highlight-orange'>不能适用简易程序</span>，而且要告知听证！<br><br>💡 <strong>小白记忆：</strong>简易程序：警告或两百下！"
+            },
+            {
+                question: "人民警察当场作出治安管理处罚决定的，应当在多少小时内报所属公安机关备案？",
+                options: ["A. 12小时", "B. 24小时", "C. 48小时", "D. 7日"],
+                answer: 1,
+                explanation: "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>12小时不是治安管理处罚法的规定！<br><br><strong>B. 正确！</strong>当场作出治安管理处罚决定的，经办的人民警察应当在<span class='highlight-red'>24小时内</span>报所属公安机关备案！<br><br><strong>C. 错误！</strong>48小时太长了！<br><br><strong>D. 错误！</strong>7日是行政处罚法中部分规定的期限！<br><br>💡 <strong>小白记忆：</strong>当场处罚24时内要备案！"
+            },
+            {
+                question: "简易程序的适用条件不包括？",
+                options: ["A. 事实清楚", "B. 证据确凿", "C. 处行政拘留", "D. 处警告或200元以下罚款"],
+                answer: 2,
+                explanation: "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>事实清楚是简易程序的条件之一，不选。<br><br><strong>B. 错误！</strong>证据确凿是简易程序的条件之一，不选。<br><br><strong>C. 正确！</strong>简易程序<span class='highlight-red'>不能用于行政拘留</span>！只能用于警告或200元以下罚款！<br><br><strong>D. 错误！</strong>处警告或200元以下罚款是简易程序的条件之一，不选。<br><br>💡 <strong>小白记忆：</strong>简易程序三条件：事实清楚+证据确凿+警告或两百下！拘留不能简易！"
+            },
+            {
+                question: "当场收缴罚款的，人民警察应当？",
+                options: ["A. 直接收钱即可", "B. 出具罚款收据", "C. 让当事人去银行缴纳", "D. 扣押财物"],
+                answer: 1,
+                explanation: "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>不能直接收钱，必须出具<span class='highlight-orange'>法定收据</span>！<br><br><strong>B. 正确！</strong>当场收缴罚款的，人民警察<span class='highlight-red'>应当向被处罚人出具罚款收据</span>！不出具的，当事人有权拒绝缴纳！<br><br><strong>C. 错误！</strong>这是正常缴纳罚款的方式，不是当场收缴。<br><br><strong>D. 错误！</strong>扣押财物是另一种行政措施，不是收缴罚款。<br><br>💡 <strong>小白记忆：</strong>当场收钱要出票！没票可以不给钱！"
+            },
+            {
+                question: "简易程序的适用范围是？",
+                options: ["A. 所有治安案件", "B. 事实清楚、证据确凿的警告或200元以下罚款案件", "C. 所有罚款案件", "D. 行政拘留案件"],
+                answer: 1,
+                explanation: "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>简易程序<span class='highlight-orange'>有条件限制</span>，不是所有案件！<br><br><strong>B. 正确！</strong>简易程序适用于：<span class='highlight-blue'>事实清楚、证据确凿</span>的<span class='highlight-red'>警告或200元以下罚款</span>案件！<br><br><strong>C. 错误！</strong>所有罚款案件太宽泛，简易程序只限于200元以下！<br><br><strong>D. 错误！</strong>行政拘留<span class='highlight-orange'>不能适用简易程序</span>！<br><br>💡 <strong>小白记忆：</strong>简易程序：小额（两百下）+轻情节（事实清楚）！"
+            }
+        ],
+        'module10': [
+            {
+                question: "公安派出所可以独立做出的处罚决定是？",
+                options: ["A. 行政拘留10日", "B. 罚款600元", "C. 警告", "D. 吊销许可证"],
+                answer: 2,
+                explanation: "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>行政拘留<span class='highlight-orange'>只能由县级以上公安机关决定</span>，派出所无权！<br><br><strong>B. 错误！</strong>派出所只能决定<span class='highlight-orange'>500元以下罚款</span>，600元超出权限！<br><br><strong>C. 正确！</strong>派出所可以独立做出<span class='highlight-red'>警告、500元以下罚款</span>的决定！<br><br><strong>D. 错误！</strong>吊销许可证<span class='highlight-orange'>只能由县级以上公安机关决定</span>，派出所无权！<br><br>💡 <strong>小白记忆：</strong>派出所权限：警告五百下！"
+            },
+            {
+                question: "派出所无权做出的处罚决定是？",
+                options: ["A. 警告", "B. 罚款300元", "C. 行政拘留5日", "D. 罚款100元"],
+                answer: 2,
+                explanation: "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>警告在派出所权限范围内，不选。<br><br><strong>B. 错误！</strong>300元在500元以下，在派出所权限范围内，不选。<br><br><strong>C. 正确！</strong>行政拘留<span class='highlight-red'>只能由县级以上公安机关决定</span>，派出所<span class='highlight-orange'>无权决定</span>！即使是5日、1日也不行！<br><br><strong>D. 错误！</strong>100元在500元以下，在派出所权限范围内，不选。<br><br>💡 <strong>小白记忆：</strong>拘留不管几天都要县局批！"
+            },
+            {
+                question: "根据治安管理处罚法，警告、500元以下罚款可以由谁决定？",
+                options: ["A. 人民警察", "B. 公安派出所", "C. 县级公安机关", "D. 公安部"],
+                answer: 1,
+                explanation: "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>普通人民警察不能独立做处罚决定，需要通过派出所或县级以上公安机关！<br><br><strong>B. 正确！</strong>根据治安管理处罚法，警告、<span class='highlight-red'>500元以下罚款可以由公安派出所决定</span>！这是派出所的特殊授权！<br><br><strong>C. 错误！</strong>县级公安机关当然可以，但题目问的是\"可以由谁决定\"，派出所也可以！<br><br><strong>D. 错误！</strong>公安部层级太高，权限更大！<br><br>💡 <strong>小白记忆：</strong>派出所特殊授权：警告五百我能办！"
+            },
+            {
+                question: "派出所对张三作出罚款800元的处罚决定，正确的是？",
+                options: ["A. 派出所有权自行决定", "B. 应报请县级公安机关决定", "C. 应报请公安部决定", "D. 应采用简易程序"],
+                answer: 1,
+                explanation: "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>派出所只能决定<span class='highlight-orange'>500元以下罚款</span>，800元超出权限！<br><br><strong>B. 正确！</strong>派出所无权决定800元罚款，应当<span class='highlight-red'>报请县级公安机关决定</span>！<br><br><strong>C. 错误！</strong>不需要报到公安部，那是最高级别！<br><br><strong>D. 错误！</strong>简易程序适用于警告或200元以下罚款，不是800元！<br><br>💡 <strong>小白记忆：</strong>超了五百报县局！"
+            },
+            {
+                question: "关于派出所权限的说法，正确的是？",
+                options: ["A. 派出所可以拘留任何人", "B. 派出所可以吊销驾驶证", "C. 派出所可以处警告或500元以下罚款", "D. 派出所可以没收财物"],
+                answer: 2,
+                explanation: "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>派出所<span class='highlight-orange'>没有拘留权</span>！拘留必须县级以上公安机关决定！<br><br><strong>B. 错误！</strong>吊销驾驶证属于吊销许可证，<span class='highlight-orange'>超出派出所权限</span>！<br><br><strong>C. 正确！</strong>公安派出所可以决定<span class='highlight-red'>警告、500元以下罚款</span>！这是法律明确授权的！<br><br><strong>D. 错误！</strong>没收财物<span class='highlight-orange'>不在派出所权限范围内</span>！<br><br>💡 <strong>小白记忆：</strong>派出所两件事：警告五百下！其他的要找县局！"
+            }
+        ],
+        'practice': [
+            {
+                question: "治安管理处罚的种类不包括下列哪一项？",
+                options: ["A. 警告", "B. 罚款", "C. 拘役", "D. 吊销许可证"],
+                answer: 2,
+                explanation: "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>警告是治安管理处罚的种类之一。<br><br><strong>B. 错误！</strong>罚款是治安管理处罚的种类之一。<br><br><strong>C. 正确！</strong>拘役是<span class='highlight-orange'>刑事处罚</span>的种类，由法院判决，用于犯罪行为，不是治安管理处罚！<br><br><strong>D. 错误！</strong>吊销许可证是治安管理处罚的种类之一。<br><br>💡 <strong>小白记忆：</strong>治安处罚五种，拘役是刑事的！"
+            },
+            {
+                question: "因民间纠纷引起的打架斗殴，情节较轻的，公安机关可以？",
+                options: ["A. 直接拘留", "B. 调解处理", "C. 罚款了事", "D. 不予处理"],
+                answer: 1,
+                explanation: "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>不是直接拘留，情节较轻的可以先调解！<br><br><strong>B. 正确！</strong>对于因<span class='highlight-red'>民间纠纷引起的打架斗殴或者损毁他人财物等违反治安管理行为，情节较轻的，公安机关可以调解处理</span>！<br><br><strong>C. 错误！</strong>调解是优先选项，不是直接罚款！<br><br><strong>D. 错误！</strong>违反治安管理的行为必须处理，不能不处理！<br><br>💡 <strong>小白记忆：</strong>民间纠纷+打架/损物+情节轻=可调解！"
+            },
+            {
+                question: "违反治安管理行为在多长时间内未被公安机关发现的，不再处罚？",
+                options: ["A. 3个月", "B. 6个月", "C. 1年", "D. 2年"],
+                answer: 1,
+                explanation: "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>3个月不是治安管理处罚法的追诉时效！<br><br><strong>B. 正确！</strong>违反治安管理行为在<span class='highlight-red'>6个月</span>内没有被公安机关发现的，不再处罚！<br><br><strong>C. 错误！</strong>1年是部分行政处罚的追诉时效！<br><br><strong>D. 错误！</strong>2年是一般行政处罚的追诉时效！<br><br>💡 <strong>小白记忆：</strong>治安追诉6个月，行政2年，刑事无期限！"
+            },
+            {
+                question: "已满14周岁不满16周岁的人违反治安管理的，应当？",
+                options: ["A. 不予处罚", "B. 从轻处罚", "C. 不执行行政拘留", "D. 加重处罚"],
+                answer: 2,
+                explanation: "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>不满14周岁的人才不予处罚！<br><br><strong>B. 错误！</strong>14-16岁是应当从轻或减轻，但主要是<span class='highlight-orange'>不执行拘留</span>！<br><br><strong>C. 正确！</strong>已满<span class='highlight-red'>14周岁不满16周岁</span>的人违反治安管理的，<span class='highlight-red'>不执行行政拘留</span>！<br><br><strong>D. 错误！</strong>未成年是减轻处罚，不是加重！<br><br>💡 <strong>小白记忆：</strong>14-16岁：处罚但不关！"
+            },
+            {
+                question: "对外国人附加适用的处罚是？",
+                options: ["A. 行政拘留", "B. 罚金", "C. 限期出境", "D. 管制"],
+                answer: 2,
+                explanation: "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>行政拘留是对所有人的处罚，不是专门针对外国人的！<br><br><strong>B. 错误！</strong>罚金是刑事处罚的种类！<br><br><strong>C. 正确！</strong>限期出境（或驱逐出境）是<span class='highlight-red'>专门针对外国人</span>的附加处罚！<br><br><strong>D. 错误！</strong>管制是刑事处罚！<br><br>💡 <strong>小白记忆：</strong>外国人专属处罚：限期出境和驱逐出境！"
+            },
+            {
+                question: "有两种以上违反治安管理行为的，行政拘留合并执行最长不超过多少日？",
+                options: ["A. 10日", "B. 15日", "C. 20日", "D. 30日"],
+                answer: 2,
+                explanation: "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>10日是单个拘留的档次，不是合并上限！<br><br><strong>B. 错误！</strong>15日是单个拘留的最长期限，不是合并上限！<br><br><strong>C. 正确！</strong>有两种以上违反治安管理行为的，行政拘留合并执行最长不超过<span class='highlight-red'>20日</span>！<br><br><strong>D. 错误！</strong>30日超过法律规定！<br><br>💡 <strong>小白记忆：</strong>单个最多15天，合并最多20天！"
+            },
+            {
+                question: "一事不再罚原则的核心是？",
+                options: ["A. 同一违法行为不能被处罚两次", "B. 同一违法行为不能被罚两次款", "C. 同一人不能被处罚两次", "D. 同一案件不能审理两次"],
+                answer: 1,
+                explanation: "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>不是\"不能被处罚两次\"，而是<span class='highlight-orange'>不能被罚两次款</span>！其他处罚可以并用！<br><br><strong>B. 正确！</strong>一事不再罚原则：对当事人的<span class='highlight-red'>同一个违法行为，不得给予两次以上罚款</span>！<br><br><strong>C. 错误！</strong>不同违法行为当然可以分别处罚！<br><br><strong>D. 错误！</strong>这是两审终审制的内容！<br><br>💡 <strong>小白记忆：</strong>一事不再\"款\"，罚款只能一次！"
+            },
+            {
+                question: "公安机关作出吊销许可证或者多少元以上罚款决定前，应当告知当事人有权要求听证？",
+                options: ["A. 1000元", "B. 2000元", "C. 3000元", "D. 5000元"],
+                answer: 1,
+                explanation: "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>1000元不是治安管理处罚法规定的听证标准！<br><br><strong>B. 正确！</strong>公安机关作出吊销许可证、<span class='highlight-red'>2000元以上罚款</span>的治安管理处罚决定前，应当告知当事人有权要求听证！<br><br><strong>C. 错误！</strong>3000元不是治安管理处罚法的标准！<br><br><strong>D. 错误！</strong>5000元不是！<br><br>💡 <strong>小白记忆：</strong>听证两千上，吊销要告知！"
+            },
+            {
+                question: "简易程序的适用范围是？",
+                options: ["A. 所有治安案件", "B. 警告或200元以下罚款", "C. 所有罚款案件", "D. 行政拘留案件"],
+                answer: 1,
+                explanation: "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>不是所有案件！<br><br><strong>B. 正确！</strong>简易程序适用于：事实清楚、证据确凿，<span class='highlight-red'>处警告或者200元以下罚款</span>的案件！<br><br><strong>C. 错误！</strong>简易程序只限于200元以下！<br><br><strong>D. 错误！</strong>行政拘留<span class='highlight-orange'>不能适用简易程序</span>！<br><br>💡 <strong>小白记忆：</strong>简易程序：小额（两百下）+轻情节！"
+            },
+            {
+                question: "公安派出所可以独立做出的处罚是？",
+                options: ["A. 行政拘留", "B. 罚款600元", "C. 警告", "D. 吊销许可证"],
+                answer: 2,
+                explanation: "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>行政拘留必须县级以上公安机关决定！<br><br><strong>B. 错误！</strong>派出所只能决定500元以下罚款！<br><br><strong>C. 正确！</strong>派出所可以决定<span class='highlight-red'>警告、500元以下罚款</span>！<br><br><strong>D. 错误！</strong>吊销许可证必须县级以上公安机关决定！<br><br>💡 <strong>小白记忆：</strong>派出所权限：警告五百下！"
+            },
+            {
+                question: "治安调解必须遵循的原则是？",
+                options: ["A. 强制原则", "B. 自愿原则", "C. 公开原则", "D. 效率原则"],
+                answer: 1,
+                explanation: "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>治安调解<span class='highlight-orange'>不能强制</span>，必须是双方自愿的！<br><br><strong>B. 正确！</strong>治安调解必须遵循<span class='highlight-red'>自愿原则</span>！双方都同意才能调解！<br><br><strong>C. 错误！</strong>公开不是调解的特有原则！<br><br><strong>D. 错误！</strong>效率不是调解的原则！<br><br>💡 <strong>小白记忆：</strong>调解是\"商量\"，不是\"命令\"！"
+            },
+            {
+                question: "治安调解达成协议后不履行的，公安机关应当？",
+                options: ["A. 继续调解", "B. 不予处罚", "C. 依法给予处罚", "D. 强制执行协议"],
+                answer: 2,
+                explanation: "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>调解一般只有一次！<br><br><strong>B. 错误！</strong>只有调解成功并履行才不予处罚！<br><br><strong>C. 正确！</strong>经调解<span class='highlight-red'>未达成协议</span>或者达成协议后<span class='highlight-red'>不履行的</span>，公安机关应当依照本法规定给予处罚！<br><br><strong>D. 错误！</strong>公安机关<span class='highlight-orange'>不能强制执行调解协议</span>！<br><br>💡 <strong>小白记忆：</strong>调解成功不处罚，调解失败要处罚！"
+            },
+            {
+                question: "关于追诉时效的说法，正确的是？",
+                options: ["A. 只要没人报警就不能处罚", "B. 超过6个月未被发现不再处罚", "C. 6个月从发现之日起算", "D. 所有违法行为都无限期追诉"],
+                answer: 1,
+                explanation: "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>关键是公安机关\"发现\"，不是没人报警！<br><br><strong>B. 正确！</strong>违反治安管理行为在<span class='highlight-red'>6个月</span>内没有被公安机关发现的，<span class='highlight-red'>不再处罚</span>！<br><br><strong>C. 错误！</strong>从违法行为<span class='highlight-orange'>发生之日</span>起算，不是发现之日！<br><br><strong>D. 错误！</strong>治安管理处罚有6个月的追诉时效！<br><br>💡 <strong>小白记忆：</strong>过期不候，6个月！"
+            },
+            {
+                question: "已满16周岁不满18周岁的人初次违反治安管理的，行政拘留应当？",
+                options: ["A. 从重执行", "B. 正常执行", "C. 不执行", "D. 加重执行"],
+                answer: 2,
+                explanation: "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>初次违反是减轻情节，不是从重！<br><br><strong>B. 错误！</strong>初次违反且年龄在16-18岁之间，<span class='highlight-orange'>不执行拘留</span>！<br><br><strong>C. 正确！</strong>已满16周岁不满18周岁，<span class='highlight-red'>初次</span>违反治安管理的，<span class='highlight-red'>不执行行政拘留</span>！注意必须是\"初次\"！<br><br><strong>D. 错误！</strong>未成年不是加重情节！<br><br>💡 <strong>小白记忆：</strong>16-18岁初次不关！第二次就要关！"
+            },
+            {
+                question: "70周岁以上的人违反治安管理，行政拘留应当？",
+                options: ["A. 从重执行", "B. 正常执行", "C. 不执行", "D. 加重执行"],
+                answer: 2,
+                explanation: "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>70岁以上是应当保护的对象，不是从重！<br><br><strong>B. 错误！</strong>70岁以上<span class='highlight-orange'>不执行拘留</span>！<br><br><strong>C. 正确！</strong><span class='highlight-red'>70周岁以上</span>的人违反治安管理的，<span class='highlight-red'>不执行行政拘留</span>！<br><br><strong>D. 错误！</strong>老人是保护对象，不是加重！<br><br>💡 <strong>小白记忆：</strong>70岁以上：处罚但不关！"
+            },
+            {
+                question: "怀孕或者哺乳自己不满一周岁婴儿的妇女违反治安管理的，行政拘留应当？",
+                options: ["A. 从重执行", "B. 正常执行", "C. 不执行", "D. 加重执行"],
+                answer: 2,
+                explanation: "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>特殊人群是保护对象！<br><br><strong>B. 错误！</strong>这类人群<span class='highlight-orange'>不执行拘留</span>！<br><br><strong>C. 正确！</strong><span class='highlight-red'>怀孕或者哺乳自己不满一周岁婴儿</span>的妇女，<span class='highlight-red'>不执行行政拘留</span>！<br><br><strong>D. 错误！</strong>这是保护不是加重！<br><br>💡 <strong>小白记忆：</strong>孕妇哺乳不拘留，保护母亲和婴儿！"
+            },
+            {
+                question: "限期出境和驱逐出境的决定机关是？",
+                options: ["A. 派出所", "B. 县级公安机关", "C. 公安部", "D. 法院"],
+                answer: 2,
+                explanation: "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>派出所有权限太低！<br><br><strong>B. 错误！</strong>县级公安机关没有这个权力！<br><br><strong>C. 正确！</strong>限期出境和驱逐出境由<span class='highlight-red'>公安部</span>决定！<br><br><strong>D. 错误！</strong>法院是审判机关！<br><br>💡 <strong>小白记忆：</strong>赶人出国是大事件，公安部才能决定！"
+            },
+            {
+                question: "驱逐出境和限期出境的区别是？",
+                options: ["A. 两者没有区别", "B. 限期让当事人自己走，驱逐是强制送走", "C. 驱逐更轻", "D. 限期更重"],
+                answer: 1,
+                explanation: "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>两者有明显区别！<br><br><strong>B. 正确！</strong>限期出境给你期限<span class='highlight-blue'>自己走</span>，驱逐出境是<span class='highlight-red'>强制</span>送走！<br><br><strong>C. 错误！</strong>驱逐出境<span class='highlight-orange'>更重</span>！<br><br><strong>D. 错误！</strong>驱逐出境更重！<br><br>💡 <strong>小白记忆：</strong>限期给你机会，驱逐强制执行！"
+            },
+            {
+                question: "张三有两个违法行为，分别被处以拘留5日和8日，合并执行应当拘留多少天？",
+                options: ["A. 5日", "B. 8日", "C. 13日", "D. 20日"],
+                answer: 2,
+                explanation: "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>不是只执行一个！<br><br><strong>B. 错误！</strong>不是只执行一个！<br><br><strong>C. 正确！</strong>分别决定，合并执行，5+8=<span class='highlight-blue'>13日</span>。因为13日不超过20日上限，所以执行13日！<br><br><strong>D. 错误！</strong>没有超过20日！<br><br>💡 <strong>小白记忆：</strong>分别相加，不超20天就执行！"
+            },
+            {
+                question: "张三有三个违法行为，分别被处以拘留5日、10日、8日，合并执行应当拘留多少天？",
+                options: ["A. 5日", "B. 10日", "C. 20日", "D. 23日"],
+                answer: 2,
+                explanation: "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>不是只执行一个！<br><br><strong>B. 错误！</strong>不是只执行一个！<br><br><strong>C. 正确！</strong>分别决定，合并执行，5+10+8=<span class='highlight-blue'>23日</span>。但因为合并执行最长不超过<span class='highlight-red'>20日</span>，所以实际执行<span class='highlight-red'>20日</span>！<br><br><strong>D. 错误！</strong>超过20日上限！<br><br>💡 <strong>小白记忆：</strong>相加超20天，按20天算！"
+            },
+            {
+                question: "一事不再罚原则规定在哪个法律中？",
+                options: ["A. 刑法", "B. 刑事诉讼法", "C. 行政处罚法", "D. 民法"],
+                answer: 2,
+                explanation: "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>刑法是规定犯罪和刑罚的法律！<br><br><strong>B. 错误！</strong>刑事诉讼法是规定诉讼程序的法律！<br><br><strong>C. 正确！</strong>一事不再罚原则规定在<span class='highlight-red'>行政处罚法</span>中，是行政处罚的基本原则！<br><br><strong>D. 错误！</strong>民法是规定民事关系的法律！<br><br>💡 <strong>小白记忆：</strong>一事不再罚是行政处罚法的原则！"
+            },
+            {
+                question: "听证的费用由谁承担？",
+                options: ["A. 当事人", "B. 公安机关", "C. 双方分担", "D. 败诉方"],
+                answer: 1,
+                explanation: "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>当事人<span class='highlight-orange'>不承担</span>听证费用！<br><br><strong>B. 正确！</strong>当事人<span class='highlight-red'>不承担</span>行政机关组织听证的费用！<br><br><strong>C. 错误！</strong>不是双方分担！<br><br><strong>D. 错误！</strong>听证不是诉讼！<br><br>💡 <strong>小白记忆：</strong>听证免费！"
+            },
+            {
+                question: "当场作出治安管理处罚决定的，应当在多少小时内备案？",
+                options: ["A. 12小时", "B. 24小时", "C. 48小时", "D. 7日"],
+                answer: 1,
+                explanation: "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>12小时不是治安管理处罚法的规定！<br><br><strong>B. 正确！</strong>当场作出治安管理处罚决定的，经办的人民警察应当在<span class='highlight-red'>24小时</span>内报所属公安机关备案！<br><br><strong>C. 错误！</strong>48小时太长了！<br><br><strong>D. 错误！</strong>7日是其他法律的规定！<br><br>💡 <strong>小白记忆：</strong>当场处罚24时内要备案！"
+            },
+            {
+                question: "当场收缴罚款的，应当向被处罚人出具什么？",
+                options: ["A. 口头说明", "B. 罚款收据", "C. 扣押凭证", "D. 拘留决定书"],
+                answer: 1,
+                explanation: "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>口头说明不符合法定程序！<br><br><strong>B. 正确！</strong>当场收缴罚款的，人民警察<span class='highlight-red'>应当向被处罚人出具罚款收据</span>！不出具的，当事人有权拒绝缴纳！<br><br><strong>C. 错误！</strong>扣押凭证是扣押物品时出具的！<br><br><strong>D. 错误！</strong>拘留决定书是拘留时出具的！<br><br>💡 <strong>小白记忆：</strong>当场收钱要出票，没票可以不给钱！"
+            },
+            {
+                question: "派出所无权做出的处罚是？",
+                options: ["A. 警告", "B. 罚款300元", "C. 行政拘留3日", "D. 罚款200元"],
+                answer: 2,
+                explanation: "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>警告在派出所权限范围内！<br><br><strong>B. 错误！</strong>300元在500元以下，在派出所权限范围内！<br><br><strong>C. 正确！</strong>行政拘留<span class='highlight-red'>只能由县级以上公安机关决定</span>，派出所<span class='highlight-orange'>无权决定</span>，即使是1天、3天也不行！<br><br><strong>D. 错误！</strong>200元在派出所权限范围内！<br><br>💡 <strong>小白记忆：</strong>拘留不管几天都要县局批！"
+            },
+            {
+                question: "下列哪项不属于治安管理处罚的种类？",
+                options: ["A. 警告", "B. 没收违法所得", "C. 行政拘留", "D. 吊销许可证"],
+                answer: 1,
+                explanation: "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>警告是治安管理处罚的种类之一！<br><br><strong>B. 正确！</strong>没收违法所得是<span class='highlight-orange'>行政处罚法</span>规定的处罚种类，不是<span class='highlight-red'>治安管理处罚法</span>规定的！治安管理处罚只有五种：警告、罚款、拘留、吊销许可证、限期出境/驱逐出境！<br><br><strong>C. 错误！</strong>行政拘留是治安管理处罚的种类之一！<br><br><strong>D. 错误！</strong>吊销许可证是治安管理处罚的种类之一！<br><br>💡 <strong>小白记忆：</strong>治安处罚五种：警告罚款拘留证，出境只对老外！"
+            },
+            {
+                question: "治安调解适用于哪些情况？",
+                options: ["A. 盗窃案件", "B. 因民间纠纷引起的打架斗殴", "C. 寻衅滋事案件", "D. 所有治安案件"],
+                answer: 1,
+                explanation: "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>盗窃不是民间纠纷，不能调解！<br><br><strong>B. 正确！</strong>治安调解适用于<span class='highlight-red'>因民间纠纷引起</span>的打架斗殴或者损毁他人财物等违反治安管理行为，<span class='highlight-blue'>情节较轻</span>的！<br><br><strong>C. 错误！</strong>结伙斗殴、寻衅滋事等不能调解！<br><br><strong>D. 错误！</strong>不是所有案件！有条件限制！<br><br>💡 <strong>小白记忆：</strong>调解三条件：民间纠纷+打架/损物+情节轻！"
+            },
+            {
+                question: "违法行为有连续状态的，追诉时效从何时起算？",
+                options: ["A. 第一次行为发生之日", "B. 最后一次行为发生之日", "C. 行为终了之日", "D. 发现之日"],
+                answer: 2,
+                explanation: "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>连续状态不是从第一次算！<br><br><strong>B. 错误！</strong>最后一次发生和终了是同一回事，但更准确的说法是\"终了之日\"！<br><br><strong>C. 正确！</strong>违法行为有<span class='highlight-red'>连续或者继续状态</span>的，从行为<span class='highlight-blue'>终了之日</span>起算！<br><br><strong>D. 错误！</strong>发现之日是判断是否超过时效的截止点！<br><br>💡 <strong>小白记忆：</strong>持续干坏事，从\"干完\"那天算！"
+            },
+            {
+                question: "不满多少周岁的人违反治安管理的，不予行政处罚？",
+                options: ["A. 12周岁", "B. 14周岁", "C. 16周岁", "D. 18周岁"],
+                answer: 1,
+                explanation: "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>12周岁不是法定年龄界限！<br><br><strong>B. 正确！</strong>不满<span class='highlight-red'>14周岁</span>的人违反治安管理的，<span class='highlight-red'>不予行政处罚</span>！<br><br><strong>C. 错误！</strong>14-16岁是要处罚的，只是不执行拘留！<br><br><strong>D. 错误！</strong>18岁以上是完全责任年龄！<br><br>💡 <strong>小白记忆：</strong>14岁以下：不处罚！"
+            },
+            {
+                question: "下列哪种情况不适用治安调解？",
+                options: ["A. 邻居因琐事打架", "B. 因民间纠纷损毁财物", "C. 雇凶伤害他人", "D. 同事因工作争执打架"],
+                answer: 2,
+                explanation: "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>邻居打架是民间纠纷，可以调解！<br><br><strong>B. 错误！</strong>因民间纠纷损毁财物可以调解！<br><br><strong>C. 正确！</strong><span class='highlight-red'>雇凶伤害他人</span>不适用调解！因为这不是民间纠纷，而是有组织的违法行为！<br><br><strong>D. 错误！</strong>同事争执打架可以是民间纠纷，可以调解！<br><br>💡 <strong>小白记忆：</strong>雇凶伤人不能调解！"
+            },
+            {
+                question: "关于听证程序的说法，正确的是？",
+                options: ["A. 拘留决定要听证", "B. 2000元以上罚款要听证", "C. 所有处罚都要听证", "D. 听证由败诉方承担费用"],
+                answer: 1,
+                explanation: "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>拘留<span class='highlight-orange'>不需要听证</span>！<br><br><strong>B. 正确！</strong>吊销许可证、<span class='highlight-red'>2000元以上罚款</span>要告知听证权利！<br><br><strong>C. 错误！</strong>不是所有处罚都要听证！<br><br><strong>D. 错误！</strong>听证<span class='highlight-orange'>免费</span>！<br><br>💡 <strong>小白记忆：</strong>听证范围：吊证+两千上！"
+            },
+            {
+                question: "简易程序的适用条件不包括？",
+                options: ["A. 事实清楚", "B. 证据确凿", "C. 处行政拘留", "D. 处警告或200元以下罚款"],
+                answer: 2,
+                explanation: "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>事实清楚是条件之一！<br><br><strong>B. 错误！</strong>证据确凿是条件之一！<br><br><strong>C. 正确！</strong>简易程序<span class='highlight-red'>不能用于行政拘留</span>！<br><br><strong>D. 错误！</strong>处警告或200元以下罚款是条件之一！<br><br>💡 <strong>小白记忆：</strong>简易程序三条件：事实清楚+证据确凿+警告或两百下！"
+            },
+            {
+                question: "派出所对张三作出罚款800元的处罚决定，正确的是？",
+                options: ["A. 派出所有权自行决定", "B. 应报请县级公安机关决定", "C. 应采用简易程序", "D. 应报请公安部决定"],
+                answer: 1,
+                explanation: "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>派出所只能决定500元以下罚款！<br><br><strong>B. 正确！</strong>派出所无权决定800元罚款，应当<span class='highlight-red'>报请县级公安机关决定</span>！<br><br><strong>C. 错误！</strong>简易程序适用于警告或200元以下罚款！<br><br><strong>D. 错误！</strong>不需要报到公安部！<br><br>💡 <strong>小白记忆：</strong>超了五百报县局！"
+            },
+            {
+                question: "对醉酒的人在醉酒状态中的约束措施是？",
+                options: ["A. 行政处罚", "B. 刑事拘留", "C. 保护性约束至酒醒", "D. 罚款"],
+                answer: 2,
+                explanation: "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>约束至酒醒不是行政处罚！<br><br><strong>B. 错误！</strong>这不是刑事拘留！<br><br><strong>C. 正确！</strong>醉酒的人在醉酒状态中，对本人有危险或者对他人的人身、财产或者公共安全有威胁的，应当对其采取<span class='highlight-red'>保护性措施约束至酒醒</span>！<br><br><strong>D. 错误！</strong>这不是罚款！<br><br>💡 <strong>小白记忆：</strong>醉酒有危险，约束至酒醒！"
+            },
+            {
+                question: "间歇性精神病人违反治安管理的，应当？",
+                options: ["A. 不予处罚", "B. 从轻处罚", "C. 在精神正常时给予处罚", "D. 加重处罚"],
+                answer: 2,
+                explanation: "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>间歇性精神病人在精神正常时违反治安管理的，应当给予处罚！<br><br><strong>B. 错误！</strong>不是必须从轻！<br><br><strong>C. 正确！</strong><span class='highlight-red'>间歇性精神病人在精神正常时有违法行为的，应当给予行政处罚</span>！<br><br><strong>D. 错误！</strong>精神病不是加重情节！<br><br>💡 <strong>小白记忆：</strong>间歇性精神病，正常时违法要处罚！"
+            },
+            {
+                question: "聋哑人违反治安管理的，可以？",
+                options: ["A. 从重处罚", "B. 不予处罚", "C. 从轻、减轻或不予处罚", "D. 加重处罚"],
+                answer: 2,
+                explanation: "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>聋哑人是特殊人群，应当从轻或减轻！<br><br><strong>B. 错误！</strong>不是完全不予处罚！<br><br><strong>C. 正确！</strong>又聋又哑或者盲人违反治安管理的，可以<span class='highlight-red'>从轻、减轻或者不予处罚</span>！<br><br><strong>D. 错误！</strong>这是减轻不是加重！<br><br>💡 <strong>小白记忆：</strong>聋哑盲人违法，可以从轻减轻或不予！"
+            },
+            {
+                question: "下列哪种情形应当从重处罚？",
+                options: ["A. 主动消除违法后果", "B. 受他人胁迫实施违法", "C. 六个月内曾受过治安管理处罚", "D. 初次违反治安管理"],
+                answer: 2,
+                explanation: "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>主动消除违法后果是<span class='highlight-orange'>减轻</span>情节！<br><br><strong>B. 错误！</strong>受他人胁迫是<span class='highlight-orange'>减轻</span>情节！<br><br><strong>C. 正确！</strong><span class='highlight-red'>六个月内曾受过治安管理处罚</span>的，是<span class='highlight-red'>从重处罚</span>的情形！这类似于刑法中的\"累犯\"！<br><br><strong>D. 错误！</strong>初次违反是<span class='highlight-orange'>减轻或不处罚</span>情节！<br><br>💡 <strong>小白记忆：</strong>从重情形：后果严重、六月内被罚过！"
+            },
+            {
+                question: "下列哪种情形可以减轻或不予处罚？",
+                options: ["A. 情节特别轻微的", "B. 有较严重后果的", "C. 教唆他人违反治安管理的", "D. 六个月内曾受过治安管理处罚的"],
+                answer: 0,
+                explanation: "✅ 正确答案是 <strong>A</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 正确！</strong><span class='highlight-red'>情节特别轻微</span>的，可以<span class='highlight-blue'>减轻处罚或者不予处罚</span>！<br><br><strong>B. 错误！</strong>有较严重后果是<span class='highlight-orange'>从重</span>情节！<br><br><strong>C. 错误！</strong>教唆他人违反治安管理是<span class='highlight-orange'>从重</span>情节！<br><br><strong>D. 错误！</strong>六个月内曾受过处罚是<span class='highlight-orange'>从重</span>情节！<br><br>💡 <strong>小白记忆：</strong>减轻情形：情节特别轻微、主动消除后果、被胁迫、主动投案、立功！"
+            },
+            {
+                question: "对违反治安管理行为人作出处罚决定后，应当在多少日内送达？",
+                options: ["A. 2日", "B. 3日", "C. 5日", "D. 7日"],
+                answer: 0,
+                explanation: "✅ 正确答案是 <strong>A</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 正确！</strong>公安机关应当向被处罚人宣告治安管理处罚决定书，并当场交付被处罚人；无法当场向被处罚人宣告的，应当在<span class='highlight-red'>2日</span>内送达被处罚人！<br><br><strong>B. 错误！</strong>不是3日！<br><br><strong>C. 错误！</strong>不是5日！<br><br><strong>D. 错误！</strong>不是7日！<br><br>💡 <strong>小白记忆：</strong>处罚决定书：当场交付，2日内送达！"
+            },
+            {
+                question: "被处罚人不服行政拘留处罚决定的，可以申请什么？",
+                options: ["A. 民事诉讼", "B. 刑事诉讼", "C. 行政复议或行政诉讼", "D. 仲裁"],
+                answer: 2,
+                explanation: "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>民事诉讼是解决民事纠纷的！<br><br><strong>B. 错误！</strong>刑事诉讼是解决刑事案件的！<br><br><strong>C. 正确！</strong>被处罚人不服行政拘留处罚决定的，可以向公安机关提出<span class='highlight-red'>行政复议</span>或者向法院提起<span class='highlight-red'>行政诉讼</span>！<br><br><strong>D. 错误！</strong>仲裁是解决民事纠纷的方式！<br><br>💡 <strong>小白记忆：</strong>不服治安处罚：复议或诉讼！"
+            },
+            {
+                question: "被处罚人申请行政复议后，是否可以申请暂缓执行行政拘留？",
+                options: ["A. 不可以", "B. 可以，但需提供担保", "C. 可以无条件暂缓", "D. 只能停止执行"],
+                answer: 1,
+                explanation: "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>可以申请暂缓执行！<br><br><strong>B. 正确！</strong>被处罚人不服行政拘留处罚决定，申请行政复议、提起行政诉讼的，可以向公安机关提出<span class='highlight-red'>暂缓执行行政拘留的申请</span>。公安机关认为暂缓执行不致发生社会危险的，由被处罚人或者其近亲属提出担保人，或者按每日200元的标准交纳保证金，可以暂缓执行！<br><br><strong>C. 错误！</strong>不是无条件，需要提供担保！<br><br><strong>D. 错误！</strong>不是停止执行，而是暂缓执行！<br><br>💡 <strong>小白记忆：</strong>复议诉讼可暂缓，要担保人或保证金！"
+            },
+            {
+                question: "询问不满16周岁的违反治安管理行为人，应当通知谁到场？",
+                options: ["A. 无需通知", "B. 其法定代理人", "C. 邻居", "D. 学校老师"],
+                answer: 1,
+                explanation: "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>必须通知！<br><br><strong>B. 正确！</strong>询问不满<span class='highlight-red'>16周岁</span>的违反治安管理行为人，应当通知其<span class='highlight-blue'>法定代理人</span>到场！<br><br><strong>C. 错误！</strong>邻居不是法定代理人！<br><br><strong>D. 错误！</strong>学校老师不是法定代理人！<br><br>💡 <strong>小白记忆：</strong>询问未满16岁，要叫法定代理人！"
+            },
+            {
+                question: "被询问人确认笔录无误后，应当签名或者盖章，询问的人民警察也应当在笔录上签名。这个说法正确吗？",
+                options: ["A. 正确", "B. 错误，警察不需要签名", "C. 错误，只需警察签名", "D. 错误，只需被询问人签名"],
+                answer: 0,
+                explanation: "✅ 正确答案是 <strong>A</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 正确！</strong>询问笔录应当交被询问人核对；记载有遗漏或者差错的，被询问人可以提出补充或者更正。被询问人确认笔录无误后，应当<span class='highlight-red'>签名或者盖章</span>，询问的人民警察也应当在笔录上<span class='highlight-red'>签名</span>！<br><br><strong>B. 错误！</strong>警察必须签名！<br><br><strong>C. 错误！</strong>被询问人也必须签名！<br><br><strong>D. 错误！</strong>警察也必须签名！<br><br>💡 <strong>小白记忆：</strong>询问笔录：双方都要签名！"
+            },
+            {
+                question: "对扣押的物品，应当妥善保管，不得挪作他用。对不宜长期保存的物品，应当如何处理？",
+                options: ["A. 随意丢弃", "B. 按有关规定处理", "C. 归还物品持有人", "D. 永久保存"],
+                answer: 1,
+                explanation: "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>不能随意丢弃！<br><br><strong>B. 正确！</strong>对<span class='highlight-red'>不宜长期保存的物品，按照有关规定处理</span>！<br><br><strong>C. 错误！</strong>不宜长期保存的物品不能直接归还！<br><br><strong>D. 错误！</strong>不宜长期保存的物品不能永久保存！<br><br>💡 <strong>小白记忆：</strong>扣押物品要保管，不宜长期保存按规定处理！"
+            },
+            {
+                question: "经查明与案件无关的物品，应当如何处理？",
+                options: ["A. 继续扣押", "B. 及时退还", "C. 拍卖", "D. 销毁"],
+                answer: 1,
+                explanation: "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>与案件无关的物品<span class='highlight-orange'>不能继续扣押</span>！<br><br><strong>B. 正确！</strong>经查明与案件无关的物品，应当<span class='highlight-red'>及时退还</span>！<br><br><strong>C. 错误！</strong>与案件无关的物品不能拍卖！<br><br><strong>D. 错误！</strong>与案件无关的物品不能销毁！<br><br>💡 <strong>小白记忆：</strong>与案件无关，及时退还！"
+            },
+            {
+                question: "人民警察的回避，由谁决定？",
+                options: ["A. 本人决定", "B. 当事人决定", "C. 其所属公安机关决定", "D. 法院决定"],
+                answer: 2,
+                explanation: "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>本人不能自己决定！<br><br><strong>B. 错误！</strong>当事人不能决定警察的回避！<br><br><strong>C. 正确！</strong>人民警察的回避，由其<span class='highlight-red'>所属公安机关决定</span>！<br><br><strong>D. 错误！</strong>法院不决定警察的回避！<br><br>💡 <strong>小白记忆：</strong>警察回避：所属公安机关决定！"
+            },
+            {
+                question: "公安机关负责人的回避，由谁决定？",
+                options: ["A. 本人决定", "B. 其所属公安机关决定", "C. 上一级公安机关决定", "D. 法院决定"],
+                answer: 2,
+                explanation: "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>本人不能自己决定！<br><br><strong>B. 错误！</strong>所属公安机关不能决定自己的负责人回避！<br><br><strong>C. 正确！</strong>公安机关负责人的回避，由<span class='highlight-red'>上一级公安机关决定</span>！<br><br><strong>D. 错误！</strong>法院不决定公安机关负责人的回避！<br><br>💡 <strong>小白记忆：</strong>负责人回避：上级公安机关决定！"
+            },
+            {
+                question: "房屋出租人将房屋出租给无身份证件的人居住的，应当如何处罚？",
+                options: ["A. 不处罚", "B. 处200元以上500元以下罚款", "C. 行政拘留", "D. 吊销许可证"],
+                answer: 1,
+                explanation: "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>这是违法行为，应当处罚！<br><br><strong>B. 正确！</strong>房屋出租人将房屋出租给<span class='highlight-blue'>无身份证件</span>的人居住的，或者<span class='highlight-blue'>不按规定登记承租人姓名</span>、身份证件种类和号码的，处<span class='highlight-red'>200元以上500元以下罚款</span>！<br><br><strong>C. 错误！</strong>这是罚款，不是拘留！<br><br><strong>D. 错误！</strong>这不是吊销许可证的情形！<br><br>💡 <strong>小白记忆：</strong>出租不登记：两百至五百元罚款！"
+            },
+            {
+                question: "受到罚款处罚的人应当自收到处罚决定书之日起多少日内，到指定的银行缴纳罚款？",
+                options: ["A. 5日", "B. 10日", "C. 15日", "D. 30日"],
+                answer: 2,
+                explanation: "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>5日太短了！<br><br><strong>B. 错误！</strong>10日不对！<br><br><strong>C. 正确！</strong>受到罚款处罚的人应当自收到处罚决定书之日起<span class='highlight-red'>15日</span>内，到指定的银行缴纳罚款！<br><br><strong>D. 错误！</strong>30日太长了！<br><br>💡 <strong>小白记忆：</strong>罚款缴纳期限：15日！"
+            },
+            {
+                question: "当场收缴罚款的，应当在多少日内向所属公安机关交付？",
+                options: ["A. 1日", "B. 2日", "C. 3日", "D. 5日"],
+                answer: 1,
+                explanation: "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong>1日太短了！<br><br><strong>B. 正确！</strong>人民警察当场收缴罚款的，应当在<span class='highlight-red'>2日</span>内将罚款交所属公安机关！<br><br><strong>C. 错误！</strong>3日不对！<br><br><strong>D. 错误！</strong>5日太长了！<br><br>💡 <strong>小白记忆：</strong>当场收缴2日交！"
+            }
+        ]
+    };
+    
+    let totalAnswered = 0;
+    let totalCorrect = 0;
+    
+    function renderKnowledgeQuiz(containerId, key, questions) {
+        const container = document.getElementById(containerId);
+        if (!container || !questions) return;
+        
+        let html = '';
+        questions.forEach((q, index) => {
+            html += `
+                <div class="quiz-card" data-quiz="${key}">
+                    <p class="question"><span class="question-num">${index + 1}</span>${q.question}</p>
+                    <div class="options">
+                        ${q.options.map((opt, i) => `
+                            <button class="option-btn" onclick="checkQuizAnswer(this, ${i === q.answer}, '${key}', ${index})">
+                                <span class="option-letter">${opt.charAt(0)}</span>${opt.substring(3)}
+                            </button>
+                        `).join('')}
+                    </div>
+                    <div class="explanation" style="display:none;">
+                        <p class="result"></p>
+                        <p>${q.explanation}</p>
+                    </div>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+    }
+    
+    function checkQuizAnswer(button, isCorrect, key, questionIndex) {
+        const quizCard = button.closest('.quiz-card');
+        const options = quizCard.querySelectorAll('.option-btn');
+        
+        if (button.classList.contains('disabled')) return;
+        
+        options.forEach(opt => opt.classList.add('disabled'));
+        
+        if (isCorrect) {
+            button.classList.add('correct');
+            totalCorrect++;
+        } else {
+            button.classList.add('wrong');
+            const questions = quizData[key];
+            if (questions && questions[questionIndex]) {
+                const correctAnswer = questions[questionIndex].answer;
+                options.forEach(opt => {
+                    const letter = opt.querySelector('.option-letter').textContent;
+                    if (letter === String.fromCharCode(65 + correctAnswer)) {
+                        opt.classList.add('correct');
+                    }
+                });
+            }
+        }
+        
+        totalAnswered++;
+        updateScore();
+        
+        const explanation = quizCard.querySelector('.explanation');
+        explanation.style.display = 'block';
+        explanation.querySelector('.result').className = 'result ' + (isCorrect ? 'correct' : 'wrong');
+        explanation.querySelector('.result').textContent = isCorrect ? '✅ 回答正确！' : '❌ 回答错误';
+    }
+    
+    function updateScore() {
+        document.getElementById('totalScore').textContent = `已答: ${totalAnswered} | 正确: ${totalCorrect}`;
+    }
+    
+    function scrollToSection(navItem, event) {
+        if (event) event.preventDefault();
+        document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+        navItem.classList.add('active');
+        const targetId = navItem.getAttribute('href').substring(1);
+        const target = document.getElementById(targetId);
+        if (target) {
+            target.scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        for (const [key, questions] of Object.entries(quizData)) {
+            renderKnowledgeQuiz('quiz-' + key, key, questions);
+        }
+        
+        window.addEventListener('scroll', function() {
+            const scrolled = window.scrollY;
+            const maxScroll = document.body.scrollHeight - window.innerHeight;
+            const progress = (scrolled / maxScroll) * 100;
+            document.getElementById('mainProgress').style.width = progress + '%';
+        });
+    });
+    </script>
+</body>
+</html>
