@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>行政许可法基础知识学习</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; line-height: 1.8; color: #333; background: #f5f7fa; }
+        
+        /* 顶部导航栏 */
+        .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 60px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .top-nav .logo { font-size: 20px; font-weight: bold; }
+        .top-nav .progress-info { display: flex; align-items: center; gap: 15px; }
+        .top-nav .progress-bar { width: 200px; height: 8px; background: rgba(255,255,255,0.3); border-radius: 4px; overflow: hidden; }
+        .top-nav .progress-fill { height: 100%; background: #fff; transition: width 0.3s; }
+        .top-nav .score-display { font-size: 14px; }
+        .close-nav-btn { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: #fff; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-size: 16px; line-height: 28px; text-align: center; padding: 0; }
+        .close-nav-btn:hover { background: rgba(255,255,255,0.3); }
+        
+        /* 侧边栏 */
+        .sidebar { position: fixed; top: 60px; left: 0; width: 240px; height: calc(100vh - 60px); background: white; border-right: 1px solid #e0e0e0; overflow-y: auto; z-index: 999; }
+        .sidebar-title { padding: 20px; font-size: 16px; font-weight: bold; color: #667eea; border-bottom: 2px solid #667eea; }
+        .sidebar-menu { list-style: none; }
+        .sidebar-menu li { border-bottom: 1px solid #f0f0f0; }
+        .sidebar-menu a { display: block; padding: 15px 20px; color: #333; text-decoration: none; transition: all 0.3s; }
+        .sidebar-menu a:hover { background: #f5f7fa; color: #667eea; }
+        .sidebar-menu a.active { background: #667eea; color: white; }
+        
+        /* 主内容区 */
+        .main-content { margin-left: 240px; margin-top: 60px; padding: 30px; min-height: calc(100vh - 60px); }
+        
+        /* 知识卡片 */
+        .knowledge-card { background: white; border-radius: 12px; padding: 30px; margin-bottom: 30px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); scroll-margin-top: 80px; }
+        .knowledge-card h2 { font-size: 24px; color: #667eea; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #667eea; }
+        .knowledge-card h3 { font-size: 18px; color: #333; margin: 20px 0 10px; }
+        .knowledge-card p { margin: 10px 0; line-height: 1.8; }
+        .knowledge-card ul { margin: 10px 0 10px 25px; }
+        .knowledge-card li { margin: 8px 0; line-height: 1.8; }
+        .example { background: #f8f9fa; border-left: 4px solid #667eea; padding: 15px 20px; margin: 15px 0; border-radius: 0 8px 8px 0; }
+        .example p { margin: 8px 0; }
+        .highlight-red { color: #e74c3c; font-weight: bold; }
+        .highlight-blue { color: #3498db; font-weight: bold; }
+        .highlight-orange { color: #e67e22; font-weight: bold; }
+        .highlight-purple { color: #9b59b6; font-weight: bold; }
+        
+        /* 练习题卡片 */
+        .quiz-card { background: white; border-radius: 12px; padding: 25px; margin: 20px 0; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+        .quiz-card .question { font-size: 16px; font-weight: 500; margin-bottom: 15px; padding-left: 35px; position: relative; }
+        .quiz-card .question-num { position: absolute; left: 0; top: 0; width: 26px; height: 26px; background: #667eea; color: white; border-radius: 50%; text-align: center; line-height: 26px; font-size: 14px; font-weight: bold; }
+        .quiz-card .options { margin-top: 15px; }
+        .quiz-card .option-btn { display: block; width: 100%; padding: 12px 15px; margin: 8px 0; background: #f8f9fa; border: 2px solid #e0e0e0; border-radius: 8px; text-align: left; cursor: pointer; font-size: 15px; transition: all 0.3s; }
+        .quiz-card .option-btn:hover:not(.disabled) { background: #e8f4fd; border-color: #667eea; }
+        .quiz-card .option-btn .option-letter { display: inline-block; width: 24px; height: 24px; background: #667eea; color: white; border-radius: 50%; text-align: center; line-height: 24px; margin-right: 10px; font-weight: bold; }
+        .quiz-card .option-btn.correct { background: #d4edda; border-color: #28a745; }
+        .quiz-card .option-btn.wrong { background: #f8d7da; border-color: #dc3545; }
+        .quiz-card .option-btn.disabled { cursor: not-allowed; opacity: 0.8; }
+        .quiz-card .explanation { margin-top: 15px; padding: 15px; background: #fff3cd; border-radius: 8px; display: none; line-height: 1.8; }
+        .quiz-card .explanation.show { display: block; }
+        
+        /* 知识框架 */
+        .framework-section { background: white; border-radius: 12px; padding: 30px; margin: 30px 0; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+        .framework-section h2 { font-size: 24px; color: #667eea; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #667eea; }
+        .framework-item { margin: 20px 0; padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #667eea; }
+        .framework-item h4 { color: #333; margin-bottom: 10px; }
+        .framework-item p { margin: 5px 0; font-size: 14px; }
+        
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .sidebar { width: 100%; height: auto; position: relative; margin-top: 60px; }
+            .main-content { margin-left: 0; padding: 15px; padding-top: 20px; }
+            .top-nav .progress-bar { width: 100px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <nav class="top-nav" id="topNav">
+        <div class="logo">📋 行政许可法基础知识学习</div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <div class="score-display" id="totalScore">已答: 0/0</div>
+            <button class="close-nav-btn" onclick="closeTopNav()">✕</button>
+        </div>
+    </nav>
+    
+    <!-- 侧边栏 -->
+    <aside class="sidebar">
+        <div class="sidebar-title">📚 知识模块</div>
+        <ul class="sidebar-menu">
+            <li><a href="#module1" onclick="scrollToSection(event, 'module1')">模块1：概念与特征</a></li>
+            <li><a href="#module2" onclick="scrollToSection(event, 'module2')">模块2：基本原则</a></li>
+            <li><a href="#module3" onclick="scrollToSection(event, 'module3')">模块3：许可种类</a></li>
+            <li><a href="#module4" onclick="scrollToSection(event, 'module4')">模块4：设定权限</a></li>
+            <li><a href="#module5" onclick="scrollToSection(event, 'module5')">模块5：实施主体</a></li>
+            <li><a href="#module6" onclick="scrollToSection(event, 'module6')">模块6：申请与受理</a></li>
+            <li><a href="#module7" onclick="scrollToSection(event, 'module7')">模块7：审查与决定</a></li>
+            <li><a href="#module8" onclick="scrollToSection(event, 'module8')">模块8：许可期限</a></li>
+            <li><a href="#module9" onclick="scrollToSection(event, 'module9')">模块9：听证程序</a></li>
+            <li><a href="#module10" onclick="scrollToSection(event, 'module10')">模块10：费用与监督</a></li>
+            <li><a href="#framework" onclick="scrollToSection(event, 'framework')">📋 知识框架总览</a></li>
+            <li><a href="#practice" onclick="scrollToSection(event, 'practice')">📝 练习专区</a></li>
+        </ul>
+    </aside>
+    
+    <!-- 主内容区 -->
+    <main class="main-content">
+        
+        <!-- 模块1：行政许可的概念与特征 -->
+        <section id="module1" class="knowledge-card">
+            <h2>🎯 模块1：行政许可的概念与特征</h2>
+            
+            <h3>一、什么是行政许可？</h3>
+            <p><span style="color: #e74c3c;">行政许可</span>，简单说就是：政府同意你做某件事的"通行证"。</p>
+            <p>用大白话说，就是：</p>
+            <ul>
+                <li>你想开饭店 → 需要营业执照和卫生许可证 → 这就是行政许可</li>
+                <li>你想当律师 → 需要律师资格证 → 这就是行政许可</li>
+                <li>你想开车 → 需要驾驶证 → 这也是行政许可</li>
+            </ul>
+            
+            <div class="example">
+                <p><strong>🌰 举例：</strong></p>
+                <p>张三想开一家小餐馆。</p>
+                <p>不开玩笑，直接开？不行！得去市场监管局申请营业执照，去卫健委申请卫生许可证。</p>
+                <p>政府审查后，给你发证 = 同意你开业 = 这就是行政许可！</p>
+                <p><strong>🔍 为什么这样举例：</strong></p>
+                <p>这个例子说明行政许可的核心：<span style="color: #e74c3c;">事前审批</span>——你想做某事，必须先得到政府同意，拿到"通行证"才能做。没有这个证，你偷偷开了，就是违法！</p>
+            </div>
+            
+            <h3>二、行政许可的特征</h3>
+            <p><span style="color: #3498db;">特征一：依申请行为</span></p>
+            <p>政府不会主动给你发证，必须你先提出申请。</p>
+            <p style="color: #9b59b6;">💡 小白记忆：不申请，不许可——政府不会追着你发证！</p>
+            
+            <p><span style="color: #3498db;">特征二：管理性行为</span></p>
+            <p>许可是为了管理社会事务，不是民事行为。</p>
+            <p style="color: #9b59b6;">💡 小白记忆：政府管你 = 行政许可；你和朋友签合同 = 民事行为（不是行政许可）</p>
+            
+            <p><span style="color: #3498db;">特征三：外部行为</span></p>
+            <p>行政许可针对的是"外部"的公民、法人，不是政府内部的人事管理。</p>
+            <p style="color: #9b59b6;">💡 小白记忆：对外不对内！公务员升职不是行政许可！</p>
+            
+            <p><span style="color: #3498db;">特征四：准予行为</span></p>
+            <p>许可的结果是"同意你做某事"，赋予你某种资格或权利。</p>
+            <p style="color: #9b59b6;">💡 小白记忆：许可 = 给你开绿灯！</p>
+            
+            <p style="color: #e67e22;">⚠️ 易错点提醒：行政许可 vs 行政确认</p>
+            <ul>
+                <li>行政许可：事先同意你做某事（如营业执照、驾驶证）</li>
+                <li>行政确认：事后确认某个事实（如房产登记、婚姻登记）</li>
+            </ul>
+            <p style="color: #9b59b6;">💡 记忆口诀：<span style="color: #9b59b6;">许可事前给通行，确认事后认事实！</span></p>
+            
+            <h3>三、行政许可的功能</h3>
+            <ul>
+                <li><span style="color: #e74c3c;">控制危险</span>：比如危险化学品经营许可，防止出事</li>
+                <li><span style="color: #e74c3c;">配置资源</span>：比如采矿许可，有限资源不能乱挖</li>
+                <li><span style="color: #e74c3c;">提供公信</span>：比如律师资格证，让大家信得过你</li>
+            </ul>
+            
+            <h3>📝 模块1练习题</h3>
+            <div id="quiz-module1"></div>
+        </section>
+        
+        <!-- 模块2：行政许可的基本原则 -->
+        <section id="module2" class="knowledge-card">
+            <h2>🎯 模块2：行政许可的基本原则</h2>
+            
+            <h3>一、合法原则</h3>
+            <p><span style="color: #e74c3c;">核心意思</span>：行政许可必须依法设立、依法实施。</p>
+            <p>用大白话说：</p>
+            <ul>
+                <li>设定许可，必须有法律依据</li>
+                <li>实施许可，必须按法律程序办</li>
+            </ul>
+            <p style="color: #9b59b6;">💡 记忆口诀：<span style="color: #9b59b6;">许可要合法，法外无许可！</span></p>
+            
+            <h3>二、公开原则</h3>
+            <p><span style="color: #e74c3c;">核心意思</span>：许可的事项、条件、程序都要公开透明。</p>
+            <div class="example">
+                <p><strong>🌰 举例：</strong></p>
+                <p>你想办营业执照，去政务大厅一看，墙上贴着：</p>
+                <ul>
+                    <li>需要什么材料——公开！</li>
+                    <li>多久能办好——公开！</li>
+                    <li>找谁办——公开！</li>
+                </ul>
+                <p><strong>🔍 为什么这样举例：</strong></p>
+                <p>这个例子说明公开原则的实质：让老百姓<span style="color: #e74c3c;">明明白白办事</span>，不用到处打听"找谁办""要啥材料"，一切都在阳光下运行。</p>
+            </div>
+            
+            <h3>三、公平公正原则</h3>
+            <p><span style="color: #e74c3c;">核心意思</span>：符合条件就给许可，不符合就不给，不能看人下菜碟。</p>
+            <p style="color: #e67e22;">⚠️ 易错点：公平公正 ≠ 平均主义</p>
+            <p>公平公正是说"条件一样，待遇一样"，不是说"每个人都发一个证"。</p>
+            <div class="example">
+                <p><strong>🌰 举例：</strong></p>
+                <p>张三和李四都申请开出租车，都符合条件。交管局给张三发证，不给李四发证？不行！这就是不公平！</p>
+                <p><strong>🔍 为什么这样举例：</strong></p>
+                <p>公平公正的核心是<span style="color: #e74c3c;">同等条件同等对待</span>，不能因为张三是领导亲戚就优先，李四是普通人就刁难。</p>
+            </div>
+            
+            <h3>四、便民原则</h3>
+            <p><span style="color: #e74c3c;">核心意思</span>：让老百姓少跑腿，办事方便。</p>
+            <ul>
+                <li><span style="color: #3498db;">一个窗口</span>：一站式服务，不用到处跑</li>
+                <li><span style="color: #3498db;">网上办理</span>：能网上办的，不用跑腿</li>
+                <li><span style="color: #3498db;">一次性告知</span>：需要什么材料，一次说清楚</li>
+            </ul>
+            <p style="color: #9b59b6;">💡 记忆口诀：<span style="color: #9b59b6;">便民少跑腿，一次就搞定！</span></p>
+            
+            <h3>五、救济原则</h3>
+            <p><span style="color: #e74c3c;">核心意思</span>：你不服许可决定，可以复议、诉讼。</p>
+            <p>用大白话说：政府不给你发证，你可以告！政府给你发了不该发的证，别人也可以告！</p>
+            
+            <h3>六、信赖保护原则（重要！）</h3>
+            <p><span style="color: #e74c3c;">核心意思</span>：政府发的证，老百姓可以信赖；政府不能随意撤销。</p>
+            <div class="example">
+                <p><strong>🌰 举例：</strong></p>
+                <p>张三依法取得了采矿许可证，投入了100万买设备。过了一年，政府说"当年审批有误"，把证撤销了。</p>
+                <p>这行吗？</p>
+                <p><span style="color: #e74c3c;">不行！</span>这违反信赖保护原则！政府要撤销，必须赔偿张三的损失。</p>
+                <p><strong>🔍 为什么这样举例：</strong></p>
+                <p>信赖保护原则的核心是：<span style="color: #e74c3c;">老百姓信任政府，政府的决定不能朝令夕改</span>。如果政府自己错了要改，必须赔偿老百姓的损失。</p>
+            </div>
+            <p style="color: #9b59b6;">💡 记忆口诀：<span style="color: #9b59b6;">信赖要保护，撤销要赔偿！</span></p>
+            
+            <p style="color: #e67e22;">⚠️ 易错点：什么情况下可以撤销许可？</p>
+            <ul>
+                <li><span style="color: #e74c3c;">可以撤销</span>：申请人弄虚作假骗取许可 → 不赔</li>
+                <li><span style="color: #e74c3c;">可以撤销但要赔</span>：行政机关违法作出许可 → 要赔</li>
+            </ul>
+            
+            <h3>📝 模块2练习题</h3>
+            <div id="quiz-module2"></div>
+        </section>
+        
+        <!-- 模块3：行政许可的种类 -->
+        <section id="module3" class="knowledge-card">
+            <h2>🎯 模块3：行政许可的种类</h2>
+            
+            <h3>一、五种许可类型（重要考点！）</h3>
+            
+            <h3>1. 普通许可</h3>
+            <p><span style="color: #e74c3c;">核心意思</span>：符合条件就给，没有数量限制。</p>
+            <div class="example">
+                <p><strong>🌰 举例：</strong>驾驶证、营业执照、结婚证</p>
+                <p><strong>🔍 为什么这样举例：</strong></p>
+                <p>这些许可的特点是：<span style="color: #e74c3c;">只要符合条件，人人都能申请，没有名额限制</span>。你考过驾照就发证，不会说"今年驾照名额已满，明年再来"。</p>
+            </div>
+            
+            <h3>2. 特许</h3>
+            <p><span style="color: #e74c3c;">核心意思</span>：有限资源，有数量限制，要竞争或拍卖。</p>
+            <div class="example">
+                <p><strong>🌰 举例：</strong>出租车经营许可、采矿许可、海域使用许可</p>
+                <p><strong>🔍 为什么这样举例：</strong></p>
+                <p>出租车牌照数量有限，不可能人人都能开出租车。这个牌照就是"特许"——<span style="color: #e74c3c;">有限资源，竞争取得</span>。大城市出租车牌照甚至能卖到几十万！</p>
+            </div>
+            <p style="color: #e67e22;">⚠️ 易错点：普通许可 vs 特许</p>
+            <p>普通许可 = 人人可申请，无数量限制</p>
+            <p>特许 = 有限资源，有数量限制</p>
+            
+            <h3>3. 认可</h3>
+            <p><span style="color: #e74c3c;">核心意思</span>：对某种资格、资质的认定。</p>
+            <div class="example">
+                <p><strong>🌰 举例：</strong>律师资格证、医师资格证、注册会计师证</p>
+                <p><strong>🔍 为什么这样举例：</strong></p>
+                <p>这些都是<span style="color: #e74c3c;">职业资格</span>的认可。你考过了司法考试，司法部给你发律师证，就是认可你"有当律师的资格"。没有这个认可，你不能以律师身份执业。</p>
+            </div>
+            
+            <h3>4. 核准</h3>
+            <p><span style="color: #e74c3c;">核心意思</span>：对技术标准、安全标准的认定。</p>
+            <div class="example">
+                <p><strong>🌰 举例：</strong>消防验收核准、电梯安全核准、食品安全核准</p>
+                <p><strong>🔍 为什么这样举例：</strong></p>
+                <p>这些涉及<span style="color: #e74c3c;">安全和技术标准</span>。你盖了大楼，消防验收不合格，不准开业！这是核准——检查你是否符合技术标准。</p>
+            </div>
+            
+            <h3>5. 登记</h3>
+            <p><span style="color: #e74c3c;">核心意思</span>：确认主体资格，形式审查为主。</p>
+            <div class="example">
+                <p><strong>🌰 举例：</strong>企业登记、社会团体登记、事业单位登记</p>
+                <p><strong>🔍 为什么这样举例：</strong></p>
+                <p>工商登记就是典型的"登记"。你提交材料，工商局主要是<span style="color: #e74c3c;">形式审查</span>——材料齐全、格式正确就给你登记，不太深入审查实质内容。</p>
+            </div>
+            
+            <p style="color: #9b59b6;">💡 五种许可记忆口诀：</p>
+            <p><span style="color: #9b59b6;">普通人人有，特许要竞争，认可给资格，核准查安全，登记认身份！</span></p>
+            
+            <h3>📝 模块3练习题</h3>
+            <div id="quiz-module3"></div>
+        </section>
+        
+        <!-- 模块4：行政许可的设定权 -->
+        <section id="module4" class="knowledge-card">
+            <h2>🎯 模块4：行政许可的设定权</h2>
+            
+            <h3>一、谁有权设定行政许可？（重要考点！）</h3>
+            
+            <table border="1" cellpadding="8" style="width:100%; border-collapse:collapse; margin:15px 0;">
+                <tr style="background:#667eea; color:white;">
+                    <th>设定主体</th>
+                    <th>能设定的许可</th>
+                    <th>限制</th>
+                </tr>
+                <tr>
+                    <td><span style="color: #e74c3c;">法律</span></td>
+                    <td>所有行政许可</td>
+                    <td>无限制</td>
+                </tr>
+                <tr>
+                    <td><span style="color: #3498db;">行政法规</span></td>
+                    <td>所有行政许可</td>
+                    <td>法律未设定的</td>
+                </tr>
+                <tr>
+                    <td><span style="color: #3498db;">地方性法规</span></td>
+                    <td>部分行政许可</td>
+                    <td>不能设定：①资格资质 ②企业登记 ③限制外地商品</td>
+                </tr>
+                <tr>
+                    <td><span style="color: #e67e22;">省级政府规章</span></td>
+                    <td>临时性许可</td>
+                    <td><span style="color: #e74c3c;">有效期1年</span>，期满需提请制定地方性法规</td>
+                </tr>
+            </table>
+            
+            <h3>二、不能设定行政许可的事项</h3>
+            <ul>
+                <li><span style="color: #e74c3c;">公民能自主决定的</span>：比如你穿什么衣服，不需要政府许可</li>
+                <li><span style="color: #e74c3c;">市场竞争能解决的</span>：比如商品价格，让市场决定</li>
+                <li><span style="color: #e74c3c;">行业组织能自律的</span>：比如行业标准，让行业协会管</li>
+                <li><span style="color: #e74c3c;">事后监督能解决的</span>：不需要事前审批，事后管就行</li>
+            </ul>
+            
+            <div class="example">
+                <p><strong>🌰 举例：</strong></p>
+                <p>某市规定"卖馒头需要政府审批"，这合理吗？</p>
+                <p><span style="color: #e74c3c;">不合理！</span>卖馒头是市场竞争能解决的事情，不需要政府事前审批。事后监管食品安全即可。</p>
+                <p><strong>🔍 为什么这样举例：</strong></p>
+                <p>这个例子说明：不是什么事情都需要许可。政府管得太多，反而影响效率。<span style="color: #e74c3c;">能不管的，尽量不管</span>——这就是行政许可法的精神。</p>
+            </div>
+            
+            <h3>三、地方性法规设定许可的限制（高频考点！）</h3>
+            <p style="color: #e67e22;">⚠️ 地方性法规不能设定的许可：</p>
+            <ul>
+                <li>① <span style="color: #e74c3c;">资格资质类许可</span>：如律师资格、医师资格（全国统一）</li>
+                <li>② <span style="color: #e74c3c;">企业登记前置许可</span>：如营业执照前置审批</li>
+                <li>③ <span style="color: #e74c3c;">限制外地商品的许可</span>：地方保护主义不行！</li>
+            </ul>
+            <p style="color: #9b59b6;">💡 记忆口诀：<span style="color: #9b59b6;">地方不设三样：资格、登记、地方保护！</span></p>
+            
+            <h3>四、省级规章的临时许可</h3>
+            <p><span style="color: #3498db;">关键数字</span>：<span style="color: #3498db;">1年</span></p>
+            <p>省级政府规章只能设定临时性许可，有效期1年。期满需要继续实施的，必须提请本级人大制定地方性法规。</p>
+            <p style="color: #e67e22;">⚠️ 注意：省级以下政府规章无权设定行政许可！</p>
+            
+            <h3>📝 模块4练习题</h3>
+            <div id="quiz-module4"></div>
+        </section>
+        
+        <!-- 模块5：行政许可的实施主体 -->
+        <section id="module5" class="knowledge-card">
+            <h2>🎯 模块5：行政许可的实施主体</h2>
+            
+            <h3>一、谁来实施行政许可？</h3>
+            
+            <h3>1. 行政机关</h3>
+            <p><span style="color: #e74c3c;">核心意思</span>：有行政许可权的行政机关直接实施许可。</p>
+            <div class="example">
+                <p><strong>🌰 举例：</strong></p>
+                <p>市场监管局颁发营业执照 → 市场监管局是行政机关</p>
+                <p>交管局颁发驾驶证 → 交管局是行政机关</p>
+                <p><strong>🔍 为什么这样举例：</strong></p>
+                <p>行政机关是许可实施的最主要主体。<span style="color: #e74c3c;">谁有许可权，谁就实施许可</span>，这个权力来自法律、法规的授权。</p>
+            </div>
+            
+            <h3>2. 被授权组织</h3>
+            <p><span style="color: #e74c3c;">核心意思</span>：法律、法规授权的组织实施许可，地位等同于行政机关。</p>
+            <div class="example">
+                <p><strong>🌰 举例：</strong></p>
+                <p>中国证监会（事业单位）审批证券发行 → 被法律授权</p>
+                <p>银保监会审批银行设立 → 被法律授权</p>
+                <p><strong>🔍 为什么这样举例：</strong></p>
+                <p>这些组织虽然不是行政机关，但<span style="color: #e74c3c;">法律、法规授权</span>它们实施许可，它们就有许可权。它们的地位等同于行政机关。</p>
+            </div>
+            
+            <h3>3. 受委托机关</h3>
+            <p><span style="color: #e74c3c;">核心意思</span>：行政机关可以委托其他机关实施许可，但法律责任由委托机关承担。</p>
+            <p style="color: #e67e22;">⚠️ 注意：</p>
+            <ul>
+                <li>受委托机关<span style="color: #e74c3c;">不能再委托</span>其他人</li>
+                <li>许可的法律责任由<span style="color: #e74c3c;">委托机关</span>承担</li>
+                <li>受委托主体只能是<span style="color: #e74c3c;">行政机关</span>，不能是个人或企业</li>
+            </ul>
+            
+            <p style="color: #9b59b6;">💡 记忆口诀：<span style="color: #9b59b6;">授权等于行政机关，委托责任在委托方！</span></p>
+            
+            <h3>二、行政许可实施主体的禁止性规定</h3>
+            <ul>
+                <li>禁止<span style="color: #e74c3c;">转委托</span>：受委托机关不能再委托</li>
+                <li>禁止<span style="color: #e74c3c;">主体资格转让</span>：许可权不能转让给其他机关</li>
+                <li>禁止<span style="color: #e74c3c;">内设机构以自己名义许可</span>：必须以机关名义</li>
+            </ul>
+            
+            <h3>📝 模块5练习题</h3>
+            <div id="quiz-module5"></div>
+        </section>
+        
+        <!-- 模块6：行政许可的申请与受理 -->
+        <section id="module6" class="knowledge-card">
+            <h2>🎯 模块6：行政许可的申请与受理</h2>
+            
+            <h3>一、申请方式</h3>
+            <p>申请人可以通过以下方式提出许可申请：</p>
+            <ul>
+                <li><span style="color: #e74c3c;">书面申请</span>：传统方式，递交申请书</li>
+                <li><span style="color: #e74c3c;">信函申请</span>：邮寄申请材料</li>
+                <li><span style="color: #e74c3c;">电报申请</span>：适用于紧急情况</li>
+                <li><span style="color: #e74c3c;">电子申请</span>：网上申请，越来越普遍</li>
+            </ul>
+            <p style="color: #9b59b6;">💡 记忆口诀：<span style="color: #9b59b6;">书面、信函、电报、电子，四种方式任你选！</span></p>
+            
+            <h3>二、行政机关的义务</h3>
+            <ul>
+                <li><span style="color: #e74c3c;">提供申请书格式文本</span>：免费提供，不得收费</li>
+                <li><span style="color: #e74c3c;">公示许可事项</span>：条件、程序、期限都要公示</li>
+                <li><span style="color: #e74c3c;">一次性告知</span>：需要补正的材料，一次说清楚</li>
+            </ul>
+            
+            <h3>三、申请的处理</h3>
+            <table border="1" cellpadding="8" style="width:100%; border-collapse:collapse; margin:15px 0;">
+                <tr style="background:#667eea; color:white;">
+                    <th>情况</th>
+                    <th>处理方式</th>
+                    <th>期限</th>
+                </tr>
+                <tr>
+                    <td>申请事项不需要许可</td>
+                    <td>即时告知不受理</td>
+                    <td>即时</td>
+                </tr>
+                <tr>
+                    <td>不属于本机关管辖</td>
+                    <td>即时告知向其他机关申请</td>
+                    <td>即时</td>
+                </tr>
+                <tr>
+                    <td>材料存在可以更正的错误</td>
+                    <td>允许当场更正</td>
+                    <td>当场</td>
+                </tr>
+                <tr>
+                    <td>材料不齐全或不符合要求</td>
+                    <td>一次性告知补正内容</td>
+                    <td><span style="color: #3498db;">5日内</span></td>
+                </tr>
+                <tr>
+                    <td>材料齐全、符合要求</td>
+                    <td>受理申请</td>
+                    <td>当场</td>
+                </tr>
+            </table>
+            
+            <p style="color: #e67e22;">⚠️ 关键数字：<span style="color: #3498db;">5日内</span>一次性告知</p>
+            <p>申请人提交的材料不齐全或不符合要求的，行政机关应当在<span style="color: #3498db;">5日内</span>一次性告知需要补正的全部内容。</p>
+            
+            <div class="example">
+                <p><strong>🌰 举例：</strong></p>
+                <p>张三申请营业执照，提交了5份材料。</p>
+                <p>工商局发现少了一份身份证复印件，当场没说。</p>
+                <p>过了10天，工商局说"材料不齐，补身份证复印件"。</p>
+                <p><span style="color: #e74c3c;">违法！</span>工商局应在5日内一次性告知，逾期不告知的，视为受理！</p>
+                <p><strong>🔍 为什么这样举例：</strong></p>
+                <p>这个例子说明<span style="color: #e74c3c;">"一次性告知"的重要性</span>——行政机关不能让申请人跑断腿，今天说少这个，明天说少那个。必须在5日内一次说清楚！</p>
+            </div>
+            
+            <h3>📝 模块6练习题</h3>
+            <div id="quiz-module6"></div>
+        </section>
+        
+        <!-- 模块7：行政许可的审查与决定 -->
+        <section id="module7" class="knowledge-card">
+            <h2>🎯 模块7：行政许可的审查与决定</h2>
+            
+            <h3>一、审查方式</h3>
+            
+            <h3>1. 书面审查</h3>
+            <p><span style="color: #e74c3c;">核心意思</span>：只看申请材料，不实地核查。</p>
+            <p>适用于材料齐全、情况简单的许可申请。</p>
+            
+            <h3>2. 实地核查</h3>
+            <p><span style="color: #e74c3c;">核心意思</span>：到现场检查核实情况。</p>
+            <div class="example">
+                <p><strong>🌰 举例：</strong></p>
+                <p>申请开饭店，卫生监督员要到现场检查厨房卫生、消毒设备等。</p>
+                <p>申请消防验收，消防人员要到现场检查消防设施。</p>
+                <p><strong>🔍 为什么这样举例：</strong></p>
+                <p>这些涉及<span style="color: #e74c3c;">安全、卫生</span>的许可，光看材料不够，必须实地看看是否符合条件。</p>
+            </div>
+            
+            <h3>3. 听取意见</h3>
+            <p><span style="color: #e74c3c;">核心意思</span>：许可涉及他人重大利益的，应当听取利害关系人意见。</p>
+            
+            <h3>二、审查期限（重要考点！）</h3>
+            <table border="1" cellpadding="8" style="width:100%; border-collapse:collapse; margin:15px 0;">
+                <tr style="background:#667eea; color:white;">
+                    <th>许可类型</th>
+                    <th>期限</th>
+                    <th>可否延长</th>
+                </tr>
+                <tr>
+                    <td>一般许可</td>
+                    <td><span style="color: #3498db;">20日</span></td>
+                    <td>可延长<span style="color: #3498db;">10日</span></td>
+                </tr>
+                <tr>
+                    <td>统一办理、联合办理</td>
+                    <td><span style="color: #3498db;">45日</span></td>
+                    <td>可延长<span style="color: #3498db;">15日</span></td>
+                </tr>
+                <tr>
+                    <td>层级审查</td>
+                    <td><span style="color: #3498db;">20日</span></td>
+                    <td>不得延长</td>
+                </tr>
+            </table>
+            
+            <p style="color: #9b59b6;">💡 记忆口诀：<span style="color: #9b59b6;">一般20延长10，联合45延长15，层级20不能延！</span></p>
+            
+            <h3>三、许可决定</h3>
+            <ul>
+                <li><span style="color: #e74c3c;">准予许可</span>：颁发许可证件或加盖印章</li>
+                <li><span style="color: #e74c3c;">不予许可</span>：书面说明理由，告知救济权利</li>
+            </ul>
+            
+            <h3>四、许可的效力范围</h3>
+            <p><span style="color: #e74c3c;">地域范围</span>：行政许可一般在发证机关管辖范围内有效。</p>
+            <p><span style="color: #e74c3c;">时间范围</span>：许可证件应注明有效期限。</p>
+            
+            <h3>📝 模块7练习题</h3>
+            <div id="quiz-module7"></div>
+        </section>
+        
+        <!-- 模块8：行政许可的期限 -->
+        <section id="module8" class="knowledge-card">
+            <h2>🎯 模块8：行政许可的期限（高频考点！）</h2>
+            
+            <h3>一、各类期限汇总</h3>
+            
+            <table border="1" cellpadding="8" style="width:100%; border-collapse:collapse; margin:15px 0;">
+                <tr style="background:#667eea; color:white;">
+                    <th>期限类型</th>
+                    <th>时长</th>
+                    <th>备注</th>
+                </tr>
+                <tr>
+                    <td>申请材料补正告知</td>
+                    <td><span style="color: #3498db;">5日</span></td>
+                    <td>逾期不告知视为受理</td>
+                </tr>
+                <tr>
+                    <td>一般许可决定期限</td>
+                    <td><span style="color: #3498db;">20日</span></td>
+                    <td>可延长10日</td>
+                </tr>
+                <tr>
+                    <td>联合办理期限</td>
+                    <td><span style="color: #3498db;">45日</span></td>
+                    <td>可延长15日</td>
+                </tr>
+                <tr>
+                    <td>层级审查期限</td>
+                    <td><span style="color: #3498db;">20日</span></td>
+                    <td>不得延长</td>
+                </tr>
+                <tr>
+                    <td>许可证件颁发</td>
+                    <td><span style="color: #3498db;">10日</span></td>
+                    <td>决定之日起</td>
+                </tr>
+                <tr>
+                    <td>听证告知期限</td>
+                    <td><span style="color: #3498db;">7日</span></td>
+                    <td>听证前告知</td>
+                </tr>
+                <tr>
+                    <td>听证申请期限</td>
+                    <td><span style="color: #3498db;">5日</span></td>
+                    <td>收到告知后</td>
+                </tr>
+            </table>
+            
+            <h3>二、期限计算规则</h3>
+            <ul>
+                <li>期限<span style="color: #e74c3c;">不含</span>受理申请当日</li>
+                <li>期限届满的最后一日是节假日的，<span style="color: #e74c3c;">顺延至节假日后第一个工作日</span></li>
+                <li>期限<span style="color: #e74c3c;">不含</span>专业审查、检验、检测时间</li>
+            </ul>
+            
+            <div class="example">
+                <p><strong>🌰 举例：</strong></p>
+                <p>张三1月5日提交许可申请，当日受理。</p>
+                <p>一般许可决定期限是20日，什么时候必须作出决定？</p>
+                <p>计算：1月5日不算，从1月6日开始算，到1月25日止（共20日）。</p>
+                <p><strong>🔍 为什么这样举例：</strong></p>
+                <p>这个例子说明期限计算的关键：<span style="color: #e74c3c;">受理当日不算</span>。从次日开始计算，20日后必须作出决定。</p>
+            </div>
+            
+            <p style="color: #9b59b6;">💡 记忆口诀：<span style="color: #9b59b6;">期限当日不算，节假日顺延，检验时间除外！</span></p>
+            
+            <h3>三、期限延长的程序</h3>
+            <p>期限需要延长的，必须：</p>
+            <ul>
+                <li>经本机关负责人批准</li>
+                <li>书面告知申请人延长期限的理由</li>
+            </ul>
+            <p style="color: #e67e22;">⚠️ 注意：层级审查不得延长！</p>
+            
+            <h3>📝 模块8练习题</h3>
+            <div id="quiz-module8"></div>
+        </section>
+        
+        <!-- 模块9：行政许可的听证程序 -->
+        <section id="module9" class="knowledge-card">
+            <h2>🎯 模块9：行政许可的听证程序</h2>
+            
+            <h3>一、听证的适用范围</h3>
+            <h3>1. 应当听证（法定听证）</h3>
+            <ul>
+                <li><span style="color: #e74c3c;">法律、法规、规章规定应当听证的事项</span></li>
+                <li><span style="color: #e74c3c;">涉及公共利益的重大行政许可事项</span></li>
+            </ul>
+            
+            <h3>2. 可以听证（依申请听证）</h3>
+            <p>许可直接涉及申请人与他人之间<span style="color: #e74c3c;">重大利益关系</span>的，申请人、利害关系人可以申请听证。</p>
+            
+            <div class="example">
+                <p><strong>🌰 举例：</strong></p>
+                <p>张三申请在某小区门口开酒吧。</p>
+                <p>小区居民认为酒吧会影响休息，要求听证。</p>
+                <p><span style="color: #e74c3c;">可以听证！</span>酒吧直接影响居民利益，居民可以申请听证。</p>
+                <p><strong>🔍 为什么这样举例：</strong></p>
+                <p>这个例子说明听证的核心目的：<span style="color: #e74c3c;">保护利害关系人的利益</span>。许可不只是申请人的事，还要考虑其他受影响的人。</p>
+            </div>
+            
+            <h3>二、听证程序（重要考点！）</h3>
+            
+            <table border="1" cellpadding="8" style="width:100%; border-collapse:collapse; margin:15px 0;">
+                <tr style="background:#667eea; color:white;">
+                    <th>步骤</th>
+                    <th>期限</th>
+                    <th>内容</th>
+                </tr>
+                <tr>
+                    <td>告知听证权利</td>
+                    <td><span style="color: #3498db;">听证7日前</span></td>
+                    <td>告知时间、地点</td>
+                </tr>
+                <tr>
+                    <td>申请听证</td>
+                    <td><span style="color: #3498db;">收到告知5日内</span></td>
+                    <td>提交听证申请</td>
+                </tr>
+                <tr>
+                    <td>组织听证</td>
+                    <td><span style="color: #3498db;">20日内</span></td>
+                    <td>举行听证会</td>
+                </tr>
+            </table>
+            
+            <p style="color: #9b59b6;">💡 记忆口诀：<span style="color: #9b59b6;">告知提前7天，申请5天内，听证20日办！</span></p>
+            
+            <h3>三、听证规则</h3>
+            <ul>
+                <li><span style="color: #e74c3c;">公开举行</span>：听证应当公开举行</li>
+                <li><span style="color: #e74c3c;">职能分离</span>：调查人员不得担任听证主持人</li>
+                <li><span style="color: #e74c3c;">回避制度</span>：与许可有利害关系的人员应当回避</li>
+                <li><span style="color: #e74c3c;">听证费用</span>：行政机关承担，不得向申请人收取</li>
+            </ul>
+            
+            <p style="color: #e67e22;">⚠️ 易错点：听证笔录的效力</p>
+            <p>行政机关应当根据<span style="color: #e74c3c;">听证笔录</span>作出许可决定。</p>
+            <p>这意味着：听证笔录是作出决定的依据，不能在听证笔录之外另采证据！</p>
+            
+            <h3>📝 模块9练习题</h3>
+            <div id="quiz-module9"></div>
+        </section>
+        
+        <!-- 模块10：行政许可的费用与监督检查 -->
+        <section id="module10" class="knowledge-card">
+            <h2>🎯 模块10：行政许可的费用与监督检查</h2>
+            
+            <h3>一、许可收费原则</h3>
+            <p><span style="color: #e74c3c;">核心原则</span>：行政许可<span style="color: #e74c3c;">原则上不收费</span>！</p>
+            
+            <h3>二、可以收费的情形</h3>
+            <ul>
+                <li><span style="color: #3498db;">法律、行政法规规定</span>可以收费的</li>
+                <li>收费必须有<span style="color: #e74c3c;">法定依据</span></li>
+                <li>收费必须<span style="color: #e74c3c;">公开标准</span></li>
+                <li>收费必须<span style="color: #e74c3c;">实行收支两条线</span></li>
+            </ul>
+            
+            <div class="example">
+                <p><strong>🌰 举例：</strong></p>
+                <p>办营业执照收费吗？<span style="color: #e74c3c;">不收费！</span></p>
+                <p>办驾驶证收费吗？<span style="color: #e74c3c;">收考试费，但法律有规定！</span></p>
+                <p><strong>🔍 为什么这样举例：</strong></p>
+                <p>行政许可法的核心精神是<span style="color: #e74c3c;">减轻老百姓负担</span>。收费必须有法律依据，不能随意收费。</p>
+            </div>
+            
+            <h3>三、监督检查</h3>
+            <h3>1. 谁来监督？</h3>
+            <ul>
+                <li><span style="color: #e74c3c;">上级行政机关</span>监督下级行政机关</li>
+                <li><span style="color: #e74c3c;">许可实施机关</span>监督被许可人</li>
+            </ul>
+            
+            <h3>2. 监督内容</h3>
+            <ul>
+                <li>被许可人是否<span style="color: #e74c3c;">按照许可条件</span>从事活动</li>
+                <li>被许可人是否<span style="color: #e74c3c;">保持许可条件</span></li>
+                <li>许可事项是否<span style="color: #e74c3c;">发生变化</span></li>
+            </ul>
+            
+            <h3>四、许可的撤销、撤回、注销（高频考点！）</h3>
+            
+            <table border="1" cellpadding="8" style="width:100%; border-collapse:collapse; margin:15px 0;">
+                <tr style="background:#667eea; color:white;">
+                    <th>类型</th>
+                    <th>原因</th>
+                    <th>法律后果</th>
+                </tr>
+                <tr>
+                    <td rowspan="2"><span style="color: #e74c3c;">撤销</span></td>
+                    <td>行政机关违法作出许可</td>
+                    <td><span style="color: #e74c3c;">可撤销，应赔偿</span></td>
+                </tr>
+                <tr>
+                    <td>申请人弄虚作假骗取许可</td>
+                    <td><span style="color: #e74c3c;">应当撤销，不赔偿</span></td>
+                </tr>
+                <tr>
+                    <td><span style="color: #3498db;">撤回</span></td>
+                    <td>许可依据修改或废止<br>客观情况发生重大变化</td>
+                    <td>应当<span style="color: #e74c3c;">补偿</span>财产损失</td>
+                </tr>
+                <tr>
+                    <td><span style="color: #e67e22;">注销</span></td>
+                    <td>许可有效期届满<br>许可被撤销/撤回<br>法人终止等</td>
+                    <td>许可效力消灭</td>
+                </tr>
+            </table>
+            
+            <p style="color: #9b59b6;">💡 记忆口诀：</p>
+            <p><span style="color: #9b59b6;">撤销分两种：机关错要赔，申请人错不赔！</span></p>
+            <p><span style="color: #9b59b6;">撤回是变故，政府要补偿！</span></p>
+            <p><span style="color: #9b59b6;">注销是程序，效力消灭了！</span></p>
+            
+            <div class="example">
+                <p><strong>🌰 举例：</strong></p>
+                <p>场景1：张三行贿拿到许可证 → <span style="color: #e74c3c;">撤销，不赔</span></p>
+                <p>场景2：工商局工作人员疏忽，不该给张三发了证 → <span style="color: #e74c3c;">可撤销，要赔</span></p>
+                <p>场景3：张三合法拿到采矿证，后来该区域划为自然保护区 → <span style="color: #3498db;">撤回，要补偿</span></p>
+                <p>场景4：张三的许可证到期了 → <span style="color: #e67e22;">注销</span></p>
+                <p><strong>🔍 为什么这样举例：</strong></p>
+                <p>这四个场景完整展示了撤销、撤回、注销的区别：<span style="color: #e74c3c;">撤销是纠错，撤回是变故，注销是程序</span>。</p>
+            </div>
+            
+            <h3>📝 模块10练习题</h3>
+            <div id="quiz-module10"></div>
+        </section>
+        
+        <!-- 知识框架总览 -->
+        <section id="framework" class="framework-section">
+            <h2>📋 知识框架总览</h2>
+            
+            <div class="framework-item">
+                <h4>模块1：行政许可的概念与特征</h4>
+                <p><span style="color: #e74c3c;">核心概念</span>：政府同意你做某事的"通行证"</p>
+                <p><span style="color: #3498db;">四大特征</span>：依申请、管理性、外部性、准予性</p>
+                <p><span style="color: #9b59b6;">记忆口诀</span>：许可事前给通行，确认事后认事实</p>
+                <p><span style="color: #e67e22;">易错点</span>：行政许可 vs 行政确认的区别</p>
+            </div>
+            
+            <div class="framework-item">
+                <h4>模块2：行政许可的基本原则</h4>
+                <p><span style="color: #e74c3c;">六大原则</span>：合法、公开、公平公正、便民、救济、信赖保护</p>
+                <p><span style="color: #3498db;">信赖保护原则</span>：政府发的证不能随意撤销，撤销要赔偿</p>
+                <p><span style="color: #9b59b6;">记忆口诀</span>：信赖要保护，撤销要赔偿</p>
+                <p><span style="color: #e67e22;">易错点</span>：申请人弄虚作假骗取许可 → 撤销不赔</p>
+            </div>
+            
+            <div class="framework-item">
+                <h4>模块3：行政许可的种类</h4>
+                <p><span style="color: #e74c3c;">五种类型</span>：普通许可、特许、认可、核准、登记</p>
+                <p><span style="color: #3498db;">普通许可</span>：人人可申请，无数量限制（如驾驶证）</p>
+                <p><span style="color: #3498db;">特许</span>：有限资源，有数量限制（如出租车牌照）</p>
+                <p><span style="color: #9b59b6;">记忆口诀</span>：普通人人有，特许要竞争，认可给资格，核准查安全，登记认身份</p>
+            </div>
+            
+            <div class="framework-item">
+                <h4>模块4：行政许可的设定权</h4>
+                <p><span style="color: #e74c3c;">法律</span>：可设定所有许可</p>
+                <p><span style="color: #3498db;">行政法规</span>：可设定所有许可（法律未设定的）</p>
+                <p><span style="color: #3498db;">地方性法规</span>：部分许可，不能设资格、登记、地方保护</p>
+                <p><span style="color: #e67e22;">省级规章</span>：临时许可，有效期<span style="color: #3498db;">1年</span></p>
+                <p><span style="color: #9b59b6;">记忆口诀</span>：地方不设三样：资格、登记、地方保护</p>
+            </div>
+            
+            <div class="framework-item">
+                <h4>模块5：行政许可的实施主体</h4>
+                <p><span style="color: #e74c3c;">三类主体</span>：行政机关、被授权组织、受委托机关</p>
+                <p><span style="color: #3498db;">被授权组织</span>：法律、法规授权，地位等同于行政机关</p>
+                <p><span style="color: #e67e22;">受委托机关</span>：不能再委托，责任由委托机关承担</p>
+                <p><span style="color: #9b59b6;">记忆口诀</span>：授权等于行政机关，委托责任在委托方</p>
+            </div>
+            
+            <div class="framework-item">
+                <h4>模块6：行政许可的申请与受理</h4>
+                <p><span style="color: #e74c3c;">申请方式</span>：书面、信函、电报、电子</p>
+                <p><span style="color: #3498db;">补正告知期限</span>：<span style="color: #3498db;">5日内</span>一次性告知，逾期视为受理</p>
+                <p><span style="color: #9b59b6;">记忆口诀</span>：书面、信函、电报、电子，四种方式任你选</p>
+                <p><span style="color: #e67e22;">易错点</span>：逾期不告知补正内容的，视为受理</p>
+            </div>
+            
+            <div class="framework-item">
+                <h4>模块7：行政许可的审查与决定</h4>
+                <p><span style="color: #e74c3c;">审查方式</span>：书面审查、实地核查、听取意见</p>
+                <p><span style="color: #3498db;">一般许可期限</span>：<span style="color: #3498db;">20日</span>，可延长<span style="color: #3498db;">10日</span></p>
+                <p><span style="color: #3498db;">联合办理期限</span>：<span style="color: #3498db;">45日</span>，可延长<span style="color: #3498db;">15日</span></p>
+                <p><span style="color: #9b59b6;">记忆口诀</span>：一般20延长10，联合45延长15，层级20不能延</p>
+            </div>
+            
+            <div class="framework-item">
+                <h4>模块8：行政许可的期限</h4>
+                <p><span style="color: #e74c3c;">关键期限</span>：补正告知5日、许可决定20日、颁证10日</p>
+                <p><span style="color: #3498db;">期限计算</span>：不含受理当日，节假日顺延</p>
+                <p><span style="color: #e67e22;">层级审查</span>：<span style="color: #3498db;">20日</span>，不得延长</p>
+                <p><span style="color: #9b59b6;">记忆口诀</span>：期限当日不算，节假日顺延，检验时间除外</p>
+            </div>
+            
+            <div class="framework-item">
+                <h4>模块9：行政许可的听证程序</h4>
+                <p><span style="color: #e74c3c;">适用范围</span>：法定听证 + 依申请听证</p>
+                <p><span style="color: #3498db;">告知期限</span>：听证<span style="color: #3498db;">7日前</span>告知</p>
+                <p><span style="color: #3498db;">申请期限</span>：收到告知<span style="color: #3498db;">5日内</span>申请</p>
+                <p><span style="color: #e67e22;">听证规则</span>：公开举行、职能分离、回避制度、费用由机关承担</p>
+                <p><span style="color: #9b59b6;">记忆口诀</span>：告知提前7天，申请5天内，听证20日办</p>
+            </div>
+            
+            <div class="framework-item">
+                <h4>模块10：行政许可的费用与监督检查</h4>
+                <p><span style="color: #e74c3c;">收费原则</span>：原则上不收费，收费须有法律依据</p>
+                <p><span style="color: #3498db;">撤销</span>：机关错要赔，申请人错不赔</p>
+                <p><span style="color: #3498db;">撤回</span>：客观情况变化，政府要补偿</p>
+                <p><span style="color: #e67e22;">注销</span>：许可效力消灭的程序性手续</p>
+                <p><span style="color: #9b59b6;">记忆口诀</span>：撤销分两种，机关错要赔；撤回是变故，政府要补偿；注销是程序，效力消灭了</p>
+            </div>
+        </section>
+        
+        <!-- 练习专区 -->
+        <section id="practice" class="knowledge-card">
+            <h2>📝 练习专区（50道综合题）</h2>
+            <p>以下题目综合检验你对行政许可法的掌握程度，请认真作答！</p>
+            <div id="quiz-practice"></div>
+        </section>
+        
+        <script>
+        // ========== 关闭导航栏 ==========
+        function closeTopNav() {
+            document.getElementById('topNav').style.display = 'none';
+        }
+        
+        // ========== 滚动到指定模块 ==========
+        function scrollToSection(event, sectionId) {
+            event.preventDefault();
+            const element = document.getElementById(sectionId);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+        
+        // ========== 题库数据 ==========
+        
+        // 模块1题库：行政许可的概念与特征
+        const quiz1Data = [
+            {"question": "行政许可的本质是什么？", "options": ["A. 政府对民事行为的认可", "B. 政府同意你做某事的通行证", "C. 政府对犯罪行为的处罚", "D. 政府对民事纠纷的调解"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>民事行为不需要政府许可！签合同是民事行为！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>政府同意你做某事的通行证</span>！这就是行政许可的本质！</b><br><br><strong>C. 错误！</strong><b>处罚不是许可，许可也不是处罚！</b><br><br><strong>D. 错误！</strong><b>调解是行政行为，但不是行政许可！</b><br><br><span class='highlight-purple'>小白记忆：</span>许可 = 政府给你开绿灯！"},
+            {"question": "下列哪项属于行政许可？", "options": ["A. 房产登记", "B. 婚姻登记", "C. 营业执照", "D. 身份证办理"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>房产登记是<span class='highlight-orange'>行政确认</span>，确认房产归属，不是许可！</b><br><br><strong>B. 错误！</strong><b>婚姻登记是<span class='highlight-orange'>行政确认</span>，确认婚姻关系，不是许可！</b><br><br><strong>C. 正确！</strong><b><span class='highlight-red'>营业执照</span>是行政许可！你想开公司，必须先拿到营业执照这个通行证！</b><br><br><strong>D. 错误！</strong><b>身份证办理是行政确认，确认身份，不是许可！</b><br><br><span class='highlight-purple'>小白记忆：</span>许可事前给通行，确认事后认事实！"},
+            {"question": "行政许可的特征不包括？", "options": ["A. 依申请行为", "B. 管理性行为", "C. 内部行为", "D. 准予行为"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 正确！</strong><b>行政许可是依申请行为，政府不会主动给你发证！</b><br><br><strong>B. 正确！</strong><b>行政许可是管理性行为，用于管理社会事务！</b><br><br><strong>C. 错误！</strong><b><span class='highlight-red'>行政许可不是内部行为，而是外部行为</span>！针对的是外部公民、法人！</b><br><br><strong>D. 正确！</strong><b>行政许可是准予行为，给你开绿灯！</b><br><br><span class='highlight-purple'>小白记忆：</span>许可对外不对内！"},
+            {"question": "行政许可与行政确认的主要区别是？", "options": ["A. 主体不同", "B. 是否需要申请", "C. 是事前审批还是事后确认", "D. 是否收费"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>主体都是行政机关！</b><br><br><strong>B. 错误！</strong><b>两者都需要申请！</b><br><br><strong>C. 正确！</strong><b><span class='highlight-red'>许可事前审批，确认事后认定</span>！许可是事先同意你做某事，确认是事后认可某个事实！</b><br><br><strong>D. 错误！</strong><b>是否收费不是主要区别！</b><br><br><span class='highlight-purple'>小白记忆：</span>许可 = 事先同意；确认 = 事后认定！"},
+            {"question": "下列关于行政许可功能的说法，错误的是？", "options": ["A. 控制危险", "B. 配置资源", "C. 提供公信", "D. 创造财富"], "answer": 3, "explanation": "✅ 正确答案是 <strong>D</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 正确！</strong><b>许可可以控制危险，如危险化学品经营许可！</b><br><br><strong>B. 正确！</strong><b>许可可以配置有限资源，如采矿许可！</b><br><br><strong>C. 正确！</strong><b>许可可以提供公信，如律师资格证！</b><br><br><strong>D. 错误！</strong><b><span class='highlight-red'>行政许可本身不创造财富</span>，它是管理行为！</b><br><br><span class='highlight-purple'>小白记忆：</span>许可三大功能：控危险、配资源、供公信！"}
+        ];
+        
+        // 模块2题库：行政许可的基本原则
+        const quiz2Data = [
+            {"question": "信赖保护原则的核心内容是？", "options": ["A. 政府可以随时撤销许可", "B. 政府发的证老百姓可以信赖，不能随意撤销", "C. 申请人可以随时申请撤销许可", "D. 政府可以无条件变更许可"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>政府不能随意撤销许可！要撤销得有理由，可能还要赔！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>政府发的证老百姓可以信赖，不能随意撤销</span>！这就是信赖保护原则！</b><br><br><strong>C. 错误！</strong><b>申请人不能随意撤销许可，这是政府的行为！</b><br><br><strong>D. 错误！</strong><b>政府不能无条件变更许可，必须有正当理由！</b><br><br><span class='highlight-purple'>小白记忆：</span>信赖要保护，撤销要赔偿！"},
+            {"question": "申请人弄虚作假骗取许可，政府撤销许可后？", "options": ["A. 应当赔偿损失", "B. 不予赔偿", "C. 可以赔偿", "D. 必须补偿"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>申请人自己作假，政府撤销不赔！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>不予赔偿</span>！申请人弄虚作假骗取许可，撤销后不赔偿！这是申请人自己的错！</b><br><br><strong>C. 错误！</strong><b>不是可以赔偿，是不赔偿！</b><br><br><strong>D. 错误！</strong><b>补偿是撤回的情况，撤销是纠错，而且申请人有错不赔！</b><br><br><span class='highlight-purple'>小白记忆：</span>申请人作假撤销不赔，机关搞错撤销要赔！"},
+            {"question": "行政机关违法作出许可决定，撤销后应当？", "options": ["A. 不予赔偿", "B. 赔偿损失", "C. 不予补偿", "D. 追究刑事责任"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>机关搞错了要赔！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>赔偿损失</span>！行政机关自己搞错，撤销后要赔偿申请人的损失！</b><br><br><strong>C. 错误！</strong><b>不是补偿，是赔偿！机关有错要赔！</b><br><br><strong>D. 错误！</strong><b>撤销许可不涉及刑事责任！</b><br><br><span class='highlight-purple'>小白记忆：</span>机关错要赔，申请人错不赔！"},
+            {"question": "便民原则要求行政机关？", "options": ["A. 可以让申请人多跑几次", "B. 一次性告知需要补正的材料", "C. 可以分多次告知需要补正的材料", "D. 不需要告知申请人材料是否齐全"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>便民原则要求少跑腿，不能让申请人多跑！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>一次性告知</span>！需要补正的材料，一次说清楚，不能今天说缺这个，明天说缺那个！</b><br><br><strong>C. 错误！</strong><b>不能分多次告知，必须一次性告知！</b><br><br><strong>D. 错误！</strong><b>必须告知！否则逾期视为受理！</b><br><br><span class='highlight-purple'>小白记忆：</span>便民少跑腿，一次就搞定！"},
+            {"question": "下列哪项体现了行政许可的公开原则？", "options": ["A. 许可条件保密", "B. 许可程序不公开", "C. 许可条件、程序、期限向社会公开", "D. 许可决定不公开"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>公开原则要求许可条件公开，不能保密！</b><br><br><strong>B. 错误！</strong><b>公开原则要求许可程序公开！</b><br><br><strong>C. 正确！</strong><b><span class='highlight-red'>许可条件、程序、期限向社会公开</span>！这就是公开原则！让老百姓明明白白办事！</b><br><br><strong>D. 错误！</strong><b>许可决定也应当公开！</b><br><br><span class='highlight-purple'>小白记忆：</span>公开原则 = 阳光下办事！"}
+        ];
+        
+        // 模块3题库：行政许可的种类
+        const quiz3Data = [
+            {"question": "下列哪种许可是特许？", "options": ["A. 驾驶证", "B. 出租车经营许可", "C. 律师资格证", "D. 营业执照"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>驾驶证是普通许可，符合条件人人都能考！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>出租车经营许可是特许</span>！出租车牌照有限，有数量限制，需要竞争或拍卖取得！</b><br><br><strong>C. 错误！</strong><b>律师资格证是认可，对职业资格的认定！</b><br><br><strong>D. 错误！</strong><b>营业执照是登记，确认企业主体资格！</b><br><br><span class='highlight-purple'>小白记忆：</span>特许 = 有限资源 + 竞争取得！"},
+            {"question": "普通许可与特许的主要区别是？", "options": ["A. 申请主体不同", "B. 是否有数量限制", "C. 是否需要审查", "D. 是否收费"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>申请主体都是公民、法人！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>是否有数量限制</span>！普通许可无数量限制，特许有数量限制！</b><br><br><strong>C. 错误！</strong><b>两者都需要审查！</b><br><br><strong>D. 错误！</strong><b>是否收费不是主要区别！</b><br><br><span class='highlight-purple'>小白记忆：</span>普通人人有，特许要竞争！"},
+            {"question": "律师资格证属于哪种许可类型？", "options": ["A. 普通许可", "B. 特许", "C. 认可", "D. 核准"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>律师资格证不是普通许可！</b><br><br><strong>B. 错误！</strong><b>律师资格证不是特许，没有数量限制！</b><br><br><strong>C. 正确！</strong><b><span class='highlight-red'>认可</span>！律师资格证是对职业资格的认定，属于认可类许可！</b><br><br><strong>D. 错误！</strong><b>核准是对技术标准的认定，如消防验收！</b><br><br><span class='highlight-purple'>小白记忆：</span>认可给资格！"},
+            {"question": "消防验收核准属于哪种许可？", "options": ["A. 普通许可", "B. 特许", "C. 认可", "D. 核准"], "answer": 3, "explanation": "✅ 正确答案是 <strong>D</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>消防验收不是普通许可！</b><br><br><strong>B. 错误！</strong><b>消防验收不是特许！</b><br><br><strong>C. 错误！</strong><b>认可是对资格的认定！</b><br><br><strong>D. 正确！</strong><b><span class='highlight-red'>核准</span>！消防验收是对技术标准、安全标准的认定，属于核准类许可！</b><br><br><span class='highlight-purple'>小白记忆：</span>核准查安全！"},
+            {"question": "企业工商登记属于哪种许可？", "options": ["A. 普通许可", "B. 特许", "C. 认可", "D. 登记"], "answer": 3, "explanation": "✅ 正确答案是 <strong>D</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>企业登记不是普通许可！</b><br><br><strong>B. 错误！</strong><b>企业登记不是特许！</b><br><br><strong>C. 错误！</strong><b>企业登记不是认可！</b><br><br><strong>D. 正确！</strong><b><span class='highlight-red'>登记</span>！企业工商登记是确认主体资格，属于登记类许可！</b><br><br><span class='highlight-purple'>小白记忆：</span>登记认身份！"}
+        ];
+        
+        // 模块4题库：行政许可的设定权
+        const quiz4Data = [
+            {"question": "法律可以设定的行政许可范围是？", "options": ["A. 部分行政许可", "B. 所有行政许可", "C. 只能设定普通许可", "D. 不能设定许可"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>法律的设定权没有限制！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>所有行政许可</span>！法律的效力最高，可以设定任何行政许可！</b><br><br><strong>C. 错误！</strong><b>法律不仅能设定普通许可，特许等都能设定！</b><br><br><strong>D. 错误！</strong><b>法律当然可以设定许可！</b><br><br><span class='highlight-purple'>小白记忆：</span>法律效力最高，许可能全设！"},
+            {"question": "省级政府规章设定的临时性行政许可，有效期是？", "options": ["A. 6个月", "B. 1年", "C. 2年", "D. 3年"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>不是6个月！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-blue'>1年</span>！省级政府规章只能设定临时性许可，有效期<span class='highlight-blue'>1年</span>！</b><br><br><strong>C. 错误！</strong><b>临时许可有效期只有1年！</b><br><br><strong>D. 错误！</strong><b>临时许可有效期只有1年！</b><br><br><span class='highlight-purple'>小白记忆：</span>省级规章临时许可 = 1年！"},
+            {"question": "地方性法规不能设定的许可是？", "options": ["A. 普通许可", "B. 特许", "C. 资格资质类许可", "D. 核准类许可"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>地方性法规可以设定普通许可！</b><br><br><strong>B. 错误！</strong><b>地方性法规可以设定特许！</b><br><br><strong>C. 正确！</strong><b><span class='highlight-red'>资格资质类许可</span>！地方性法规不能设定资格资质、企业登记、限制外地商品的许可！</b><br><br><strong>D. 错误！</strong><b>地方性法规可以设定核准类许可！</b><br><br><span class='highlight-purple'>小白记忆：</span>地方不设三样：资格、登记、地方保护！"},
+            {"question": "省级政府规章设定临时许可期满后需要继续实施的，应当？", "options": ["A. 自行延长有效期", "B. 提请制定地方性法规", "C. 重新制定规章", "D. 自动失效"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>不能自行延长！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>提请制定地方性法规</span>！临时许可期满后需要继续实施的，必须提请本级人大制定地方性法规！</b><br><br><strong>C. 错误！</strong><b>不能重新制定规章延长！</b><br><br><strong>D. 错误！</strong><b>如果需要继续实施，可以提请制定地方性法规，不是自动失效！</b><br><br><span class='highlight-purple'>小白记忆：</span>临时1年满，提请人大立法！"},
+            {"question": "下列哪项事项不需要设定行政许可？", "options": ["A. 直接涉及公共安全的活动", "B. 公民能自主决定的事项", "C. 有限自然资源开发利用", "D. 提供公众服务且关系公共利益的活动"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>涉及公共安全的活动需要许可！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>公民能自主决定的事项</span>不需要行政许可！比如穿什么衣服、吃什么饭！</b><br><br><strong>C. 错误！</strong><b>有限自然资源开发利用需要许可！</b><br><br><strong>D. 错误！</strong><b>提供公众服务且关系公共利益的活动需要许可！</b><br><br><span class='highlight-purple'>小白记忆：</span>自己能定的不用许可！"}
+        ];
+        
+        // 模块5题库：行政许可的实施主体
+        const quiz5Data = [
+            {"question": "受委托实施行政许可的主体可以是？", "options": ["A. 个人", "B. 企业", "C. 行政机关", "D. 社会团体"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>受委托主体必须是机关，不能是个人！</b><br><br><strong>B. 错误！</strong><b>受委托主体必须是机关，不能是企业！</b><br><br><strong>C. 正确！</strong><b><span class='highlight-red'>行政机关</span>！受委托实施许可的主体只能是行政机关！</b><br><br><strong>D. 错误！</strong><b>受委托主体必须是机关，不能是社会团体！</b><br><br><span class='highlight-purple'>小白记忆：</span>委托只能给机关！"},
+            {"question": "受委托机关实施的行政许可，法律责任由谁承担？", "options": ["A. 受委托机关", "B. 委托机关", "C. 申请人", "D. 双方共同承担"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>受委托机关只是帮忙干活，责任不在它！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>委托机关</span>！受委托机关实施的许可，法律责任由委托机关承担！</b><br><br><strong>C. 错误！</strong><b>申请人是被许可的对象，不承担许可责任！</b><br><br><strong>D. 错误！</strong><b>不是共同承担，责任在委托方！</b><br><br><span class='highlight-purple'>小白记忆：</span>委托责任在委托方！"},
+            {"question": "被授权组织实施行政许可，其地位等同于？", "options": ["A. 企业", "B. 行政机关", "C. 社会团体", "D. 个人"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>被授权组织不是企业！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>行政机关</span>！被法律、法规授权实施许可的组织，其地位等同于行政机关！</b><br><br><strong>C. 错误！</strong><b>被授权组织不是一般社会团体！</b><br><br><strong>D. 错误！</strong><b>被授权组织不是个人！</b><br><br><span class='highlight-purple'>小白记忆：</span>授权等于行政机关！"},
+            {"question": "受委托机关能否再委托其他组织实施许可？", "options": ["A. 可以再委托", "B. 不能再委托", "C. 经批准可以委托", "D. 视情况而定"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>受委托机关不能再委托！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>不能再委托</span>！受委托机关不能再委托其他组织或个人实施许可，禁止转委托！</b><br><br><strong>C. 错误！</strong><b>即使经批准也不能转委托！</b><br><br><strong>D. 错误！</strong><b>任何情况都不能转委托！</b><br><br><span class='highlight-purple'>小白记忆：</span>受委托 = 不能再委托！"},
+            {"question": "行政机关的内设机构能否以自己的名义实施许可？", "options": ["A. 可以", "B. 不可以", "C. 经授权可以", "D. 视情况而定"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>内设机构不能以自己名义许可！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>不可以</span>！行政机关的内设机构不能以自己的名义实施许可，必须以机关名义！</b><br><br><strong>C. 错误！</strong><b>内设机构即使授权也不能以自己名义！</b><br><br><strong>D. 错误！</strong><b>任何情况都不行！</b><br><br><span class='highlight-purple'>小白记忆：</span>内设机构 = 必须以机关名义！"}
+        ];
+        
+        // 模块6题库：行政许可的申请与受理
+        const quiz6Data = [
+            {"question": "行政机关应当在几日内一次性告知申请人需要补正的全部内容？", "options": ["A. 3日", "B. 5日", "C. 7日", "D. 10日"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>不是3日！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-blue'>5日</span>！行政机关应当在<span class='highlight-blue'>5日内</span>一次性告知需要补正的全部内容！</b><br><br><strong>C. 错误！</strong><b>不是7日！</b><br><br><strong>D. 错误！</strong><b>不是10日！</b><br><br><span class='highlight-purple'>小白记忆：</span>补正告知 = 5日！"},
+            {"question": "行政机关逾期不告知需要补正内容的，视为？", "options": ["A. 不予受理", "B. 已受理", "C. 驳回申请", "D. 撤销申请"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>不是不予受理，是视为已受理！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>已受理</span>！行政机关逾期不告知补正内容的，视为受理！</b><br><br><strong>C. 错误！</strong><b>不是驳回申请！</b><br><br><strong>D. 错误！</strong><b>不是撤销申请！</b><br><br><span class='highlight-purple'>小白记忆：</span>逾期不告知 = 视为受理！"},
+            {"question": "行政许可申请书格式文本是否收费？", "options": ["A. 应当收费", "B. 不得收费", "C. 可以收费", "D. 视情况而定"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>申请书格式文本不得收费！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>不得收费</span>！行政机关应当免费提供行政许可申请书格式文本！</b><br><br><strong>C. 错误！</strong><b>不是可以收费，是不得收费！</b><br><br><strong>D. 错误！</strong><b>任何情况都不得收费！</b><br><br><span class='highlight-purple'>小白记忆：</span>申请书格式 = 免费！"},
+            {"question": "申请材料存在可以当场更正的错误的，行政机关应当？", "options": ["A. 退回申请", "B. 允许申请人当场更正", "C. 要求重新提交", "D. 不予受理"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>不需要退回，可以当场更正！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>允许申请人当场更正</span>！申请材料有可以当场更正的错误的，行政机关应当允许当场更正！</b><br><br><strong>C. 错误！</strong><b>不需要重新提交，当场更正即可！</b><br><br><strong>D. 错误！</strong><b>不能因为小错误就不受理！</b><br><br><span class='highlight-purple'>小白记忆：</span>小错误 = 当场更正！"},
+            {"question": "申请事项不属于本行政机关管辖的，应当？", "options": ["A. 直接驳回", "B. 即时告知申请人向有关行政机关申请", "C. 受理后移送", "D. 不予理会"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>不能直接驳回，要告知去向！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>即时告知申请人向有关行政机关申请</span>！不属于本机关管辖的，要告诉申请人应该找谁办！</b><br><br><strong>C. 错误！</strong><b>不是受理后移送，而是告知去向！</b><br><br><strong>D. 错误！</strong><b>必须告知，不能不理会！</b><br><br><span class='highlight-purple'>小白记忆：</span>不归我管 = 告诉你找谁管！"}
+        ];
+        
+        // 模块7题库：行政许可的审查与决定
+        const quiz7Data = [
+            {"question": "一般行政许可的决定期限是？", "options": ["A. 15日", "B. 20日", "C. 30日", "D. 45日"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>不是15日！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-blue'>20日</span>！一般行政许可决定的期限是<span class='highlight-blue'>20日</span>！</b><br><br><strong>C. 错误！</strong><b>不是30日！</b><br><br><strong>D. 错误！</strong><b>45日是联合办理的期限！</b><br><br><span class='highlight-purple'>小白记忆：</span>一般许可 = 20日！"},
+            {"question": "一般行政许可决定期限可以延长几天？", "options": ["A. 5日", "B. 10日", "C. 15日", "D. 20日"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>不是5日！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-blue'>10日</span>！一般行政许可决定期限可以延长<span class='highlight-blue'>10日</span>！</b><br><br><strong>C. 错误！</strong><b>15日是联合办理可延长的天数！</b><br><br><strong>D. 错误！</strong><b>不是20日！</b><br><br><span class='highlight-purple'>小白记忆：</span>一般20延长10！"},
+            {"question": "统一办理、联合办理的行政许可期限是？", "options": ["A. 20日", "B. 30日", "C. 45日", "D. 60日"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>20日是一般许可期限！</b><br><br><strong>B. 错误！</strong><b>不是30日！</b><br><br><strong>C. 正确！</strong><b><span class='highlight-blue'>45日</span>！统一办理、联合办理的行政许可期限是<span class='highlight-blue'>45日</span>！</b><br><br><strong>D. 错误！</strong><b>不是60日！</b><br><br><span class='highlight-purple'>小白记忆：</span>联合办理 = 45日！"},
+            {"question": "行政机关作出不予许可决定的，应当？", "options": ["A. 口头告知理由", "B. 书面说明理由并告知救济权利", "C. 不需要说明理由", "D. 电话通知"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>必须书面说明，不能只是口头！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>书面说明理由并告知救济权利</span>！不予许可的，要书面说明理由，还要告诉申请人可以复议或诉讼！</b><br><br><strong>C. 错误！</strong><b>必须说明理由！</b><br><br><strong>D. 错误！</strong><b>必须书面，不能只是电话通知！</b><br><br><span class='highlight-purple'>小白记忆：</span>不给许可 = 书面说理由 + 告诉你怎么办！"},
+            {"question": "层级审查的期限是？", "options": ["A. 15日", "B. 20日", "C. 30日", "D. 45日"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>不是15日！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-blue'>20日</span>！层级审查的期限是<span class='highlight-blue'>20日</span>，而且不得延长！</b><br><br><strong>C. 错误！</strong><b>不是30日！</b><br><br><strong>D. 错误！</strong><b>不是45日！</b><br><br><span class='highlight-purple'>小白记忆：</span>层级20不能延！"}
+        ];
+        
+        // 模块8题库：行政许可的期限
+        const quiz8Data = [
+            {"question": "行政许可期限计算时，受理当日是否计算在内？", "options": ["A. 计算在内", "B. 不计算在内", "C. 视情况而定", "D. 由行政机关决定"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>受理当日不计算在内！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>不计算在内</span>！行政许可期限不含受理申请当日，从次日开始计算！</b><br><br><strong>C. 错误！</strong><b>不是视情况，是一律不计算！</b><br><br><strong>D. 错误！</strong><b>不是由行政机关决定，法律明确规定！</b><br><br><span class='highlight-purple'>小白记忆：</span>期限当日不算！"},
+            {"question": "行政许可期限届满最后一日是节假日的，如何处理？", "options": ["A. 期限提前至节假日前的最后一日", "B. 顺延至节假日后的第一个工作日", "C. 期限不变", "D. 行政机关自行决定"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>不是提前，是顺延！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>顺延至节假日后的第一个工作日</span>！期限届满最后一日是节假日的，要顺延！</b><br><br><strong>C. 错误！</strong><b>期限会顺延，不是不变！</b><br><br><strong>D. 错误！</strong><b>法律明确规定顺延，不是自行决定！</b><br><br><span class='highlight-purple'>小白记忆：</span>节假日顺延！"},
+            {"question": "行政许可决定作出后，颁发许可证件的期限是？", "options": ["A. 5日", "B. 10日", "C. 15日", "D. 20日"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>不是5日！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-blue'>10日</span>！行政许可决定作出后，颁发许可证件的期限是<span class='highlight-blue'>10日</span>！</b><br><br><strong>C. 错误！</strong><b>不是15日！</b><br><br><strong>D. 错误！</strong><b>不是20日！</b><br><br><span class='highlight-purple'>小白记忆：</span>颁证期限 = 10日！"},
+            {"question": "行政许可期限是否包含专业审查、检验、检测时间？", "options": ["A. 包含", "B. 不包含", "C. 部分包含", "D. 由行政机关决定"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>专业审查时间不包含在期限内！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>不包含</span>！行政许可期限不含专业审查、检验、检测时间！</b><br><br><strong>C. 错误！</strong><b>不是部分包含，是一律不包含！</b><br><br><strong>D. 错误！</strong><b>法律明确规定，不是行政机关决定！</b><br><br><span class='highlight-purple'>小白记忆：</span>检验时间除外！"},
+            {"question": "行政机关延长许可期限的，应当？", "options": ["A. 口头告知申请人", "B. 书面告知申请人延长期限的理由", "C. 不需要告知申请人", "D. 电话通知即可"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>必须书面告知，不能只是口头！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>书面告知申请人延长期限的理由</span>！延长期限的，要书面说明理由！</b><br><br><strong>C. 错误！</strong><b>必须告知申请人！</b><br><br><strong>D. 错误！</strong><b>必须书面，不能只是电话！</b><br><br><span class='highlight-purple'>小白记忆：</span>延期 = 书面说理由！"}
+        ];
+        
+        // 模块9题库：行政许可的听证程序
+        const quiz9Data = [
+            {"question": "行政机关应当在听证几日前告知申请人听证时间、地点？", "options": ["A. 3日", "B. 5日", "C. 7日", "D. 10日"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>不是3日！</b><br><br><strong>B. 错误！</strong><b>5日是申请听证的期限！</b><br><br><strong>C. 正确！</strong><b><span class='highlight-blue'>7日</span>！行政机关应当在听证<span class='highlight-blue'>7日前</span>告知申请人听证时间、地点！</b><br><br><strong>D. 错误！</strong><b>不是10日！</b><br><br><span class='highlight-purple'>小白记忆：</span>告知提前7天！"},
+            {"question": "申请人、利害关系人应当在收到听证告知后几日内提出听证申请？", "options": ["A. 3日", "B. 5日", "C. 7日", "D. 10日"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>不是3日！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-blue'>5日</span>！申请人、利害关系人应当在收到听证告知后<span class='highlight-blue'>5日内</span>提出听证申请！</b><br><br><strong>C. 错误！</strong><b>7日是听证告知的期限！</b><br><br><strong>D. 错误！</strong><b>不是10日！</b><br><br><span class='highlight-purple'>小白记忆：</span>申请5天内！"},
+            {"question": "行政许可听证的费用由谁承担？", "options": ["A. 申请人", "B. 利害关系人", "C. 行政机关", "D. 双方共同承担"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>申请人不需要承担听证费用！</b><br><br><strong>B. 错误！</strong><b>利害关系人不需要承担听证费用！</b><br><br><strong>C. 正确！</strong><b><span class='highlight-red'>行政机关</span>！行政许可听证的费用由行政机关承担，不得向申请人收取！</b><br><br><strong>D. 错误！</strong><b>不是共同承担，全部由行政机关承担！</b><br><br><span class='highlight-purple'>小白记忆：</span>听证费用 = 行政机关承担！"},
+            {"question": "行政许可听证是否公开举行？", "options": ["A. 不公开举行", "B. 应当公开举行", "C. 根据情况决定", "D. 由申请人决定"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>听证应当公开举行！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>应当公开举行</span>！行政许可听证应当公开举行！</b><br><br><strong>C. 错误！</strong><b>不是根据情况决定，是一律公开！</b><br><br><strong>D. 错误！</strong><b>不是由申请人决定，法律规定公开！</b><br><br><span class='highlight-purple'>小白记忆：</span>听证公开举行！"},
+            {"question": "行政机关应当根据什么作出许可决定？", "options": ["A. 听证主持人的意见", "B. 听证笔录", "C. 行政机关领导的意见", "D. 调查人员的报告"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>不能只听主持人的意见，要根据听证笔录！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>听证笔录</span>！行政机关应当根据听证笔录作出许可决定！</b><br><br><strong>C. 错误！</strong><b>不能只听领导的意见，要根据听证笔录！</b><br><br><strong>D. 错误！</strong><b>不能只看调查人员的报告，要根据听证笔录！</b><br><br><span class='highlight-purple'>小白记忆：</span>许可决定 = 根据听证笔录！"}
+        ];
+        
+        // 模块10题库：行政许可的费用与监督检查
+        const quiz10Data = [
+            {"question": "行政许可原则上是否收费？", "options": ["A. 应当收费", "B. 原则上不收费", "C. 必须收费", "D. 视情况收费"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>行政许可原则上不收费！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>原则上不收费</span>！行政许可原则上不收费，只有法律、行政法规规定可以收费的才收费！</b><br><br><strong>C. 错误！</strong><b>不是必须收费！</b><br><br><strong>D. 错误！</strong><b>不是视情况，原则上不收费！</b><br><br><span class='highlight-purple'>小白记忆：</span>许可原则上不收费！"},
+            {"question": "行政机关违法作出许可，撤销后应当如何处理？", "options": ["A. 不予赔偿", "B. 赔偿损失", "C. 不予处理", "D. 追究刑事责任"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>行政机关搞错了，撤销后要赔！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>赔偿损失</span>！行政机关违法作出许可，撤销后应当赔偿被许可人的损失！</b><br><br><strong>C. 错误！</strong><b>必须处理，要赔偿！</b><br><br><strong>D. 错误！</strong><b>不涉及刑事责任，是民事赔偿！</b><br><br><span class='highlight-purple'>小白记忆：</span>机关错要赔！"},
+            {"question": "行政许可所依据的法律被修改，导致许可无法继续实施的，应当如何处理？", "options": ["A. 撤销许可，不赔偿", "B. 撤回许可，补偿损失", "C. 维持许可不变", "D. 让被许可人自己解决"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>这是撤回，不是撤销，要补偿！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>撤回许可，补偿损失</span>！许可依据修改或客观情况变化，应当撤回许可并补偿财产损失！</b><br><br><strong>C. 错误！</strong><b>许可无法继续实施，必须处理！</b><br><br><strong>D. 错误！</strong><b>政府应当处理并补偿！</b><br><br><span class='highlight-purple'>小白记忆：</span>撤回是变故，政府要补偿！"},
+            {"question": "行政许可有效期届满未延续的，应当如何处理？", "options": ["A. 撤销", "B. 撤回", "C. 注销", "D. 吊销"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>撤销是纠错，许可证到期不是纠错！</b><br><br><strong>B. 错误！</strong><b>撤回是客观情况变化，许可证到期不是撤回！</b><br><br><strong>C. 正确！</strong><b><span class='highlight-red'>注销</span>！许可有效期届满未延续的，应当注销！</b><br><br><strong>D. 错误！</strong><b>吊销是处罚，许可证到期不是处罚！</b><br><br><span class='highlight-purple'>小白记忆：</span>注销是程序，效力消灭了！"},
+            {"question": "申请人弄虚作假骗取行政许可的，撤销后是否赔偿？", "options": ["A. 应当赔偿", "B. 不予赔偿", "C. 部分赔偿", "D. 视情况而定"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>申请人自己作假，撤销不赔！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>不予赔偿</span>！申请人弄虚作假骗取许可，撤销后不予赔偿！</b><br><br><strong>C. 错误！</strong><b>不是部分赔偿，是一律不赔！</b><br><br><strong>D. 错误！</strong><b>不是视情况，是一律不赔！</b><br><br><span class='highlight-purple'>小白记忆：</span>申请人作假撤销不赔！"}
+        ];
+        
+        // 练习专区50道综合题
+                                const practiceData = [
+            {"question": "行政许可的本质特征是?", "options": ["A. 政府对民事行为的认可", "B. 政府同意公民从事特定活动的行为", "C. 政府对犯罪行为的处罚", "D. 政府对民事纠纷的调解"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误!</strong><b>行政许可不是民事认可!</b>民事行为如签合同不需要政府许可!<span style='color: #e67e22;'>小白提点:许可是行政行为,不是民事!</span><br><br><strong>B. 正确!</strong><b><span class='highlight-red'>政府同意公民从事特定活动的行为</span>!</b>你想开饭店,政府给你营业执照,这就是行政许可!<span style='color: #e67e22;'>小白提点:许可=政府给你开绿灯!</span><br><br><strong>C. 错误!</strong><b>处罚不是许可!</b>许可是给你权利,处罚是剥夺权利!<span style='color: #e67e22;'>小白提点:许可和处罚相反!</span><br><br><strong>D. 错误!</strong><b>调解不是许可!</b>调解是解决纠纷,许可是批准你做某事!<span style='color: #e67e22;'>小白提点:许可=事先同意!</span><br><br><span class='highlight-purple'>💡 小白提点:</span>行政许可=政府同意你做某事的通行证!"},
+            {"question": "下列哪项属于行政确认而非行政许可?", "options": ["A. 营业执照", "B. 驾驶证", "C. 房产登记", "D. 卫生许可证"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误!</strong><b>营业执照是行政许可!</b>你想开公司,政府给你发证!<span style='color: #e67e22;'>小白提点:营业执照=许可!</span><br><br><strong>B. 错误!</strong><b>驾驶证是行政许可!</b>你想开车,考过驾照政府给你发证!<span style='color: #e67e22;'>小白提点:驾驶证=许可!</span><br><br><strong>C. 正确!</strong><b><span class='highlight-red'>房产登记是行政确认</span>!</b>你买了房子,政府登记确认产权归属,这是事后确认!<span style='color: #e67e22;'>小白提点:确认=事后认定事实!</span><br><br><strong>D. 错误!</strong><b>卫生许可证是行政许可!</b>你想开饭店,政府审批卫生条件!<span style='color: #e67e22;'>小白提点:卫生许可=许可!</span><br><br><span class='highlight-purple'>💡 小白提点:</span>许可事前给通行,确认事后认事实!"},
+            {"question": "行政许可的公开原则要求?", "options": ["A. 所有许可过程和结果都要公开", "B. 只有许可结果需要公开", "C. 涉及国家秘密的可以不公开", "D. 申请人可以要求不公开"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误!</strong><b>不是所有都要公开!</b>涉及国家秘密、商业秘密、个人隐私的可以不公开!<span style='color: #e67e22;'>小白提点:公开有例外!</span><br><br><strong>B. 错误!</strong><b>不只是结果!</b>许可的实施过程和结果都要公开!<span style='color: #e67e22;'>小白提点:过程+结果都要公开!</span><br><br><strong>C. 正确!</strong><b><span class='highlight-red'>涉及国家秘密等可以不公开</span>!</b>国家秘密、商业秘密、个人隐私是公开原则的例外!<span style='color: #e67e22;'>小白提点:三个秘密=例外!</span><br><br><strong>D. 错误!</strong><b>申请人不能随意要求不公开!</b>只有涉及商业秘密和个人隐私的,申请人申请不公开,经审查同意才可以!<span style='color: #e67e22;'>小白提点:不公开要申请+审查!</span><br><br><span class='highlight-purple'>💡 小白提点:</span>公开是原则,不公开是例外(国家秘密、商业秘密、个人隐私)!"},
+            {"question": "下列属于行政许可便民原则体现的是?", "options": ["A. 收取高额许可费用", "B. 一次性告知所需全部材料", "C. 要求申请人亲自到场办理", "D. 多部门分别审批"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误!</strong><b>收取高额费用不是便民!</b>行政许可应当免费,除法律另有规定外!<span style='color: #e67e22;'>小白提点:便民=省钱省事!</span><br><br><strong>B. 正确!</strong><b><span class='highlight-red'>一次性告知全部材料</span>!</b>申请人材料不全的,行政机关应当一次性告知需要补正的全部材料,不能让申请人来回跑!<span style='color: #e67e22;'>小白提点:一次告知=不让跑断腿!</span><br><br><strong>C. 错误!</strong><b>要求亲自到场不是便民!</b>便民原则允许委托他人办理、邮寄办理、网上办理!<span style='color: #e67e22;'>小白提点:能不亲自去就不去!</span><br><br><strong>D. 错误!</strong><b>多部门分别审批不是便民!</b>便民原则要求联合办理、统一办理,一个窗口搞定!<span style='color: #e67e22;'>小白提点:一个窗口=少跑腿!</span><br><br><span class='highlight-purple'>💡 小白提点:</span>便民=一次性告知+免费+能委托+能邮寄+能网上+联合办!"},
+            {"question": "信赖保护原则的核心内容是?", "options": ["A. 政府可以随时改变已作出的许可", "B. 公民对政府许可的信任应当受到保护", "C. 许可一旦作出就永远不能改变", "D. 公民必须信任政府所有决定"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误!</strong><b>政府不能随时改变!</b>政府改变许可需要有法律依据,不能说改就改!<span style='color: #e67e22;'>小白提点:政府也要讲信用!</span><br><br><strong>B. 正确!</strong><b><span class='highlight-red'>公民对政府许可的信任应当受到保护</span>!</b>政府作出的许可,公民有理由相信是有效的,政府不能轻易改变!<span style='color: #e67e22;'>小白提点:政府说话算数!</span><br><br><strong>C. 错误!</strong><b>不是永远不能改变!</b>法律法规变化或客观情况变化时,政府可以依法改变或撤回许可,但要给补偿!<span style='color: #e67e22;'>小白提点:合法改变要补偿!</span><br><br><strong>D. 错误!</strong><b>不是盲目信任!</b>信赖保护只保护合法有效的许可,违法行为造成的许可不受保护!<span style='color: #e67e22;'>小白提点:合法才保护!</span><br><br><span class='highlight-purple'>💡 小白提点:</span>信赖保护=政府不能乱改许可+合法改变要补偿+违法撤销要赔偿!"},
+            {"question": "关于行政许可的禁止转让原则,下列说法正确的是?", "options": ["A. 所有行政许可都可以转让", "B. 法律规定可以转让的才能转让", "C. 只要有双方协议就可以转让", "D. 许可证丢失后不能补办"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误!</strong><b>不是所有都可以转让!</b>行政许可原则上禁止转让,比如驾驶证不能卖给别人!<span style='color: #e67e22;'>小白提点:驾照不能卖!</span><br><br><strong>B. 正确!</strong><b><span class='highlight-red'>法律规定可以转让的才能转让</span>!</b>行政许可一般禁止转让,只有法律明确规定可以转让的,才能转让!<span style='color: #e67e22;'>小白提点:法律说了算!</span><br><br><strong>C. 错误!</strong><b>双方协议无效!</b>私自转让许可是违法行为,即使双方达成协议也是无效的!<span style='color: #e67e22;'>小白提点:私下转让=违法!</span><br><br><strong>D. 错误!</strong><b>许可证丢失可以补办!</b>禁止转让不等于不能补办,丢失后可以向原发证机关申请补发!<span style='color: #e67e22;'>小白提点:丢了能补,不能卖!</span><br><br><span class='highlight-purple'>💡 小白提点:</span>禁止转让原则=原则上不能卖+法律规定例外才能卖+丢了能补办!"},
+            {"question": "下列属于普通许可的是?", "options": ["A. 采矿许可证", "B. 驾驶证", "C. 无线电频率使用许可", "D. 航线使用许可"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误!</strong><b>采矿许可是特许!</b>矿产资源是有限的,需要通过招标拍卖等方式取得,有数量限制!<span style='color: #e67e22;'>小白提点:采矿=有限资源=特许!</span><br><br><strong>B. 正确!</strong><b><span class='highlight-red'>驾驶证是普通许可</span>!</b>驾驶证没有数量限制,只要符合条件通过考试就能取得,属于普通许可!<span style='color: #e67e22;'>小白提点:驾照=无数量限制=普通许可!</span><br><br><strong>C. 错误!</strong><b>无线电频率许可是特许!</b>无线电频率是有限资源,有数量限制!<span style='color: #e67e22;'>小白提点:无线电=有限资源=特许!</span><br><br><strong>D. 错误!</strong><b>航线使用许可是特许!</b>航线是有限资源,不是想开就开,有数量限制!<span style='color: #e67e22;'>小白提点:航线=有限资源=特许!</span><br><br><span class='highlight-purple'>💡 小白提点:</span>普通许可=无数量限制(如驾驶证)+特许=有限资源有数量限制(如采矿证、航线)!"},
+            {"question": "行政许可的种类中,认可是指?", "options": ["A. 对有限资源的配置", "B. 对资格资质的认定", "C. 对技术标准的判断", "D. 对主体资格的确定"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误!</strong><b>有限资源配置是特许!</b>比如采矿权、航线使用权等有限资源的分配!<span style='color: #e67e22;'>小白提点:有限资源=特许!</span><br><br><strong>B. 正确!</strong><b><span class='highlight-red'>认可是对资格资质的认定</span>!</b>比如教师资格证、律师资格证、医师资格证等,是对你从事特定职业资格的认可!<span style='color: #e67e22;'>小白提点:认可=考资格证!</span><br><br><strong>C. 错误!</strong><b>技术标准判断是核准!</b>比如食品检验检疫、电梯安全检验等,是对技术是否符合标准的判断!<span style='color: #e67e22;'>小白提点:技术检验=核准!</span><br><br><strong>D. 错误!</strong><b>主体资格确定是登记!</b>比如工商登记、社会团体登记等,是确定你的主体资格和身份!<span style='color: #e67e22;'>小白提点:登记=确定身份!</span><br><br><span class='highlight-purple'>💡 小白提点:</span>认可=资格资质(老师、律师、医生)+核准=技术标准(食品、电梯)+登记=主体身份(公司)!"},
+            {"question": "下列属于核准类行政许可的是?", "options": ["A. 律师资格证", "B. 食品经营许可证", "C. 电梯安全检验", "D. 营业执照"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误!</strong><b>律师资格证是认可!</b>律师资格证是对你从事律师职业资格的认可!<span style='color: #e67e22;'>小白提点:资格证=认可!</span><br><br><strong>B. 错误!</strong><b>食品经营许可证是普通许可!</b>食品经营许可证没有数量限制,符合条件就能取得!<span style='color: #e67e22;'>小白提点:经营许可=普通许可!</span><br><br><strong>C. 正确!</strong><b><span class='highlight-red'>电梯安全检验是核准</span>!</b>电梯安全检验是对电梯是否符合安全技术标准的判断,属于核准类许可!<span style='color: #e67e22;'>小白提点:技术安全检验=核准!</span><br><br><strong>D. 错误!</strong><b>营业执照是登记!</b>营业执照是确定企业主体资格的登记,不是核准!<span style='color: #e67e22;'>小白提点:企业注册=登记!</span><br><br><span class='highlight-purple'>💡 小白提点:</span>核准=技术标准检验(电梯、游乐设施、食品检验检疫)!"},
+            {"question": "可以设定经常性行政许可的是?", "options": ["A. 国务院部门规章", "B. 省级政府规章", "C. 国务院行政法规", "D. 市级人大地方法规"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误!</strong><b>部门规章不能设定许可!</b>国务院各部门的规章无权设定行政许可!<span style='color: #e67e22;'>小白提点:部门规章=无设定权!</span><br><br><strong>B. 错误!</strong><b>省级规章只能设临时许可!</b>省级政府规章只能设定临时性行政许可,有效期1年!<span style='color: #e67e22;'>小白提点:省级规章=临时=1年!</span><br><br><strong>C. 正确!</strong><b><span class='highlight-red'>国务院行政法规可以设定经常性许可</span>!</b>国务院制定的行政法规可以设定经常性行政许可,没有时间限制!<span style='color: #e67e22;'>小白提点:行政法规=经常性许可!</span><br><br><strong>D. 错误!</strong><b>市级人大无权设定!</b>只有省级人大及其常委会可以通过地方性法规设定行政许可!<span style='color: #e67e22;'>小白提点:市级=无设定权!</span><br><br><span class='highlight-purple'>💡 小白提点:</span>经常性许可=法律(全国人大)+行政法规(国务院)+地方性法规(省级人大)!"},
+            {"question": "省级政府规章可以设定的行政许可是?", "options": ["A. 经常性行政许可", "B. 临时性行政许可,有效期1年", "C. 所有类型的行政许可", "D. 涉及国家安全的许可"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误!</strong><b>省级规章不能设经常性许可!</b>经常性许可需要法律、行政法规、地方性法规设定!<span style='color: #e67e22;'>小白提点:经常性=省级规章不行!</span><br><br><strong>B. 正确!</strong><b><span class='highlight-red'>省级规章只能设临时许可,有效期1年</span>!</b>省级政府规章可以设定临时性行政许可,但必须在1年内提请本级人大制定地方性法规,否则失效!<span style='color: #e67e22;'>小白提点:省级规章=临时=1年!</span><br><br><strong>C. 错误!</strong><b>省级规章权限有限!</b>省级规章只能设临时许可,不能设所有类型的许可!<span style='color: #e67e22;'>小白提点:权限有限!</span><br><br><strong>D. 错误!</strong><b>涉及国家安全的许可层级更高!</b>涉及国家安全的许可需要法律或行政法规设定,省级规章无权!<span style='color: #e67e22;'>小白提点:国家安全=高层级!</span><br><br><span class='highlight-purple'>💡 小白提点:</span>省级规章=临时许可+1年有效期+到期要变地方性法规!"},
+            {"question": "下列不能设定行政许可的是?", "options": ["A. 法律", "B. 行政法规", "C. 地方性法规", "D. 部门规章"], "answer": 3, "explanation": "✅ 正确答案是 <strong>D</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误!</strong><b>法律可以设定!</b>全国人大及其常委会制定的法律可以设定行政许可!<span style='color: #e67e22;'>小白提点:法律=最高层级!</span><br><br><strong>B. 错误!</strong><b>行政法规可以设定!</b>国务院制定的行政法规可以设定行政许可!<span style='color: #e67e22;'>小白提点:行政法规=第二层级!</span><br><br><strong>C. 错误!</strong><b>地方性法规可以设定!</b>省级人大及其常委会制定的地方性法规可以设定行政许可!<span style='color: #e67e22;'>小白提点:地方性法规=第三层级!</span><br><br><strong>D. 正确!</strong><b><span class='highlight-red'>部门规章不能设定行政许可</span>!</b>国务院各部委制定的规章无权设定行政许可,这是行政许可法明确规定的!<span style='color: #e67e22;'>小白提点:部门规章=无设定权!</span><br><br><span class='highlight-purple'>💡 小白提点:</span>设定权排序:法律>行政法规>地方性法规>省级规章(临时),部门规章最惨=无权!"},
+            {"question": "行政许可的实施主体是?", "options": ["A. 任何行政机关", "B. 具有行政许可权的行政机关", "C. 所有事业单位", "D. 任何组织"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误!</strong><b>不是任何机关都可以!</b>只有具有行政许可权的行政机关才能实施许可!<span style='color: #e67e22;'>小白提点:有权才行!</span><br><br><strong>B. 正确!</strong><b><span class='highlight-red'>具有行政许可权的行政机关</span>!</b>行政许可必须由具有相应权限的行政机关实施,不能随便找个机关就办!<span style='color: #e67e22;'>小白提点:有权限的机关=合法主体!</span><br><br><strong>C. 错误!</strong><b>事业单位不能随意实施!</b>只有法律、法规授权的公共组织才能实施行政许可!<span style='color: #e67e22;'>小白提点:事业单位要授权!</span><br><br><strong>D. 错误!</strong><b>组织不能随意实施!</b>只有行政机关或法律授权的组织才能实施许可,私人组织不行!<span style='color: #e67e22;'>小白提点:私人组织=无权!</span><br><br><span class='highlight-purple'>💡 小白提点:</span>实施主体=行政机关(有权限)+授权组织(法律法规授权)!"},
+            {"question": "行政许可申请可以通过哪些方式提出?", "options": ["A. 只能亲自到场申请", "B. 只能书面申请", "C. 可以信函、电报、传真、电子数据交换等方式", "D. 只能网上申请"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误!</strong><b>不是只能亲自到场!</b>便民原则允许申请人通过多种方式申请!<span style='color: #e67e22;'>小白提点:能不去就不去!</span><br><br><strong>B. 错误!</strong><b>不只是书面!</b>口头申请在某些情况下也是允许的!<span style='color: #e67e22;'>小白提点:口头也可以!</span><br><br><strong>C. 正确!</strong><b><span class='highlight-red'>可以多种方式申请</span>!</b>申请人可以通过信函、电报、电传、传真、电子数据交换和电子邮件等方式提出申请,还可以委托代理人申请!<span style='color: #e67e22;'>小白提点:方式多样=便民!</span><br><br><strong>D. 错误!</strong><b>不是只能网上!</b>网上申请只是其中一种方式,不是唯一方式!<span style='color: #e67e22;'>小白提点:网上只是选项之一!</span><br><br><span class='highlight-purple'>💡 小白提点:</span>申请方式=亲自+委托+信函+电报+传真+电子数据+邮件=多种多样!"},
+            {"question": "行政机关对行政许可申请的处理,正确的是?", "options": ["A. 申请事项不属于本机关职责的,直接不予受理", "B. 申请材料不全的,直接不予受理", "C. 申请材料存在可以当场更正的错误的,应当允许申请人当场更正", "D. 申请事项不需要取得许可的,应当受理后审查"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误!</strong><b>不能直接不受理!</b>申请事项不属于本机关职责的,应当即时作出不予受理的决定,并告知申请人向有关行政机关申请!<span style='color: #e67e22;'>小白提点:要告知去向!</span><br><br><strong>B. 错误!</strong><b>不能直接不受理!</b>申请材料不全的,应当一次性告知需要补正的全部材料!<span style='color: #e67e22;'>小白提点:要告知补什么!</span><br><br><strong>C. 正确!</strong><b><span class='highlight-red'>应当允许当场更正</span>!</b>申请材料存在可以当场更正的错误的,行政机关应当允许申请人当场更正,体现便民原则!<span style='color: #e67e22;'>小白提点:小错误当场改!</span><br><br><strong>D. 错误!</strong><b>不需要许可的应告知!</b>申请事项依法不需要取得行政许可的,应当即时告知申请人不受理!<span style='color: #e67e22;'>小白提点:不需要许可就告知!</span><br><br><span class='highlight-purple'>💡 小白提点:</span>材料处理=小错误当场改+材料不全一次告知+不属于本机关告知去向+不需要许可告知不受理!"},
+            {"question": "行政机关受理行政许可申请后,应当在多长时间内作出决定?", "options": ["A. 10日内", "B. 20日内", "C. 30日内", "D. 根据具体情况确定,但一般不超过20日"], "answer": 3, "explanation": "✅ 正确答案是 <strong>D</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误!</strong><b>不是固定10日!</b>期限不是固定的,要根据具体情况确定!<span style='color: #e67e22;'>小白提点:期限有弹性!</span><br><br><strong>B. 错误!</strong><b>不是固定20日!</b>20日是一般期限,但可以延长!<span style='color: #e67e22;'>小白提点:可以延长!</span><br><br><strong>C. 错误!</strong><b>不是固定30日!</b>期限要根据具体情况确定!<span style='color: #e67e22;'>小白提点:要看情况!</span><br><br><strong>D. 正确!</strong><b><span class='highlight-red'>一般不超过20日,可延长</span>!</b>行政机关应当自受理申请之日起20日内作出决定,经批准可延长10日,但应当将延长期限的理由告知申请人!<span style='color: #e67e22;'>小白提点:20+10=30日上限!</span><br><br><span class='highlight-purple'>💡 小白提点:</span>期限=一般20日+可延长10日+要告知理由=最多30日!"},
+            {"question": "行政许可决定应当公开的是?", "options": ["A. 所有许可决定都要公开", "B. 只有准予许可的决定才公开", "C. 准予许可的决定应当公开,不予许可的决定不公开", "D. 申请人要求公开的才公开"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误!</strong><b>不是所有都要公开!</b>涉及国家秘密、商业秘密、个人隐私的不公开!<span style='color: #e67e22;'>小白提点:有例外!</span><br><br><strong>B. 错误!</strong><b>表述不完整!</b>准予许可的决定应当公开,但涉及秘密的除外!<span style='color: #e67e22;'>小白提点:表述要准确!</span><br><br><strong>C. 正确!</strong><b><span class='highlight-red'>准予许可公开,不予许可不公开</span>!</b>行政机关准予行政许可的决定,应当予以公开,公众有权查阅;不予许可的决定一般不公开!<span style='color: #e67e22;'>小白提点:准了要公开,拒了不公开!</span><br><br><strong>D. 错误!</strong><b>不是申请人说了算!</b>公开是法定要求,不需要申请人要求!<span style='color: #e67e22;'>小白提点:公开是义务!</span><br><br><span class='highlight-purple'>💡 小白提点:</span>公开原则=准予许可要公开+公众可查阅+涉及秘密除外!"},
+            {"question": "行政许可的听证程序适用于?", "options": ["A. 所有行政许可事项", "B. 只有申请人申请听证的", "C. 法律、法规、规章规定应当听证的,或行政机关认为需要听证的", "D. 只有行政机关认为需要听证的"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误!</strong><b>不是所有都要听证!</b>听证程序只适用于特定情况,不是所有许可都要听证!<span style='color: #e67e22;'>小白提点:听证=特殊情况!</span><br><br><strong>B. 错误!</strong><b>不只是申请人申请!</b>行政机关也可以主动组织听证!<span style='color: #e67e22;'>小白提点:行政机关也能主动!</span><br><br><strong>C. 正确!</strong><b><span class='highlight-red'>法定应当听证或行政机关认为需要听证</span>!</b>法律、法规、规章规定应当听证的事项,或者行政机关认为需要听证的涉及公共利益的重大行政许可事项,应当举行听证!<span style='color: #e67e22;'>小白提点:法定+主动=两种情况!</span><br><br><strong>D. 错误!</strong><b>不只是行政机关认为!</b>申请人也可以申请听证,符合条件应当组织!<span style='color: #e67e22;'>小白提点:申请人也能申请!</span><br><br><span class='highlight-purple'>💡 小白提点:</span>听证=法律规定应当听证+行政机关认为需要+申请人申请(涉及重大利益)!"},
+            {"question": "行政许可听证的费用由谁承担?", "options": ["A. 申请人承担", "B. 行政机关承担", "C. 双方各承担一半", "D. 根据听证结果确定"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误!</strong><b>申请人不承担!</b>听证是行政机关的职责,费用由行政机关承担!<span style='color: #e67e22;'>小白提点:政府买单!</span><br><br><strong>B. 正确!</strong><b><span class='highlight-red'>行政机关承担听证费用</span>!</b>行政机关组织听证的费用由行政机关承担,申请人不承担任何费用,这体现了便民原则!<span style='color: #e67e22;'>小白提点:政府请客,不收钱!</span><br><br><strong>C. 错误!</strong><b>不是双方分担!</b>听证费用全部由行政机关承担,不需要申请人承担!<span style='color: #e67e22;'>小白提点:申请人免费!</span><br><br><strong>D. 错误!</strong><b>与听证结果无关!</b>无论听证结果如何,费用都由行政机关承担!<span style='color: #e67e22;'>小白提点:结果不影响费用!</span><br><br><span class='highlight-purple'>💡 小白提点:</span>听证费用=行政机关承担+申请人免费=便民原则体现!"},
+            {"question": "行政许可的实施和结果,除涉及国家秘密、商业秘密、个人隐私外,应当?", "options": ["A. 保密", "B. 公开", "C. 申请人要求才公开", "D. 由行政机关决定是否公开"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误!</strong><b>不是保密!</b>行政许可应当公开,保密是例外!<span style='color: #e67e22;'>小白提点:公开是原则!</span><br><br><strong>B. 正确!</strong><b><span class='highlight-red'>应当公开</span>!</b>行政许可的实施过程和结果应当公开,公众有权查阅,这体现了公开原则!<span style='color: #e67e22;'>小白提点:过程+结果都要公开!</span><br><br><strong>C. 错误!</strong><b>不需要申请人要求!</b>公开是法定义务,不需要申请人提出要求!<span style='color: #e67e22;'>小白提点:公开是义务!</span><br><br><strong>D. 错误!</strong><b>不是行政机关决定!</b>公开是法定要求,行政机关无权随意决定不公开!<span style='color: #e67e22;'>小白提点:法律说了算!</span><br><br><span class='highlight-purple'>💡 小白提点:</span>公开原则=实施过程公开+结果公开+公众可查阅+三个秘密例外!"},
+            {"question": "行政许可的费用,下列说法正确的是?", "options": ["A. 行政机关可以收取许可费用", "B. 行政机关可以向申请人摊派费用", "C. 法律、行政法规另有规定的除外,行政机关不得收取费用", "D. 所有行政许可都要收费"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误!</strong><b>不能随意收费!</b>行政机关实施行政许可一般不得收取费用!<span style='color: #e67e22;'>小白提点:许可=原则上免费!</span><br><br><strong>B. 错误!</strong><b>不能摊派!</b>行政机关不得向申请人提出购买指定商品、接受有偿服务等不正当要求!<span style='color: #e67e22;'>小白提点:不能强买强卖!</span><br><br><strong>C. 正确!</strong><b><span class='highlight-red'>法律、行政法规另有规定才能收费</span>!</b>行政机关实施行政许可,不得收取任何费用,除非法律、行政法规另有规定!<span style='color: #e67e22;'>小白提点:收费=法律行政法规授权!</span><br><br><strong>D. 错误!</strong><b>不是都要收费!</b>行政许可原则上免费,只有法律、行政法规规定可以收费的才能收费!<span style='color: #e67e22;'>小白提点:免费是原则,收费是例外!</span><br><br><span class='highlight-purple'>💡 小白提点:</span>费用原则=原则上免费+法律行政法规可规定收费+不得摊派!"},
+            {"question": "行政机关违法实施行政许可,给当事人的合法权益造成损害的,应当?", "options": ["A. 不承担责任", "B. 给予补偿", "C. 依法给予赔偿", "D. 恢复原状即可"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误!</strong><b>要承担责任!</b>行政机关违法实施许可,造成损害的,应当承担赔偿责任!<span style='color: #e67e22;'>小白提点:违法要赔偿!</span><br><br><strong>B. 错误!</strong><b>不是补偿!</b>违法行为造成损害的,是赔偿,不是补偿!合法行为造成损害才是补偿!<span style='color: #e67e22;'>小白提点:违法=赔偿,合法=补偿!</span><br><br><strong>C. 正确!</strong><b><span class='highlight-red'>依法给予赔偿</span>!</b>行政机关违法实施行政许可,给当事人的合法权益造成损害的,应当依法给予赔偿!<span style='color: #e67e22;'>小白提点:违法造成损害=国家赔偿!</span><br><br><strong>D. 错误!</strong><b>不只是恢复原状!</b>赔偿包括财产损失、精神损害等,不只是恢复原状!<span style='color: #e67e22;'>小白提点:赔偿范围更广!</span><br><br><span class='highlight-purple'>💡 小白提点:</span>违法实施许可=国家赔偿+合法撤回许可=补偿+区分赔偿与补偿!"},
+            {"question": "行政机关依法变更或者撤回已经生效的行政许可,造成财产损失的,应当?", "options": ["A. 不承担责任", "B. 依法给予补偿", "C. 依法给予赔偿", "D. 恢复原状即可"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误!</strong><b>要承担责任!</b>行政机关依法变更或撤回许可,造成损失的要补偿!<span style='color: #e67e22;'>小白提点:合法也要负责!</span><br><br><strong>B. 正确!</strong><b><span class='highlight-red'>依法给予补偿</span>!</b>行政机关依法变更或者撤回已经生效的行政许可,是为了公共利益的需要,由此给公民、法人造成财产损失的,应当依法给予补偿!<span style='color: #e67e22;'>小白提点:合法改变=补偿!</span><br><br><strong>C. 错误!</strong><b>不是赔偿!</b>合法变更或撤回造成损失的是补偿,违法行为造成损害才是赔偿!<span style='color: #e67e22;'>小白提点:合法=补偿,违法=赔偿!</span><br><br><strong>D. 错误!</strong><b>不只是恢复原状!</b>补偿是对财产损失的补偿,不是简单恢复原状!<span style='color: #e67e22;'>小白提点:补偿=金钱补偿!</span><br><br><span class='highlight-purple'>💡 小白提点:</span>补偿vs赔偿:合法改变=补偿,违法实施=赔偿!口诀:合法补偿违法赔!"},
+            {"question": "行政许可的监督检查,下列说法正确的是?", "options": ["A. 只能由原许可机关监督", "B. 行政机关可以对被许可人生产经营场所实地检查", "C. 监督检查不得妨碍被许可人正常的生产经营活动", "D. 监督检查结果可以不公开"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误!</strong><b>不只是原许可机关!</b>上级行政机关也可以监督下级行政机关的实施情况!<span style='color: #e67e22;'>小白提点:上级也能监督!</span><br><br><strong>B. 错误!</strong><b>表述不完整!</b>行政机关可以对被许可人生产经营场所实地检查,但不得妨碍正常生产经营!<span style='color: #e67e22;'>小白提点:能检查但不能妨碍!</span><br><br><strong>C. 正确!</strong><b><span class='highlight-red'>不得妨碍正常生产经营活动</span>!</b>行政机关实施监督检查,不得妨碍被许可人正常的生产经营活动,不得索取或者收受财物、谋取其他利益!<span style='color: #e67e22;'>小白提点:监督不能乱来!</span><br><br><strong>D. 错误!</strong><b>监督检查结果应当公开!</b>监督检查的处理结果应当公开,公众有权查阅!<span style='color: #e67e22;'>小白提点:结果要公开!</span><br><br><span class='highlight-purple'>💡 小白提点:</span>监督检查=上级可监督+能实地检查+不得妨碍正常经营+不得收受财物+结果要公开!"},
+            {"question": "被许可人需要延续依法取得的行政许可的有效期的,应当在该行政许可有效期届满多长时间前提出申请?", "options": ["A. 10日", "B. 15日", "C. 20日", "D. 30日"], "answer": 3, "explanation": "✅ 正确答案是 <strong>D</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误!</strong><b>10日太短!</b>被许可人需要在有效期届满30日前提出申请!<span style='color: #e67e22;'>小白提点:要提前申请!</span><br><br><strong>B. 错误!</strong><b>15日也不够!</b>法律规定是30日前提出申请!<span style='color: #e67e22;'>小白提点:记住30日!</span><br><br><strong>C. 错误!</strong><b>20日也不够!</b>法律规定是30日前提出申请!<span style='color: #e67e22;'>小白提点:30日是标准!</span><br><br><strong>D. 正确!</strong><b><span class='highlight-red'>30日前提出申请</span>!</b>被许可人需要延续依法取得的行政许可的有效期的,应当在该行政许可有效期届满30日前向作出行政许可决定的行政机关提出申请!<span style='color: #e67e22;'>小白提点:延续=提前30日申请!</span><br><br><span class='highlight-purple'>💡 小白提点:</span>延续许可=提前30日申请+机关在有效期届满前决定+逾期视为准予延续!"},
+            {"question": "行政机关逾期未对延续行政许可申请作出决定的,视为?", "options": ["A. 不予延续", "B. 准予延续", "C. 需要重新申请", "D. 申请失效"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误!</strong><b>不是不予延续!</b>行政机关逾期未作决定的,视为准予延续!<span style='color: #e67e22;'>小白提点:逾期=默认同意!</span><br><br><strong>B. 正确!</strong><b><span class='highlight-red'>视为准予延续</span>!</b>行政机关应当在该行政许可有效期届满前作出是否准予延续的决定;逾期未作决定的,视为准予延续!<span style='color: #e67e22;'>小白提点:行政机关不回复=默认同意!</span><br><br><strong>C. 错误!</strong><b>不需要重新申请!</b>逾期未作决定,视为准予延续,不需要重新申请!<span style='color: #e67e22;'>小白提点:已经续期了!</span><br><br><strong>D. 错误!</strong><b>申请不会失效!</b>逾期未作决定,视为准予延续,申请有效!<span style='color: #e67e22;'>小白提点:申请有效并成功!</span><br><br><span class='highlight-purple'>💡 小白提点:</span>逾期未决=视为准予延续=保护申请人权益!"},
+            {"question": "行政机关应当办理行政许可注销手续的情形是?", "options": ["A. 行政许可有效期届满未延续的", "B. 被许可人申请注销的", "C. 行政许可依法被撤销的", "D. 以上都是"], "answer": 3, "explanation": "✅ 正确答案是 <strong>D</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误!</strong><b>表述不完整!</b>有效期届满未延续只是注销情形之一!<span style='color: #e67e22;'>小白提点:这是其中一种!</span><br><br><strong>B. 错误!</strong><b>表述不完整!</b>被许可人申请注销只是注销情形之一!<span style='color: #e67e22;'>小白提点:这也是其中一种!</span><br><br><strong>C. 错误!</strong><b>表述不完整!</b>行政许可依法被撤销只是注销情形之一!<span style='color: #e67e22;'>小白提点:这还是其中一种!</span><br><br><strong>D. 正确!</strong><b><span class='highlight-red'>以上都是注销情形</span>!</b>行政机关应当办理行政许可注销手续的情形包括:有效期届满未延续、被许可人申请注销、许可依法被撤销、许可依法被撤回、法人终止等!<span style='color: #e67e22;'>小白提点:注销=许可结束的形式手续!</span><br><br><span class='highlight-purple'>💡 小白提点:</span>注销情形=有效期届满未延续+申请人申请+许可被撤销/撤回+法人终止!"},
+            {"question": "下列属于可以撤销行政许可的情形是?", "options": ["A. 行政机关工作人员滥用职权、玩忽职守作出准予行政许可决定的", "B. 超越法定职权作出准予行政许可决定的", "C. 违反法定程序作出准予行政许可决定的", "D. 以上都是"], "answer": 3, "explanation": "✅ 正确答案是 <strong>D</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误!</strong><b>表述不完整!</b>滥用职权只是撤销情形之一!<span style='color: #e67e22;'>小白提点:这是其中一种!</span><br><br><strong>B. 错误!</strong><b>表述不完整!</b>超越法定职权只是撤销情形之一!<span style='color: #e67e22;'>小白提点:这也是其中一种!</span><br><br><strong>C. 错误!</strong><b>表述不完整!</b>违反法定程序只是撤销情形之一!<span style='color: #e67e22;'>小白提点:这还是其中一种!</span><br><br><strong>D. 正确!</strong><b><span class='highlight-red'>以上都是撤销情形</span>!</b>可以撤销行政许可的情形包括:滥用职权、玩忽职守、超越职权、违反程序、对不具备申请资格的申请人准予许可等!<span style='color: #e67e22;'>小白提点:撤销=违法作出的许可要取消!</span><br><br><span class='highlight-purple'>💡 小白提点:</span>撤销=违法许可要取消(滥用职权、超越职权、违反程序等)!"},
+            {"question": "撤销行政许可可能对公共利益造成重大损害的,应当?", "options": ["A. 必须撤销", "B. 不予撤销", "C. 听证后决定", "D. 由上级机关决定"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误!</strong><b>不是必须撤销!</b>如果撤销可能对公共利益造成重大损害,不予撤销!<span style='color: #e67e22;'>小白提点:公共利益优先!</span><br><br><strong>B. 正确!</strong><b><span class='highlight-red'>不予撤销</span>!</b>撤销行政许可可能对公共利益造成重大损害的,不予撤销,这是公共利益原则的体现!<span style='color: #e67e22;'>小白提点:公共利益>个人利益!</span><br><br><strong>C. 错误!</strong><b>不需要听证!</b>法律明确规定可能对公共利益造成重大损害的,不予撤销!<span style='color: #e67e22;'>小白提点:法律规定明确!</span><br><br><strong>D. 错误!</strong><b>不需要上级决定!</b>法律已经规定了处理方式,不予撤销!<span style='color: #e67e22;'>小白提点:法律规定了!</span><br><br><span class='highlight-purple'>💡 小白提点:</span>撤销例外=可能对公共利益造成重大损害=不予撤销=公共利益优先原则!"},
+            {"question": "行政许可的设定和实施,应当遵循的原则不包括?", "options": ["A. 公开原则", "B. 公平、公正原则", "C. 效率优先原则", "D. 便民原则"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误!</strong><b>公开是原则!</b>行政许可的实施和结果应当公开!<span style='color: #e67e22;'>小白提点:公开原则!</span><br><br><strong>B. 错误!</strong><b>公平公正是原则!</b>行政许可的实施应当公平、公正!<span style='color: #e67e22;'>小白提点:公平公正原则!</span><br><br><strong>C. 正确!</strong><b><span class='highlight-red'>效率优先不是原则</span>!</b>行政许可法规定的是便民原则,不是效率优先原则!便民原则强调方便申请人,而不是追求行政机关的效率!<span style='color: #e67e22;'>小白提点:便民≠效率优先!</span><br><br><strong>D. 错误!</strong><b>便民是原则!</b>行政许可的实施应当遵循便民原则,方便申请人办理!<span style='color: #e67e22;'>小白提点:便民原则!</span><br><br><span class='highlight-purple'>💡 小白提点:</span>行政许可原则=公开+公平公正+便民+救济+信赖保护,没有效率优先!"},
+            {"question": "被许可人以欺骗、贿赂等不正当手段取得行政许可的,应当?", "options": ["A. 可以撤销", "B. 应当撤销", "C. 一律不予撤销", "D. 听证后决定"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误!</strong><b>不是可以撤销!</b>以欺骗、贿赂取得的许可,应当撤销!<span style='color: #e67e22;'>小白提点:必须撤销!</span><br><br><strong>B. 正确!</strong><b><span class='highlight-red'>应当撤销</span>!</b>被许可人以欺骗、贿赂等不正当手段取得行政许可的,应当予以撤销!<span style='color: #e67e22;'>小白提点:骗来的许可必须收回!</span><br><br><strong>C. 错误!</strong><b>必须撤销!</b>以欺骗、贿赂取得的许可,没有例外,必须撤销!<span style='color: #e67e22;'>小白提点:不能保留!</span><br><br><strong>D. 错误!</strong><b>不需要听证!</b>法律明确规定应当撤销,不需要听证!<span style='color: #e67e22;'>小白提点:法律规定明确!</span><br><br><span class='highlight-purple'>💡 小白提点:</span>欺骗、贿赂取得许可=应当撤销+利益不受保护+申请人三年内不得再次申请!"},
+            {"question": "被许可人以欺骗手段取得行政许可,申请人在多长时间内不得再次申请该行政许可?", "options": ["A. 一年", "B. 二年", "C. 三年", "D. 五年"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误!</strong><b>不是一年!</b>以欺骗手段取得许可被撤销后,三年内不得再次申请!<span style='color: #e67e22;'>小白提点:记住三年!</span><br><br><strong>B. 错误!</strong><b>不是二年!</b>法律规定是三年内不得再次申请!<span style='color: #e67e22;'>小白提点:三年是标准!</span><br><br><strong>C. 正确!</strong><b><span class='highlight-red'>三年内不得再次申请</span>!</b>被许可人以欺骗、贿赂等不正当手段取得行政许可的,行政机关应当撤销该许可,申请人三年内不得再次申请该行政许可!<span style='color: #e67e22;'>小白提点:欺骗=撤销+三年禁申!</span><br><br><strong>D. 错误!</strong><b>不是五年!</b>法律规定是三年,不是五年!<span style='color: #e67e22;'>小白提点:三年期限!</span><br><br><span class='highlight-purple'>💡 小白提点:</span>欺骗取得许可=应当撤销+三年内不得再次申请+利益不受保护!"},
+            {"question": "行政许可申请材料不齐全或者不符合法定形式的,行政机关应当当场或者在几日内一次告知申请人需要补正的全部内容?", "options": ["A. 3日", "B. 5日", "C. 7日", "D. 10日"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误!</strong><b>不是3日!</b>法律规定是5日内一次告知!<span style='color: #e67e22;'>小白提点:记住5日!</span><br><br><strong>B. 正确!</strong><b><span class='highlight-red'>当场或者在5日内一次告知</span>!</b>申请材料不齐全或者不符合法定形式的,行政机关应当当场或者在5日内一次告知申请人需要补正的全部内容!<span style='color: #e67e22;'>小白提点:材料不全=当场或5日内告知!</span><br><br><strong>C. 错误!</strong><b>不是7日!</b>法律规定是5日,不是7日!<span style='color: #e67e22;'>小白提点:5日是标准!</span><br><br><strong>D. 错误!</strong><b>不是10日!</b>法律规定是5日,不是10日!<span style='color: #e67e22;'>小白提点:5日期限!</span><br><br><span class='highlight-purple'>💡 小白提点:</span>材料不全=当场告知或5日内一次告知=便民原则体现!"},
+            {"question": "行政机关作出准予行政许可的决定,需要颁发行政许可证件的,应当向申请人颁发加盖本行政机关印章的行政许可证件。这体现了行政许可的什么原则?", "options": ["A. 公开原则", "B. 公平原则", "C. 形式要件原则", "D. 便民原则"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误!</strong><b>不是公开原则!</b>公开原则强调过程和结果的公开,不是证件的形式!<span style='color: #e67e22;'>小白提点:公开≠形式!</span><br><br><strong>B. 错误!</strong><b>不是公平原则!</b>公平原则强调平等对待申请人,不是证件的形式!<span style='color: #e67e22;'>小白提点:公平≠形式!</span><br><br><strong>C. 正确!</strong><b><span class='highlight-red'>形式要件原则</span>!</b>行政机关作出准予行政许可的决定,需要颁发行政许可证件的,应当向申请人颁发加盖本行政机关印章的行政许可证件,这体现了形式要件原则!<span style='color: #e67e22;'>小白提点:许可要有形式凭证!</span><br><br><strong>D. 错误!</strong><b>不是便民原则!</b>便民原则强调方便申请人办理,不是证件的形式!<span style='color: #e67e22;'>小白提点:便民≠形式!</span><br><br><span class='highlight-purple'>💡 小白提点:</span>形式要件原则=许可要有正式证件+要盖机关印章=许可的正式性!"},
+            {"question": "下列关于行政许可的期限计算,正确的是?", "options": ["A. 以工作日计算,不含法定节假日", "B. 以自然日计算,包含法定节假日", "C. 以工作日计算,包含法定节假日", "D. 以自然日计算,不含法定节假日"], "answer": 0, "explanation": "✅ 正确答案是 <strong>A</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 正确!</strong><b><span class='highlight-red'>以工作日计算,不含法定节假日</span>!</b>行政许可法规定的期限以工作日计算,不含法定节假日,这是为了方便申请人和行政机关!<span style='color: #e67e22;'>小白提点:工作日计算=不含节假日!</span><br><br><strong>B. 错误!</strong><b>不是自然日!</b>行政许可期限以工作日计算,不是自然日!<span style='color: #e67e22;'>小白提点:工作日≠自然日!</span><br><br><strong>C. 错误!</strong><b>不含法定节假日!</b>行政许可期限不含法定节假日!<span style='color: #e67e22;'>小白提点:要扣除节假日!</span><br><br><strong>D. 错误!</strong><b>不是自然日计算!</b>行政许可期限以工作日计算,不是自然日!<span style='color: #e67e22;'>小白提点:工作日计算!</span><br><br><span class='highlight-purple'>💡 小白提点:</span>期限计算=工作日计算+不含法定节假日=方便办事!"},
+            {"question": "行政许可的申请可以委托代理人提出,体现了什么原则?", "options": ["A. 公开原则", "B. 公平原则", "C. 便民原则", "D. 效率原则"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误!</strong><b>不是公开原则!</b>公开原则强调过程和结果的公开,不是申请方式!<span style='color: #e67e22;'>小白提点:公开≠代理!</span><br><br><strong>B. 错误!</strong><b>不是公平原则!</b>公平原则强调平等对待,不是申请方式!<span style='color: #e67e22;'>小白提点:公平≠代理!</span><br><br><strong>C. 正确!</strong><b><span class='highlight-red'>便民原则</span>!</b>行政许可申请可以委托代理人提出,体现了便民原则,方便申请人办理!<span style='color: #e67e22;'>小白提点:能委托=便民!</span><br><br><strong>D. 错误!</strong><b>效率原则不是法定原则!</b>行政许可法规定的是便民原则,不是效率原则!<span style='color: #e67e22;'>小白提点:便民≠效率!</span><br><br><span class='highlight-purple'>💡 小白提点:</span>便民原则=能委托+能邮寄+能网上+一次告知=方便申请人!"},
+            {"question": "行政机关对行政许可申请进行审查时,发现行政许可事项直接关系他人重大利益的,应当?", "options": ["A. 直接作出决定", "B. 告知该利害关系人", "C. 不需要告知他人", "D. 只告知申请人"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误!</strong><b>不能直接决定!</b>涉及他人重大利益的,应当告知利害关系人!<span style='color: #e67e22;'>小白提点:要告知利害关系人!</span><br><br><strong>B. 正确!</strong><b><span class='highlight-red'>告知该利害关系人</span>!</b>行政机关对行政许可申请进行审查时,发现行政许可事项直接关系他人重大利益的,应当告知该利害关系人,保障其陈述、申辩权!<span style='color: #e67e22;'>小白提点:他人利益要保护!</span><br><br><strong>C. 错误!</strong><b>必须告知!</b>涉及他人重大利益的,必须告知利害关系人!<span style='color: #e67e22;'>小白提点:不告知=程序违法!</span><br><br><strong>D. 错误!</strong><b>不仅要告知申请人!</b>还要告知利害关系人!<span style='color: #e67e22;'>小白提点:申请人和利害关系人都要告知!</span><br><br><span class='highlight-purple'>💡 小白提点:</span>涉及他人重大利益=告知利害关系人+听取陈述申辩=程序公正!"},
+            {"question": "行政机关对行政许可申请进行审查时,申请人、利害关系人有权进行陈述和申辩。行政机关应当?", "options": ["A. 听取申请人、利害关系人的意见", "B. 可以不听取意见", "C. 只听取申请人的意见", "D. 只听取利害关系人的意见"], "answer": 0, "explanation": "✅ 正确答案是 <strong>A</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 正确!</strong><b><span class='highlight-red'>听取申请人、利害关系人的意见</span>!</b>行政机关应当听取申请人、利害关系人的陈述和申辩意见,这是程序公正的体现!<span style='color: #e67e22;'>小白提点:双方意见都要听!</span><br><br><strong>B. 错误!</strong><b>必须听取!</b>行政机关应当听取意见,不能不听取!<span style='color: #e67e22;'>小白提点:听取是义务!</span><br><br><strong>C. 错误!</strong><b>不只听取申请人的!</b>利害关系人的意见也要听取!<span style='color: #e67e22;'>小白提点:利害关系人也有权!</span><br><br><strong>D. 错误!</strong><b>不只听取利害关系人的!</b>申请人的意见也要听取!<span style='color: #e67e22;'>小白提点:申请人也有权!</span><br><br><span class='highlight-purple'>💡 小白提点:</span>陈述申辩权=申请人有权+利害关系人有权+行政机关应当听取=程序公正!"},
+            {"question": "行政许可的救济原则是指?", "options": ["A. 申请人对行政许可决定不服的,可以申请行政复议", "B. 申请人对行政许可决定不服的,可以提起行政诉讼", "C. 因行政许可造成损害的,可以要求赔偿", "D. 以上都是"], "answer": 3, "explanation": "✅ 正确答案是 <strong>D</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误!</strong><b>表述不完整!</b>可以申请行政复议只是救济方式之一!<span style='color: #e67e22;'>小白提点:这是其中一种!</span><br><br><strong>B. 错误!</strong><b>表述不完整!</b>可以提起行政诉讼只是救济方式之一!<span style='color: #e67e22;'>小白提点:这也是其中一种!</span><br><br><strong>C. 错误!</strong><b>表述不完整!</b>要求赔偿只是救济方式之一!<span style='color: #e67e22;'>小白提点:这还是其中一种!</span><br><br><strong>D. 正确!</strong><b><span class='highlight-red'>以上都是救济原则内容</span>!</b>救济原则包括:陈述权、申辩权、申请行政复议权、提起行政诉讼权、要求赔偿权等,为申请人提供全方位的权利保护!<span style='color: #e67e22;'>小白提点:救济=权利保护!</span><br><br><span class='highlight-purple'>💡 小白提点:</span>救济原则=陈述申辩+复议+诉讼+赔偿=全方位权利保护!"},
+            {"question": "行政许可法规定,设定行政许可,应当规定行政许可的?", "options": ["A. 实施机关", "B. 条件、程序", "C. 期限", "D. 以上都是"], "answer": 3, "explanation": "✅ 正确答案是 <strong>D</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误!</strong><b>表述不完整!</b>实施机关只是规定内容之一!<span style='color: #e67e22;'>小白提点:这是其中一项!</span><br><br><strong>B. 错误!</strong><b>表述不完整!</b>条件、程序只是规定内容之一!<span style='color: #e67e22;'>小白提点:这也是其中一项!</span><br><br><strong>C. 错误!</strong><b>表述不完整!</b>期限只是规定内容之一!<span style='color: #e67e22;'>小白提点:这还是其中一项!</span><br><br><strong>D. 正确!</strong><b><span class='highlight-red'>以上都是规定内容</span>!</b>设定行政许可,应当规定行政许可的实施机关、条件、程序、期限,这是行政许可法的要求,确保许可规范实施!<span style='color: #e67e22;'>小白提点:设定许可要全面!</span><br><br><span class='highlight-purple'>💡 小白提点:</span>设定许可=实施机关+条件+程序+期限=规范完整!"},
+            {"question": "关于行政许可的变更,下列说法正确的是?", "options": ["A. 被许可人可以随时申请变更", "B. 行政机关可以主动变更行政许可", "C. 变更行政许可需要重新申请", "D. 变更行政许可应当办理变更手续"], "answer": 3, "explanation": "✅ 正确答案是 <strong>D</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误!</strong><b>不能随时申请!</b>被许可人需要变更许可事项的,应当向作出许可决定的行政机关提出申请!<span style='color: #e67e22;'>小白提点:要申请才能变更!</span><br><br><strong>B. 错误!</strong><b>不能主动变更!</b>行政机关变更许可需要依法进行,不能随意主动变更!<span style='color: #e67e22;'>小白提点:变更要有依据!</span><br><br><strong>C. 错误!</strong><b>不需要重新申请!</b>变更许可是对原许可的修改,不是重新申请!<span style='color: #e67e22;'>小白提点:变更≠重新申请!</span><br><br><strong>D. 正确!</strong><b><span class='highlight-red'>变更应当办理变更手续</span>!</b>被许可人要求变更行政许可事项的,应当向作出行政许可决定的行政机关提出申请;符合法定条件、标准的,行政机关应当依法办理变更手续!<span style='color: #e67e22;'>小白提点:变更要办手续!</span><br><br><span class='highlight-purple'>💡 小白提点:</span>变更许可=向原机关申请+符合条件+办理变更手续!"},
+            {"question": "下列关于行政许可的表述,正确的是?", "options": ["A. 行政许可是依职权的行政行为", "B. 行政许可是依申请的行政行为", "C. 行政许可可以依职权主动作出", "D. 行政机关可以主动颁发许可证"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误!</strong><b>不是依职权!</b>行政许可必须由公民、法人提出申请,行政机关才能审查决定!<span style='color: #e67e22;'>小白提点:许可要申请!</span><br><br><strong>B. 正确!</strong><b><span class='highlight-red'>行政许可是依申请的行政行为</span>!</b>行政许可必须由申请人提出申请,行政机关不能主动颁发许可证!<span style='color: #e67e22;'>小白提点:不申请不发证!</span><br><br><strong>C. 错误!</strong><b>不能主动作出!</b>行政许可必须依申请作出,行政机关不能主动作出!<span style='color: #e67e22;'>小白提点:被动审查!</span><br><br><strong>D. 错误!</strong><b>不能主动颁发!</b>行政机关不能主动颁发许可证,必须等申请人申请!<span style='color: #e67e22;'>小白提点:等申请再办!</span><br><br><span class='highlight-purple'>💡 小白提点:</span>行政许可=依申请行为+不申请不发证+行政机关被动审查!"},
+            {"question": "行政许可的实施和结果,涉及商业秘密、个人隐私的,应当?", "options": ["A. 一律公开", "B. 一律不公开", "C. 经权利人同意可以公开", "D. 经行政机关决定可以公开"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误!</strong><b>不能一律公开!</b>涉及商业秘密、个人隐私的,要保护权利人利益!<span style='color: #e67e22;'>小白提点:要保护秘密!</span><br><br><strong>B. 错误!</strong><b>不是一律不公开!</b>经权利人同意可以公开!<span style='color: #e67e22;'>小白提点:同意可以公开!</span><br><br><strong>C. 正确!</strong><b><span class='highlight-red'>经权利人同意可以公开</span>!</b>涉及商业秘密、个人隐私的,经权利人同意公开的,可以公开!<span style='color: #e67e22;'>小白提点:权利人同意=可以公开!</span><br><br><strong>D. 错误!</strong><b>不是行政机关决定!</b>需要权利人同意,不是行政机关决定!<span style='color: #e67e22;'>小白提点:权利人说了算!</span><br><br><span class='highlight-purple'>💡 小白提点:</span>商业秘密、个人隐私=原则上不公开+权利人同意可以公开!"},
+            {"question": "行政许可的听证程序中,行政机关应当于举行听证的几日前将听证的时间、地点通知申请人、利害关系人?", "options": ["A. 3日", "B. 5日", "C. 7日", "D. 10日"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误!</strong><b>不是3日!</b>法律规定是7日前通知!<span style='color: #e67e22;'>小白提点:记住7日!</span><br><br><strong>B. 错误!</strong><b>不是5日!</b>法律规定是7日前通知!<span style='color: #e67e22;'>小白提点:7日是标准!</span><br><br><strong>C. 正确!</strong><b><span class='highlight-red'>7日前通知</span>!</b>行政机关应当于举行听证的7日前将举行听证的时间、地点通知申请人、利害关系人,必要时予以公告!<span style='color: #e67e22;'>小白提点:听证通知=提前7日!</span><br><br><strong>D. 错误!</strong><b>不是10日!</b>法律规定是7日,不是10日!<span style='color: #e67e22;'>小白提点:7日期限!</span><br><br><span class='highlight-purple'>💡 小白提点:</span>听证通知=提前7日告知时间地点=保障参与权!"},
+            {"question": "行政许可听证应当制作笔录,听证笔录应当交听证参加人确认无误后签字或者盖章。行政机关应当根据什么作出行政许可决定?", "options": ["A. 行政机关的意志", "B. 听证笔录", "C. 申请人的申请", "D. 利害关系人的意见"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误!</strong><b>不是行政机关意志!</b>行政机关必须根据听证笔录作出决定,不能随意决定!<span style='color: #e67e22;'>小白提点:不能乱来!</span><br><br><strong>B. 正确!</strong><b><span class='highlight-red'>根据听证笔录作出决定</span>!</b>行政机关应当根据听证笔录,作出行政许可决定,听证笔录是决定的唯一依据!<span style='color: #e67e22;'>小白提点:听证笔录=唯一依据!</span><br><br><strong>C. 错误!</strong><b>不只是申请人意见!</b>行政机关要综合考虑听证笔录的全部内容!<span style='color: #e67e22;'>小白提点:要看全部笔录!</span><br><br><strong>D. 错误!</strong><b>不只是利害关系人意见!</b>行政机关要综合考虑听证笔录的全部内容!<span style='color: #e67e22;'>小白提点:要看全部笔录!</span><br><br><span class='highlight-purple'>💡 小白提点:</span>听证笔录=决定的唯一依据+听证参加人签字确认=程序公正!"},
+            {"question": "行政许可法规定,行政机关实施行政许可,不得向申请人提出?", "options": ["A. 购买指定商品", "B. 接受有偿服务", "C. 参加强制性培训", "D. 以上都是"], "answer": 3, "explanation": "✅ 正确答案是 <strong>D</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误!</strong><b>表述不完整!</b>不得要求购买指定商品只是禁止行为之一!<span style='color: #e67e22;'>小白提点:这是其中一种!</span><br><br><strong>B. 错误!</strong><b>表述不完整!</b>不得要求接受有偿服务只是禁止行为之一!<span style='color: #e67e22;'>小白提点:这也是其中一种!</span><br><br><strong>C. 错误!</strong><b>表述不完整!</b>不得要求参加强制性培训只是禁止行为之一!<span style='color: #e67e22;'>小白提点:这还是其中一种!</span><br><br><strong>D. 正确!</strong><b><span class='highlight-red'>以上都是禁止行为</span>!</b>行政机关实施行政许可,不得向申请人提出购买指定商品、接受有偿服务、参加强制性培训等不正当要求,保障申请人自主选择权!<span style='color: #e67e22;'>小白提点:不能强买强卖!</span><br><br><span class='highlight-purple'>💡 小白提点:</span>禁止行为=不得指定商品+不得有偿服务+不得强制培训=保护申请人权益!"},
+            {"question": "行政许可法规定,行政机关应当将法律、法规、规章规定的有关行政许可的事项、依据、条件、数量、程序、期限以及需要提交的全部材料的目录和申请书示范文本等在哪里公示?", "options": ["A. 在办公场所公示", "B. 在网上公示", "C. 在报纸上公示", "D. 在电视上公示"], "answer": 0, "explanation": "✅ 正确答案是 <strong>A</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 正确!</strong><b><span class='highlight-red'>在办公场所公示</span>!</b>行政机关应当将有关行政许可的事项、依据、条件、数量、程序、期限以及需要提交的全部材料的目录和申请书示范文本等在办公场所公示!<span style='color: #e67e22;'>小白提点:办公场所公示=方便申请人查看!</span><br><br><strong>B. 错误!</strong><b>不是必须在网上!</b>法律规定是在办公场所公示,网上公示可以作为补充!<span style='color: #e67e22;'>小白提点:办公场所是法定!</span><br><br><strong>C. 错误!</strong><b>不是在报纸!</b>法律规定是在办公场所公示!<span style='color: #e67e22;'>小白提点:报纸不是法定!</span><br><br><strong>D. 错误!</strong><b>不是在电视!</b>法律规定是在办公场所公示!<span style='color: #e67e22;'>小白提点:电视不是法定!</span><br><br><span class='highlight-purple'>💡 小白提点:</span>公示地点=办公场所=事项+依据+条件+数量+程序+期限+材料目录+申请书示范文本!"}
+        ];
+        
+        // ========== 渲染函数 ==========
+        let totalAnswered = 0;
+        let totalCorrect = 0;
+        
+        function renderQuiz(containerId, quizData) {
+            const container = document.getElementById(containerId);
+            if (!container || !quizData) return;
+            
+            container.innerHTML = '';
+            
+            quizData.forEach((q, index) => {
+                const card = document.createElement('div');
+                card.className = 'quiz-card';
+                card.innerHTML = `
+                    <div class="question">
+                        <span class="question-num">${index + 1}</span>
+                        ${q.question}
+                    </div>
+                    <div class="options" id="options-${containerId}-${index}">
+                        ${q.options.map((opt, i) => `
+                            <button class="option-btn" onclick="checkAnswer('${containerId}', ${index}, ${i}, ${q.answer})">
+                                <span class="option-letter">${String.fromCharCode(65 + i)}</span>
+                                ${opt.substring(3)}
+                            </button>
+                        `).join('')}
+                    </div>
+                    <div class="explanation" id="explanation-${containerId}-${index}">
+                        ${q.explanation}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+        
+        function checkAnswer(containerId, questionIndex, selectedIndex, correctIndex) {
+            const optionsContainer = document.getElementById(`options-${containerId}-${questionIndex}`);
+            const explanation = document.getElementById(`explanation-${containerId}-${questionIndex}`);
+            const buttons = optionsContainer.querySelectorAll('.option-btn');
+            
+            // 检查是否已经回答过
+            if (buttons[0].classList.contains('disabled')) return;
+            
+            // 禁用所有按钮
+            buttons.forEach(btn => btn.classList.add('disabled'));
+            
+            // 标记正确和错误答案
+            buttons[selectedIndex].classList.add(selectedIndex === correctIndex ? 'correct' : 'wrong');
+            if (selectedIndex !== correctIndex) {
+                buttons[correctIndex].classList.add('correct');
+            }
+            
+            // 显示解析
+            explanation.classList.add('show');
+            
+            // 更新统计
+            totalAnswered++;
+            if (selectedIndex === correctIndex) {
+                totalCorrect++;
+            }
+            updateScore();
+        }
+        
+        function updateScore() {
+            document.getElementById('totalScore').textContent = `已答: ${totalCorrect}/${totalAnswered}`;
+        }
+        
+        // ========== 初始化 ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            renderQuiz('quiz-module1', quiz1Data);
+            renderQuiz('quiz-module2', quiz2Data);
+            renderQuiz('quiz-module3', quiz3Data);
+            renderQuiz('quiz-module4', quiz4Data);
+            renderQuiz('quiz-module5', quiz5Data);
+            renderQuiz('quiz-module6', quiz6Data);
+            renderQuiz('quiz-module7', quiz7Data);
+            renderQuiz('quiz-module8', quiz8Data);
+            renderQuiz('quiz-module9', quiz9Data);
+            renderQuiz('quiz-module10', quiz10Data);
+            renderQuiz('quiz-practice', practiceData);
+        });
+        </script>
+    </main>
+</body>
+</html>
