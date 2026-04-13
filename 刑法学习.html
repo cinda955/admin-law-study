@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>刑法学习 - 辅警备考</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: linear-gradient(135deg, #3498db 0%, #2c3e50 100%); min-height: 100vh; color: #333; }
+        .progress-bar { position: fixed; top: 0; left: 0; width: 100%; height: 4px; background: rgba(255,255,255,0.1); z-index: 1000; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #00d9ff, #00ff88); width: 0%; transition: width 0.3s ease; }
+        .top-nav { position: fixed; top: 4px; left: 0; right: 0; background: rgba(52, 152, 219, 0.95); backdrop-filter: blur(10px); padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 999; border-bottom: 1px solid rgba(255,255,255,0.2); }
+        .logo { color: #fff; font-size: 18px; font-weight: bold; display: flex; align-items: center; gap: 8px; }
+        .score-display { background: rgba(255,255,255,0.2); color: #fff; padding: 8px 16px; border-radius: 20px; font-size: 14px; }
+        .sidebar { position: fixed; left: 0; top: 50px; width: 260px; height: calc(100vh - 50px); background: rgba(255,255,255,0.95); overflow-y: auto; padding: 20px 0; box-shadow: 2px 0 10px rgba(0,0,0,0.1); z-index: 998; }
+        .sidebar-title { color: #2c3e50; padding: 0 20px 15px; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid #eee; margin-bottom: 15px; }
+        .nav-item { padding: 12px 20px; color: #666; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 10px; font-size: 14px; border-left: 3px solid transparent; text-decoration: none; }
+        .nav-item:hover { background: rgba(52, 152, 219, 0.1); color: #3498db; }
+        .nav-item.active { background: rgba(52, 152, 219, 0.15); color: #3498db; border-left-color: #3498db; font-weight: bold; }
+        .main-content { margin-left: 260px; padding: 70px 30px 30px; max-width: 900px; }
+        .section-header { text-align: center; margin-bottom: 40px; }
+        .section-header h1 { font-size: 42px; color: #fff; margin-bottom: 10px; text-shadow: 0 0 30px rgba(0,0,0,0.2); }
+        .section-header p { color: rgba(255,255,255,0.8); font-size: 16px; }
+        .knowledge-card { background: #fff; border-radius: 20px; padding: 30px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); scroll-margin-top: 100px; }
+        .knowledge-card h2 { font-size: 24px; color: #333; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; border-bottom: 2px solid #3498db; padding-bottom: 15px; }
+        .knowledge-card h3 { font-size: 18px; color: #555; margin: 20px 0 10px; padding-left: 15px; border-left: 4px solid #3498db; }
+        .knowledge-content p { line-height: 1.8; color: #555; margin-bottom: 15px; }
+        .highlight-red { color: #e74c3c; font-weight: bold; background: rgba(231, 76, 60, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .highlight-blue { color: #3498db; font-weight: bold; background: rgba(52, 152, 219, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .highlight-green { color: #27ae60; font-weight: bold; background: rgba(39, 174, 96, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .highlight-orange { color: #e67e22; font-weight: bold; background: rgba(230, 126, 34, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .highlight-purple { color: #9b59b6; font-weight: bold; background: rgba(155, 89, 182, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .example { background: linear-gradient(135deg, #fff3e0, #ffe0b2); border-left: 4px solid #ff9800; padding: 15px 20px; border-radius: 0 10px 10px 0; margin: 15px 0; }
+        .example p { color: #e65100; margin: 8px 0; }
+        .memory-tip { background: linear-gradient(135deg, #e8f5e9, #c8e6c9); border-left: 4px solid #4caf50; padding: 15px 20px; border-radius: 0 10px 10px 0; margin: 15px 0; }
+        .memory-tip p { color: #2e7d32; margin: 0; }
+        .warning { background: linear-gradient(135deg, #ffebee, #ffcdd2); border-left: 4px solid #f44336; padding: 15px 20px; border-radius: 0 10px 10px 0; margin: 15px 0; }
+        .warning p { color: #c62828; margin: 0; }
+        .quiz-container { margin-top: 30px; }
+        .quiz-card { background: #f8f9fa; border-radius: 15px; padding: 20px; margin-bottom: 20px; border: 1px solid #e9ecef; }
+        .question { font-size: 16px; color: #333; margin-bottom: 15px; font-weight: 500; }
+        .question-num { display: inline-block; background: #3498db; color: #fff; width: 28px; height: 28px; border-radius: 50%; text-align: center; line-height: 28px; margin-right: 10px; font-size: 14px; }
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .option-btn { padding: 12px 20px; background: #fff; border: 2px solid #e9ecef; border-radius: 10px; cursor: pointer; text-align: left; font-size: 15px; color: #555; transition: all 0.3s ease; }
+        .option-btn:hover { border-color: #3498db; background: rgba(52, 152, 219, 0.05); }
+        .option-letter { display: inline-block; width: 26px; height: 26px; background: #e9ecef; border-radius: 50%; text-align: center; line-height: 26px; margin-right: 10px; font-weight: bold; color: #3498db; }
+        .option-btn.correct { background: #d4edda; border-color: #28a745; }
+        .option-btn.correct .option-letter { background: #28a745; color: #fff; }
+        .option-btn.wrong { background: #f8d7da; border-color: #dc3545; }
+        .option-btn.wrong .option-letter { background: #dc3545; color: #fff; }
+        .option-btn.disabled { cursor: not-allowed; opacity: 0.7; }
+        .explanation { background: linear-gradient(135deg, #e8f4fd, #d6e9f8); border-radius: 10px; padding: 15px 20px; margin-top: 15px; display: none; line-height: 1.8; }
+        .explanation .result { font-size: 18px; font-weight: bold; margin-bottom: 10px; }
+        .explanation .result.correct { color: #28a745; }
+        .explanation .result.wrong { color: #dc3545; }
+        .framework-section { background: #fff; border-radius: 20px; padding: 30px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); scroll-margin-top: 100px; }
+        .framework-section h2 { font-size: 28px; color: #333; margin-bottom: 25px; text-align: center; border-bottom: 2px solid #3498db; padding-bottom: 15px; }
+        .framework-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .framework-card { background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-radius: 15px; padding: 20px; border-left: 4px solid #3498db; }
+        .framework-card h3 { font-size: 18px; color: #3498db; margin-bottom: 10px; }
+        .framework-card p { color: #666; font-size: 14px; margin: 5px 0; line-height: 1.6; }
+        .practice-section { background: #fff; border-radius: 20px; padding: 30px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); scroll-margin-top: 100px; }
+        .practice-section h2 { font-size: 28px; color: #333; margin-bottom: 25px; text-align: center; border-bottom: 2px solid #2c3e50; padding-bottom: 15px; }
+        .table-section { background: #f8f9fa; border-radius: 10px; padding: 20px; margin: 15px 0; overflow-x: auto; }
+        .table-section table { width: 100%; border-collapse: collapse; }
+        .table-section th, .table-section td { padding: 12px 15px; text-align: left; border: 1px solid #ddd; }
+        .table-section th { background: #3498db; color: #fff; }
+        .table-section tr:nth-child(even) { background: #fff; }
+        @media (max-width: 768px) { .sidebar { width: 100%; height: auto; position: relative; margin-top: 50px; } .main-content { margin-left: 0; padding-top: 80px; } }
+        .close-nav-btn { background: rgba(255,255,255,0.2); border: none; color: #fff; font-size: 18px; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.3s; }
+        .close-nav-btn:hover { background: rgba(255,255,255,0.3); }
+    </style>
+</head>
+<body>
+    <div class="progress-bar"><div class="progress-fill" id="mainProgress"></div></div>
+    <nav class="top-nav" id="topNav">
+        <div class="logo">⚖️ 刑法基础知识学习</div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <div class="score-display" id="totalScore">已答: 0/0</div>
+            <button class="close-nav-btn" onclick="closeTopNav()">✕</button>
+        </div>
+    </nav>
+    <aside class="sidebar">
+        <div class="sidebar-title">📖 目录导航</div>
+        <a href="#module1" class="nav-item active" onclick="scrollToSection(this, event)">📜 模块1: 刑法三大基本原则</a>
+        <a href="#module2" class="nav-item" onclick="scrollToSection(this, event)">🔍 模块2: 犯罪三特征</a>
+        <a href="#module3" class="nav-item" onclick="scrollToSection(this, event)">🏛️ 模块3: 犯罪四要件</a>
+        <a href="#module4" class="nav-item" onclick="scrollToSection(this, event)">📅 模块4: 刑事责任年龄</a>
+        <a href="#module5" class="nav-item" onclick="scrollToSection(this, event)">🧠 模块5: 刑事责任能力</a>
+        <a href="#module6" class="nav-item" onclick="scrollToSection(this, event)">🏢 模块6: 单位犯罪</a>
+        <a href="#module7" class="nav-item" onclick="scrollToSection(this, event)">💭 模块7: 犯罪主观方面</a>
+        <a href="#module8" class="nav-item" onclick="scrollToSection(this, event)">🛡️ 模块8: 正当防卫与紧急避险</a>
+        <a href="#module9" class="nav-item" onclick="scrollToSection(this, event)">📈 模块9: 故意犯罪形态</a>
+        <a href="#module10" class="nav-item" onclick="scrollToSection(this, event)">👥 模块10: 共同犯罪</a>
+        <a href="#module11" class="nav-item" onclick="scrollToSection(this, event)">📋 模块11: 刑法分则罪名</a>
+        <a href="#framework" class="nav-item" onclick="scrollToSection(this, event)">📋 知识框架总览</a>
+        <a href="#practice" class="nav-item" onclick="scrollToSection(this, event)">📝 练习专区</a>
+    </aside>
+    <main class="main-content">
+        <div class="section-header">
+            <h1>⚖️ 刑法基础知识学习</h1>
+            <p>系统学习刑法知识，轻松应对辅警考试</p>
+        </div>
+        
+        <section id="module1" class="knowledge-card">
+            <h2>📜 模块1: 刑法三大基本原则</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">核心概念</span>：刑法的基本原则就像"游戏规则"，贯穿整部刑法，所有判决都必须遵守！考试必考，必须记住有哪三个！</p>
+                
+                <h3>📌 一、罪刑法定原则（最重要！）</h3>
+                <p>把<span class="highlight-red">"罪"</span>和<span class="highlight-red">"刑"</span>两个字分开理解：</p>
+                <p>• <span class="highlight-blue">"罪"是法定的</span>：什么行为是犯罪，法律必须明文规定！法官不能自己创造罪名</p>
+                <p>• <span class="highlight-blue">"刑"是法定的</span>：判什么刑罚，法律必须明文规定！法官不能随便判</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三在网上骂人，法官能不能判他"网络侮辱罪"？<span class="highlight-red">不能！</span>因为刑法里没有"网络侮辱罪"这个罪名！法官不能自己发明罪名，这就是罪刑法定！为什么这样举例？因为考试经常考"法官能不能创造罪名"——答案永远是<span class="highlight-red">不能！</span></p></div>
+                <p>记忆要点：<span class="highlight-red">法无明文规定不为罪，法无明文规定不处罚！</span></p>
+                
+                <h3>📌 二、平等适用刑法原则</h3>
+                <p>简单说就是<span class="highlight-blue">"法律面前人人平等"</span>！</p>
+                <p>• 普通人犯罪和高官犯罪，同样处罚</p>
+                <p>• 富人犯罪和穷人犯罪，同样处罚</p>
+                <p>• 不允许任何人有特权！</p>
+                <div class="example"><p><strong>🌰 举例：</strong>某局长酒后驾车撞人，能不能因为他是局长就轻判？<span class="highlight-red">不能！</span>这就是平等适用刑法！为什么这样举例？因为考试会出"某高官犯罪如何处理"的题——答案就是<span class="highlight-red">和普通人一样！</span></p></div>
+                
+                <h3>📌 三、罪责刑相适应原则</h3>
+                <p>简单说就是<span class="highlight-blue">"重罪重罚，轻罪轻罚"</span>！</p>
+                <p>• 抢劫1000万判1年？违法成本太低！不能！</p>
+                <p>• 偷100块判无期徒刑？太重了！不能！</p>
+                <p>• 罪行和刑罚要匹配！</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三偷了10块钱，法官能不能判他死刑？<span class="highlight-red">不能！</span>这违反了罪责刑相适应原则！为什么这样举例？因为考试会出"偷小钱判重刑"的题——这就是<span class="highlight-red">违反罪责刑相适应！</span></p></div>
+                
+                <p class="memory-tip"><strong><span class='highlight-purple'>记忆口诀：</span></strong>三大原则=法定（法无明文不为罪）+平等（人人平等）+相适应（重罪重罚）！</p>
+                <p class="warning">⚠️ <strong>易错点：</strong>考试会问"体现哪个原则"——抓住关键词：出现"法无明文规定"就是罪刑法定；出现"人人平等"就是平等适用；出现"罪行与刑罚匹配"就是罪责刑相适应！</p>
+            </div>
+            <div id="quiz-module1" class="quiz-container"></div>
+        </section>
+        
+        <section id="module2" class="knowledge-card">
+            <h2>🔍 模块2: 犯罪三特征</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">核心概念</span>：犯罪不是随便定的，必须同时具备三个特征！缺一不可！</p>
+                
+                <h3>📌 一、社会危害性（本质特征！）</h3>
+                <p>行为必须<span class="highlight-red">危害到社会利益</span>，才可能构成犯罪！</p>
+                <p>• 危害国家利益：分裂国家、颠覆政权</p>
+                <p>• 危害社会秩序：扰乱公共秩序</p>
+                <p>• 危害人身权利：杀人、伤害</p>
+                <p>• 危害财产权利：盗窃、诈骗</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三借钱不还，构成犯罪吗？<span class="highlight-red">不构成！</span>借钱不还是民事纠纷，不是犯罪，因为<span class="highlight-orange">刑法没有规定"借钱不还"是犯罪！</span>为什么这样举例？因为考试会出"借钱不还是否犯罪"——答案永远是<span class="highlight-red">民事纠纷，不犯罪！</span></p></div>
+                
+                <h3>📌 二、刑事违法性</h3>
+                <p>行为必须<span class="highlight-blue">违反刑法规定</span>，才可能构成犯罪！</p>
+                <p>这是从罪刑法定原则延伸出来的！</p>
+                <p>• 刑法没有规定的行为，不能认定为犯罪</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三在网上骂人，但刑法没有"网络骂人罪"，所以他<span class="highlight-red">不构成犯罪！</span>为什么这样举例？因为考试会问"某行为是否犯罪"——先看<span class="highlight-red">刑法有没有规定！</span></p></div>
+                
+                <h3>📌 三、应受刑罚处罚性</h3>
+                <p>行为必须<span class="highlight-blue">应当受到刑罚处罚</span>，才可能构成犯罪！</p>
+                <p>• 有危害性 + 有违法性，但不一定构成犯罪！</p>
+                <p>• 还要看<span class="highlight-red">行为人是否应当受到刑罚处罚！</span></p>
+                <div class="example"><p><strong>🌰 举例：</strong>10岁小孩抢劫，构成犯罪吗？<span class="highlight-red">不构成！</span>虽然有社会危害性（抢劫危害大），也违反刑法（刑法规定了抢劫罪），但<span class="highlight-orange">不满14周岁不负刑事责任！</span>所以不构成犯罪！为什么这样举例？因为考试会出"未成年人犯罪"的题——先看<span class="highlight-red">年龄！</span></p></div>
+                
+                <p class="memory-tip"><strong><span class='highlight-purple'>记忆口诀：</span></strong>犯罪三特征=危害性（本质）+违法性（法定）+应受处罚（缺一不可）！</p>
+                <p class="warning">⚠️ <strong>易错点：</strong><span class="highlight-red">社会危害性是本质特征！</span>考试会问"犯罪的本质特征是什么"——答案是<span class="highlight-red">社会危害性！</span></p>
+            </div>
+            <div id="quiz-module2" class="quiz-container"></div>
+        </section>
+        
+        <section id="module3" class="knowledge-card">
+            <h2>🏛️ 模块3: 犯罪四要件</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">核心概念</span>：犯罪四要件就像"查案四步"，判断是否构成犯罪，必须四步都符合！</p>
+                
+                <h3>📌 一、犯罪主体（"谁干的"）</h3>
+                <p><span class="highlight-blue">实施犯罪的人</span>，包括自然人和单位。</p>
+                <p>自然人成为犯罪主体的条件：</p>
+                <p>• <span class="highlight-red">达到刑事责任年龄</span>（不满12周岁不负刑事责任）</p>
+                <p>• <span class="highlight-red">具备刑事责任能力</span>（精神正常）</p>
+                <div class="example"><p><strong>🌰 举例：</strong>11岁小孩杀人，能不能成为犯罪主体？<span class="highlight-red">不能！</span>因为不满12周岁，没有达到刑事责任年龄！为什么这样举例？因为考试会出"未成年人能否成为犯罪主体"——先看<span class="highlight-red">年龄！</span></p></div>
+                
+                <h3>📌 二、犯罪主观方面（"怎么想的"）</h3>
+                <p>行为人的<span class="highlight-blue">内心想法</span>，包括故意和过失。</p>
+                <p>• <span class="highlight-red">故意</span>：明知会发生危害结果，希望或放任发生</p>
+                <p>• <span class="highlight-orange">过失</span>：应当预见危害结果，但因疏忽大意没预见，或已预见但轻信能避免</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三想杀李四，开枪打死李四——这是<span class="highlight-red">故意杀人</span>！张三开车闯红灯，不小心撞死路人——这是<span class="highlight-orange">过失致人死亡</span>！为什么这样举例？因为考试会问"故意还是过失"——看<span class="highlight-red">行为人心里想不想发生危害结果！</span></p></div>
+                
+                <h3>📌 三、犯罪客体（"侵害了什么"）</h3>
+                <p>犯罪行为侵害的<span class="highlight-blue">社会关系</span>（法律保护的权益）。</p>
+                <p>• 杀人罪的客体：<span class="highlight-red">生命权</span></p>
+                <p>• 伤害罪的客体：<span class="highlight-red">健康权</span></p>
+                <p>• 盗窃罪的客体：<span class="highlight-red">财产权</span></p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三杀李四，犯罪客体是什么？<span class="highlight-red">李四的生命权！</span>不是"李四本人"（那是犯罪对象）！为什么这样举例？因为考试会混淆<span class="highlight-red">客体（社会关系）和对象（具体的人或物）！</span></p></div>
+                
+                <h3>📌 四、犯罪客观方面（"干了什么"）</h3>
+                <p>犯罪行为的<span class="highlight-blue">外在表现</span>，包括行为、结果、因果关系。</p>
+                <p>• 行为：杀人的动作</p>
+                <p>• 结果：被害人死亡</p>
+                <p>• 因果关系：行为和结果之间的联系</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三开枪打李四，李四死亡——行为是<span class="highlight-blue">开枪</span>，结果是<span class="highlight-red">李四死亡</span>，因果关系是<span class="highlight-orange">开枪导致死亡</span>！为什么这样举例？因为考试会问"客观方面包括什么"——记住<span class="highlight-red">行为+结果+因果关系！</span></p></div>
+                
+                <p class="memory-tip"><strong><span class='highlight-purple'>记忆口诀：</span></strong>四要件=主体（谁干的）+主观（怎么想的）+客体（侵害什么）+客观（干了什么）！</p>
+                <p class="warning">⚠️ <strong>易错点：</strong>犯罪客体<span class="highlight-red">不是</span>犯罪对象！客体是社会关系（如生命权），对象是具体的人或物（如被害人）！</p>
+            </div>
+            <div id="quiz-module3" class="quiz-container"></div>
+        </section>
+        
+        <section id="module4" class="knowledge-card">
+            <h2>📅 模块4: 刑事责任年龄（必背！）</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">核心概念</span>：年龄是判断是否负刑事责任的关键！考试必考，必须背下来！</p>
+                
+                <h3>📌 年龄分段（记住12、14、16三个数字！）</h3>
+                <div class="table-section">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>年龄阶段</th>
+                                <th>刑事责任</th>
+                                <th>备注</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="highlight-blue">不满12周岁</span></td>
+                                <td><span class="highlight-red">完全不负刑事责任</span></td>
+                                <td>10岁杀人也不负刑事责任！</td>
+                            </tr>
+                            <tr>
+                                <td><span class="highlight-blue">已满12不满14周岁</span></td>
+                                <td><span class="highlight-orange">相对负刑事责任</span></td>
+                                <td>仅对故意杀人、故意伤害致人死亡或特别残忍手段致人重伤造成严重残疾，经最高检核准追诉</td>
+                            </tr>
+                            <tr>
+                                <td><span class="highlight-blue">已满14不满16周岁</span></td>
+                                <td><span class="highlight-orange">相对负刑事责任</span></td>
+                                <td>仅对8种犯罪负刑事责任！</td>
+                            </tr>
+                            <tr>
+                                <td><span class="highlight-blue">已满16周岁</span></td>
+                                <td><span class="highlight-green">完全负刑事责任</span></td>
+                                <td>对所有犯罪负刑事责任！</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <h3>📌 14-16周岁负刑事责任的8种犯罪（必背口诀！）</h3>
+                <p><span class="highlight-red">口诀：烧杀淫掠，商贩爆头！</span></p>
+                <p>• <span class="highlight-blue">烧</span> = 放火</p>
+                <p>• <span class="highlight-blue">杀</span> = 故意杀人</p>
+                <p>• <span class="highlight-blue">淫</span> = 强奸</p>
+                <p>• <span class="highlight-blue">掠</span> = 抢劫</p>
+                <p>• <span class="highlight-blue">商</span> = 故意伤害致人重伤或死亡</p>
+                <p>• <span class="highlight-blue">贩</span> = 贩卖毒品</p>
+                <p>• <span class="highlight-blue">爆</span> = 爆炸</p>
+                <p>• <span class="highlight-blue">头</span> = 投放危险物质（不是投毒！）</p>
+                <div class="example"><p><strong>🌰 举例：</strong>15岁的张三实施了绑架行为，要负刑事责任吗？<span class="highlight-red">不要！</span>因为绑架<span class="highlight-orange">不在8种犯罪里！</span>为什么这样举例？因为考试经常用<span class="highlight-red">绑架来挖坑！</span>记住：14-16岁只对8种犯罪负责，绑架不在其中！</p></div>
+                
+                <h3>📌 未成年人犯罪的处罚原则</h3>
+                <p>• <span class="highlight-blue">已满14不满18周岁</span>：应当从轻或减轻处罚，且不适用死刑</p>
+                <p>• <span class="highlight-blue">不满16周岁</span>：不予刑事处罚，责令家长管教，必要时专门矫治教育</p>
+                <div class="example"><p><strong>🌰 举例：</strong>17岁的张三杀人，能不能判死刑？<span class="highlight-red">不能！</span>因为不满18周岁，不适用死刑！而且<span class="highlight-orange">应当从轻或减轻处罚！</span>为什么这样举例？因为考试会出"未成年人犯罪如何处罚"——记住<span class="highlight-red">应当从轻减轻，不适用死刑！</span></p></div>
+                
+                <p class="memory-tip"><strong><span class='highlight-purple'>记忆口诀：</span></strong>年龄分段：12下无责，12-14特残忍+最高检核准，14-16烧杀淫掠商贩爆头，16上全责！未成年=应当从轻减轻+不适用死刑！</p>
+                <p class="warning">⚠️ <strong>易错点：</strong>投放危险物质<span class="highlight-red">不是</span>投毒！毒只是危险物质的一种！还有放射性物质等！</p>
+            </div>
+            <div id="quiz-module4" class="quiz-container"></div>
+        </section>
+        
+        <section id="module5" class="knowledge-card">
+            <h2>🧠 模块5: 刑事责任能力</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">核心概念</span>：刑事责任能力看的是<span class="highlight-blue">精神状态</span>！能否辨认和控制自己的行为！</p>
+                
+                <h3>📌 精神病人的三种状态</h3>
+                <div class="table-section">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>精神状态</th>
+                                <th>刑事责任</th>
+                                <th>处理方式</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="highlight-blue">精神正常</span></td>
+                                <td><span class="highlight-red">完全负刑事责任</span></td>
+                                <td>正常处罚</td>
+                            </tr>
+                            <tr>
+                                <td><span class="highlight-blue">间歇性精神病（未发病）</span></td>
+                                <td><span class="highlight-red">应当负刑事责任</span></td>
+                                <td>精神正常时犯罪要负责</td>
+                            </tr>
+                            <tr>
+                                <td><span class="highlight-blue">间歇性精神病（发病）</span></td>
+                                <td><span class="highlight-green">不负刑事责任</span></td>
+                                <td>责令家属看管，必要时强制医疗</td>
+                            </tr>
+                            <tr>
+                                <td><span class="highlight-blue">完全不能辨认控制（全疯）</span></td>
+                                <td><span class="highlight-green">不负刑事责任</span></td>
+                                <td>责令家属看管，必要时强制医疗</td>
+                            </tr>
+                            <tr>
+                                <td><span class="highlight-blue">尚未完全丧失辨认控制（半疯）</span></td>
+                                <td><span class="highlight-orange">应当负刑事责任，但可以从轻或减轻</span></td>
+                                <td>是"可以"不是"应当"</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="example"><p><strong>🌰 举例：</strong>间歇性精神病人张三，精神正常时杀人，杀人后发病，要不要负刑事责任？<span class="highlight-red">要！</span>因为<span class="highlight-red">看的是犯罪时的精神状态！</span>犯罪时精神正常，就要负刑事责任！为什么这样举例？因为考试会出这种"杀人后发病"的题——记住<span class="highlight-red">看犯罪时的精神状态！</span></p></div>
+                
+                <h3>📌 醉酒的人犯罪</h3>
+                <p><span class="highlight-red">应当负刑事责任！</span></p>
+                <p>• 醉酒是自己能控制的（可以不喝酒）</p>
+                <p>• 醉酒后犯罪不能找借口！</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三喝醉酒后打伤人，能不能说不负刑事责任？<span class="highlight-red">不能！</span>醉酒的人犯罪<span class="highlight-red">应当负刑事责任！</span></p></div>
+                
+                <h3>📌 又聋又哑的人、盲人犯罪</h3>
+                <p><span class="highlight-blue">可以从轻、减轻或免除处罚！</span></p>
+                <p>• 注意是<span class="highlight-red">"可以"</span>，不是"应当"</p>
+                <p>• 必须是<span class="highlight-orange">又聋又哑</span>，只聋不哑或只哑不聋不算</p>
+                <div class="example"><p><strong>🌰 举例：</strong>盲人张三犯罪，法院必须从轻处罚吗？<span class="highlight-red">不是必须！</span>是<span class="highlight-orange">"可以"从轻、减轻或免除！</span>法院有裁量权！为什么这样举例？因为考试会出"应当还是可以"——记住<span class="highlight-red">聋哑人、盲人是"可以"！</span></p></div>
+                
+                <p class="memory-tip"><strong><span class='highlight-purple'>记忆口诀：</span></strong>精神状态：正常负责，发病不负责，间歇看犯罪时！醉酒必须负责！聋哑盲可以从轻减免！</p>
+                <p class="warning">⚠️ <strong>易错点：</strong>间歇性精神病看的是<span class="highlight-red">犯罪时的精神状态</span>，不是审判时！半疯是<span class="highlight-red">"可以"</span>从轻减轻，不是"应当"！</p>
+            </div>
+            <div id="quiz-module5" class="quiz-container"></div>
+        </section>
+        
+        <section id="module6" class="knowledge-card">
+            <h2>🏢 模块6: 单位犯罪</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">核心概念</span>：单位犯罪就是<span class="highlight-blue">组织犯罪</span>，以单位名义实施犯罪，利益归单位！</p>
+                
+                <h3>📌 单位犯罪的主体</h3>
+                <p><span class="highlight-red">一切组织</span>都可以成为单位犯罪的主体！</p>
+                <p>• 公司、企业</p>
+                <p>• 事业单位</p>
+                <p>• 机关（包括国家机关！）</p>
+                <p>• 团体</p>
+                <div class="example"><p><strong>🌰 举例：</strong>某市政府部门以单位名义受贿，构成单位犯罪吗？<span class="highlight-red">构成！</span>国家机关也可以成为单位犯罪主体！为什么这样举例？因为考试会问"国家机关能否成为单位犯罪主体"——答案是<span class="highlight-red">能！</span></p></div>
+                
+                <h3>📌 处罚原则：双罚制（必考！）</h3>
+                <p><span class="highlight-red">单位犯罪实行双罚制：</span></p>
+                <p>• <span class="highlight-blue">罚单位</span>：对单位判处罚金（单位不能坐牢，只能罚钱）</p>
+                <p>• <span class="highlight-blue">罚个人</span>：对直接负责的主管人员和直接责任人员判处刑罚</p>
+                <div class="example"><p><strong>🌰 举例：</strong>某公司虚开增值税发票1000万，怎么处罚？<span class="highlight-red">双罚！</span>对公司判处罚金，对公司的老板和财务人员判处刑罚！为什么这样举例？因为考试会问"单位犯罪怎么处罚"——记住<span class="highlight-red">双罚制！</span></p></div>
+                
+                <h3>📌 不构成单位犯罪的情况</h3>
+                <p>以下情况<span class="highlight-orange">不构成单位犯罪</span>，按个人犯罪处理：</p>
+                <p>• <span class="highlight-red">为了犯罪而设立公司</span>：如张三为走私而设立公司</p>
+                <p>• <span class="highlight-red">设立后以犯罪为主要活动</span>：如公司成立后专门搞诈骗</p>
+                <p>• <span class="highlight-red">盗用单位名义犯罪，个人私分利益</span></p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三为了走私，专门设立了一个贸易公司，这算单位犯罪吗？<span class="highlight-red">不算！</span>因为公司只是犯罪的工具，按<span class="highlight-red">个人犯罪</span>处理！为什么这样举例？因为考试会出这种"设立公司专门犯罪"的题——记住<span class="highlight-red">不算单位犯罪！</span></p></div>
+                
+                <p class="memory-tip"><strong><span class='highlight-purple'>记忆口诀：</span></strong>单位犯罪=一切组织+双罚制（罚单位罚个人）！为犯罪设公司、犯罪为主业、个人私分利益=不算单位犯罪！</p>
+                <p class="warning">⚠️ <strong>易错点：</strong>单位犯罪只能判<span class="highlight-red">罚金</span>，不能判有期徒刑、无期徒刑、死刑！因为单位不是人，不能坐牢！</p>
+            </div>
+            <div id="quiz-module6" class="quiz-container"></div>
+        </section>
+        
+        <section id="module7" class="knowledge-card">
+            <h2>💭 模块7: 犯罪主观方面</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">核心概念</span>：犯罪主观方面看的是<span class="highlight-blue">行为人的内心想法</span>，是故意还是过失！</p>
+                
+                <h3>📌 犯罪故意</h3>
+                <p><span class="highlight-red">明知</span>自己的行为会发生危害结果，<span class="highlight-blue">希望或放任</span>结果发生！</p>
+                <p>• <span class="highlight-blue">直接故意</span>：明知+希望结果发生（我就是要他死！）</p>
+                <p>• <span class="highlight-orange">间接故意</span>：明知+放任结果发生（死不死都无所谓）</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三想杀李四，开枪打死李四——这是<span class="highlight-red">直接故意杀人</span>！张三在人群中乱开枪，打死了路人——这是<span class="highlight-orange">间接故意杀人</span>（张三不是想杀路人，但放任了结果发生）！为什么这样举例？因为考试会区分直接故意和间接故意——看<span class="highlight-red">是希望还是放任！</span></p></div>
+                
+                <h3>📌 犯罪过失</h3>
+                <p><span class="highlight-blue">应当预见</span>危害结果可能发生，但因疏忽大意没预见，或<span class="highlight-blue">已预见</span>但轻信能避免！</p>
+                <p>• <span class="highlight-blue">疏忽大意过失</span>：应当预见但没预见（根本没想到）</p>
+                <p>• <span class="highlight-orange">过于自信过失</span>：已预见但轻信能避免（我技术好，不会有事）</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三开车闯红灯，撞死路人——这是<span class="highlight-blue">疏忽大意过失</span>（他没想到会撞人）！张三飙车，自认为技术好不会撞人，结果撞死了——这是<span class="highlight-orange">过于自信过失</span>（他知道可能撞人，但自信能避免）！为什么这样举例？因为考试会区分两种过失——看<span class="highlight-red">有没有预见到危害结果！</span></p></div>
+                
+                <h3>📌 意外事件</h3>
+                <p><span class="highlight-green">根本不可能预见</span>危害结果发生，<span class="highlight-red">不构成犯罪！</span></p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三正常开车，突然一个小孩冲出来撞在车上死亡——这是<span class="highlight-green">意外事件</span>，张三<span class="highlight-red">不构成犯罪！</span>因为他根本不可能预见！为什么这样举例？因为考试会问"意外事件要不要负责"——答案是<span class="highlight-red">不构成犯罪！</span></p></div>
+                
+                <p class="memory-tip"><strong><span class='highlight-purple'>记忆口诀：</span></strong>故意=明知+希望/放任；过失=应当预见没预见/已预见轻信避免；意外事件=不可能预见=不犯罪！</p>
+                <p class="warning">⚠️ <strong>易错点：</strong><span class="highlight-red">间接故意</span>是"放任结果发生"，<span class="highlight-orange">过于自信过失</span>是"轻信能避免"——区别在于有没有采取避免措施！</p>
+            </div>
+            <div id="quiz-module7" class="quiz-container"></div>
+        </section>
+        
+        <section id="module8" class="knowledge-card">
+            <h2>🛡️ 模块8: 正当防卫与紧急避险</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">核心概念</span>：正当防卫和紧急避险是<span class="highlight-blue">合法行为</span>，不构成犯罪！但条件要严格掌握！</p>
+                
+                <h3>📌 正当防卫的条件</h3>
+                <p><span class="highlight-red">五个条件，缺一不可！</span></p>
+                <p>1. <span class="highlight-blue">起因条件</span>：存在<span class="highlight-red">不法侵害</span>（必须是违法的侵害行为）</p>
+                <p>2. <span class="highlight-blue">时间条件</span>：不法侵害<span class="highlight-red">正在进行</span>（不能事后防卫）</p>
+                <p>3. <span class="highlight-blue">对象条件</span>：针对<span class="highlight-red">不法侵害人</span>本人（不能打无辜的人）</p>
+                <p>4. <span class="highlight-blue">主观条件</span>：具有<span class="highlight-red">防卫意图</span>（目的是保护合法权益）</p>
+                <p>5. <span class="highlight-blue">限度条件</span>：不能<span class="highlight-red">明显超过必要限度</span>造成重大损害</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三正在打李四，李四还手把张三打伤——这是<span class="highlight-red">正当防卫</span>！因为：①张三在打人（不法侵害）②正在打（正在进行）③打的是张三本人（对象正确）④李四为了保护自己（防卫意图）⑤还手打伤不过分（限度适当）！为什么这样举例？因为考试会出"是否正当防卫"的题——逐条检验<span class="highlight-red">五个条件！</span></p></div>
+                
+                <h3>📌 特殊防卫（无限防卫权）</h3>
+                <p>对<span class="highlight-red">严重危及人身安全</span>的暴力犯罪，可以无限防卫！</p>
+                <p>• 行凶、杀人、抢劫、强奸、绑架等</p>
+                <p>• <span class="highlight-blue">可以打死不法侵害人，不算防卫过当！</span></p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三持刀抢劫李四，李四反抗时把张三打死——这是<span class="highlight-red">特殊防卫</span>，不算防卫过当，<span class="highlight-green">不构成犯罪！</span>为什么这样举例？因为考试会出"打死抢劫犯是否防卫过当"——答案是<span class="highlight-red">不算！特殊防卫权！</span></p></div>
+                
+                <h3>📌 紧急避险的条件</h3>
+                <p><span class="highlight-red">为了保护较大的利益，牺牲较小的利益！</span></p>
+                <p>1. <span class="highlight-blue">起因条件</span>：存在<span class="highlight-red">危险</span>（可以是自然灾害、动物侵袭等）</p>
+                <p>2. <span class="highlight-blue">时间条件</span>：危险<span class="highlight-red">正在发生</span></p>
+                <p>3. <span class="highlight-blue">限制条件</span>：<span class="highlight-red">没有其他方法</span>可以避免</p>
+                <p>4. <span class="highlight-blue">限度条件</span>：损害的利益<span class="highlight-red">不能大于</span>保护的利益</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三开车遇到山体滑坡，紧急转向撞坏了路边的围墙——这是<span class="highlight-red">紧急避险</span>，不构成犯罪！为什么这样举例？因为考试会出"紧急避险是否犯罪"——答案要看<span class="highlight-red">损害是否大于保护的利益！</span></p></div>
+                
+                <p class="memory-tip"><strong><span class='highlight-purple'>记忆口诀：</span></strong>正当防卫=不法侵害+正在进行+针对侵害人+防卫意图+不过度！特殊防卫=严重暴力犯罪可打死！紧急避险=保护大利益牺牲小利益！</p>
+                <p class="warning">⚠️ <strong>易错点：</strong>正当防卫针对的是<span class="highlight-red">不法侵害人</span>，紧急避险可能损害<span class="highlight-orange">无辜第三人的利益</span>！</p>
+            </div>
+            <div id="quiz-module8" class="quiz-container"></div>
+        </section>
+        
+        <section id="module9" class="knowledge-card">
+            <h2>📈 模块9: 故意犯罪形态</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">核心概念</span>：故意犯罪有四种形态，从预备到既遂，犯罪程度不同，处罚也不同！</p>
+                
+                <h3>📌 犯罪预备</h3>
+                <p><span class="highlight-blue">为了犯罪准备工具、制造条件</span>，但由于意志以外的原因未能着手！</p>
+                <p>• 准备工具：买刀、配钥匙等</p>
+                <p>• 制造条件：踩点、跟踪等</p>
+                <p>• <span class="highlight-orange">处罚：可以比照既遂犯从轻、减轻或免除处罚</span></p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三想杀李四，买了刀准备动手，但买刀时被抓——这是<span class="highlight-red">犯罪预备</span>！因为张三还没开始杀人，只是准备阶段！为什么这样举例？因为考试会问"准备阶段被抓是什么形态"——答案是<span class="highlight-red">犯罪预备！</span></p></div>
+                
+                <h3>📌 犯罪未遂</h3>
+                <p><span class="highlight-blue">已经着手实施犯罪</span>，但由于意志以外的原因未得逞！</p>
+                <p>• 已经开始实施犯罪行为</p>
+                <p>• 因为外界原因没成功</p>
+                <p>• <span class="highlight-orange">处罚：可以比照既遂犯从轻或减轻处罚</span></p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三持刀杀李四，砍了一刀没砍死，被路人制服——这是<span class="highlight-red">犯罪未遂</span>！因为张三已经开始杀人了，但没成功！为什么这样举例？因为考试会区分<span class="highlight-red">预备（没开始）和未遂（开始了但没成功）！</span></p></div>
+                
+                <h3>📌 犯罪中止</h3>
+                <p><span class="highlight-blue">在犯罪过程中自动放弃犯罪</span>，或者自动有效防止犯罪结果发生！</p>
+                <p>• <span class="highlight-red">自动性</span>：自己想放弃，不是因为外界原因被迫放弃</p>
+                <p>• <span class="highlight-green">处罚：没有造成损害的免除处罚，造成损害的减轻处罚</span></p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三持刀杀李四，砍了一刀后良心发现，把李四送医院救活了——这是<span class="highlight-red">犯罪中止</span>！因为张三是<span class="highlight-red">自动放弃</span>犯罪！为什么这样举例？因为考试会区分<span class="highlight-red">中止（自愿放弃）和未遂（被迫没成功）！</span></p></div>
+                
+                <h3>📌 犯罪既遂</h3>
+                <p><span class="highlight-blue">犯罪行为完成，达到犯罪目的！</span></p>
+                <p>• 正常处罚，没有从轻减轻</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三持刀杀李四，李四死亡——这是<span class="highlight-red">犯罪既遂</span>！杀人目的达成！</p></div>
+                
+                <p class="memory-tip"><strong><span class='highlight-purple'>记忆口诀：</span></strong>预备=准备阶段被抓；未遂=开始了没成功（被动）；中止=自愿放弃（主动）；既遂=成功！中止处罚最轻（免或减）！</p>
+                <p class="warning">⚠️ <strong>易错点：</strong>犯罪中止要求<span class="highlight-red">自动性</span>！如果是"杀了一刀发现刀断了没法杀"——这是<span class="highlight-orange">未遂</span>，不是中止！因为是被迫放弃！</p>
+            </div>
+            <div id="quiz-module9" class="quiz-container"></div>
+        </section>
+        
+        <section id="module10" class="knowledge-card">
+            <h2>👥 模块10: 共同犯罪</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">核心概念</span>：共同犯罪是<span class="highlight-blue">二人以上共同故意犯罪</span>！区分主犯、从犯、胁从犯、教唆犯！</p>
+                
+                <h3>📌 共同犯罪的成立条件</h3>
+                <p>1. <span class="highlight-blue">主体条件</span>：二人以上</p>
+                <p>2. <span class="highlight-blue">主观条件</span>：共同故意（都知道在犯罪）</p>
+                <p>3. <span class="highlight-blue">客观条件</span>：共同行为（都参与了犯罪）</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三和李四商量好去抢劫，张三负责威胁，李四负责拿钱——这是<span class="highlight-red">共同犯罪</span>！因为两人都有故意，都参与了！为什么这样举例？因为考试会问"是否共同犯罪"——看<span class="highlight-red">有没有共同故意和共同行为！</span></p></div>
+                
+                <h3>📌 主犯</h3>
+                <p><span class="highlight-red">组织、领导犯罪集团或者在共同犯罪中起主要作用！</span></p>
+                <p>• 犯罪集团的组织者、领导者</p>
+                <p>• 在共同犯罪中起主要作用的人</p>
+                <p>• <span class="highlight-orange">处罚：按照其所参与的或者组织、指挥的全部犯罪处罚</span></p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三是抢劫团伙的老大，策划指挥抢劫——张三是<span class="highlight-red">主犯</span>！要对他组织的所有抢劫负责！</p></div>
+                
+                <h3>📌 从犯</h3>
+                <p><span class="highlight-blue">在共同犯罪中起次要或辅助作用！</span></p>
+                <p>• 帮助犯：提供工具、望风等</p>
+                <p>• <span class="highlight-green">处罚：应当从轻、减轻或免除处罚</span></p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三抢劫时，李四帮忙望风——李四是<span class="highlight-blue">从犯</span>！应当从轻减轻！</p></div>
+                
+                <h3>📌 胁从犯</h3>
+                <p><span class="highlight-orange">被胁迫参加犯罪！</span></p>
+                <p>• 不是自愿参加，是被威胁强迫的</p>
+                <p>• <span class="highlight-green">处罚：应当按照他的犯罪情节减轻或免除处罚</span></p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三威胁李四：不帮忙抢劫就杀你全家——李四是<span class="highlight-orange">胁从犯</span>！处罚最轻！</p></div>
+                
+                <h3>📌 教唆犯</h3>
+                <p><span class="highlight-red">教唆他人犯罪！</span></p>
+                <p>• 唆使本无犯罪意图的人产生犯罪意图</p>
+                <p>• <span class="highlight-orange">处罚：按照他在共同犯罪中所起的作用处罚</span></p>
+                <p>• 教唆不满18周岁的人犯罪，应当从重处罚</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三怂恿李四去杀人——张三是<span class="highlight-red">教唆犯</span>！如果张三教唆17岁的李四杀人，张三要<span class="highlight-red">从重处罚</span>！为什么这样举例？因为考试会考<span class="highlight-red">教唆未成年人犯罪从重处罚！</span></p></div>
+                
+                <p class="memory-tip"><strong><span class='highlight-purple'>记忆口诀：</span></strong>共同犯罪=二人+共同故意+共同行为！主犯全责，从犯减免，胁从最轻（减或免），教唆按作用+教唆未成年从重！</p>
+                <p class="warning">⚠️ <strong>易错点：</strong>教唆犯<span class="highlight-red">不是独立的罪名</span>！教唆杀人就是杀人罪的教唆犯，没有"教唆罪"这个罪名！</p>
+            </div>
+            <div id="quiz-module10" class="quiz-container"></div>
+        </section>
+        
+        <section id="module11" class="knowledge-card">
+            <h2>📋 模块11: 刑法分则罪名</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">核心概念</span>：刑法分则规定了具体的罪名，考试常考财产犯罪和人身犯罪！重点区分抢劫、抢夺、盗窃、诈骗！</p>
+                
+                <h3>📌 抢劫罪（最重！）</h3>
+                <p><span class="highlight-red">以暴力、胁迫或其他方法压制反抗，强行劫取财物！</span></p>
+                <p>• <span class="highlight-blue">特征</span>：暴力压制反抗+当场取财</p>
+                <p>• <span class="highlight-blue">客体</span>：复杂客体（人身权+财产权）</p>
+                <p>• <span class="highlight-orange">既遂标准</span>：侵犯人身或财产之一即既遂！</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三持刀威胁李四"把钱交出来"——这是<span class="highlight-red">抢劫罪</span>！张三用暴力压制李四反抗！为什么这样举例？因为抢劫罪的关键是<span class="highlight-red">压制反抗！</span></p></div>
+                
+                <h3>📌 转化型抢劫（必考！）</h3>
+                <p><span class="highlight-red">犯盗窃、诈骗、抢夺罪，为窝藏赃物、抗拒抓捕、毁灭罪证而当场使用暴力或以暴力相威胁——以抢劫罪论处！</span></p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三偷了李四的手机，被发现后用刀威胁李四"不许追"——由<span class="highlight-red">盗窃转化为抢劫</span>！因为张三为了抗拒抓捕使用了暴力！为什么这样举例？因为考试<span class="highlight-red">必考转化型抢劫！</span></p></div>
+                
+                <h3>📌 抢夺罪</h3>
+                <p><span class="highlight-blue">趁人不备，公开夺取财物！</span></p>
+                <p>• <span class="highlight-blue">特征</span>：趁人不备+公开夺取+不压制反抗</p>
+                <p>• <span class="highlight-blue">客体</span>：单一客体（财产权）</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三骑摩托车飞车抢夺李四的包——这是<span class="highlight-blue">抢夺罪</span>！趁李四不备，直接拿走，没有压制反抗！为什么这样举例？因为要区分<span class="highlight-red">抢劫（压制反抗）和抢夺（不压制反抗）！</span></p></div>
+                
+                <h3>📌 盗窃罪</h3>
+                <p><span class="highlight-blue">秘密窃取财物！</span></p>
+                <p>• <span class="highlight-blue">特征</span>：秘密窃取（被害人不知道）</p>
+                <p>• <span class="highlight-orange">既遂标准</span>：被害人失去对财物的控制！</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三趁李四不在，偷了李四的钱包——这是<span class="highlight-blue">盗窃罪</span>！秘密窃取！</p></div>
+                
+                <h3>📌 诈骗罪</h3>
+                <p><span class="highlight-blue">虚构事实或隐瞒真相，骗取财物！</span></p>
+                <p>• <span class="highlight-blue">特征</span>：虚构事实+被害人产生错误认识+被害人自愿交出财物</p>
+                <p>• <span class="highlight-orange">关键</span>：被害人必须基于错误认识自愿交出财物！</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三冒充警察，说李四涉嫌诈骗要交保证金，李四信了转账——这是<span class="highlight-blue">诈骗罪</span>！李四因被骗而自愿交钱！为什么这样举例？因为诈骗罪的关键是<span class="highlight-red">被害人因被骗而自愿交钱！</span></p></div>
+                
+                <h3>📌 非法拘禁罪</h3>
+                <p><span class="highlight-red">非法剥夺他人人身自由！</span></p>
+                <p>• <span class="highlight-blue">特征</span>：限制他人行动自由</p>
+                <p>• <span class="highlight-orange">注意</span>：非法拘禁中使用暴力致人伤残死亡的，以故意伤害罪或故意杀人罪论处！</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三把李四关在地下室三天——这是<span class="highlight-red">非法拘禁罪</span>！如果张三在拘禁过程中把李四打成重伤——转化为<span class="highlight-red">故意伤害罪</span>！</p></div>
+                
+                <h3>📌 绑架罪</h3>
+                <p><span class="highlight-red">以勒索财物为目的绑架他人，或绑架他人作为人质！</span></p>
+                <p>• <span class="highlight-blue">特征</span>：绑架人质+向第三人勒索</p>
+                <p>• <span class="highlight-orange">注意</span>：如果绑架后直接向被绑架人要钱——是抢劫罪！</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三绑架了李四的儿子，打电话让李四拿100万赎人——这是<span class="highlight-red">绑架罪</span>！因为张三是向第三人（李四）勒索！为什么这样举例？因为要区分<span class="highlight-red">绑架（向第三人勒索）和抢劫（直接向被害人要钱）！</span></p></div>
+                
+                <p class="memory-tip"><strong><span class='highlight-purple'>记忆口诀：</span></strong>抢劫=暴力压制+当场取财；抢夺=趁人不备+不压制；盗窃=秘密窃取；诈骗=骗得自愿交钱！转化型抢劫：盗抢骗+暴力抗抓=抢劫！</p>
+                <p class="warning">⚠️ <strong>易错点：</strong>14-16岁对<span class="highlight-red">抢劫</span>负刑事责任，但不对<span class="highlight-orange">抢夺、盗窃、诈骗、绑架</span>负刑事责任！</p>
+            </div>
+            <div id="quiz-module11" class="quiz-container"></div>
+        </section>
+        
+        <section id="framework" class="framework-section">
+            <h2>📋 刑法知识框架总览</h2>
+            <div class="framework-grid">
+                <div class="framework-card">
+                    <h3>📜 基本原则</h3>
+                    <p><span class="highlight-red">核心：</span>罪刑法定、平等适用、罪责刑相适应</p>
+                    <p><span class="highlight-blue">关键：</span>法无明文规定不为罪</p>
+                    <p><span class="highlight-purple">口诀：</span>法定+平等+相适应</p>
+                </div>
+                <div class="framework-card">
+                    <h3>🔍 犯罪三特征</h3>
+                    <p><span class="highlight-red">核心：</span>社会危害性、刑事违法性、应受刑罚处罚性</p>
+                    <p><span class="highlight-blue">关键：</span>社会危害性是本质特征</p>
+                    <p><span class="highlight-purple">口诀：</span>危害性+违法性+应受处罚</p>
+                </div>
+                <div class="framework-card">
+                    <h3>🏛️ 犯罪四要件</h3>
+                    <p><span class="highlight-red">核心：</span>主体、主观方面、客体、客观方面</p>
+                    <p><span class="highlight-blue">关键：</span>客体是权益，对象是人或物</p>
+                    <p><span class="highlight-purple">口诀：</span>谁干的+怎么想的+侵害什么+干了什么</p>
+                </div>
+                <div class="framework-card">
+                    <h3>📅 刑事责任年龄</h3>
+                    <p><span class="highlight-red">核心：</span>12、14、16三个关键数字</p>
+                    <p><span class="highlight-blue">关键：</span>14-16岁烧杀淫掠商贩爆头</p>
+                    <p><span class="highlight-purple">口诀：</span>12下无责，16上全责</p>
+                </div>
+                <div class="framework-card">
+                    <h3>🧠 刑事责任能力</h3>
+                    <p><span class="highlight-red">核心：</span>精神状态决定责任能力</p>
+                    <p><span class="highlight-blue">关键：</span>间歇性精神病看犯罪时</p>
+                    <p><span class="highlight-purple">口诀：</span>正常负责，发病不负责</p>
+                </div>
+                <div class="framework-card">
+                    <h3>🏢 单位犯罪</h3>
+                    <p><span class="highlight-red">核心：</span>组织犯罪+双罚制</p>
+                    <p><span class="highlight-blue">关键：</span>罚单位罚个人</p>
+                    <p><span class="highlight-purple">口诀：</span>单位犯罪=双罚</p>
+                </div>
+                <div class="framework-card">
+                    <h3>💭 犯罪主观方面</h3>
+                    <p><span class="highlight-red">核心：</span>故意和过失</p>
+                    <p><span class="highlight-blue">关键：</span>故意=希望/放任，过失=疏忽/轻信</p>
+                    <p><span class="highlight-purple">口诀：</span>故意重，过失轻</p>
+                </div>
+                <div class="framework-card">
+                    <h3>🛡️ 正当防卫</h3>
+                    <p><span class="highlight-red">核心：</span>不法侵害+正在进行+防卫意图</p>
+                    <p><span class="highlight-blue">关键：</span>特殊防卫可打死暴力犯罪人</p>
+                    <p><span class="highlight-purple">口诀：</span>五条件缺一不可</p>
+                </div>
+                <div class="framework-card">
+                    <h3>📈 犯罪形态</h3>
+                    <p><span class="highlight-red">核心：</span>预备、未遂、中止、既遂</p>
+                    <p><span class="highlight-blue">关键：</span>中止是自愿放弃，处罚最轻</p>
+                    <p><span class="highlight-purple">口诀：</span>中止免减，未遂减免，预备减免</p>
+                </div>
+                <div class="framework-card">
+                    <h3>👥 共同犯罪</h3>
+                    <p><span class="highlight-red">核心：</span>主犯、从犯、胁从犯、教唆犯</p>
+                    <p><span class="highlight-blue">关键：</span>教唆未成年从重处罚</p>
+                    <p><span class="highlight-purple">口诀：</span>主犯全责，从犯减免</p>
+                </div>
+                <div class="framework-card">
+                    <h3>📋 常考罪名</h3>
+                    <p><span class="highlight-red">核心：</span>抢劫、抢夺、盗窃、诈骗</p>
+                    <p><span class="highlight-blue">关键：</span>抢劫压制反抗，抢夺不压制</p>
+                    <p><span class="highlight-purple">口诀：</span>抢劫最重，盗窃最轻</p>
+                </div>
+            </div>
+            <div id="quiz-framework" class="quiz-container"></div>
+        </section>
+        
+        <section id="practice" class="practice-section">
+            <h2>📝 练习专区（综合题50道）</h2>
+            <p style="text-align:center; color:#666; margin-bottom:20px;">测试你对刑法知识的综合掌握程度</p>
+            <div id="practiceQuestions" class="quiz-container"></div>
+        </section>
+    </main>
+    
+    <script>
+        // ========== 工具函数 ==========
+        function closeTopNav() {
+            document.getElementById('topNav').style.display = 'none';
+        }
+        
+        function scrollToSection(element, event) {
+            event.preventDefault();
+            const targetId = element.getAttribute('href').substring(1);
+            const targetElement = document.getElementById(targetId);
+            if (targetElement) {
+                targetElement.scrollIntoView({ behavior: 'smooth' });
+                // 更新导航状态
+                document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+                element.classList.add('active');
+            }
+        }
+        
+        // ========== 题库数据 ==========
+        
+        const quiz1Data = [
+            {"question": "下列哪个体现了罪刑法定原则？", "options": ["A. 类推适用法律", "B. 法无明文规定不为罪", "C. 用新法律惩罚过去的行为", "D. 法官自由裁量"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>类推适用法律<span class='highlight-orange'>违反</span>罪刑法定原则！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>法无明文规定不为罪</span>！这是罪刑法定原则的核心内容！</b><br><br><strong>C. 错误！</strong><b>用新法律惩罚过去的行为是<span class='highlight-orange'>事后法</span>，违反罪刑法定原则！</b><br><br><strong>D. 错误！</strong><b>法官自由裁量不是罪刑法定原则！罪刑法定要求严格依据法律！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>罪刑法定=法无明文不为罪！"},
+            {"question": "刑法平等原则的含义是？", "options": ["A. 普通人和高官同样犯罪同样处罚", "B. 富人和穷人同样犯罪同样处罚", "C. 所有公民在适用法律上一律平等", "D. 以上都是"], "answer": 3, "explanation": "✅ 正确答案是 <strong>D</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 正确！</strong><b>普通人和高官同样犯罪同样处罚，体现了<span class='highlight-red'>法律面前人人平等</span>！</b><br><br><strong>B. 正确！</strong><b>富人和穷人同样犯罪同样处罚，也体现了<span class='highlight-red'>法律面前人人平等</span>！</b><br><br><strong>C. 正确！</strong><b>所有公民在适用法律上一律平等，这是<span class='highlight-red'>刑法平等原则</span>的核心！</b><br><br><strong>D. 正确！</strong><b><span class='highlight-red'>以上都是</span>！刑法平等原则要求对所有公民一律平等！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>刑法平等=人人平等！"},
+            {"question": "罪责刑相适应原则是指？", "options": ["A. 罪行越重，刑罚越重", "B. 罪行越轻，刑罚越轻", "C. 刑罚的轻重应与犯罪分子所犯罪行和承担的刑事责任相适应", "D. 以上都是"], "answer": 3, "explanation": "✅ 正确答案是 <strong>D</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 正确！</strong><b>罪行越重，刑罚越重，体现了<span class='highlight-red'>罪责刑相适应</span>！</b><br><br><strong>B. 正确！</strong><b>罪行越轻，刑罚越轻，也体现了<span class='highlight-red'>罪责刑相适应</span>！</b><br><br><strong>C. 正确！</strong><b>刑罚的轻重应与犯罪分子所犯罪行和承担的刑事责任相适应，这是<span class='highlight-red'>罪责刑相适应原则</span>的完整表述！</b><br><br><strong>D. 正确！</strong><b><span class='highlight-red'>以上都是</span>！罪责刑相适应原则要求刑罚与罪行、责任相匹配！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>罪责相适应=罪行与刑罚匹配！"},
+            {"question": "下列哪个行为不能认定为犯罪？", "options": ["A. 杀人", "B. 抢劫", "C. 法律没有规定的行为", "D. 盗窃"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>杀人是犯罪！<span class='highlight-red'>刑法有规定</span>！</b><br><br><strong>B. 错误！</strong><b>抢劫是犯罪！<span class='highlight-red'>刑法有规定</span>！</b><br><br><strong>C. 正确！</strong><b><span class='highlight-red'>法律没有规定的行为</span>不能认定为犯罪！这体现了<span class='highlight-red'>罪刑法定原则</span>！</b><br><br><strong>D. 错误！</strong><b>盗窃是犯罪！<span class='highlight-red'>刑法有规定</span>！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>法律没规定=不犯罪！"},
+            {"question": "关于罪刑法定原则，说法错误的是？", "options": ["A. 禁止类推适用", "B. 禁止事后法", "C. 法官可以自由裁量", "D. 法无明文规定不处罚"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>这是罪刑法定原则的内容！<span class='highlight-red'>禁止类推适用</span>！</b><br><br><strong>B. 错误！</strong><b>这也是罪刑法定原则的内容！<span class='highlight-red'>禁止事后法</span>！</b><br><br><strong>C. 正确！</strong><b><span class='highlight-red'>法官不能自由裁量</span>！罪刑法定要求严格依据法律！</b><br><br><strong>D. 错误！</strong><b>这是罪刑法定原则的内容！<span class='highlight-red'>法无明文规定不处罚</span>！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>罪刑法定=禁止类推+禁止事后法+严格依法！"}
+        ];
+        
+        const quiz2Data = [
+            {"question": "犯罪的本质特征是？", "options": ["A. 社会危害性", "B. 刑事违法性", "C. 应受刑罚处罚性", "D. 主观恶性"], "answer": 0, "explanation": "✅ 正确答案是 <strong>A</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 正确！</strong><b><span class='highlight-red'>社会危害性</span>是犯罪的本质特征！没有社会危害性就不是犯罪！</b><br><br><strong>B. 错误！</strong><b>刑事违法性是<span class='highlight-orange'>法律特征</span>，不是本质特征！</b><br><br><strong>C. 错误！</strong><b>应受刑罚处罚性是<span class='highlight-orange'>法律后果</span>，不是本质特征！</b><br><br><strong>D. 错误！</strong><b>主观恶性不是犯罪的法定特征！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>本质特征=社会危害性！"},
+            {"question": "张三借钱不还，是否构成犯罪？", "options": ["A. 构成犯罪", "B. 不构成犯罪", "C. 构成民事犯罪", "D. 视情况而定"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>借钱不还<span class='highlight-orange'>不构成犯罪</span>！这是民事纠纷！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>不构成犯罪</span>！因为刑法没有规定\"借钱不还\"是犯罪！缺乏刑事违法性！</b><br><br><strong>C. 错误！</strong><b>没有\"民事犯罪\"这个说法！借钱不还是民事纠纷！</b><br><br><strong>D. 错误！</strong><b>不构成犯罪！这不是刑法调整的范围！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>借钱不还=民事纠纷，不犯罪！"},
+            {"question": "犯罪三特征中，缺一不可的是？", "options": ["A. 社会危害性", "B. 刑事违法性", "C. 应受刑罚处罚性", "D. 以上都是"], "answer": 3, "explanation": "✅ 正确答案是 <strong>D</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 正确！</strong><b>社会危害性是犯罪三特征之一，<span class='highlight-red'>不可或缺</span>！</b><br><br><strong>B. 正确！</strong><b>刑事违法性是犯罪三特征之一，<span class='highlight-red'>不可或缺</span>！</b><br><br><strong>C. 正确！</strong><b>应受刑罚处罚性是犯罪三特征之一，<span class='highlight-red'>不可或缺</span>！</b><br><br><strong>D. 正确！</strong><b><span class='highlight-red'>以上都是</span>！犯罪三特征缺一不可！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>犯罪三特征=缺一不可！"},
+            {"question": "13岁的张三杀人，是否构成犯罪？", "options": ["A. 构成犯罪", "B. 不构成犯罪", "C. 视情况而定", "D. 构成过失犯罪"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>13岁的人杀人<span class='highlight-orange'>不构成犯罪</span>！因为不满14周岁不负刑事责任！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>不构成犯罪</span>！虽然行为危害很大，但不满14周岁不负刑事责任！</b><br><br><strong>C. 错误！</strong><b>法律规定明确，不满14周岁不负刑事责任！</b><br><br><strong>D. 错误！</strong><b>不构成任何犯罪！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>14以下=不负刑事责任！"},
+            {"question": "刑事违法性是指？", "options": ["A. 违反道德", "B. 违反民法", "C. 刑法明文规定为犯罪", "D. 违反行政法"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>违反道德不是刑事违法性！<span class='highlight-red'>刑事违法性是刑法规定的</span>！</b><br><br><strong>B. 错误！</strong><b>违反民法不是刑事违法性！<span class='highlight-red'>刑事违法性是刑法规定的</span>！</b><br><br><strong>C. 正确！</strong><b><span class='highlight-red'>刑法明文规定为犯罪</span>！这是刑事违法性的定义！</b><br><br><strong>D. 错误！</strong><b>违反行政法不是刑事违法性！<span class='highlight-red'>刑事违法性是刑法规定的</span>！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>刑事违法=刑法规定！"}
+        ];
+        
+        const quiz3Data = [
+            {"question": "犯罪构成四要件中，被侵害的社会关系是？", "options": ["A. 犯罪客体", "B. 犯罪客观方面", "C. 犯罪主体", "D. 犯罪主观方面"], "answer": 0, "explanation": "✅ 正确答案是 <strong>A</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 正确！</strong><b><span class='highlight-red'>犯罪客体</span>是被犯罪行为侵害的社会关系！如杀人罪的客体是生命权！</b><br><br><strong>B. 错误！</strong><b>犯罪客观方面是<span class='highlight-orange'>犯罪行为、结果、因果关系等</span>！</b><br><br><strong>C. 错误！</strong><b>犯罪主体是<span class='highlight-orange'>实施犯罪行为的人</span>！</b><br><br><strong>D. 错误！</strong><b>犯罪主观方面是<span class='highlight-orange'>犯罪故意或过失</span>！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>犯罪客体=被侵害的社会关系！"},
+            {"question": "杀人罪的犯罪客体是？", "options": ["A. 人", "B. 身体", "C. 生命权", "D. 健康权"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>人是<span class='highlight-orange'>犯罪对象</span>，不是犯罪客体！犯罪客体是社会关系！</b><br><br><strong>B. 错误！</strong><b>身体是<span class='highlight-orange'>犯罪对象</span>，不是犯罪客体！犯罪客体是社会关系！</b><br><br><strong>C. 正确！</strong><b><span class='highlight-red'>生命权</span>！这是杀人罪的犯罪客体！</b><br><br><strong>D. 错误！</strong><b>健康权是<span class='highlight-orange'>伤害罪</span>的客体，不是杀人罪的客体！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>杀人罪客体=生命权！"},
+            {"question": "犯罪客观方面不包括？", "options": ["A. 犯罪行为", "B. 危害结果", "C. 犯罪故意", "D. 因果关系"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>犯罪行为是<span class='highlight-orange'>犯罪客观方面</span>！</b><br><br><strong>B. 错误！</strong><b>危害结果是<span class='highlight-orange'>犯罪客观方面</span>！</b><br><br><strong>C. 正确！</strong><b><span class='highlight-red'>犯罪故意</span>是<span class='highlight-orange'>犯罪主观方面</span>，不是犯罪客观方面！</b><br><br><strong>D. 错误！</strong><b>因果关系是<span class='highlight-orange'>犯罪客观方面</span>！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>犯罪主观=心里想；犯罪客观=做了什么！"},
+            {"question": "犯罪主体必须具备的条件是？", "options": ["A. 达到刑事责任年龄", "B. 具备刑事责任能力", "C. A和B都是", "D. A和B都不是"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 正确！</strong><b><span class='highlight-red'>达到刑事责任年龄</span>是犯罪主体的条件之一！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>具备刑事责任能力</span>是犯罪主体的条件之一！</b><br><br><strong>C. 正确！</strong><b><span class='highlight-red'>A和B都是</span>！犯罪主体必须同时具备这两个条件！</b><br><br><strong>D. 错误！</strong><b>明显错误！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>犯罪主体=年龄+能力！"},
+            {"question": "犯罪客体与犯罪对象的区别是？", "options": ["A. 客体是社会关系，对象是具体的人或物", "B. 客体是具体的人或物，对象是社会关系", "C. 两者没有区别", "D. 客体比对象重要"], "answer": 0, "explanation": "✅ 正确答案是 <strong>A</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 正确！</strong><b><span class='highlight-red'>客体是社会关系，对象是具体的人或物</span>！这是两者的根本区别！</b><br><br><strong>B. 错误！</strong><b>说反了！<span class='highlight-orange'>客体是社会关系，对象是具体的人或物</span>！</b><br><br><strong>C. 错误！</strong><b>两者<span class='highlight-orange'>有本质区别</span>！不能混淆！</b><br><br><strong>D. 错误！</strong><b>不是重要性的问题，是<span class='highlight-orange'>性质不同</span>！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>客体=社会关系；对象=具体的人或物！"}
+        ];
+        
+        const quiz4Data = [
+            {"question": "不满14周岁的人犯罪，如何处理？", "options": ["A. 负刑事责任", "B. 不负刑事责任", "C. 从轻处罚", "D. 减轻处罚"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>不满14周岁的人<span class='highlight-orange'>不负刑事责任</span>！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>不负刑事责任</span>！不满14周岁完全不负刑事责任！</b><br><br><strong>C. 错误！</strong><b>从轻处罚是针对已满14周岁不满18周岁的人的！</b><br><br><strong>D. 错误！</strong><b>减轻处罚是针对已满14周岁不满18周岁的人的！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>14以下=不负刑事责任！"},
+            {"question": "15岁的人实施下列哪种行为要负刑事责任？", "options": ["A. 盗窃", "B. 抢劫", "C. 诈骗", "D. 敲诈勒索"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>盗窃<span class='highlight-orange'>不是</span>14-16周岁承担责任的8种犯罪之一！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>抢劫</span>是14-16周岁承担责任的8种犯罪之一！</b><br><br><strong>C. 错误！</strong><b>诈骗<span class='highlight-orange'>不是</span>14-16周岁承担责任的8种犯罪之一！</b><br><br><strong>D. 错误！</strong><b>敲诈勒索<span class='highlight-orange'>不是</span>14-16周岁承担责任的8种犯罪之一！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>14-16=8种犯罪（杀人、伤害、强奸、抢劫、贩卖毒品、放火、爆炸、投放危险物质）！"},
+            {"question": "已满14周岁不满18周岁的人犯罪，应当？", "options": ["A. 从重处罚", "B. 从轻或减轻处罚", "C. 不负刑事责任", "D. 免除处罚"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>已满14周岁不满18周岁的人<span class='highlight-orange'>不应当从重处罚</span>！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>从轻或减轻处罚</span>！这是对未成年人的特殊保护！</b><br><br><strong>C. 错误！</strong><b>不是不负刑事责任！是从轻或减轻处罚！</b><br><br><strong>D. 错误！</strong><b>不是免除处罚！是从轻或减轻处罚！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>18岁以下=从轻或减轻！"},
+            {"question": "16周岁以上的人犯罪，如何处理？", "options": ["A. 不负刑事责任", "B. 相对负刑事责任", "C. 完全负刑事责任", "D. 视情况而定"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>16周岁以上的人<span class='highlight-orange'>要负刑事责任</span>！</b><br><br><strong>B. 错误！</strong><b>相对负刑事责任是14-16周岁！16周岁以上是<span class='highlight-red'>完全负刑事责任</span>！</b><br><br><strong>C. 正确！</strong><b><span class='highlight-red'>完全负刑事责任</span>！16周岁以上就是成年人了！</b><br><br><strong>D. 错误！</strong><b>法律规定明确，16周岁以上完全负刑事责任！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>16以上=完全负刑事责任！"},
+            {"question": "14-16周岁的人实施下列哪种行为不负刑事责任？", "options": ["A. 故意杀人", "B. 抢劫", "C. 盗窃", "D. 强奸"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>故意杀人<span class='highlight-orange'>要负刑事责任</span>！是8种犯罪之一！</b><br><br><strong>B. 错误！</strong><b>抢劫<span class='highlight-orange'>要负刑事责任</span>！是8种犯罪之一！</b><br><br><strong>C. 正确！</strong><b><span class='highlight-red'>盗窃</span>！盗窃<span class='highlight-orange'>不是</span>8种犯罪之一，不负刑事责任！</b><br><br><strong>D. 错误！</strong><b>强奸<span class='highlight-orange'>要负刑事责任</span>！是8种犯罪之一！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>14-16=8种犯罪，盗窃不在其中！"}
+        ];
+        
+        const quiz5Data = [
+            {"question": "精神病人在不能辨认或控制自己行为时造成危害结果，如何处理？", "options": ["A. 负刑事责任", "B. 不负刑事责任", "C. 从轻处罚", "D. 减轻处罚"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>精神病人在不能辨认或控制自己行为时<span class='highlight-orange'>不负刑事责任</span>！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>不负刑事责任</span>！因为他在犯罪时不能辨认和控制自己的行为！</b><br><br><strong>C. 错误！</strong><b>不是从轻处罚，是<span class='highlight-orange'>不负刑事责任</span>！</b><br><br><strong>D. 错误！</strong><b>不是减轻处罚，是<span class='highlight-orange'>不负刑事责任</span>！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>精神病发作期=不负刑事责任！"},
+            {"question": "间歇性精神病人在精神正常时犯罪，如何处理？", "options": ["A. 不负刑事责任", "B. 应当负刑事责任", "C. 从轻处罚", "D. 减轻处罚"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>间歇性精神病人在精神正常时犯罪<span class='highlight-orange'>要负刑事责任</span>！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>应当负刑事责任</span>！因为他在犯罪时精神正常，具备辨认和控制能力！</b><br><br><strong>C. 错误！</strong><b>不是从轻处罚，是<span class='highlight-orange'>应当负刑事责任</span>！</b><br><br><strong>D. 错误！</strong><b>不是减轻处罚，是<span class='highlight-orange'>应当负刑事责任</span>！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>间歇性精神病=正常期要负责！"},
+            {"question": "又聋又哑的人犯罪，如何处理？", "options": ["A. 不负刑事责任", "B. 应当负刑事责任", "C. 可以从轻、减轻或免除处罚", "D. 必须从轻处罚"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>又聋又哑的人<span class='highlight-orange'>要负刑事责任</span>！不是不负责任！</b><br><br><strong>B. 错误！</strong><b>虽然要负刑事责任，但<span class='highlight-orange'>不是必须</span>按正常标准判！</b><br><br><strong>C. 正确！</strong><b><span class='highlight-red'>可以从轻、减轻或免除处罚</span>！注意是<span class='highlight-red'>可以</span>，不是必须！</b><br><br><strong>D. 错误！</strong><b>不是<span class='highlight-orange'>必须</span>从轻处罚！是可以！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>又聋又哑=要负责但可以从轻、减轻或免除！"},
+            {"question": "醉酒的人犯罪，如何处理？", "options": ["A. 不负刑事责任", "B. 应当负刑事责任", "C. 可以从轻处罚", "D. 应当减轻处罚"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>醉酒的人<span class='highlight-orange'>要负刑事责任</span>！不能以醉酒为借口！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>应当负刑事责任</span>！醉酒是自己能控制的，不能作为免责理由！</b><br><br><strong>C. 错误！</strong><b>不是可以，是<span class='highlight-red'>应当负刑事责任</span>！</b><br><br><strong>D. 错误！</strong><b>不是应当减轻！是<span class='highlight-orange'>正常处罚</span>！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>醉酒犯罪=必须负责！"},
+            {"question": "盲人犯罪，如何处理？", "options": ["A. 不负刑事责任", "B. 应当负刑事责任", "C. 可以从轻、减轻或免除处罚", "D. 必须减轻处罚"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>盲人<span class='highlight-orange'>要负刑事责任</span>！不是不负责任！</b><br><br><strong>B. 错误！</strong><b>虽然要负刑事责任，但<span class='highlight-orange'>不是必须</span>按正常标准判！</b><br><br><strong>C. 正确！</strong><b><span class='highlight-red'>可以从轻、减轻或免除处罚</span>！注意是<span class='highlight-red'>可以</span>，不是必须！</b><br><br><strong>D. 错误！</strong><b>不是<span class='highlight-orange'>必须</span>减轻处罚！是可以！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>盲人=要负责但可以从轻、减轻或免除！"}
+        ];
+        
+        const quiz6Data = [
+            {"question": "单位犯罪的处罚原则是？", "options": ["A. 单罚制", "B. 双罚制", "C. 免除处罚", "D. 从轻处罚"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>单位犯罪不是单罚制！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>双罚制</span>！既罚单位（罚金），又罚个人（刑罚）！</b><br><br><strong>C. 错误！</strong><b>单位犯罪要处罚，不是免除！</b><br><br><strong>D. 错误！</strong><b>不是从轻处罚，是<span class='highlight-red'>双罚制</span>！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>单位犯罪=双罚（罚单位+罚个人）！"},
+            {"question": "单位犯罪中，对单位判处的刑罚是？", "options": ["A. 有期徒刑", "B. 罚金", "C. 拘役", "D. 无期徒刑"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>单位不能判有期徒刑！单位不是人，不能坐牢！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>罚金</span>！单位只能判罚金，不能判人身刑！</b><br><br><strong>C. 错误！</strong><b>单位不能判拘役！拘役是人身刑！</b><br><br><strong>D. 错误！</strong><b>单位不能判无期徒刑！无期徒刑是人身刑！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>单位=只能罚钱！"},
+            {"question": "下列哪种情况不构成单位犯罪？", "options": ["A. 公司实施犯罪", "B. 为犯罪而设立公司", "C. 事业单位犯罪", "D. 国家机关犯罪"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>公司实施犯罪可以构成单位犯罪！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>为犯罪而设立公司</span>不构成单位犯罪！公司只是犯罪工具，按<span class='highlight-red'>个人犯罪</span>处理！</b><br><br><strong>C. 错误！</strong><b>事业单位可以成为单位犯罪主体！</b><br><br><strong>D. 错误！</strong><b>国家机关也可以成为单位犯罪主体！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>为犯罪设公司=个人犯罪！"},
+            {"question": "国家机关能否成为单位犯罪主体？", "options": ["A. 能", "B. 不能", "C. 视情况而定", "D. 法律没有规定"], "answer": 0, "explanation": "✅ 正确答案是 <strong>A</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 正确！</strong><b><span class='highlight-red'>能</span>！国家机关也可以成为单位犯罪主体！</b><br><br><strong>B. 错误！</strong><b>国家机关<span class='highlight-orange'>能</span>成为单位犯罪主体！</b><br><br><strong>C. 错误！</strong><b>法律明确规定，国家机关可以成为单位犯罪主体！</b><br><br><strong>D. 错误！</strong><b>法律有规定！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>国家机关=能成为单位犯罪主体！"},
+            {"question": "单位犯罪中，对直接负责的主管人员判处什么刑罚？", "options": ["A. 只能罚金", "B. 刑罚（如有期徒刑等）", "C. 不处罚", "D. 警告"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>对个人是判<span class='highlight-red'>刑罚</span>，不是罚金！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>刑罚</span>！对直接负责的主管人员判处刑罚，如有期徒刑、拘役等！</b><br><br><strong>C. 错误！</strong><b>要处罚！双罚制！</b><br><br><strong>D. 错误！</strong><b>警告不是刑罚！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>双罚制=罚单位罚金+罚个人刑罚！"}
+        ];
+        
+        const quiz7Data = [
+            {"question": "直接故意与间接故意的区别在于？", "options": ["A. 是否明知会发生危害结果", "B. 是希望还是放任结果发生", "C. 是否造成危害结果", "D. 主观恶性大小"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>两者都是明知会发生危害结果！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>希望还是放任</span>！直接故意是希望结果发生，间接故意是放任结果发生！</b><br><br><strong>C. 错误！</strong><b>是否造成结果不是区分标准！</b><br><br><strong>D. 错误！</strong><b>主观恶性不是区分标准！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>直接故意=希望；间接故意=放任！"},
+            {"question": "疏忽大意过失与过于自信过失的区别在于？", "options": ["A. 是否预见到危害结果", "B. 是否造成危害结果", "C. 主观恶性大小", "D. 客观行为不同"], "answer": 0, "explanation": "✅ 正确答案是 <strong>A</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 正确！</strong><b><span class='highlight-red'>是否预见到危害结果</span>！疏忽大意是没预见，过于自信是已预见但轻信能避免！</b><br><br><strong>B. 错误！</strong><b>是否造成结果不是区分标准！</b><br><br><strong>C. 错误！</strong><b>主观恶性不是区分标准！</b><br><br><strong>D. 错误！</strong><b>客观行为不是区分标准！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>疏忽大意=没预见；过于自信=已预见！"},
+            {"question": "意外事件与过失的区别在于？", "options": ["A. 是否造成危害结果", "B. 是否能够预见危害结果", "C. 主观恶性大小", "D. 客观行为不同"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>意外事件也会造成危害结果！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>是否能够预见危害结果</span>！意外事件是根本不可能预见，过失是能够预见！</b><br><br><strong>C. 错误！</strong><b>意外事件没有主观恶性！</b><br><br><strong>D. 错误！</strong><b>客观行为不是区分标准！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>意外事件=不可能预见=不犯罪！"},
+            {"question": "张三开车正常行驶，突然有人冲出来撞在车上死亡，张三是否构成犯罪？", "options": ["A. 构成故意杀人罪", "B. 构成过失致人死亡罪", "C. 不构成犯罪，是意外事件", "D. 构成交通肇事罪"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>张三没有杀人故意！</b><br><br><strong>B. 错误！</strong><b>张三没有过失！他不可能预见有人会突然冲出来！</b><br><br><strong>C. 正确！</strong><b><span class='highlight-red'>不构成犯罪，是意外事件</span>！张三根本不可能预见有人会突然冲出来！</b><br><br><strong>D. 错误！</strong><b>张三没有违反交通规则，不构成交通肇事罪！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>意外事件=不可能预见=不犯罪！"},
+            {"question": "间接故意与过于自信过失的区别在于？", "options": ["A. 是否明知会发生危害结果", "B. 是放任结果发生还是轻信能避免", "C. 是否造成危害结果", "D. 主观恶性大小"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>两者都是明知会发生危害结果！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>放任结果发生还是轻信能避免</span>！间接故意是放任，过于自信是轻信能避免！</b><br><br><strong>C. 错误！</strong><b>是否造成结果不是区分标准！</b><br><br><strong>D. 错误！</strong><b>主观恶性不是区分标准！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>间接故意=放任；过于自信=轻信能避免！"}
+        ];
+        
+        const quiz8Data = [
+            {"question": "正当防卫的时间条件是？", "options": ["A. 不法侵害已经结束", "B. 不法侵害正在进行", "C. 不法侵害尚未开始", "D. 任何时候都可以"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>不法侵害已经结束不能正当防卫！那是事后防卫！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>不法侵害正在进行</span>！这是正当防卫的时间条件！</b><br><br><strong>C. 错误！</strong><b>不法侵害尚未开始不能正当防卫！那是事前防卫！</b><br><br><strong>D. 错误！</strong><b>不是任何时候都可以！必须是<span class='highlight-red'>不法侵害正在进行</span>！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>正当防卫=正在进行！"},
+            {"question": "特殊防卫针对的是？", "options": ["A. 所有犯罪行为", "B. 严重危及人身安全的暴力犯罪", "C. 财产犯罪", "D. 经济犯罪"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>不是所有犯罪都可以特殊防卫！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>严重危及人身安全的暴力犯罪</span>！如杀人、抢劫、强奸、绑架等！</b><br><br><strong>C. 错误！</strong><b>财产犯罪一般不适用特殊防卫！</b><br><br><strong>D. 错误！</strong><b>经济犯罪不适用特殊防卫！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>特殊防卫=严重暴力犯罪！"},
+            {"question": "紧急避险与正当防卫的区别在于？", "options": ["A. 是否正在进行", "B. 针对的是不法侵害人还是无辜第三人", "C. 是否可以超过限度", "D. 是否需要主观意图"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>两者都要求正在进行！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>针对的是不法侵害人还是无辜第三人</span>！正当防卫针对不法侵害人，紧急避险可能损害无辜第三人利益！</b><br><br><strong>C. 错误！</strong><b>两者都有限度要求！</b><br><br><strong>D. 错误！</strong><b>两者都需要主观意图！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>正当防卫=打坏人；紧急避险=牺牲小利益！"},
+            {"question": "张三持刀抢劫李四，李四反抗时把张三打死，李四是否构成犯罪？", "options": ["A. 构成故意杀人罪", "B. 构成防卫过当", "C. 不构成犯罪，是特殊防卫", "D. 构成过失致人死亡罪"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>李四没有杀人故意！是正当防卫！</b><br><br><strong>B. 错误！</strong><b>对抢劫可以特殊防卫，打死不算防卫过当！</b><br><br><strong>C. 正确！</strong><b><span class='highlight-red'>不构成犯罪，是特殊防卫</span>！抢劫是严重危及人身安全的暴力犯罪，可以特殊防卫！</b><br><br><strong>D. 错误！</strong><b>李四没有过失！是正当防卫！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>抢劫=可以特殊防卫=打死不算过当！"},
+            {"question": "正当防卫的对象条件是？", "options": ["A. 针对任何人", "B. 针对不法侵害人本人", "C. 针对无辜第三人", "D. 针对财产"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>不能针对任何人！只能针对不法侵害人！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>针对不法侵害人本人</span>！这是正当防卫的对象条件！</b><br><br><strong>C. 错误！</strong><b>不能针对无辜第三人！那是紧急避险的情况！</b><br><br><strong>D. 错误！</strong><b>正当防卫针对的是人，不是财产！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>正当防卫=打侵害人！"}
+        ];
+        
+        const quiz9Data = [
+            {"question": "犯罪预备与犯罪未遂的区别在于？", "options": ["A. 是否准备工具", "B. 是否已经着手实施犯罪", "C. 是否造成危害结果", "D. 主观恶性大小"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>准备工具是犯罪预备，但不是区分标准！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>是否已经着手实施犯罪</span>！预备是还没开始，未遂是开始了但没成功！</b><br><br><strong>C. 错误！</strong><b>是否造成结果不是区分标准！</b><br><br><strong>D. 错误！</strong><b>主观恶性不是区分标准！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>预备=没开始；未遂=开始了没成功！"},
+            {"question": "犯罪中止与犯罪未遂的区别在于？", "options": ["A. 是否已经着手实施犯罪", "B. 是自动放弃还是被迫放弃", "C. 是否造成危害结果", "D. 主观恶性大小"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>中止和未遂都是已经着手实施犯罪！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>自动放弃还是被迫放弃</span>！中止是自动放弃，未遂是被迫没成功！</b><br><br><strong>C. 错误！</strong><b>是否造成结果不是区分标准！</b><br><br><strong>D. 错误！</strong><b>主观恶性不是区分标准！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>中止=自愿放弃；未遂=被迫没成功！"},
+            {"question": "犯罪中止的处罚原则是？", "options": ["A. 与既遂犯同样处罚", "B. 没有造成损害的免除处罚，造成损害的减轻处罚", "C. 从轻处罚", "D. 减轻处罚"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>中止的处罚比既遂轻！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>没有造成损害的免除处罚，造成损害的减轻处罚</span>！这是犯罪中止的处罚原则！</b><br><br><strong>C. 错误！</strong><b>中止可以免除或减轻，不是从轻！</b><br><br><strong>D. 错误！</strong><b>中止可以免除或减轻，不仅是减轻！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>中止=最轻（免或减）！"},
+            {"question": "张三想杀李四，买了刀准备动手，买刀时被抓，这是什么犯罪形态？", "options": ["A. 犯罪预备", "B. 犯罪未遂", "C. 犯罪中止", "D. 犯罪既遂"], "answer": 0, "explanation": "✅ 正确答案是 <strong>A</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 正确！</strong><b><span class='highlight-red'>犯罪预备</span>！张三还在准备工具阶段，没有着手实施杀人行为！</b><br><br><strong>B. 错误！</strong><b>犯罪未遂要求已经着手实施犯罪！</b><br><br><strong>C. 错误！</strong><b>犯罪中止要求在犯罪过程中自动放弃！</b><br><br><strong>D. 错误！</strong><b>犯罪既遂要求犯罪行为完成！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>准备阶段被抓=犯罪预备！"},
+            {"question": "张三持刀杀李四，砍了一刀后良心发现，把李四送医院救活，这是什么犯罪形态？", "options": ["A. 犯罪预备", "B. 犯罪未遂", "C. 犯罪中止", "D. 犯罪既遂"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>张三已经着手实施杀人行为，不是预备！</b><br><br><strong>B. 错误！</strong><b>张三是自愿放弃犯罪，不是被迫没成功！</b><br><br><strong>C. 正确！</strong><b><span class='highlight-red'>犯罪中止</span>！张三自动放弃犯罪，并且有效防止了死亡结果发生！</b><br><br><strong>D. 错误！</strong><b>李四没有死亡，不是既遂！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>自愿放弃+有效防止结果=犯罪中止！"}
+        ];
+        
+        const quiz10Data = [
+            {"question": "共同犯罪的成立条件包括？", "options": ["A. 二人以上", "B. 共同故意", "C. 共同行为", "D. 以上都是"], "answer": 3, "explanation": "✅ 正确答案是 <strong>D</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 正确！</strong><b>二人以上是共同犯罪的主体条件！</b><br><br><strong>B. 正确！</strong><b>共同故意是共同犯罪的主观条件！</b><br><br><strong>C. 正确！</strong><b>共同行为是共同犯罪的客观条件！</b><br><br><strong>D. 正确！</strong><b><span class='highlight-red'>以上都是</span>！共同犯罪必须具备三个条件！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>共同犯罪=二人+共同故意+共同行为！"},
+            {"question": "主犯的处罚原则是？", "options": ["A. 从轻处罚", "B. 减轻处罚", "C. 按照其所参与的或者组织、指挥的全部犯罪处罚", "D. 免除处罚"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>主犯不从轻处罚！</b><br><br><strong>B. 错误！</strong><b>主犯不减轻处罚！</b><br><br><strong>C. 正确！</strong><b><span class='highlight-red'>按照其所参与的或者组织、指挥的全部犯罪处罚</span>！这是主犯的处罚原则！</b><br><br><strong>D. 错误！</strong><b>主犯不免除处罚！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>主犯=全责！"},
+            {"question": "从犯的处罚原则是？", "options": ["A. 应当从轻、减轻或免除处罚", "B. 可以从轻、减轻或免除处罚", "C. 与主犯同样处罚", "D. 不处罚"], "answer": 0, "explanation": "✅ 正确答案是 <strong>A</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 正确！</strong><b><span class='highlight-red'>应当从轻、减轻或免除处罚</span>！这是从犯的处罚原则！</b><br><br><strong>B. 错误！</strong><b>是<span class='highlight-red'>应当</span>，不是可以！</b><br><br><strong>C. 错误！</strong><b>从犯比主犯处罚轻！</b><br><br><strong>D. 错误！</strong><b>从犯要处罚，只是从轻减免！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>从犯=应当减免！"},
+            {"question": "教唆不满18周岁的人犯罪，如何处罚？", "options": ["A. 从轻处罚", "B. 减轻处罚", "C. 从重处罚", "D. 免除处罚"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>教唆未成年人是<span class='highlight-red'>从重处罚</span>，不是从轻！</b><br><br><strong>B. 错误！</strong><b>教唆未成年人是<span class='highlight-red'>从重处罚</span>，不是减轻！</b><br><br><strong>C. 正确！</strong><b><span class='highlight-red'>从重处罚</span>！教唆不满18周岁的人犯罪，应当从重处罚！</b><br><br><strong>D. 错误！</strong><b>教唆未成年人是<span class='highlight-red'>从重处罚</span>，不是免除！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>教唆未成年人=从重处罚！"},
+            {"question": "胁从犯的处罚原则是？", "options": ["A. 应当从轻处罚", "B. 应当减轻或免除处罚", "C. 与主犯同样处罚", "D. 不处罚"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>胁从犯是<span class='highlight-red'>减轻或免除</span>，不是从轻！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>应当按照他的犯罪情节减轻或免除处罚</span>！这是胁从犯的处罚原则！</b><br><br><strong>C. 错误！</strong><b>胁从犯比主犯处罚轻！</b><br><br><strong>D. 错误！</strong><b>胁从犯要处罚，只是减轻或免除！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>胁从犯=最轻（减或免）！"}
+        ];
+        
+        const quiz11Data = [
+            {"question": "抢劫罪与抢夺罪的区别在于？", "options": ["A. 是否使用暴力", "B. 是否压制反抗", "C. 是否取得财物", "D. 主体年龄"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>抢夺也可能使用暴力，如飞车抢夺！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>是否压制反抗</span>！抢劫是压制反抗，抢夺是趁人不备！</b><br><br><strong>C. 错误！</strong><b>两者都可能取得财物！</b><br><br><strong>D. 错误！</strong><b>主体年龄不是区分标准！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>抢劫=压制反抗；抢夺=趁人不备！"},
+            {"question": "转化型抢劫的条件是？", "options": ["A. 犯盗窃、诈骗、抢夺罪", "B. 为窝藏赃物、抗拒抓捕、毁灭罪证", "C. 当场使用暴力或以暴力相威胁", "D. 以上都是"], "answer": 3, "explanation": "✅ 正确答案是 <strong>D</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 正确！</strong><b>必须先犯盗窃、诈骗、抢夺罪！</b><br><br><strong>B. 正确！</strong><b>必须是为了窝藏赃物、抗拒抓捕、毁灭罪证！</b><br><br><strong>C. 正确！</strong><b>必须当场使用暴力或以暴力相威胁！</b><br><br><strong>D. 正确！</strong><b><span class='highlight-red'>以上都是</span>！三个条件必须同时具备！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>转化型抢劫=盗抢骗+暴力抗抓！"},
+            {"question": "盗窃罪的既遂标准是？", "options": ["A. 取得财物", "B. 被害人失去对财物的控制", "C. 离开现场", "D. 变卖财物"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>盗窃不以取得财物为既遂标准！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>被害人失去对财物的控制</span>！这是盗窃罪的既遂标准！</b><br><br><strong>C. 错误！</strong><b>离开现场不是既遂标准！</b><br><br><strong>D. 错误！</strong><b>变卖财物不是既遂标准！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>盗窃既遂=被害人失去控制！"},
+            {"question": "诈骗罪的关键特征是？", "options": ["A. 使用暴力", "B. 被害人因被骗而自愿交出财物", "C. 趁人不备", "D. 秘密窃取"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>诈骗不使用暴力！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>被害人因被骗而自愿交出财物</span>！这是诈骗罪的关键特征！</b><br><br><strong>C. 错误！</strong><b>趁人不备是抢夺罪的特征！</b><br><br><strong>D. 错误！</strong><b>秘密窃取是盗窃罪的特征！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>诈骗=骗得自愿交钱！"},
+            {"question": "绑架罪与抢劫罪的区别在于？", "options": ["A. 是否使用暴力", "B. 是向第三人勒索还是直接向被害人要钱", "C. 是否取得财物", "D. 主体年龄"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>两者都可能使用暴力！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>是向第三人勒索还是直接向被害人要钱</span>！绑架是向第三人勒索，抢劫是直接向被害人要钱！</b><br><br><strong>C. 错误！</strong><b>两者都可能取得财物！</b><br><br><strong>D. 错误！</strong><b>主体年龄不是区分标准！</b><br><br><br><strong><span class='highlight-purple'>小白记忆：</span></strong>绑架=向第三人勒索；抢劫=直接向被害人要钱！"}
+        ];
+        
+        // 练习专区50道综合题
+        const practiceData = [
+            {"question": "刑法的基本原则不包括？", "options": ["A. 罪刑法定原则", "B. 平等适用刑法原则", "C. 罪责刑相适应原则", "D. 罪刑推定原则"], "answer": 3, "explanation": "✅ 正确答案是 <strong>D</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>罪刑法定原则是刑法基本原则！</b><br><br><strong>B. 错误！</strong><b>平等适用刑法原则是刑法基本原则！</b><br><br><strong>C. 错误！</strong><b>罪责刑相适应原则是刑法基本原则！</b><br><br><strong>D. 正确！</strong><b><span class='highlight-red'>罪刑推定原则不是刑法基本原则</span>！刑法没有这个原则！</b>"},
+            {"question": "不满12周岁的人犯罪，如何处理？", "options": ["A. 负刑事责任", "B. 不负刑事责任", "C. 从轻处罚", "D. 减轻处罚"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>不满12周岁的人<span class='highlight-orange'>不负刑事责任</span>！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>不负刑事责任</span>！不满12周岁完全不负刑事责任！</b>"},
+            {"question": "14-16周岁的人对绑架罪是否负刑事责任？", "options": ["A. 负刑事责任", "B. 不负刑事责任", "C. 视情况而定", "D. 从轻处罚"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 错误！</strong><b>绑架<span class='highlight-orange'>不是</span>14-16周岁承担责任的8种犯罪之一！</b><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>不负刑事责任</span>！14-16周岁只对烧杀淫掠商贩爆头8种犯罪负责！</b>"},
+            {"question": "单位犯罪对单位判处的刑罚是？", "options": ["A. 有期徒刑", "B. 罚金", "C. 拘役", "D. 死刑"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>罚金</span>！单位只能判罚金，不能判人身刑！</b>"},
+            {"question": "间歇性精神病人在精神正常时犯罪，如何处理？", "options": ["A. 不负刑事责任", "B. 应当负刑事责任", "C. 可以从轻处罚", "D. 应当减轻处罚"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>应当负刑事责任</span>！精神正常时犯罪要负责！</b>"},
+            {"question": "正当防卫不能针对？", "options": ["A. 不法侵害人", "B. 无辜第三人", "C. 犯罪分子", "D. 暴力犯罪人"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>不能针对无辜第三人</span>！正当防卫必须针对不法侵害人！</b>"},
+            {"question": "犯罪中止的处罚原则是？", "options": ["A. 与既遂犯同样处罚", "B. 从轻处罚", "C. 没有造成损害的免除处罚，造成损害的减轻处罚", "D. 减轻处罚"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>C. 正确！</strong><b><span class='highlight-red'>没有造成损害的免除处罚，造成损害的减轻处罚</span>！中止处罚最轻！</b>"},
+            {"question": "教唆不满18周岁的人犯罪，如何处罚？", "options": ["A. 从轻处罚", "B. 减轻处罚", "C. 从重处罚", "D. 免除处罚"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>C. 正确！</strong><b><span class='highlight-red'>从重处罚</span>！教唆未成年人犯罪从重！</b>"},
+            {"question": "抢劫罪与抢夺罪的主要区别是？", "options": ["A. 是否使用暴力", "B. 是否压制反抗", "C. 是否取得财物", "D. 主体年龄"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>是否压制反抗</span>！抢劫压制反抗，抢夺趁人不备！</b>"},
+            {"question": "盗窃罪的既遂标准是？", "options": ["A. 取得财物", "B. 被害人失去对财物的控制", "C. 离开现场", "D. 变卖财物"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>被害人失去对财物的控制</span>！这是盗窃既遂标准！</b>"},
+            {"question": "刑法的基本原则有几个？", "options": ["A. 2个", "B. 3个", "C. 4个", "D. 5个"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>3个</span>！罪刑法定、平等适用、罪责刑相适应！</b>"},
+            {"question": "犯罪的本质特征是？", "options": ["A. 社会危害性", "B. 刑事违法性", "C. 应受刑罚处罚性", "D. 主观恶性"], "answer": 0, "explanation": "✅ 正确答案是 <strong>A</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 正确！</strong><b><span class='highlight-red'>社会危害性</span>是犯罪的本质特征！</b>"},
+            {"question": "完全负刑事责任的年龄是？", "options": ["A. 14周岁", "B. 16周岁", "C. 18周岁", "D. 20周岁"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>16周岁</span>以上完全负刑事责任！</b>"},
+            {"question": "醉酒的人犯罪，如何处理？", "options": ["A. 不负刑事责任", "B. 应当负刑事责任", "C. 可以从轻处罚", "D. 应当减轻处罚"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>应当负刑事责任</span>！醉酒不能作为免责理由！</b>"},
+            {"question": "单位犯罪的处罚原则是？", "options": ["A. 单罚制", "B. 双罚制", "C. 免除处罚", "D. 从轻处罚"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>双罚制</span>！罚单位+罚个人！</b>"},
+            {"question": "犯罪的主观方面包括？", "options": ["A. 故意", "B. 过失", "C. 故意和过失", "D. 动机"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>C. 正确！</strong><b><span class='highlight-red'>故意和过失</span>！犯罪主观方面包括故意和过失！</b>"},
+            {"question": "正当防卫的时间条件是？", "options": ["A. 不法侵害已经结束", "B. 不法侵害正在进行", "C. 不法侵害尚未开始", "D. 任何时候"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>不法侵害正在进行</span>！这是正当防卫的时间条件！</b>"},
+            {"question": "犯罪预备与犯罪未遂的主要区别是？", "options": ["A. 是否准备工具", "B. 是否已经着手实施犯罪", "C. 是否造成危害结果", "D. 主观恶性大小"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>是否已经着手实施犯罪</span>！预备没开始，未遂开始了！</b>"},
+            {"question": "共同犯罪的主犯处罚原则是？", "options": ["A. 从轻处罚", "B. 减轻处罚", "C. 按照其所参与的全部犯罪处罚", "D. 免除处罚"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>C. 正确！</strong><b><span class='highlight-red'>按照其所参与的全部犯罪处罚</span>！主犯负全责！</b>"},
+            {"question": "诈骗罪的关键特征是？", "options": ["A. 使用暴力", "B. 被害人因被骗而自愿交出财物", "C. 趁人不备", "D. 秘密窃取"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>被害人因被骗而自愿交出财物</span>！这是诈骗关键！</b>"},
+            {"question": "罪刑法定原则的核心是？", "options": ["A. 法律面前人人平等", "B. 法无明文规定不为罪", "C. 重罪重罚", "D. 法官自由裁量"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>法无明文规定不为罪</span>！这是罪刑法定原则的核心！</b>"},
+            {"question": "又聋又哑的人犯罪，如何处理？", "options": ["A. 不负刑事责任", "B. 应当负刑事责任", "C. 可以从轻、减轻或免除处罚", "D. 必须从轻处罚"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>C. 正确！</strong><b><span class='highlight-red'>可以从轻、减轻或免除处罚</span>！是<span class='highlight-red'>可以</span>，不是必须！</b>"},
+            {"question": "特殊防卫针对的是？", "options": ["A. 所有犯罪行为", "B. 严重危及人身安全的暴力犯罪", "C. 财产犯罪", "D. 经济犯罪"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>严重危及人身安全的暴力犯罪</span>！如杀人、抢劫、强奸！</b>"},
+            {"question": "犯罪中止与犯罪未遂的主要区别是？", "options": ["A. 是否已经着手实施犯罪", "B. 是自动放弃还是被迫放弃", "C. 是否造成危害结果", "D. 主观恶性大小"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>自动放弃还是被迫放弃</span>！中止自愿，未遂被迫！</b>"},
+            {"question": "从犯的处罚原则是？", "options": ["A. 应当从轻、减轻或免除处罚", "B. 可以从轻、减轻或免除处罚", "C. 与主犯同样处罚", "D. 不处罚"], "answer": 0, "explanation": "✅ 正确答案是 <strong>A</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 正确！</strong><b><span class='highlight-red'>应当从轻、减轻或免除处罚</span>！是<span class='highlight-red'>应当</span>，不是可以！</b>"},
+            {"question": "绑架罪与抢劫罪的主要区别是？", "options": ["A. 是否使用暴力", "B. 是向第三人勒索还是直接向被害人要钱", "C. 是否取得财物", "D. 主体年龄"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>向第三人勒索还是直接向被害人要钱</span>！绑架向第三人，抢劫向被害人！</b>"},
+            {"question": "犯罪的三个特征缺一不可的是？", "options": ["A. 社会危害性", "B. 刑事违法性", "C. 应受刑罚处罚性", "D. 以上都是"], "answer": 3, "explanation": "✅ 正确答案是 <strong>D</strong><br><br><strong>【逐项解析】</strong><br><br><strong>D. 正确！</strong><b><span class='highlight-red'>以上都是</span>！犯罪三特征缺一不可！</b>"},
+            {"question": "已满14不满18周岁的人犯罪，应当？", "options": ["A. 从重处罚", "B. 从轻或减轻处罚", "C. 不负刑事责任", "D. 免除处罚"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>从轻或减轻处罚</span>！未成年人从轻减轻！</b>"},
+            {"question": "精神病人在不能辨认自己行为时犯罪，如何处理？", "options": ["A. 负刑事责任", "B. 不负刑事责任", "C. 从轻处罚", "D. 减轻处罚"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>不负刑事责任</span>！精神病发作期不负责！</b>"},
+            {"question": "犯罪四要件包括主体、主观方面、客体和？", "options": ["A. 客观方面", "B. 犯罪对象", "C. 犯罪结果", "D. 因果关系"], "answer": 0, "explanation": "✅ 正确答案是 <strong>A</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 正确！</strong><b><span class='highlight-red'>客观方面</span>！犯罪四要件是主体、主观方面、客体、客观方面！</b>"},
+            {"question": "抢劫罪的客体是？", "options": ["A. 财产权", "B. 人身权", "C. 财产权和人身权", "D. 公共秩序"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>C. 正确！</strong><b><span class='highlight-red'>财产权和人身权</span>！抢劫罪是复杂客体！</b>"},
+            {"question": "转化型抢劫的条件是犯盗窃、诈骗、抢夺罪后？", "options": ["A. 逃跑", "B. 为窝藏赃物、抗拒抓捕而使用暴力", "C. 投案自首", "D. 毁灭证据"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>为窝藏赃物、抗拒抓捕而使用暴力</span>！转化型抢劫的关键！</b>"},
+            {"question": "胁从犯的处罚原则是？", "options": ["A. 应当从轻处罚", "B. 应当减轻或免除处罚", "C. 与主犯同样处罚", "D. 不处罚"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>应当减轻或免除处罚</span>！胁从犯处罚最轻！</b>"},
+            {"question": "直接故意与间接故意的区别在于？", "options": ["A. 是否明知会发生危害结果", "B. 是希望还是放任结果发生", "C. 是否造成危害结果", "D. 主观恶性大小"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>希望还是放任结果发生</span>！直接故意希望，间接故意放任！</b>"},
+            {"question": "意外事件是否构成犯罪？", "options": ["A. 构成犯罪", "B. 不构成犯罪", "C. 视情况而定", "D. 从轻处罚"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>不构成犯罪</span>！意外事件不可能预见，不犯罪！</b>"},
+            {"question": "紧急避险可能损害谁的利益？", "options": ["A. 不法侵害人", "B. 无辜第三人", "C. 犯罪分子", "D. 被害人"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>无辜第三人</span>！紧急避险可能损害无辜第三人利益！</b>"},
+            {"question": "14-16周岁承担刑事责任的8种犯罪口诀是？", "options": ["A. 烧杀淫掠，商贩爆头", "B. 烧杀抢掠，商贩爆头", "C. 烧杀淫掠，盗抢爆头", "D. 烧杀淫掠，商贩投毒"], "answer": 0, "explanation": "✅ 正确答案是 <strong>A</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 正确！</strong><b><span class='highlight-red'>烧杀淫掠，商贩爆头</span>！烧=放火，杀=杀人，淫=强奸，掠=抢劫，商=伤害，贩=贩卖毒品，爆=爆炸，头=投放危险物质！</b>"},
+            {"question": "盲人犯罪，如何处理？", "options": ["A. 不负刑事责任", "B. 应当负刑事责任", "C. 可以从轻、减轻或免除处罚", "D. 必须减轻处罚"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>C. 正确！</strong><b><span class='highlight-red'>可以从轻、减轻或免除处罚</span>！是<span class='highlight-red'>可以</span>，不是必须！</b>"},
+            {"question": "为犯罪而设立公司实施犯罪，构成？", "options": ["A. 单位犯罪", "B. 个人犯罪", "C. 共同犯罪", "D. 不构成犯罪"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>个人犯罪</span>！公司只是犯罪工具，不构成单位犯罪！</b>"},
+            {"question": "抢夺罪的特征是？", "options": ["A. 压制反抗", "B. 趁人不备", "C. 秘密窃取", "D. 虚构事实"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>趁人不备</span>！抢夺是趁人不备，公开夺取！</b>"},
+            {"question": "盗窃罪的特征是？", "options": ["A. 压制反抗", "B. 趁人不备", "C. 秘密窃取", "D. 虚构事实"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>C. 正确！</strong><b><span class='highlight-red'>秘密窃取</span>！盗窃是秘密窃取财物！</b>"},
+            {"question": "犯罪客体是？", "options": ["A. 具体的人", "B. 具体的物", "C. 被侵害的社会关系", "D. 犯罪行为"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>C. 正确！</strong><b><span class='highlight-red'>被侵害的社会关系</span>！犯罪客体是法律保护的权益！</b>"},
+            {"question": "犯罪对象是？", "options": ["A. 社会关系", "B. 具体的人或物", "C. 法律保护的权益", "D. 犯罪行为"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>具体的人或物</span>！犯罪对象是具体的人或物！</b>"},
+            {"question": "投放危险物质属于什么犯罪？", "options": ["A. 放火罪", "B. 投毒罪", "C. 投放危险物质罪", "D. 危害公共安全罪"], "answer": 2, "explanation": "✅ 正确答案是 <strong>C</strong><br><br><strong>【逐项解析】</strong><br><br><strong>C. 正确！</strong><b><span class='highlight-red'>投放危险物质罪</span>！不是投毒罪！毒只是危险物质的一种！</b>"},
+            {"question": "共同犯罪的主体要求是？", "options": ["A. 一人以上", "B. 二人以上", "C. 三人以上", "D. 五人以上"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>二人以上</span>！共同犯罪必须是二人以上！</b>"},
+            {"question": "国家机关能否成为单位犯罪主体？", "options": ["A. 能", "B. 不能", "C. 视情况而定", "D. 法律没有规定"], "answer": 0, "explanation": "✅ 正确答案是 <strong>A</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 正确！</strong><b><span class='highlight-red'>能</span>！国家机关也可以成为单位犯罪主体！</b>"},
+            {"question": "不满18周岁的人犯罪，能否判死刑？", "options": ["A. 能", "B. 不能", "C. 视情况而定", "D. 可以判死缓"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>不能</span>！不满18周岁的人不适用死刑！</b>"},
+            {"question": "抢劫罪的既遂标准是？", "options": ["A. 取得财物", "B. 侵犯人身或财产之一", "C. 被害人失去控制", "D. 离开现场"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>侵犯人身或财产之一</span>！抢劫罪既遂标准！</b>"},
+            {"question": "疏忽大意过失是指？", "options": ["A. 应当预见但没有预见", "B. 已经预见但轻信能避免", "C. 希望结果发生", "D. 放任结果发生"], "answer": 0, "explanation": "✅ 正确答案是 <strong>A</strong><br><br><strong>【逐项解析】</strong><br><br><strong>A. 正确！</strong><b><span class='highlight-red'>应当预见但没有预见</span>！疏忽大意过失的定义！</b>"},
+            {"question": "过于自信过失是指？", "options": ["A. 应当预见但没有预见", "B. 已经预见但轻信能避免", "C. 希望结果发生", "D. 放任结果发生"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>已经预见但轻信能避免</span>！过于自信过失的定义！</b>"},
+            {"question": "非法拘禁中使用暴力致人重伤，定什么罪？", "options": ["A. 非法拘禁罪", "B. 故意伤害罪", "C. 过失致人重伤罪", "D. 寻衅滋事罪"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>故意伤害罪</span>！非法拘禁中使用暴力致人重伤，转化为故意伤害罪！</b>"},
+            {"question": "已满75周岁的人犯罪，一般是否适用死刑？", "options": ["A. 适用", "B. 一般不适用", "C. 必须适用", "D. 视情况而定"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>一般不适用</span>！已满75周岁的人一般不适用死刑！</b>"},
+            {"question": "犯罪预备的处罚原则是？", "options": ["A. 与既遂犯同样处罚", "B. 可以比照既遂犯从轻、减轻或免除处罚", "C. 从轻处罚", "D. 减轻处罚"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>可以比照既遂犯从轻、减轻或免除处罚</span>！犯罪预备处罚原则！</b>"},
+            {"question": "犯罪未遂的处罚原则是？", "options": ["A. 与既遂犯同样处罚", "B. 可以比照既遂犯从轻或减轻处罚", "C. 免除处罚", "D. 从重处罚"], "answer": 1, "explanation": "✅ 正确答案是 <strong>B</strong><br><br><strong>【逐项解析】</strong><br><br><strong>B. 正确！</strong><b><span class='highlight-red'>可以比照既遂犯从轻或减轻处罚</span>！犯罪未遂处罚原则！</b>"}
+        ];
+        
+        // ========== 渲染函数 ==========
+        let totalAnswered = 0;
+        let totalCorrect = 0;
+        
+        function renderQuiz(containerId, quizData) {
+            const container = document.getElementById(containerId);
+            if (!container || !quizData) return;
+            
+            container.innerHTML = '';
+            
+            quizData.forEach((q, index) => {
+                const card = document.createElement('div');
+                card.className = 'quiz-card';
+                card.innerHTML = `
+                    <div class="question">
+                        <span class="question-num">${index + 1}</span>
+                        ${q.question}
+                    </div>
+                    <div class="options" id="options-${containerId}-${index}">
+                        ${q.options.map((opt, i) => `
+                            <button class="option-btn" onclick="checkAnswer('${containerId}', ${index}, ${i}, ${q.answer})">
+                                <span class="option-letter">${String.fromCharCode(65 + i)}</span>
+                                ${opt.substring(3)}
+                            </button>
+                        `).join('')}
+                    </div>
+                    <div class="explanation" id="explanation-${containerId}-${index}">
+                        ${q.explanation}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+        
+        function checkAnswer(containerId, questionIndex, selectedIndex, correctIndex) {
+            const optionsContainer = document.getElementById(`options-${containerId}-${questionIndex}`);
+            const explanation = document.getElementById(`explanation-${containerId}-${questionIndex}`);
+            const buttons = optionsContainer.querySelectorAll('.option-btn');
+            
+            // 检查是否已经回答过
+            if (buttons[0].classList.contains('disabled')) return;
+            
+            // 禁用所有按钮
+            buttons.forEach(btn => btn.classList.add('disabled'));
+            
+            // 标记正确和错误答案
+            buttons[selectedIndex].classList.add(selectedIndex === correctIndex ? 'correct' : 'wrong');
+            if (selectedIndex !== correctIndex) {
+                buttons[correctIndex].classList.add('correct');
+            }
+            
+            // 显示解析
+            explanation.style.display = 'block';
+            
+            // 更新统计
+            totalAnswered++;
+            if (selectedIndex === correctIndex) {
+                totalCorrect++;
+            }
+            updateScore();
+        }
+        
+        function updateScore() {
+            const scoreDisplay = document.getElementById('totalScore');
+            if (scoreDisplay) {
+                scoreDisplay.textContent = `已答: ${totalCorrect}/${totalAnswered}`;
+            }
+            
+            // 更新进度条
+            const progress = document.getElementById('mainProgress');
+            if (progress) {
+                const totalQuestions = 55 + 50; // 11个模块每个5题 + 练习专区50题
+                progress.style.width = `${(totalAnswered / totalQuestions) * 100}%`;
+            }
+        }
+        
+        // ========== 初始化 ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            // 渲染各模块题目
+            renderQuiz('quiz-module1', quiz1Data);
+            renderQuiz('quiz-module2', quiz2Data);
+            renderQuiz('quiz-module3', quiz3Data);
+            renderQuiz('quiz-module4', quiz4Data);
+            renderQuiz('quiz-module5', quiz5Data);
+            renderQuiz('quiz-module6', quiz6Data);
+            renderQuiz('quiz-module7', quiz7Data);
+            renderQuiz('quiz-module8', quiz8Data);
+            renderQuiz('quiz-module9', quiz9Data);
+            renderQuiz('quiz-module10', quiz10Data);
+            renderQuiz('quiz-module11', quiz11Data);
+            
+            // 渲染练习专区
+            renderQuiz('practiceQuestions', practiceData);
+            
+            // 滚动进度条更新
+            window.addEventListener('scroll', function() {
+                const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrolled = (winScroll / height) * 100;
+                document.getElementById('mainProgress').style.width = scrolled + '%';
+            });
+        });
+    </script>
+</body>
+</html>

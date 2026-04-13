@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>刑事诉讼法学习 - 辅警备考</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; color: #333; }
+        .progress-bar { position: fixed; top: 0; left: 0; width: 100%; height: 4px; background: rgba(255,255,255,0.1); z-index: 1000; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #00d9ff, #00ff88); width: 0%; transition: width 0.3s ease; }
+        .top-nav { position: fixed; top: 4px; left: 0; right: 0; background: rgba(102, 126, 234, 0.95); backdrop-filter: blur(10px); padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 999; border-bottom: 1px solid rgba(255,255,255,0.2); }
+        .logo { color: #fff; font-size: 18px; font-weight: bold; display: flex; align-items: center; gap: 8px; }
+        .score-display { background: rgba(255,255,255,0.2); color: #fff; padding: 8px 16px; border-radius: 20px; font-size: 14px; }
+        .sidebar { position: fixed; left: 0; top: 50px; width: 260px; height: calc(100vh - 50px); background: rgba(255,255,255,0.95); overflow-y: auto; padding: 20px 0; box-shadow: 2px 0 10px rgba(0,0,0,0.1); z-index: 998; }
+        .sidebar-title { color: #764ba2; padding: 0 20px 15px; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid #eee; margin-bottom: 15px; }
+        .nav-item { padding: 12px 20px; color: #666; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 10px; font-size: 14px; border-left: 3px solid transparent; text-decoration: none; }
+        .nav-item:hover { background: rgba(102, 126, 234, 0.1); color: #667eea; }
+        .nav-item.active { background: rgba(102, 126, 234, 0.15); color: #667eea; border-left-color: #667eea; font-weight: bold; }
+        .main-content { margin-left: 260px; padding: 70px 30px 30px; max-width: 900px; }
+        .section-header { text-align: center; margin-bottom: 40px; }
+        .section-header h1 { font-size: 42px; color: #fff; margin-bottom: 10px; text-shadow: 0 0 30px rgba(0,0,0,0.2); }
+        .section-header p { color: rgba(255,255,255,0.8); font-size: 16px; }
+        .knowledge-card { background: #fff; border-radius: 20px; padding: 30px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); scroll-margin-top: 100px; }
+        .knowledge-card h2 { font-size: 24px; color: #333; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; border-bottom: 2px solid #667eea; padding-bottom: 15px; }
+        .knowledge-card h3 { font-size: 18px; color: #555; margin: 20px 0 10px; padding-left: 15px; border-left: 4px solid #667eea; }
+        .knowledge-content p { line-height: 1.8; color: #555; margin-bottom: 15px; }
+        .highlight-red { color: #e74c3c; font-weight: bold; background: rgba(231, 76, 60, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .highlight-blue { color: #3498db; font-weight: bold; background: rgba(52, 152, 219, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .highlight-green { color: #27ae60; font-weight: bold; background: rgba(39, 174, 96, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .highlight-orange { color: #e67e22; font-weight: bold; background: rgba(230, 126, 34, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .highlight-purple { color: #9b59b6; font-weight: bold; background: rgba(155, 89, 182, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .example { background: linear-gradient(135deg, #fff3e0, #ffe0b2); border-left: 4px solid #ff9800; padding: 15px 20px; border-radius: 0 10px 10px 0; margin: 15px 0; }
+        .example p { color: #e65100; margin: 8px 0; }
+        .memory-tip { background: linear-gradient(135deg, #e8f5e9, #c8e6c9); border-left: 4px solid #4caf50; padding: 15px 20px; border-radius: 0 10px 10px 0; margin: 15px 0; }
+        .memory-tip p { color: #2e7d32; margin: 0; }
+        .warning { background: linear-gradient(135deg, #ffebee, #ffcdd2); border-left: 4px solid #f44336; padding: 15px 20px; border-radius: 0 10px 10px 0; margin: 15px 0; }
+        .warning p { color: #c62828; margin: 0; }
+        .quiz-container { margin-top: 30px; }
+        .quiz-card { background: #f8f9fa; border-radius: 15px; padding: 20px; margin-bottom: 20px; border: 1px solid #e9ecef; }
+        .question { font-size: 16px; color: #333; margin-bottom: 15px; font-weight: 500; }
+        .question-num { display: inline-block; background: #667eea; color: #fff; width: 28px; height: 28px; border-radius: 50%; text-align: center; line-height: 28px; margin-right: 10px; font-size: 14px; }
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .option-btn { padding: 12px 20px; background: #fff; border: 2px solid #e9ecef; border-radius: 10px; cursor: pointer; text-align: left; font-size: 15px; color: #555; transition: all 0.3s ease; }
+        .option-btn:hover { border-color: #667eea; background: rgba(102, 126, 234, 0.05); }
+        .option-letter { display: inline-block; width: 26px; height: 26px; background: #e9ecef; border-radius: 50%; text-align: center; line-height: 26px; margin-right: 10px; font-weight: bold; color: #667eea; }
+        .option-btn.correct { background: #d4edda; border-color: #28a745; }
+        .option-btn.correct .option-letter { background: #28a745; color: #fff; }
+        .option-btn.wrong { background: #f8d7da; border-color: #dc3545; }
+        .option-btn.wrong .option-letter { background: #dc3545; color: #fff; }
+        .option-btn.disabled { cursor: not-allowed; opacity: 0.7; }
+        .explanation { background: linear-gradient(135deg, #e8f4fd, #d6e9f8); border-radius: 10px; padding: 15px 20px; margin-top: 15px; display: none; line-height: 1.8; }
+        .explanation .result { font-size: 18px; font-weight: bold; margin-bottom: 10px; }
+        .explanation .result.correct { color: #28a745; }
+        .explanation .result.wrong { color: #dc3545; }
+        .practice-section { background: #fff; border-radius: 20px; padding: 30px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); scroll-margin-top: 100px; }
+        .practice-section h2 { font-size: 28px; color: #333; margin-bottom: 25px; text-align: center; border-bottom: 2px solid #764ba2; padding-bottom: 15px; }
+        @media (max-width: 768px) { .sidebar { width: 100%; height: auto; position: relative; margin-top: 50px; } .main-content { margin-left: 0; padding-top: 80px; } }
+        .close-nav-btn { background: rgba(255,255,255,0.2); border: none; color: #fff; font-size: 18px; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.3s; }
+        .close-nav-btn:hover { background: rgba(255,255,255,0.3); }
+    </style>
+</head>
+<body>
+    <div class="progress-bar"><div class="progress-fill" id="mainProgress"></div></div>
+    <nav class="top-nav" id="topNav">
+        <div class="logo">⚖️ 刑事诉讼法基础知识学习</div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <div class="score-display" id="totalScore">已答: 0/0</div>
+            <button class="close-nav-btn" onclick="closeTopNav()">✕</button>
+        </div>
+    </nav>
+    <aside class="sidebar">
+        <div class="sidebar-title">📚 目录导航</div>
+        <a href="#module1" class="nav-item active" onclick="scrollToSection(this, event)">🌟 模块1: 刑诉法概念</a>
+        <a href="#module2" class="nav-item" onclick="scrollToSection(this, event)">💪 模块2: 基本原则</a>
+        <a href="#module3" class="nav-item" onclick="scrollToSection(this, event)">👤 模块3: 诉讼主体</a>
+        <a href="#module4" class="nav-item" onclick="scrollToSection(this, event)">🏥 模块4: 管辖制度</a>
+        <a href="#module5" class="nav-item" onclick="scrollToSection(this, event)">🔄 模块5: 回避制度</a>
+        <a href="#module6" class="nav-item" onclick="scrollToSection(this, event)">🧑‍⚖️ 模块6: 辩护与代理</a>
+        <a href="#module7" class="nav-item" onclick="scrollToSection(this, event)">🔑 模块7: 强制措施</a>
+        <a href="#module8" class="nav-item" onclick="scrollToSection(this, event)">🔍 模块8: 侦查程序</a>
+        <a href="#module9" class="nav-item" onclick="scrollToSection(this, event)">📊 模块9: 证据种类</a>
+        <a href="#module10" class="nav-item" onclick="scrollToSection(this, event)">🎯 模块10: 审判程序</a>
+        <a href="#module11" class="nav-item" onclick="scrollToSection(this, event)">📋 模块11: 执行程序</a>
+        <a href="#practice" class="nav-item" onclick="scrollToSection(this, event)">📝 练习专区</a>
+    </aside>
+    <main class="main-content">
+        <div class="section-header">
+            <h1>刑事诉讼法学习</h1>
+            <p>输入"程序"的世界，理解正义的施派</p>
+        </div>
+
+        <section id="module1" class="knowledge-card">
+            <h2>🌟 【模块1】刑事诉讼法概念与目的</h2>
+            <div class="knowledge-content">
+                <h3>一、什么是刑事诉讼法？</h3>
+                <p>刑事诉讼法就是规定<span class="highlight-red">怎么打刑事官司</span>的法律。</p>
+                <p>刑法规定了什么是犯罪、犯什么罪判什么刑，但谁来判、怎么判、按什么程序判？这就是刑事诉讼法要解决的问题。</p>
+                
+                <div class="example">
+                    <p><strong>【举例说明】</strong></p>
+                    <p>张三杀了人，刑法说这是故意杀人罪，最高可判死刑。但谁来抓张三？谁来判断张三有没有杀人？谁来判决张三该判多少年？这些"怎么做"的问题，就是刑事诉讼法规定的内容。</p>
+                    <p><strong>为什么这样举例：</strong>刑法告诉你"什么是犯罪"，刑诉法告诉你"怎么把这个犯罪的人绳之以法"，两者配合才能实现正义。</p>
+                </div>
+                
+                <h3>二、刑事诉讼法的目的</h3>
+                <p>刑诉法的目的是<span class="highlight-blue">保证刑法的正确实施</span>。</p>
+                <p>简单说：刑法是"目标"，刑诉法是"路径"。没有路径，目标无法实现。</p>
+                
+                <div class="memory-tip">
+                    <p>💡 <strong>记忆口诀：</strong>刑法管"定罪量刑"，刑诉管"程序进行"。刑法是实体，刑诉是程序，两者配合，正义才成。</p>
+                </div>
+                
+                <div class="warning">
+                    <p>⚠️ <strong>易错点：</strong>刑法的目的不是刑诉法的目的！刑法目的是"惩罚犯罪、保护人民"，刑诉法目的是"保证刑法正确实施"。</p>
+                </div>
+            </div>
+            <div class="quiz-container" id="quiz-module1"></div>
+        </section>
+
+        <section id="module2" class="knowledge-card">
+            <h2>💪 【模块2】基本原则</h2>
+            <div class="knowledge-content">
+                <h3>一、专门机关行使职权原则</h3>
+                <p><span class="highlight-red">侦查权</span> → 公安机关（原则）</p>
+                <p><span class="highlight-red">检察权</span> → 人民检察院</p>
+                <p><span class="highlight-red">审判权</span> → 人民法院</p>
+                
+                <div class="example">
+                    <p><strong>【举例说明】</strong></p>
+                    <p>小明涉嫌盗窃，公安负责侦查抓人，检察院负责批准逮捕和提起公诉，法院负责审判。就像一条流水线：公安负责"找证据"，检察院负责"把关"，法院负责"下结论"。</p>
+                    <p><strong>为什么这样举例：</strong>公检法三家各司其职，分工负责，相互配合又相互制约，防止一家独大导致权力滥用。</p>
+                </div>
+                
+                <h3>二、独立行使职权原则</h3>
+                <p>法院和检察院<span class="highlight-orange">独立行使职权</span>，不受行政机关、社会团体和个人的干涉。</p>
+                <p>注意：说的是"不受行政机关干涉"，不是说不受任何人干涉（比如还要接受党的领导、人大监督等）。</p>
+                
+                <h3>三、未经法院判决不得确定有罪原则</h3>
+                <p>在法院判决之前，任何人都不能被称为"罪犯"。</p>
+                <p>侦查阶段叫<span class="highlight-blue">"犯罪嫌疑人"</span>，审判阶段叫<span class="highlight-blue">"被告人"</span>，只有判决生效后才叫"罪犯"。</p>
+                
+                <div class="memory-tip">
+                    <p>💡 <strong>记忆口诀：</strong>公安抓人叫"嫌疑人"，检察院起诉叫"被告人"，法院判决后才是"罪犯"。没判决前，都只是"涉嫌"。</p>
+                </div>
+                
+                <div class="warning">
+                    <p>⚠️ <strong>易错点：</strong>公安机关<span class="highlight-orange">不能独立行使职权</span>，因为公安机关属于行政机关，要接受上级和人大监督。</p>
+                </div>
+            </div>
+            <div class="quiz-container" id="quiz-module2"></div>
+        </section>
+
+        <section id="module3" class="knowledge-card">
+            <h2>👤 【模块3】诉讼主体</h2>
+            <div class="knowledge-content">
+                <h3>一、专门机关</h3>
+                <p><span class="highlight-red">公检法</span>是刑事诉讼的三大专门机关。</p>
+                <p>公安机关负责侦查、拘留、执行逮捕、预审。</p>
+                <p>检察院负责批准逮捕、提起公诉、法律监督。</p>
+                <p>法院负责审判。</p>
+                
+                <h3>二、当事人</h3>
+                <p>包括：<span class="highlight-blue">被害人、犯罪嫌疑人、被告人、自诉人</span>等。</p>
+                
+                <div class="example">
+                    <p><strong>【举例说明】</strong></p>
+                    <p>小明被人推倒受伤，案件在公安侦查阶段：小明叫"被害人"，推人的人叫"犯罪嫌疑人"。等检察院起诉到法院后，推人的人就叫"被告人"了。</p>
+                    <p><strong>为什么这样举例：</strong>同一个人在不同阶段有不同称呼，就像同一个人在工作、学校、家庭中有不同的角色一样。</p>
+                </div>
+                
+                <h3>三、其他诉讼参与人</h3>
+                <p>包括：法定代理人、诉讼代理人、辩护人、证人、鉴定人等。</p>
+                
+                <div class="warning">
+                    <p>⚠️ <strong>易错点：</strong>证人<span class="highlight-orange">不需要回避</span>！即使与案件有利害关系也不需要回避，因为证人是了解案情的人，就应当作证。</p>
+                </div>
+            </div>
+            <div class="quiz-container" id="quiz-module3"></div>
+        </section>
+
+        <section id="module4" class="knowledge-card">
+            <h2>🏥 【模块4】管辖制度</h2>
+            <div class="knowledge-content">
+                <h3>一、立案管辖（"谁来办"）</h3>
+                <p><span class="highlight-red">法院直接受理</span>：自诉案件（告诉才处理的案件、轻微刑事案件）</p>
+                <p><span class="highlight-red">检察院直接受理</span>：司法工作人员职务犯罪</p>
+                <p><span class="highlight-red">公安机关受理</span>：大部分刑事案件</p>
+                
+                <h3>二、审判管辖（"谁来判"）</h3>
+                <p><span class="highlight-blue">基层法院</span>：大多数案件（最忙碌）</p>
+                <p><span class="highlight-blue">中级法院</span>：国恐无死（危害国家安全、恐怖活动、可能判无期/死刑）</p>
+                <p><span class="highlight-blue">高级法院</span>：全省重大案件</p>
+                <p><span class="highlight-blue">最高法院</span>：全国重大案件</p>
+                
+                <div class="memory-tip">
+                    <p>💡 <strong>记忆口诀：</strong>基层最忙管大事，中级"国恐无死"判，高级全省重大案，最高全国称第一。</p>
+                </div>
+                
+                <div class="warning">
+                    <p>⚠️ <strong>易错点：</strong>中级法院管辖的是"可能判处无期或死刑"，不是"实际判处"。</p>
+                </div>
+            </div>
+            <div class="quiz-container" id="quiz-module4"></div>
+        </section>
+
+        <section id="module5" class="knowledge-card">
+            <h2>🔄 【模块5】回避制度</h2>
+            <div class="knowledge-content">
+                <h3>一、什么情况下需要回避？</h3>
+                <p>1. 是本案的<span class="highlight-red">当事人或者当事人的近亲属</span></p>
+                <p>2. 本人或者他的近亲属和本案<span class="highlight-red">有利害关系</span></p>
+                <p>3. 担任过本案的<span class="highlight-red">证人、鉴定人、辩护人</span></p>
+                <p>4. 与本案当事人有<span class="highlight-red">其他关系</span>，可能影响公正处理</p>
+                
+                <div class="warning">
+                    <p>⚠️ <strong>易错点：</strong>对侦查人员的回避作出决定前，侦查人员<span class="highlight-orange">不能停止</span>侦查活动。</p>
+                </div>
+            </div>
+            <div class="quiz-container" id="quiz-module5"></div>
+        </section>
+
+        <section id="module6" class="knowledge-card">
+            <h2>🧑‍⚖️ 【模块6】辩护与代理</h2>
+            <div class="knowledge-content">
+                <h3>一、辩护人的范围</h3>
+                <p>1. <span class="highlight-red">律师</span></p>
+                <p>2. 人民团体或者所在单位<span class="highlight-red">推荐的人</span></p>
+                <p>3. <span class="highlight-red">监护人、亲友</span></p>
+                
+                <h3>二、法律援助辩护</h3>
+                <p>以下情况应当通知法律援助机构指派律师：</p>
+                <p>1. 犯罪嫌疑人、被告人是<span class="highlight-orange">盲、聋、哑人</span></p>
+                <p>2. <span class="highlight-orange">可能被判处无期徒刑、死刑</span></p>
+                <p>3. 犯罪嫌疑人、被告人是<span class="highlight-orange">未成年人</span></p>
+                
+                <div class="memory-tip">
+                    <p>💡 <strong>记忆口诀：</strong>盲聋哑、未成年，无期死刑要法援。</p>
+                </div>
+            </div>
+            <div class="quiz-container" id="quiz-module6"></div>
+        </section>
+
+        <section id="module7" class="knowledge-card">
+            <h2>🔑 【模块7】刑事强制措施</h2>
+            <div class="knowledge-content">
+                <h3>一、五种强制措施（从轻到重）</h3>
+                <p>1. <span class="highlight-green">拘传</span> → 强制到案接受讯问</p>
+                <p>2. <span class="highlight-blue">取保候审</span> → 交保证金或保证人</p>
+                <p>3. <span class="highlight-blue">监视居住</span> → 限制活动范围</p>
+                <p>4. <span class="highlight-orange">拘留</span> → 短期剥夺人身自由</p>
+                <p>5. <span class="highlight-red">逮捕</span> → 长期剥夺人身自由</p>
+                
+                <h3>二、取保候审的期限</h3>
+                <p>取保候审最长不超过<span class="highlight-blue">12个月</span>。</p>
+                
+                <div class="warning">
+                    <p>⚠️ <strong>易错点：</strong>拘留是<span class="highlight-orange">公安决定</span>的，但逮捕必须由<span class="highlight-orange">检察院批准</span>。</p>
+                </div>
+            </div>
+            <div class="quiz-container" id="quiz-module7"></div>
+        </section>
+
+        <section id="module8" class="knowledge-card">
+            <h2>🔍 【模块8】侦查程序</h2>
+            <div class="knowledge-content">
+                <h3>一、侦查行为</h3>
+                <p>讯问犯罪嫌疑人、询问证人、勘验检查、搜查、扣押、鉴定等。</p>
+                
+                <h3>二、讯问犯罪嫌疑人的要求</h3>
+                <p>1. 讯问时<span class="highlight-red">侦查人员不得少于二人</span></p>
+                <p>2. 讯问<span class="highlight-blue">应当个别进行</span></p>
+                <p>3. <span class="highlight-orange">严禁刑讯逼供</span></p>
+                
+                <div class="memory-tip">
+                    <p>💡 <strong>记忆口诀：</strong>两人讯问要分别，严禁刑讯逼供。</p>
+                </div>
+            </div>
+            <div class="quiz-container" id="quiz-module8"></div>
+        </section>
+
+        <section id="module9" class="knowledge-card">
+            <h2>📊 【模块9】证据种类</h2>
+            <div class="knowledge-content">
+                <h3>一、八大证据种类</h3>
+                <p>1. <span class="highlight-red">物证</span> → 实物证据（如凶器）</p>
+                <p>2. <span class="highlight-red">书证</span> → 文字记载的证据</p>
+                <p>3. <span class="highlight-blue">证人证言</span></p>
+                <p>4. <span class="highlight-blue">被害人陈述</span></p>
+                <p>5. <span class="highlight-blue">犯罪嫌疑人、被告人供述和辩解</span></p>
+                <p>6. <span class="highlight-orange">鉴定意见</span></p>
+                <p>7. <span class="highlight-orange">勘验、检查等笔录</span></p>
+                <p>8. <span class="highlight-purple">视听资料、电子数据</span></p>
+                
+                <h3>二、非法证据排除</h3>
+                <p>采用<span class="highlight-red">刑讯逼供</span>等非法方法收集的言词证据应当排除。</p>
+            </div>
+            <div class="quiz-container" id="quiz-module9"></div>
+        </section>
+
+        <section id="module10" class="knowledge-card">
+            <h2>🎯 【模块10】审判程序</h2>
+            <div class="knowledge-content">
+                <h3>一、一审程序</h3>
+                <p>公诉案件一审期限：<span class="highlight-blue">受理后2个月内宣判，至迟不超过3个月</span></p>
+                
+                <h3>二、审判公开原则</h3>
+                <p><span class="highlight-red">应当公开审理</span>为原则，但以下案件不公开：</p>
+                <p>1. <span class="highlight-orange">国家秘密</span>案件</p>
+                <p>2. <span class="highlight-orange">个人隐私</span>案件</p>
+                <p>3. 审判时被告人<span class="highlight-orange">不满18周岁</span>的案件</p>
+                
+                <h3>三、二审程序</h3>
+                <p><span class="highlight-blue">上诉期限</span>：不服判决10日，不服裁定5日</p>
+                
+                <div class="warning">
+                    <p>⚠️ <strong>易错点：</strong>上诉不加刑原则：被告人一方上诉的，二审法院<span class="highlight-orange">不得加重刑罚</span>。</p>
+                </div>
+            </div>
+            <div class="quiz-container" id="quiz-module10"></div>
+        </section>
+
+        <section id="module11" class="knowledge-card">
+            <h2>📋 【模块11】执行程序</h2>
+            <div class="knowledge-content">
+                <h3>一、死刑的执行</h3>
+                <p>死刑由<span class="highlight-red">最高人民法院核准</span>，由<span class="highlight-blue">人民法院执行</span>。</p>
+                
+                <h3>二、其他刑罚的执行</h3>
+                <p><span class="highlight-blue">有期徒刑、无期徒刑</span> → 监狱执行</p>
+                <p><span class="highlight-blue">拘役</span> → 公安机关执行</p>
+                <p><span class="highlight-blue">缓刑、假释</span> → 社区矫正机构执行</p>
+                
+                <h3>三、暂予监外执行</h3>
+                <p>1. 有<span class="highlight-orange">严重疾病</span>需要保外就医的</p>
+                <p>2. <span class="highlight-orange">怀孕或正在哺乳</span>自己婴儿的妇女</p>
+                
+                <div class="memory-tip">
+                    <p>💡 <strong>记忆口诀：</strong>死刑最高院核准，有期无期监狱管，拘役公安机关执。</p>
+                </div>
+            </div>
+            <div class="quiz-container" id="quiz-module11"></div>
+        </section>
+
+        <section id="practice" class="practice-section">
+            <h2>📝 练习专区（50题）</h2>
+            <p style="text-align: center; color: #666; margin-bottom: 20px;">综合检验学习成果</p>
+            <div class="quiz-container" id="quiz-practice"></div>
+        </section>
+    </main>
+
+    <script>
+        let totalAnswered = 0;
+        let totalCorrect = 0;
+        
+        function closeTopNav() {
+            document.getElementById('topNav').style.display = 'none';
+        }
+        
+        function scrollToSection(element, event) {
+            event.preventDefault();
+            const targetId = element.getAttribute('href').substring(1);
+            const target = document.getElementById(targetId);
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth' });
+                document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+                element.classList.add('active');
+            }
+        }
+        
+        function updateProgress() {
+            const progress = (totalAnswered / 105) * 100;
+            document.getElementById('mainProgress').style.width = progress + '%';
+            document.getElementById('totalScore').textContent = '已答: ' + totalCorrect + '/' + totalAnswered;
+        }
+
+        const quiz1Data = [
+            {question:"刑事诉讼法的主要目的是什么？",options:["惩罚犯罪","保护人民","保证刑法正确实施","维护社会秩序"],correct:2,explanation:"【逐项解析】A错误，惩罚犯罪是刑法目的。B错误，保护人民是刑法目的。C正确，刑诉法目的是保证刑法正确实施。D错误，维护社会秩序是法律一般目的。"},
+            {question:"刑事诉讼法属于什么性质的法律？",options:["实体法","程序法","组织法","行政法"],correct:1,explanation:"【逐项解析】A错误，实体法规定权利义务。B正确，程序法规定诉讼程序，刑诉法规定怎么打刑事官司。C错误，组织法规定国家机关组织。D错误，刑诉法是诉讼法。"},
+            {question:"下列关于刑法与刑诉法关系的表述，正确的是？",options:["刑法是程序法，刑诉法是实体法","刑法是实体法，刑诉法是程序法","两者都是实体法","两者都是程序法"],correct:1,explanation:"【逐项解析】A错误，正好说反了。B正确，刑法规定犯罪与刑罚是实体法，刑诉法规定追诉犯罪程序是程序法。C错误，刑诉法是程序法。D错误，刑法是实体法。"},
+            {question:"刑诉法的任务是？",options:["惩罚所有犯罪分子","保证准确及时查明犯罪事实","禁止任何人自证其罪","保证法院独立审判"],correct:1,explanation:"【逐项解析】A错误，惩罚的是犯罪分子不是所有犯罪分子。B正确，这是刑诉法明确规定的任务之一。C错误，这是刑诉法原则不是任务。D错误，这是审判独立原则内容。"},
+            {question:"刑事诉讼活动主要解决的问题是？",options:["什么是犯罪","如何定罪量刑","犯罪的法律后果","犯罪的社会危害性"],correct:1,explanation:"【逐项解析】A错误，什么是犯罪由刑法规定。B正确，刑诉法通过程序解决如何定罪量刑的问题。C错误，犯罪的法律后果由刑法规定。D错误，这是判断犯罪的社会学标准。"}
+        ];
+
+        const quiz2Data = [
+            {question:"侦查权原则上由哪个机关行使？",options:["人民法院","人民检察院","公安机关","国家安全机关"],correct:2,explanation:"【逐项解析】A错误，法院行使审判权。B错误，检察院行使检察权。C正确，侦查权原则上由公安机关行使，但有例外。D错误，国家安全机关对危害国家安全的案件有侦查权。"},
+            {question:"下列哪个机关可以独立行使职权？",options:["公安机关","人民法院","行政机关","监察机关"],correct:1,explanation:"【逐项解析】A错误，公安机关是行政机关不能独立行使职权。B正确，法院依法独立行使审判权不受行政机关等干涉。C错误，行政机关不能独立行使职权。D错误，监察机关与本题无关。"},
+            {question:"未经人民法院依法判决，对任何人都不得确定有罪。这一原则的含义是？",options:["任何人都是无罪的","法院判决前不能称为罪犯","只有法院能认定犯罪","以上都对"],correct:1,explanation:"【逐项解析】A错误，不是说任何人都是无罪的。B正确，这是该原则的核心含义，法院判决前只能叫嫌疑人或被告人。C错误，该原则强调的是程序保障。D错误，只有B正确。"},
+            {question:"在侦查阶段，涉嫌犯罪的人称为？",options:["罪犯","被告人","犯罪嫌疑人","嫌疑人"],correct:2,explanation:"【逐项解析】A错误，罪犯是判决生效后的称呼。B错误，被告人是审判阶段的称呼。C正确，侦查阶段叫犯罪嫌疑人。D错误，法律术语是犯罪嫌疑人。"},
+            {question:"审判公开原则的例外不包括？",options:["涉及国家秘密的案件","涉及个人隐私的案件","涉及商业秘密的案件","审判时被告人不满18周岁的案件"],correct:2,explanation:"【逐项解析】A错误，国家秘密案件不公开审理。B错误，个人隐私案件不公开审理。C正确，商业秘密案件经申请可以不公开不是一律不公开。D错误，未成年人案件一律不公开审理。"}
+        ];
+
+        const quiz3Data = [
+            {question:"下列哪项不属于刑事诉讼中的专门机关？",options:["公安机关","人民检察院","人民法院","司法局"],correct:3,explanation:"【逐项解析】A错误，公安机关是专门机关负责侦查。B错误，检察院是专门机关负责检察。C错误，法院是专门机关负责审判。D正确，司法局是行政机关不是刑事诉讼专门机关。"},
+            {question:"刑事诉讼中的当事人不包括？",options:["被害人","犯罪嫌疑人","证人","被告人"],correct:2,explanation:"【逐项解析】A错误，被害人是当事人。B错误，犯罪嫌疑人是当事人。C正确，证人是诉讼参与人不是当事人。D错误，被告人是当事人。"},
+            {question:"关于证人，下列说法正确的是？",options:["证人需要回避","证人必须出庭","证人与案件有利害关系就不能作证","证人必须如实作证"],correct:3,explanation:"【逐项解析】A错误，证人不需要回避。B错误，证人在特殊情况下可以不出庭。C错误，证人与案件有利害关系仍可作证。D正确，证人有如实作证的义务。"},
+            {question:"下列哪种人不能作为证人？",options:["聋哑人","盲人","精神病人","生理上有缺陷不能辨别是非的人"],correct:3,explanation:"【逐项解析】A错误，聋哑人可以作证。B错误，盲人可以作证。C错误，精神病人如果能够辨别是非也可以作证。D正确，不能辨别是非不能正确表达的人不能作为证人。"},
+            {question:"刑事诉讼中的诉讼参与人包括？",options:["当事人","法定代理人","诉讼代理人","以上都是"],correct:3,explanation:"【逐项解析】A错误，只是部分参与人。B错误，只是部分参与人。C错误，只是部分参与人。D正确，诉讼参与人包括当事人、法定代理人、诉讼代理人、辩护人、证人、鉴定人等。"}
+        ];
+
+        const quiz4Data = [
+            {question:"中级人民法院管辖的第一审刑事案件不包括？",options:["危害国家安全的案件","恐怖活动案件","可能判处无期徒刑的案件","可能判处10年有期徒刑的案件"],correct:3,explanation:"【逐项解析】A错误，危害国家安全案件归中院管辖。B错误，恐怖活动案件归中院管辖。C错误，可能判无期案件归中院管辖。D正确，可能判10年有期案件一般由基层法院管辖。"},
+            {question:"告诉才处理的案件，由哪个机关直接受理？",options:["公安机关","人民检察院","人民法院","监察机关"],correct:2,explanation:"【逐项解析】A错误，公安不受理告诉才处理案件。B错误，检察院不受理此类案件。C正确，告诉才处理案件由法院直接受理（自诉案件）。D错误，监察机关不受理此类案件。"},
+            {question:"人民检察院直接受理的案件是？",options:["盗窃案","故意伤害案","司法工作人员职务犯罪案","抢劫案"],correct:2,explanation:"【逐项解析】A错误，盗窃案由公安管辖。B错误，故意伤害案由公安管辖。C正确，司法工作人员职务犯罪案由检察院直接立案侦查。D错误，抢劫案由公安管辖。"},
+            {question:"基层人民法院管辖的案件是？",options:["全省重大案件","全国重大案件","大多数普通案件","危害国家安全案件"],correct:2,explanation:"【逐项解析】A错误，全省重大案件归高院管辖。B错误，全国重大案件归最高院管辖。C正确，基层法院管辖大多数普通案件最忙碌。D错误，危害国家安全案件归中院管辖。"},
+            {question:"关于立案管辖，下列说法正确的是？",options:["所有案件都由公安机关管辖","所有案件都由检察院管辖","不同案件由不同机关管辖","所有案件都由法院管辖"],correct:2,explanation:"【逐项解析】A错误，有些案件由检察院或法院管辖。B错误，检察院只管辖部分案件。C正确，这就是立案管辖的核心。D错误，法院只管辖自诉案件。"}
+        ];
+
+        const quiz5Data = [
+            {question:"侦查人员应当回避的情形不包括？",options:["是本案当事人","是本案当事人的近亲属","与本案当事人是同学","担任过本案证人"],correct:2,explanation:"【逐项解析】A错误，是本案当事人应当回避。B错误，是近亲属应当回避。C正确，仅是同学关系不影响公正处理的不必须回避。D错误，担任过证人应当回避。"},
+            {question:"对侦查人员的回避作出决定前，侦查人员能否停止侦查？",options:["可以停止","不能停止","必须停止","由侦查人员自己决定"],correct:1,explanation:"【逐项解析】A错误，侦查具有紧迫性不能停止。B正确，对侦查人员的回避作出决定前侦查人员不能停止侦查活动。C错误，正好相反。D错误，法律有明确规定。"},
+            {question:"审判人员的回避由谁决定？",options:["审判长","院长","审判委员会","庭长"],correct:1,explanation:"【逐项解析】A错误，审判长不能决定审判人员的回避。B正确，审判人员的回避由院长决定。C错误，审判委员会决定的是院长的回避。D错误，庭长不能决定。"},
+            {question:"检察长的回避由谁决定？",options:["副检察长","检察委员会","上级检察院","同级人大"],correct:1,explanation:"【逐项解析】A错误，副检察长不能决定。B正确，检察长的回避由检察委员会决定。C错误，不需要上级检察院决定。D错误，与人大无关。"},
+            {question:"下列关于回避的说法，错误的是？",options:["当事人有权申请回避","办案人员可以自行回避","证人需要回避","回避决定作出前侦查不能停止"],correct:2,explanation:"【逐项解析】A错误，当事人确实有权申请回避。B错误，办案人员可以自行回避。C正确，证人不需要回避这是关键考点。D错误，侦查具有紧迫性不能停止。"}
+        ];
+
+        const quiz6Data = [
+            {question:"犯罪嫌疑人可以委托几名辩护人？",options:["1名","2名","1至2名","不超过3名"],correct:2,explanation:"【逐项解析】A错误，可以委托不止1名。B错误，可以只委托1名。C正确，可以委托1至2名辩护人。D错误，最多2名不是3名。"},
+            {question:"下列哪种情况应当通知法律援助机构指派律师辩护？",options:["可能判处5年有期徒刑","犯罪嫌疑人是成年人","犯罪嫌疑人是盲人","犯罪嫌疑人经济困难"],correct:2,explanation:"【逐项解析】A错误，可能判5年有期不属于必须法援的情形。B错误，成年人不属于必须法援的情形。C正确，盲人是应当法援的情形之一。D错误，经济困难可以申请法援不是应当法援。"},
+            {question:"辩护律师在侦查期间的权利不包括？",options:["提供法律帮助","代理申诉控告","申请变更强制措施","进行辩护"],correct:3,explanation:"【逐项解析】A错误，可以提供法律帮助。B错误，可以代理申诉控告。C错误，可以申请变更强制措施。D正确，侦查期间只能提供法律帮助不能进行辩护。"},
+            {question:"下列哪种人可以被委托为辩护人？",options:["正在被执行刑罚的人","依法被剥夺人身自由的人","无行为能力的人","犯罪嫌疑人的朋友"],correct:3,explanation:"【逐项解析】A错误，正在被执行刑罚的人不能当辩护人。B错误，被剥夺人身自由的人不能当辩护人。C错误，无行为能力的人不能当辩护人。D正确，亲友可以被委托为辩护人。"},
+            {question:"未成年人犯罪案件，是否应当通知法律援助？",options:["是，应当通知","否，不需要通知","由未成年人决定","由法院决定"],correct:0,explanation:"【逐项解析】A正确，未成年人是应当法援的情形之一。B错误，法律规定应当通知。C错误，不由未成年人决定。D错误，法律明确规定不由法院决定。"}
+        ];
+
+        const quiz7Data = [
+            {question:"取保候审的保证人必须是？",options:["有固定收入的人","与本案无牵连的人","有住房的人","党员"],correct:1,explanation:"【逐项解析】A错误，固定收入不是保证人的必须条件。B正确，保证人必须与本案无牵连。C错误，有住房不是必须条件。D错误，党员身份不是必须条件。"},
+            {question:"取保候审的最长期限是？",options:["3个月","6个月","12个月","18个月"],correct:2,explanation:"【逐项解析】A错误，3个月太短。B错误，6个月不是取保候审期限。C正确，取保候审最长不超过12个月。D错误，18个月超过法定期限。"},
+            {question:"刑事拘留的时间一般不超过？",options:["7日","14日","30日","37日"],correct:1,explanation:"【逐项解析】A错误，7日太短。B正确，一般情况拘留不超过14日。C错误，30日是流窜作案等特殊情况。D错误，37日是拘留+检察院批捕审查期限总和。"},
+            {question:"逮捕的决定机关是？",options:["公安机关","人民法院","人民检察院","人民法院或人民检察院"],correct:3,explanation:"【逐项解析】A错误，公安只能拘留不能决定逮捕。B错误，只是部分机关。C错误，只是部分机关。D正确，法院和检察院都可以决定逮捕。"},
+            {question:"下列哪种情况可以监视居住？",options:["患有严重疾病","生活不能自理","系怀孕妇女","以上都可以"],correct:3,explanation:"【逐项解析】A错误，只是部分情形。B错误，只是部分情形。C错误，只是部分情形。D正确，这三种情况都可以监视居住。"}
+        ];
+
+        const quiz8Data = [
+            {question:"讯问犯罪嫌疑人时，侦查人员不得少于几人？",options:["1人","2人","3人","4人"],correct:1,explanation:"【逐项解析】A错误，1人不能讯问。B正确，讯问时侦查人员不得少于2人。C错误，3人不是最低要求。D错误，4人不是最低要求。"},
+            {question:"询问证人应当？",options:["集体进行","个别进行","公开进行","在证人单位进行"],correct:1,explanation:"【逐项解析】A错误，不能集体询问防止串证。B正确，询问证人应当个别进行。C错误，询问证人不要求公开。D错误，地点可以在证人单位但不是必须。"},
+            {question:"侦查羁押期限一般不超过几个月？",options:["1个月","2个月","3个月","6个月"],correct:1,explanation:"【逐项解析】A错误，1个月太短。B正确，侦查羁押期限一般不超过2个月。C错误，3个月是特殊情况。D错误，6个月是复杂案件延长后。"},
+            {question:"搜查妇女身体，应当由谁进行？",options:["男侦查人员","女侦查人员","医生","任何侦查人员"],correct:1,explanation:"【逐项解析】A错误，男侦查人员不能搜查妇女身体。B正确，搜查妇女身体应当由女工作人员进行。C错误，医生可以进行身体检查但搜查必须由女工作人员。D错误，不是任何侦查人员都可以。"},
+            {question:"下列哪种侦查行为不需要经过批准？",options:["搜查","查封","扣押邮件","讯问犯罪嫌疑人"],correct:3,explanation:"【逐项解析】A错误，搜查需要批准。B错误，查封需要批准。C错误，扣押邮件需要批准。D正确，讯问犯罪嫌疑人是侦查机关的基本权利不需要额外批准。"}
+        ];
+
+        const quiz9Data = [
+            {question:"下列哪种证据属于物证？",options:["犯罪嫌疑人的供述","凶器","证人证言","鉴定意见"],correct:1,explanation:"【逐项解析】A错误，犯罪嫌疑人的供述是言词证据。B正确，凶器是物证属于实物证据。C错误，证人证言是言词证据。D错误，鉴定意见是鉴定人意见。"},
+            {question:"采用刑讯逼供收集的证据应当？",options:["可以采用","应当排除","补正后可采用","由法官决定"],correct:1,explanation:"【逐项解析】A错误，非法证据不能采用。B正确，采用刑讯逼供等非法方法收集的言词证据应当排除。C错误，言词证据不能补正。D错误，法律明确规定应当排除。"},
+            {question:"鉴定意见由谁作出？",options:["侦查人员","检察官","法官","专业鉴定人"],correct:3,explanation:"【逐项解析】A错误，侦查人员不是鉴定人。B错误，检察官不是鉴定人。C错误，法官不是鉴定人。D正确，鉴定意见由专业鉴定人作出。"},
+            {question:"电子数据属于哪种证据？",options:["物证","书证","视听资料、电子数据","鉴定意见"],correct:2,explanation:"【逐项解析】A错误，电子数据不是物证。B错误，电子数据不是书证。C正确，电子数据与视听资料并列为一类证据。D错误，电子数据不是鉴定意见。"},
+            {question:"下列哪种证据属于书证？",options:["凶器","合同","证人证言","视听资料"],correct:1,explanation:"【逐项解析】A错误，凶器是物证。B正确，合同是以文字记载的内容证明案件事实是书证。C错误，证人证言是言词证据。D错误，视听资料是单独一类证据。"}
+        ];
+
+        const quiz10Data = [
+            {question:"一审公诉案件的审限是？",options:["1个月内宣判","2个月内宣判，至迟不超过3个月","6个月内宣判","12个月内宣判"],correct:1,explanation:"【逐项解析】A错误，1个月太短。B正确，一审公诉案件应当在2个月内宣判，至迟不超过3个月。C错误，6个月是特殊情况延长后。D错误，12个月超过法定期限。"},
+            {question:"不服判决的上诉期限是？",options:["5日","7日","10日","15日"],correct:2,explanation:"【逐项解析】A错误，5日是不服裁定的上诉期限。B错误，7日不是上诉期限。C正确，不服判决的上诉期限为10日。D错误，15日不是上诉期限。"},
+            {question:"审判公开原则的含义是？",options:["所有案件都公开审理","大部分案件公开审理","当事人公开陈述","判决公开宣布"],correct:1,explanation:"【逐项解析】A错误，不是所有案件都公开审理。B正确，公开审理是原则但有例外。C错误，这不是审判公开的含义。D错误，这是判决公开的内容。"},
+            {question:"上诉不加刑原则的含义是？",options:["二审不能改判","被告人上诉的，二审不得加重刑罚","任何情况下二审都不能加重刑罚","检察院抗诉的，二审也不能加重刑罚"],correct:1,explanation:"【逐项解析】A错误，二审可以改判。B正确，被告人一方上诉的二审不得加重刑罚。C错误，检察院抗诉的可以加重刑罚。D错误，检察院抗诉的可以加重刑罚。"},
+            {question:"二审法院对上诉案件，应当怎样处理？",options:["一律开庭审理","一律书面审理","应当开庭审理","可以开庭审理也可以书面审理"],correct:3,explanation:"【逐项解析】A错误，不是一律开庭。B错误，不是一律书面审理。C错误，不是应当开庭。D正确，二审可以开庭审理也可以书面审理。"}
+        ];
+
+        const quiz11Data = [
+            {question:"死刑由哪个机关核准？",options:["高级人民法院","中级人民法院","最高人民法院","省级检察院"],correct:2,explanation:"【逐项解析】A错误，高院不能核准死刑。B错误，中院不能核准死刑。C正确，死刑由最高人民法院核准。D错误，检察院不参与死刑核准。"},
+            {question:"有期徒刑由哪个机关执行？",options:["公安机关","监狱","法院","检察院"],correct:1,explanation:"【逐项解析】A错误，公安机关执行拘役不执行有期徒刑。B正确，有期徒刑由监狱执行。C错误，法院负责审判不负责执行。D错误，检察院负责监督不负责执行。"},
+            {question:"拘役由哪个机关执行？",options:["监狱","公安机关","法院","社区矫正机构"],correct:1,explanation:"【逐项解析】A错误，监狱执行有期徒刑以上刑罚。B正确，拘役由公安机关执行。C错误，法院不负责执行。D错误，社区矫正机构执行缓刑假释。"},
+            {question:"下列哪种情况可以暂予监外执行？",options:["可能逃跑的罪犯","有严重疾病的罪犯","有社会危险性的罪犯","自伤自残的罪犯"],correct:1,explanation:"【逐项解析】A错误，可能逃跑的不能监外执行。B正确，有严重疾病需要保外就医的可以暂予监外执行。C错误，有社会危险性的不能监外执行。D错误，自伤自残的不能监外执行。"},
+            {question:"缓刑由哪个机关执行？",options:["监狱","公安机关","社区矫正机构","法院"],correct:2,explanation:"【逐项解析】A错误，监狱执行有期徒刑以上刑罚。B错误，公安机关执行拘役。C正确，缓刑由社区矫正机构执行。D错误，法院负责审判。"}
+        ];
+
+        const practiceData = [
+            {question:"刑事诉讼法的性质是？",options:["实体法","程序法","组织法","行政法"],correct:1,explanation:"【逐项解析】A错误，实体法是规定权利义务的法律。B正确，刑诉法是程序法规定诉讼程序。C错误，组织法规定机关组织。D错误，刑诉法是诉讼法。"},
+            {question:"公检法三机关的关系是？",options:["相互独立","分工负责、互相配合、互相制约","上下级关系","领导关系"],correct:1,explanation:"【逐项解析】A错误，不是简单相互独立。B正确，分工负责、互相配合、互相制约是公检法三机关的基本关系。C错误，不是上下级关系。D错误，不是领导关系。"},
+            {question:"犯罪嫌疑人在审判阶段的称呼是？",options:["嫌疑人","被告人","罪犯","被调查人"],correct:1,explanation:"【逐项解析】A错误，嫌疑人是侦查阶段的称呼。B正确，审判阶段叫被告人。C错误，罪犯是判决生效后的称呼。D错误，被调查人是监察调查阶段的称呼。"},
+            {question:"基层法院管辖的案件特点是？",options:["重大案件","复杂案件","大多数普通案件","全省案件"],correct:2,explanation:"【逐项解析】A错误，重大案件归上级法院。B错误，复杂案件可能归上级法院。C正确，基层法院管辖大多数普通案件最忙碌。D错误，全省案件归高院。"},
+            {question:"证人的特征是？",options:["可以代替","必须回避","不可代替","必须是成年人"],correct:2,explanation:"【逐项解析】A错误，证人不可代替。B错误，证人不需要回避。C正确，证人是案件亲历者不可代替。D错误，未成年人也可以作证。"},
+            {question:"辩护人的主要职责是？",options:["证明被告人有罪","维护被告人合法权益","协助侦查机关","代表检察院"],correct:1,explanation:"【逐项解析】A错误，辩护人不证明有罪。B正确，辩护人的职责是维护被告人合法权益。C错误，辩护人不协助侦查机关。D错误，辩护人不代表检察院。"},
+            {question:"取保候审的方式包括？",options:["只交保证金","只找保证人","交保证金或找保证人","必须同时交保证金和找保证人"],correct:2,explanation:"【逐项解析】A错误，不只有保证金方式。B错误，不只有保证人方式。C正确，取保候审可以交保证金或找保证人二选一。D错误，不需要同时具备。"},
+            {question:"监视居住的期限最长是？",options:["3个月","6个月","12个月","18个月"],correct:1,explanation:"【逐项解析】A错误，3个月太短。B正确，监视居住最长不超过6个月。C错误，12个月是取保候审期限。D错误，18个月超过法定期限。"},
+            {question:"逮捕的批准机关是？",options:["公安机关","法院","检察院","监察机关"],correct:2,explanation:"【逐项解析】A错误，公安机关提请批捕不批准。B错误，法院决定逮捕不批准逮捕。C正确，检察院批准逮捕。D错误，监察机关不参与批捕。"},
+            {question:"物证的特征是？",options:["以文字内容证明案件事实","以实物形态证明案件事实","以人的陈述证明案件事实","以专业意见证明案件事实"],correct:1,explanation:"【逐项解析】A错误，这是书证的特征。B正确，物证是以实物形态证明案件事实。C错误，这是言词证据的特征。D错误，这是鉴定意见的特征。"},
+            {question:"下列哪种情形可以暂予监外执行？",options:["累犯","可能危害社会的罪犯","怀孕的妇女","暴力犯罪分子"],correct:2,explanation:"【逐项解析】A错误，累犯一般不能监外执行。B错误，可能危害社会的不能监外执行。C正确，怀孕或者正在哺乳自己婴儿的妇女可以暂予监外执行。D错误，暴力犯罪分子一般不能监外执行。"},
+            {question:"关于审判公开，下列说法正确的是？",options:["所有案件都公开审理","涉及商业秘密的案件一律不公开","不公开审理的案件也要公开宣判","未成年人案件可以公开审理"],correct:2,explanation:"【逐项解析】A错误，不是所有案件都公开。B错误，商业秘密案件经申请可以不公开不是一律不公开。C正确，不公开审理的案件判决也应当公开宣告。D错误，未成年人案件不公开审理。"},
+            {question:"关于管辖权异议，下列说法正确的是？",options:["当事人不能提出管辖权异议","管辖权异议只能在开庭前提出","法院对管辖权异议的裁定可以上诉","管辖权异议由检察院处理"],correct:2,explanation:"【逐项解析】A错误，当事人可以提出管辖权异议。B错误，管辖权异议可以在法庭辩论终结前提出。C正确，对管辖权异议的裁定可以上诉。D错误，管辖权异议由法院处理。"},
+            {question:"关于辨认，下列说法正确的是？",options:["辨认人可以一人","辨认必须公开进行","辨认前可以让辨认人见到被辨认人","辨认应当个别进行"],correct:3,explanation:"【逐项解析】A错误，辨认人不得少于二人。B错误，辨认不一定公开进行。C错误，辨认前不能让辨认人见到被辨认人。D正确，辨认应当个别进行。"},
+            {question:"关于证据的审查判断，下列说法正确的是？",options:["所有证据都需要当庭质证","书面证据不需要质证","非法证据也可以采用","证据必须查证属实才能作为定案根据"],correct:3,explanation:"【逐项解析】A错误，不是所有证据都必须当庭质证。B错误，书面证据也需要质证。C错误，非法证据不能采用。D正确，证据必须经过查证属实才能作为定案的根据。"},
+            {question:"关于自诉案件，下列说法正确的是？",options:["自诉案件不能调解","自诉案件可以反诉","自诉人不能撤回自诉","自诉案件不能和解"],correct:1,explanation:"【逐项解析】A错误，自诉案件可以调解。B正确，自诉案件的被告人在诉讼过程中可以对自诉人提起反诉。C错误，自诉人可以撤回自诉。D错误，自诉案件可以和解。"},
+            {question:"关于简易程序，下列说法正确的是？",options:["简易程序可以转为普通程序","简易程序必须开庭审理","简易程序不适用于未成年人案件","简易程序的判决可以当庭宣判"],correct:0,explanation:"【逐项解析】A正确，人民法院在审理过程中发现不宜适用简易程序的应当转为普通程序审理。B错误，简易程序一般开庭审理但可以简化程序。C错误，简易程序可以适用于未成年人案件。D错误，简易程序不一定当庭宣判。"},
+            {question:"关于减刑、假释，下列说法正确的是？",options:["减刑、假释由监狱决定","减刑、假释由法院裁定","减刑、假释不需要公示","减刑、假释可以撤销"],correct:1,explanation:"【逐项解析】A错误，监狱只能提出减刑、假释建议。B正确，减刑、假释由人民法院裁定。C错误，减刑、假释应当公示。D错误，减刑不能撤销假释可以撤销。"},
+            {question:"关于未成年人刑事案件，下列说法正确的是？",options:["未成年人犯罪案件一律不公开审理","未成年人犯罪记录应当封存","未成年人犯罪不适用死刑","以上都对"],correct:3,explanation:"【逐项解析】A错误，是审判时不满18周岁的不公开不是一律不公开。B错误，犯罪时不满18周岁被判处5年有期徒刑以下刑罚的应当封存。C错误，犯罪时不满18周岁的人不适用死刑。D正确，这些都是未成年人刑事案件的特殊规定。"},
+            {question:"死刑执行的方法包括？",options:["枪决","注射","枪决或注射","电椅"],correct:2,explanation:"【逐项解析】A错误，不只是枪决。B错误，不只是注射。C正确，死刑采用枪决或者注射等方法执行。D错误，中国不采用电椅。"},
+            {question:"无期徒刑的执行机关是？",options:["公安机关","监狱","法院","检察院"],correct:1,explanation:"【逐项解析】A错误，公安机关执行拘役。B正确，无期徒刑由监狱执行。C错误，法院负责审判。D错误，检察院负责监督。"},
+            {question:"下列哪种人不能担任辩护人？",options:["律师","亲友","正在被执行刑罚的人","监护人"],correct:2,explanation:"【逐项解析】A错误，律师可以担任辩护人。B错误，亲友可以担任辩护人。C正确，正在被执行刑罚的人不能担任辩护人。D错误，监护人可以担任辩护人。"},
+            {question:"关于回避，下列说法正确的是？",options:["只有当事人可以申请回避","办案人员不能自行回避","证人不适用回避制度","回避决定作出后立即生效"],correct:2,explanation:"【逐项解析】A错误，当事人及其法定代理人都可以申请。B错误，办案人员可以自行回避。C正确，证人不适用回避制度。D错误，回避决定可能被驳回。"},
+            {question:"下列哪种强制措施最严厉？",options:["拘传","取保候审","监视居住","逮捕"],correct:3,explanation:"【逐项解析】A错误，拘传是最轻的。B错误，取保候审较轻。C错误，监视居住较重。D正确，逮捕是最严厉的强制措施长期剥夺人身自由。"},
+            {question:"下列情形中，应当指定辩护的是？",options:["被告人经济困难","被告人是盲人","案件重大复杂","被告人是外国人"],correct:1,explanation:"【逐项解析】A错误，经济困难可以申请法援不是应当指定。B正确，被告人是盲人应当通知法律援助机构指派律师辩护。C错误，案件重大复杂不是应当指定辩护的情形。D错误，外国人不是应当指定辩护的情形。"}
+        ];
+
+        function renderQuiz(containerId, quizData, quizNum) {
+            const container = document.getElementById(containerId);
+            if (!container || !quizData) return;
+            
+            let html = '';
+            quizData.forEach((q, i) => {
+                const num = quizNum ? (quizNum + '-' + (i + 1)) : (i + 1);
+                html += '<div class="quiz-card">';
+                html += '<div class="question"><span class="question-num">' + num + '</span>' + q.question + '</div>';
+                html += '<div class="options">';
+                q.options.forEach((opt, j) => {
+                    html += '<button class="option-btn" onclick="checkQuizAnswer(this, ' + j + ', ' + q.correct + ', ' + i + ', \'' + containerId + '\')">';
+                    html += '<span class="option-letter">' + String.fromCharCode(65 + j) + '</span>' + opt;
+                    html += '</button>';
+                });
+                html += '</div>';
+                html += '<div class="explanation" id="exp-' + containerId + '-' + i + '">';
+                html += '<div class="result" id="result-' + containerId + '-' + i + '"></div>';
+                html += '<p style="white-space: pre-line;">' + q.explanation + '</p>';
+                html += '</div>';
+                html += '</div>';
+            });
+            container.innerHTML = html;
+        }
+
+        function checkQuizAnswer(btn, selected, correct, index, containerId) {
+            const card = btn.parentElement;
+            const buttons = card.querySelectorAll('.option-btn');
+            const explanation = document.getElementById('exp-' + containerId + '-' + index);
+            const result = document.getElementById('result-' + containerId + '-' + index);
+            
+            buttons.forEach(b => b.classList.add('disabled'));
+            
+            if (selected === correct) {
+                btn.classList.add('correct');
+                result.className = 'result correct';
+                result.textContent = '✓ 正确';
+                totalCorrect++;
+            } else {
+                btn.classList.add('wrong');
+                buttons[correct].classList.add('correct');
+                result.className = 'result wrong';
+                result.textContent = '✗ 错误';
+            }
+            
+            explanation.style.display = 'block';
+            totalAnswered++;
+            updateProgress();
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            renderQuiz('quiz-module1', quiz1Data, '1');
+            renderQuiz('quiz-module2', quiz2Data, '2');
+            renderQuiz('quiz-module3', quiz3Data, '3');
+            renderQuiz('quiz-module4', quiz4Data, '4');
+            renderQuiz('quiz-module5', quiz5Data, '5');
+            renderQuiz('quiz-module6', quiz6Data, '6');
+            renderQuiz('quiz-module7', quiz7Data, '7');
+            renderQuiz('quiz-module8', quiz8Data, '8');
+            renderQuiz('quiz-module9', quiz9Data, '9');
+            renderQuiz('quiz-module10', quiz10Data, '10');
+            renderQuiz('quiz-module11', quiz11Data, '11');
+            renderQuiz('quiz-practice', practiceData, null);
+        });
+    </script>
+</body>
+</html>
