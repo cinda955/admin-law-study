@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>行政诉讼法学习 - 辅警备考</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: linear-gradient(135deg, #3498db 0%, #2980b9 100%); min-height: 100vh; color: #333; }
+        .progress-bar { position: fixed; top: 0; left: 0; width: 100%; height: 4px; background: rgba(255,255,255,0.1); z-index: 1000; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #3498db, #5dade2); width: 0%; transition: width 0.3s ease; }
+        .top-nav { position: fixed; top: 4px; left: 0; right: 0; background: rgba(52, 152, 219, 0.95); backdrop-filter: blur(10px); padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 999; border-bottom: 1px solid rgba(255,255,255,0.2); }
+        .logo { color: #fff; font-size: 18px; font-weight: bold; display: flex; align-items: center; gap: 8px; }
+        .score-display { background: rgba(255,255,255,0.2); color: #fff; padding: 8px 16px; border-radius: 20px; font-size: 14px; }
+        .sidebar { position: fixed; left: 0; top: 50px; width: 260px; height: calc(100vh - 50px); background: rgba(255,255,255,0.95); overflow-y: auto; padding: 20px 0; box-shadow: 2px 0 10px rgba(0,0,0,0.1); z-index: 998; }
+        .sidebar-title { color: #2c3e50; padding: 0 20px 15px; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid #eee; margin-bottom: 15px; }
+        .nav-item { padding: 12px 20px; color: #666; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 10px; font-size: 14px; border-left: 3px solid transparent; text-decoration: none; }
+        .nav-item:hover { background: rgba(52, 152, 219, 0.1); color: #3498db; }
+        .nav-item.active { background: rgba(52, 152, 219, 0.15); color: #3498db; border-left-color: #3498db; font-weight: bold; }
+        .main-content { margin-left: 260px; padding: 70px 30px 30px; max-width: 900px; }
+        .section-header { text-align: center; margin-bottom: 40px; }
+        .section-header h1 { font-size: 42px; color: #fff; margin-bottom: 10px; text-shadow: 0 0 30px rgba(0,0,0,0.2); }
+        .section-header p { color: rgba(255,255,255,0.8); font-size: 16px; }
+        .knowledge-card { background: #fff; border-radius: 20px; padding: 30px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); scroll-margin-top: 100px; }
+        .knowledge-card h2 { font-size: 24px; color: #333; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; border-bottom: 2px solid #3498db; padding-bottom: 15px; }
+        .knowledge-card h3 { font-size: 18px; color: #555; margin: 20px 0 10px; padding-left: 15px; border-left: 4px solid #3498db; }
+        .knowledge-content p { line-height: 1.8; color: #555; margin-bottom: 15px; }
+        .highlight-red { color: #e74c3c; font-weight: bold; background: rgba(231, 76, 60, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .highlight-blue { color: #3498db; font-weight: bold; background: rgba(52, 152, 219, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .highlight-green { color: #27ae60; font-weight: bold; background: rgba(39, 174, 96, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .highlight-orange { color: #e67e22; font-weight: bold; background: rgba(230, 126, 34, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .highlight-purple { color: #9b59b6; font-weight: bold; background: rgba(155, 89, 182, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .example { background: linear-gradient(135deg, #e3f2fd, #bbdefb); border-left: 4px solid #2196f3; padding: 15px 20px; border-radius: 0 10px 10px 0; margin: 15px 0; }
+        .example p { color: #1565c0; margin: 8px 0; }
+        .memory-tip { background: linear-gradient(135deg, #e8f5e9, #c8e6c9); border-left: 4px solid #4caf50; padding: 15px 20px; border-radius: 0 10px 10px 0; margin: 15px 0; }
+        .memory-tip p { color: #2e7d32; margin: 0; }
+        .warning { background: linear-gradient(135deg, #ffebee, #ffcdd2); border-left: 4px solid #f44336; padding: 15px 20px; border-radius: 0 10px 10px 0; margin: 15px 0; }
+        .warning p { color: #c62828; margin: 0; }
+        .quiz-container { margin-top: 30px; }
+        .quiz-card { background: #f8f9fa; border-radius: 15px; padding: 20px; margin-bottom: 20px; border: 1px solid #e9ecef; }
+        .question { font-size: 16px; color: #333; margin-bottom: 15px; font-weight: 500; }
+        .question-num { display: inline-block; background: #3498db; color: #fff; width: 28px; height: 28px; border-radius: 50%; text-align: center; line-height: 28px; margin-right: 10px; font-size: 14px; }
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .option-btn { padding: 12px 20px; background: #fff; border: 2px solid #e9ecef; border-radius: 10px; cursor: pointer; text-align: left; font-size: 15px; color: #555; transition: all 0.3s ease; }
+        .option-btn:hover { border-color: #3498db; background: rgba(52, 152, 219, 0.05); }
+        .option-letter { display: inline-block; width: 26px; height: 26px; background: #e9ecef; border-radius: 50%; text-align: center; line-height: 26px; margin-right: 10px; font-weight: bold; color: #3498db; }
+        .option-btn.correct { background: #d4edda; border-color: #28a745; }
+        .option-btn.correct .option-letter { background: #28a745; color: #fff; }
+        .option-btn.wrong { background: #f8d7da; border-color: #dc3545; }
+        .option-btn.wrong .option-letter { background: #dc3545; color: #fff; }
+        .option-btn.disabled { cursor: not-allowed; opacity: 0.7; }
+        .explanation { background: linear-gradient(135deg, #fff8e1, #ffecb3); border-radius: 10px; padding: 15px 20px; margin-top: 15px; display: none; line-height: 1.8; border: 1px solid #ffc107; }
+        .explanation .result { font-size: 18px; font-weight: bold; margin-bottom: 10px; }
+        .explanation .result.correct { color: #28a745; }
+        .explanation .result.wrong { color: #dc3545; }
+        .framework-section { background: #fff; border-radius: 20px; padding: 30px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); scroll-margin-top: 100px; }
+        .framework-section h2 { font-size: 28px; color: #333; margin-bottom: 25px; text-align: center; border-bottom: 2px solid #3498db; padding-bottom: 15px; }
+        .framework-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .framework-card { background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-radius: 15px; padding: 20px; border-left: 4px solid #3498db; }
+        .framework-card h3 { font-size: 18px; color: #3498db; margin-bottom: 10px; }
+        .framework-card p { color: #666; font-size: 14px; margin: 5px 0; line-height: 1.6; }
+        .practice-section { background: #fff; border-radius: 20px; padding: 30px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); scroll-margin-top: 100px; }
+        .practice-section h2 { font-size: 28px; color: #333; margin-bottom: 25px; text-align: center; border-bottom: 2px solid #2980b9; padding-bottom: 15px; }
+        .table-section { background: #f8f9fa; border-radius: 10px; padding: 20px; margin: 15px 0; overflow-x: auto; }
+        .table-section table { width: 100%; border-collapse: collapse; }
+        .table-section th, .table-section td { padding: 12px 15px; text-align: left; border: 1px solid #ddd; }
+        .table-section th { background: #3498db; color: #fff; }
+        .table-section tr:nth-child(even) { background: #fff; }
+        @media (max-width: 768px) { .sidebar { width: 100%; height: auto; position: relative; margin-top: 50px; } .main-content { margin-left: 0; padding-top: 80px; } }
+        .close-nav-btn { background: rgba(255,255,255,0.2); border: none; color: #fff; font-size: 18px; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.3s; }
+        .close-nav-btn:hover { background: rgba(255,255,255,0.3); }
+    </style>
+</head>
+<body>
+    <div class="progress-bar"><div class="progress-fill" id="mainProgress"></div></div>
+    <nav class="top-nav" id="topNav">
+        <div class="logo">⚖️ 行政诉讼法基础知识学习</div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <div class="score-display" id="totalScore">已答: 0/0</div>
+            <button class="close-nav-btn" onclick="closeTopNav()">✕</button>
+        </div>
+    </nav>
+    <aside class="sidebar">
+        <div class="sidebar-title">📖 目录导航</div>
+        <a href="#module1" class="nav-item active" onclick="scrollToSection(this, event)">📜 模块1: 行政诉讼概念</a>
+        <a href="#module2" class="nav-item" onclick="scrollToSection(this, event)">📋 模块2: 基本原则</a>
+        <a href="#module3" class="nav-item" onclick="scrollToSection(this, event)">🎯 模块3: 复议与诉讼区别</a>
+        <a href="#module4" class="nav-item" onclick="scrollToSection(this, event)">📄 模块4: 受案范围</a>
+        <a href="#module5" class="nav-item" onclick="scrollToSection(this, event)">🏛️ 模块5: 级别管辖</a>
+        <a href="#module6" class="nav-item" onclick="scrollToSection(this, event)">🌍 模块6: 地域管辖</a>
+        <a href="#module7" class="nav-item" onclick="scrollToSection(this, event)">👥 模块7: 诉讼参加人</a>
+        <a href="#module8" class="nav-item" onclick="scrollToSection(this, event)">⚖️ 模块8: 被告确定规则</a>
+        <a href="#module9" class="nav-item" onclick="scrollToSection(this, event)">⏰ 模块9: 起诉期限与举证</a>
+        <a href="#module10" class="nav-item" onclick="scrollToSection(this, event)">📝 模块10: 审理与判决</a>
+        <a href="#framework" class="nav-item" onclick="scrollToSection(this, event)">📋 知识框架总览</a>
+        <a href="#practice" class="nav-item" onclick="scrollToSection(this, event)">📝 练习专区</a>
+    </aside>
+    <main class="main-content">
+        <div class="section-header">
+            <h1>⚖️ 行政诉讼法基础知识学习</h1>
+            <p>民告官到法院，零基础小白也能轻松上手！</p>
+        </div>
+
+        <section id="module1" class="knowledge-card">
+            <h2>📜 模块1: 行政诉讼概念</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">核心概念</span>：行政诉讼就是"民告官"，但是要到法院去告！</p>
+                
+                <h3>📌 一、什么是行政诉讼？</h3>
+                <p><span class="highlight-blue">行政诉讼 = 民告官到法院</span></p>
+                <p>• <span class="highlight-red">民（公民、法人）</span>告<span class="highlight-red">官（行政机关）</span></p>
+                <p>• 告到<span class="highlight-red">人民法院</span>（不是复议机关）</p>
+                <p>• 法院审查行政行为的<span class="highlight-red">合法性</span></p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三被公安局拘留10天，张三不服，<span class="highlight-red">可以到法院起诉公安局</span>！为什么这样举例？因为行政诉讼就是民告官到法院，和行政复议的区别就是：一个告到机关，一个告到法院！</p></div>
+                
+                <h3>📌 二、行政诉讼的特点</h3>
+                <p>• <span class="highlight-blue">被告恒定</span>：只能是行政机关，老百姓永远是原告</p>
+                <p>• <span class="highlight-blue">审查单一</span>：只审查合法性，不审查合理性（这是和复议的重要区别！）</p>
+                <p>• <span class="highlight-blue">两审终审</span>：可以上诉，不像复议那样一锤定音</p>
+                <p>• <span class="highlight-blue">不得调解</span>：审理行政案件不适用调解（但行政赔偿、行政补偿和自由裁量权案件除外）</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三被罚款2000元，张三到法院起诉公安。法院怎么判？<span class="highlight-red">只审查罚款合不合法</span>，不审查罚款2000元重不重（合理性）！为什么这样举例？因为考试常考"诉讼只查合法性，复议既查合法性又查合理性"！</p></div>
+                
+                <p class="memory-tip"><strong><span class="highlight-purple">记忆口诀：</span></strong>行政诉讼：民告官到法院，只查合法不查合理，两审终审不得调解！口诀：去法院告！法院只管合不合法，不管处罚重不重！</p>
+                <p class="warning">⚠️ <strong>易错点：</strong>行政复议<span class="highlight-red">既查合法性又查合理性</span>，行政诉讼<span class="highlight-red">只查合法性</span>！这是两者的核心区别！</p>
+            </div>
+            <div id="quiz-module1" class="quiz-container"></div>
+        </section>
+        
+        <section id="module2" class="knowledge-card">
+            <h2>📋 模块2: 基本原则</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">核心概念</span>：行政诉讼的基本原则要记牢！</p>
+                
+                <h3>📌 一、独立审判原则</h3>
+                <p><span class="highlight-blue">人民法院依法独立行使审判权</span></p>
+                <p>• 法院独立，不受行政机关、社会团体和个人干涉</p>
+                <p>• 检察院、法院、监察委员会都是独立行使职权</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三告公安局，法院怎么判？<span class="highlight-red">法院自己说了算</span>，县长、市长都不能干涉！为什么这样举例？因为宪法规定法院独立审判，不受行政机关干涉！</p></div>
+                
+                <h3>📌 二、合法性审查原则（重点！）</h3>
+                <p><span class="highlight-red">行政诉讼只审查合法性，不审查合理性！</span></p>
+                <p>• 合法 = 有没有法律依据、程序对不对</p>
+                <p>• 合理 = 处罚轻重是否适当（诉讼不管这个）</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三违章停车被罚款200元，张三嫌贵告到法院。法院会不会说"罚款200太贵了，改成50"？<span class="highlight-red">不会！</span>法院只审查罚款有没有法律依据、程序对不对，不会管200元是重还是轻！为什么这样举例？因为考试必考"诉讼只查合法性"！</p></div>
+                
+                <h3>📌 三、当事人地位平等原则</h3>
+                <p><span class="highlight-blue">原被告法律地位平等！</span></p>
+                <p>• 进入法院后，老百姓和行政机关<span class="highlight-red">平等</span></p>
+                <p>• 行政复议不一样，复议机关是上级，和被申请人不太平等</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三告公安局，在法院开庭时，<span class="highlight-red">张三和公安局局长平等对话</span>，公安局不能以"我是官"压人！为什么这样举例？因为复议是官管官，法院是民告官要平等！</p></div>
+                
+                <h3>📌 四、辩论原则</h3>
+                <p><span class="highlight-blue">当事人可以辩论！</span></p>
+                <p>• 原告、被告可以当庭辩论</p>
+                <p>• 复议没有辩论程序（书面审查为主）</p>
+                <div class="example"><p><strong>🌰 举例：</strong>法院开庭时，张三说"我没违法"，公安局说"你有视频证据"，双方<span class="highlight-red">当庭辩论</span>！复议没有这个环节！为什么这样举例？因为诉讼和复议的审理方式不同！</p></div>
+                
+                <p class="memory-tip"><strong><span class="highlight-purple">记忆口诀：</span></strong>基本原则：独立审判、合法审查（只查合法）、地位平等、辩论原则！口诀：法院说了算，只管合不合法！老百姓和官在法院面前平等！</p>
+                <p class="warning">⚠️ <strong>易错点：</strong>诉讼只查合法性，不查合理性！复议既查合法又查合理！</p>
+            </div>
+            <div id="quiz-module2" class="quiz-container"></div>
+        </section>
+        
+        <section id="module3" class="knowledge-card">
+            <h2>🎯 模块3: 复议与诉讼的区别</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">核心概念</span>：复议和诉讼都是民告官，但有大区别！</p>
+                
+                <h3>📌 一、受理机关不同（最本质区别！）</h3>
+                <p>• <span class="highlight-blue">行政复议</span>：受理机关是<span class="highlight-red">行政机关</span>（上级机关）</p>
+                <p>• <span class="highlight-blue">行政诉讼</span>：受理机关是<span class="highlight-red">人民法院</span>（法院）</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三被县公安局罚款，张三不服。找县政府申请复议（行政复议），还是找法院起诉（行政诉讼）？<span class="highlight-red">都可以！</span>找县政府是复议，找法院是诉讼！为什么这样举例？因为这是两条不同的告官途径！</p></div>
+                
+                <h3>📌 二、审查强度不同</h3>
+                <p>• <span class="highlight-blue">行政复议</span>：<span class="highlight-red">既审合法性又审合理性</span></p>
+                <p>• <span class="highlight-blue">行政诉讼</span>：<span class="highlight-red">只审合法性</span></p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三被罚款2000元，复议机关可以说"罚款太重了，改成500"（审合理性）！但法院只能说"罚款有依据，合法"或者"罚款违法，撤销"（只审合法性）！为什么这样举例？因为复议是官管官可以改，诉讼是法院只管合法不合法！</p></div>
+                
+                <h3>📌 三、程序衔接（重要！）</h3>
+                <p>• <span class="highlight-blue">复议前置</span>：有些案件必须先复议，不能直接诉讼</p>
+                <p>• <span class="highlight-blue">复议后诉讼</span>：复议不服可以诉讼</p>
+                <p>• <span class="highlight-blue">诉讼后不复议</span>：诉讼是终局的，不能再复议！</p>
+                <div class="example"><p><strong>🌰 举例：</strong>自然资源确权案件，必须先申请行政复议，不服才能到法院诉讼！为什么这样举例？因为涉及专业性强的领域要先复议！</p></div>
+                
+                <h3>📌 四、复议前置的情形</h3>
+                <p>• 自然资源确权</p>
+                <p>• 纳税争议</p>
+                <p>• 工伤保险待遇</p>
+                <p>• 治安拘留（警告、罚款）</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三被行政拘留15天，他能不能直接去法院告？<span class="highlight-red">不能！</span>必须先申请行政复议，不服才能诉讼。为什么这样举例？因为考试常考"复议前置"！</p></div>
+                
+                <p class="memory-tip"><strong><span class="highlight-purple">记忆口诀：</span></strong>复议与诉讼：复议到机关告，诉讼到法院告；复议双重审查，诉讼单一审查；诉讼终局不能再复议！口诀：找政府复议，找法院打官司，完全两码事！</p>
+                <p class="warning">⚠️ <strong>易错点：</strong>诉讼是终局的，诉讼之后不能再复议！因为法院独立行使审判权，不受行政机关干涉！</p>
+            </div>
+            <div id="quiz-module3" class="quiz-container"></div>
+        </section>
+        
+        <section id="module4" class="knowledge-card">
+            <h2>📄 模块4: 受案范围</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">核心概念</span>：哪些行政行为可以告？考试必考！</p>
+                
+                <h3>📌 一、可以诉讼的范围（和复议基本相同）</h3>
+                <p>以下行政行为可以提起行政诉讼：</p>
+                <p>• <span class="highlight-blue">行政处罚</span>：罚款、拘留、警告等</p>
+                <p>• <span class="highlight-blue">行政强制</span>：查封、扣押、冻结等</p>
+                <p>• <span class="highlight-blue">行政许可</span>：颁发许可证、执照等</p>
+                <p>• <span class="highlight-blue">行政确认</span>：确认土地、房屋权属等</p>
+                <p>• <span class="highlight-blue">行政征收</span>：征收税款、土地等</p>
+                <p>• <span class="highlight-blue">行政给付</span>：发放最低生活保障费等</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三被公安局罚款5000元，<span class="highlight-red">可以到法院起诉</span>！张三的房屋被城管强制拆除，<span class="highlight-red">可以到法院起诉</span>！为什么这样举例？因为这些都属于可诉的行政行为！</p></div>
+                
+                <h3>📌 二、不能诉讼的范围（重要！）</h3>
+                <p>以下行为<span class="highlight-red">不能</span>提起行政诉讼：</p>
+                <p>• <span class="highlight-blue">国防外交行为</span></p>
+                <p>• <span class="highlight-blue">抽象行政行为</span>（行政法规、规章、规范性文件）</p>
+                <p>• <span class="highlight-blue">内部行政行为</span>（奖惩、任免公务员）</p>
+                <p>• <span class="highlight-blue">行政机关最终裁决</span></p>
+                <p>• <span class="highlight-blue">刑事司法行为</span>（取保候审、逮捕等）</p>
+                <p>• <span class="highlight-blue">行政调解、行政指导</span></p>
+                <p>• <span class="highlight-blue">驳回重复申请的行政行为</span></p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三告国务院？<span class="highlight-red">不能告！</span>国务院的决定是最终裁决，不能告！乡政府发布的"征地补偿标准"？<span class="highlight-red">不能单独告！</span>这是抽象行政行为，只能附带审查！为什么这样举例？因为考试常考"不能告的情形"！</p></div>
+                
+                <h3>📌 三、和复议范围的细微差别</h3>
+                <p>诉讼范围比复议范围稍窄：</p>
+                <p>• <span class="highlight-blue">工伤认定</span>：可以复议，但不能诉讼</p>
+                <p>• <span class="highlight-blue">政府信息公开</span>：可以复议，但不予公开的信息不能诉讼</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三申请工伤认定，被人社局驳回，张三<span class="highlight-red">可以申请行政复议</span>，但<span class="highlight-red">不能到法院诉讼</span>！为什么这样举例？因为考试会区分复议和诉讼的范围差异！</p></div>
+                
+                <p class="memory-tip"><strong><span class="highlight-purple">记忆口诀：</span></strong>可诉范围：处罚强制许可确认征收给付！不可诉：国防抽象内部刑事调解指导！口诀：罚款拘留能告，但红头文件和内部任命不能单独告！</p>
+                <p class="warning">⚠️ <strong>易错点：</strong>抽象行政行为不能单独诉讼，但可以<span class="highlight-red">附带审查</span>！就是说起诉具体行政行为时，可以要求法院审查附带的相关规范性文件！</p>
+            </div>
+            <div id="quiz-module4" class="quiz-container"></div>
+        </section>
+        
+        <section id="module5" class="knowledge-card">
+            <h2>🏛️ 模块5: 级别管辖</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">核心概念</span>：告哪个法院？基层还是中级？考试必考！</p>
+                
+                <h3>📌 一、级别管辖概述</h3>
+                <p>• <span class="highlight-blue">基层人民法院</span>：管辖大多数案件（最忙！）</p>
+                <p>• <span class="highlight-blue">中级人民法院</span>：管辖特殊案件（重点记忆！）</p>
+                <p>• <span class="highlight-blue">高级人民法院</span>：管辖省内重大复杂案件</p>
+                <p>• <span class="highlight-blue">最高人民法院</span>：管辖全国重大复杂案件</p>
+                <div class="example"><p><strong>🌰 举例：</strong>告派出所、告县公安局、告市政府——哪个到基层告？<span class="highlight-red">派出所和县公安局到基层告！</span>市政府到中级告！为什么这样举例？因为考试常考"告谁去哪个法院"！</p></div>
+                
+                <h3>📌 二、中级人民法院管辖范围（必须背！）</h3>
+                <p><span class="highlight-red">记住三种情形：</span></p>
+                <p>1. <span class="highlight-blue">对国务院部门</span>或者<span class="highlight-blue">县级以上人民政府</span>作出的行政行为提起的诉讼</p>
+                <p>2. <span class="highlight-blue">海关处理的案件</span>（不管什么级别）</p>
+                <p>3. 本辖区内<span class="highlight-blue">重大复杂的案件</span>、<span class="highlight-blue">重大影响案件</span>、<span class="highlight-blue">共同诉讼案件</span>、<span class="highlight-blue">涉港澳台案件</span></p>
+                <div class="example"><p><strong>🌰 举例：</strong>告公安部？<span class="highlight-red">中级法院！</span>因为公安部是国务院部门！告广东省公安厅？<span class="highlight-red">基层法院！</span>因为省公安厅不是国务院部门！告深圳市政府？<span class="highlight-red">中级法院！</span>因为市政府是县级以上政府！为什么这样举例？因为考试常考"中级法院管辖范围"！</p></div>
+                
+                <h3>📌 三、简单记忆法</h3>
+                <p>• <span class="highlight-red">乡政府</span> → 基层法院</p>
+                <p>• <span class="highlight-red">县政府</span> → 基层法院</p>
+                <p>• <span class="highlight-red">市政府</span> → 中级法院</p>
+                <p>• <span class="highlight-red">省政府</span> → 中级法院</p>
+                <p>• <span class="highlight-red">公安部</span> → 中级法院</p>
+                <p>• <span class="highlight-red">省公安厅</span> → 基层法院</p>
+                <p>• <span class="highlight-red">海关（不分级别）</span> → 中级法院</p>
+                <div class="example"><p><strong>🌰 举例：</strong>记住口诀：<span class="highlight-red">"除乡政府外，所有政府都中级"</span>！部门和海关特殊记：国务院部门+海关=中级，省级部门=基层！为什么这样举例？方便记忆！</p></div>
+                
+                <p class="memory-tip"><strong><span class="highlight-purple">记忆口诀：</span></strong>级别管辖：基层管大多数，中级管特殊！口诀：告部委和县级以上政府，去中级法院！其他全部去基层！</p>
+                <p class="warning">⚠️ <strong>易错点：</strong>告省政府要到中级法院！告省公安厅反而到基层法院！因为省公安厅是省级部门，不是国务院部门！看行政级别，不是看"省"字！</p>
+            </div>
+            <div id="quiz-module5" class="quiz-container"></div>
+        </section>
+
+        <section id="module6" class="knowledge-card">
+            <h2>🌍 模块6: 地域管辖</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">核心概念</span>：在哪个地方的法院告？</p>
+                
+                <h3>📌 一、一般地域管辖（原告就被告）</h3>
+                <p><span class="highlight-blue">由最初作出行政行为的行政机关所在地法院管辖</span></p>
+                <p>• <span class="highlight-red">原告就被告</span>：到被告所在地法院告</p>
+                <p>• 方便法院调查取证</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三被深圳市公安局罚款，张三应该到<span class="highlight-red">深圳市</span>的法院起诉，而不是跑到北京去告！为什么这样举例？因为被告在哪里，就到哪里告！</p></div>
+                
+                <h3>📌 二、经复议案件的地域管辖（特殊！）</h3>
+                <p><span class="highlight-blue">可以由原机关所在地或复议机关所在地法院管辖</span></p>
+                <p>• 经复议的案件：<span class="highlight-red">可以选择</span></p>
+                <p>• 可以到原机关所在地法院告</p>
+                <p>• 也可以到复议机关所在地法院告</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三被县公安局罚款200元，张三申请行政复议到市政府，市政府维持了。张三可以去<span class="highlight-red">县法院</span>告，也可以去<span class="highlight-red">市法院</span>告，选择一个！为什么这样举例？因为复议案件可以选择管辖法院！</p></div>
+                
+                <h3>📌 三、限制人身自由的特殊规定（辅警必须掌握！）</h3>
+                <p><span class="highlight-red">可以选择被告所在地或原告所在地法院告！</span></p>
+                <p>• <span class="highlight-blue">被告所在地</span>法院</p>
+                <p>• <span class="highlight-blue">原告户籍所在地</span>法院</p>
+                <p>• <span class="highlight-blue">原告经常居住地</span>法院</p>
+                <p>• <span class="highlight-blue">被限制人身自由地</span>法院</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三在广州被北京警方拘留，张三可以到<span class="highlight-red">北京</span>的法院告，也可以到<span class="highlight-red">自己老家</span>的法院告（户籍地、经常居住地、限制人身自由地）！为什么这样举例？因为辅警工作中涉及限制人身自由，这个知识点很重要！</p></div>
+                
+                <h3>📌 四、不动产案件专属管辖</h3>
+                <p><span class="highlight-blue">因不动产提起的诉讼，由不动产所在地法院管辖</span></p>
+                <p>• 查封、扣押不动产 → 不动产所在地法院</p>
+                <p>• 拆除违章建筑 → 不动产所在地法院</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三的房子在深圳，被城管强制拆除，张三应该到<span class="highlight-red">深圳</span>的法院起诉（不动产所在地）！为什么这样举例？因为不动产案件由不动产所在地法院专属管辖！</p></div>
+                
+                <p class="memory-tip"><strong><span class="highlight-purple">记忆口诀：</span></strong>地域管辖：原告就被告！复议案件可选择！限制人身自由四选一！不动产专属管！口诀：一般去被告那告，复议后可以换地方告！被拘留了随便选！</p>
+                <p class="warning">⚠️ <strong>易错点：</strong>复议案件地域管辖：不管复议维持还是改变，<span class="highlight-red">都可以选择</span>原机关所在地或复议机关所在地！但只能选一个，不能两个都选！</p>
+            </div>
+            <div id="quiz-module6" class="quiz-container"></div>
+        </section>
+        
+        <section id="module7" class="knowledge-card">
+            <h2>👥 模块7: 诉讼参加人</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">核心概念</span>：谁可以告（原告）？谁可以被告（被告）？</p>
+                
+                <h3>📌 一、原告（谁可以告？）</h3>
+                <p><span class="highlight-blue">行政行为的相对人或者利害关系人</span></p>
+                <p>• <span class="highlight-red">行政相对人</span>：直接被处罚、被管理的张三</p>
+                <p>• <span class="highlight-red">利害关系人</span>：邻居、竞争对手等间接受影响的人</p>
+                <p>• 官（行政机关）不能当原告</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三建房子，住建局发许可证给张三，邻居李四觉得影响采光。邻居可以告吗？<span class="highlight-red">可以！</span>因为李四是利害关系人。为什么这样举例？因为考试常考"利害关系人可以当原告"！</p></div>
+                
+                <h3>📌 二、被告（告谁？）</h3>
+                <p><span class="highlight-blue">作出行政行为的机关或者组织</span></p>
+                <p>• <span class="highlight-red">行政机关</span>：公安局、市场监管局等</p>
+                <p>• <span class="highlight-red">法律授权的组织</span>：高校、公立医院等</p>
+                <p>• <span class="highlight-red">被委托的组织</span>：委托的机关是被告</p>
+                <div class="example"><p><strong>🌰 举例：</strong>治安联防队抓人，被告是<span class="highlight-red">公安局</span>，不是联防队！因为联防队是公安局委托的，被委托的不是被告。为什么这样举例？因为考试常考"被委托的不是被告"！</p></div>
+                
+                <h3>📌 三、第三人（谁有利害关系？）</h3>
+                <p><span class="highlight-blue">同案件有利害关系的人</span></p>
+                <p>• 可以申请参加诉讼</p>
+                <p>• 法院可以通知其参加诉讼</p>
+                <p>• 第三人有独立的诉讼地位</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三告公安局拘留他，李四是被张三打的受害人。李四可以作为<span class="highlight-red">第三人</span>参加诉讼。为什么这样举例？因为第三人是有利害关系的人！</p></div>
+                
+                <h3>📌 四、特殊情形</h3>
+                <p>• <span class="highlight-blue">合伙组织</span>：以登记的字号为原告，推选代表</p>
+                <p>• <span class="highlight-blue">个体工商户</span>：有字号以字号为原告，无字号以经营者为原告</p>
+                <p>• <span class="highlight-blue">股份制企业</span>：股东大会等可以企业名义起诉</p>
+                <div class="example"><p><strong>🌰 举例：</strong>美宜家便利店被罚款，原告是<span class="highlight-red">"美宜家"</span>（字号），不是老板张三！如果没有字号，原告才是张三。为什么这样举例？因为个体工商户的原告确认有讲究！</p></div>
+                
+                <p class="memory-tip"><strong><span class="highlight-purple">记忆口诀：</span></strong>诉讼参加人：原告=民（相对人或利害关系人），被告=官（作出行为的机关或组织），第三人=有利害关系的人！口诀：记住，民告官！谁告谁是原告，谁被告谁是官！</p>
+                <p class="warning">⚠️ <strong>易错点：</strong>被委托的组织<span class="highlight-red">不是被告</span>，委托的机关才是被告！联防队、城管协管员等都是被委托的，不是被告！</p>
+            </div>
+            <div id="quiz-module7" class="quiz-container"></div>
+        </section>
+        
+        <section id="module8" class="knowledge-card">
+            <h2>⚖️ 模块8: 被告确定规则</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">核心概念</span>：告谁？复议后被告怎么确定？考试超级重点！</p>
+                
+                <h3>📌 一、直接诉讼的被告</h3>
+                <p><span class="highlight-blue">谁作出行政行为，谁就是被告</span></p>
+                <p>• 派出所罚款 → 告派出所</p>
+                <p>• 公安局拘留 → 告公安局</p>
+                <p>• 县政府决定 → 告县政府</p>
+                <div class="example"><p><strong>🌰 举例：</strong>派出所对张三罚款200元，张三直接到法院起诉，被告是<span class="highlight-red">派出所</span>！为什么这样举例？因为直接诉讼，谁作行为告谁！</p></div>
+                
+                <h3>📌 二、复议后诉讼的被告（重点！三种情况！）</h3>
+                <p><span class="highlight-red">记住三种情形：</span></p>
+                <p>1. <span class="highlight-blue">复议维持</span>：共同告（原告+复议机关一起告）</p>
+                <p>2. <span class="highlight-blue">复议改变</span>：单独告（只告复议机关）</p>
+                <p>3. <span class="highlight-blue">复议不作为</span>：选择告（告原机关或复议机关都行）</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三被县公安局罚款200元，申请行政复议到市政府：<br>• 市政府维持原处罚 → <span class="highlight-red">共同告</span>：张三告县公安局+市政府<br>• 市政府改变罚款为500元 → <span class="highlight-red">单独告</span>：张三只告市政府<br>• 市政府逾期不作决定 → <span class="highlight-red">选择告</span>：张三可以选择告县公安局或市政府<br>为什么这样举例？因为这是考试超级重点！</p></div>
+                
+                <h3>📌 三、"改变"的判断</h3>
+                <p>• <span class="highlight-blue">改变处理结果</span>：如罚款从200改为500</p>
+                <p>• <span class="highlight-blue">撤销原行为</span></p>
+                <p>• <span class="highlight-blue">确认原行为无效</span></p>
+                <p>• 注意：只改变依据但结果没变 = <span class="highlight-red">维持</span>！</p>
+                <div class="example"><p><strong>🌰 举例：</strong>原行为罚款200元，复议改变为罚款100元 → <span class="highlight-red">改变</span>！原行为罚款200元，复议依据从第10条改为第15条但还是罚200元 → <span class="highlight-red">维持</span>！为什么这样举例？因为判断是否"改变"要看结果！</p></div>
+                
+                <h3>📌 四、共同被告的特殊情形</h3>
+                <p>• 共同作出行政行为的机关是<span class="highlight-red">共同被告</span></p>
+                <p>• 告漏了：法院通知原告追加，原告不同意追加的 → 列为<span class="highlight-red">共同被告</span></p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三被公安局和市场监管局联合处罚，张三只告公安局。法院通知追加，市场监管局作为<span class="highlight-red">共同被告</span>。为什么这样举例？因为共同行为要共同负责！</p></div>
+                
+                <p class="memory-tip"><strong><span class="highlight-purple">记忆口诀：</span></strong>被告确定：直接诉讼谁作谁告；复议后：维持共同告，改变单独告，不作为选择告！口诀：复议维持找两个机关告，改变只告复议机关，不作为随便挑一个！</p>
+                <p class="warning">⚠️ <strong>易错点：</strong>复议维持=共同被告（原告+复议机关都要告），复议改变=只告复议机关！不能搞混！</p>
+            </div>
+            <div id="quiz-module8" class="quiz-container"></div>
+        </section>
+        
+        <section id="module9" class="knowledge-card">
+            <h2>⏰ 模块9: 起诉期限与举证</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">核心概念</span>：多久内可以告？谁来举证？</p>
+                
+                <h3>📌 一、起诉期限（多久内可以告？）</h3>
+                <p><span class="highlight-blue">一般情况：知道行政行为之日起<span class="highlight-red">6个月</span>内</span></p>
+                <p>• 直接起诉：<span class="highlight-red">6个月</span></p>
+                <p>• 经过复议后起诉：<span class="highlight-red">15日</span></p>
+                <p>• 不知道行政行为：最长<span class="highlight-red">1年</span>（知道之日起6个月，但不超过知道后1年）</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三1月1日被公安局罚款，张三申请行政复议，3月1日复议决定作出。张三应该在<span class="highlight-red">3月16日前</span>到法院起诉（复议决定送达后15日内）！为什么这样举例？因为复议后再起诉期限只有15天！</p></div>
+                
+                <h3>📌 二、被告举证（谁来举证？）</h3>
+                <p><span class="highlight-red">被告（行政机关）承担举证责任！</span></p>
+                <p>• 被告要证明行政行为<span class="highlight-blue">合法</span></p>
+                <p>• 原告一般不需要举证</p>
+                <p>• 但在以下情况原告要举证：</p>
+                <p>  - 证明自己申请过</p>
+                <p>  - 证明自己受到损害</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三告公安局拘留他违法，张三要不要证明拘留违法？<span class="highlight-red">不需要！</span>是公安局要证明拘留合法！为什么这样举例？因为官举证是原则！民告官，还是官举证！</p></div>
+                
+                <h3>📌 三、证据保全</h3>
+                <p>• <span class="highlight-blue">诉前证据保全</span>：当事人可以在起诉前申请</p>
+                <p>• <span class="highlight-blue">诉讼中证据保全</span>：法院可以依申请或依职权保全</p>
+                <p>• 保全证据不得少于<span class="highlight-red">2人</span></p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三的店铺被城管查封，店里有监控录像。张三怕证据灭失，可以申请<span class="highlight-red">证据保全</span>！为什么这样举例？因为保全证据很重要！</p></div>
+                
+                <p class="memory-tip"><strong><span class="highlight-purple">记忆口诀：</span></strong>起诉期限：直接6个月，复议后15天！举证：被告举证，原告特殊举证！口诀：直接告6个月，复议后再告只有15天！证明你有理是官的事！</p>
+                <p class="warning">⚠️ <strong>易错点：</strong>经过复议的案件，起诉期限是<span class="highlight-red">15日</span>，不是6个月！复议是15天，诉讼是6个月！</p>
+            </div>
+            <div id="quiz-module9" class="quiz-container"></div>
+        </section>
+        
+        <section id="module10" class="knowledge-card">
+            <h2>📝 模块10: 审理与判决</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">核心概念</span>：多久审完？怎么判？</p>
+                
+                <h3>📌 一、审理程序</h3>
+                <p>• <span class="highlight-blue">普通程序</span>：<span class="highlight-red">6个月</span>内审结（可延长）</p>
+                <p>• <span class="highlight-blue">简易程序</span>：<span class="highlight-red">45日</span>内审结（不能延长）</p>
+                <p>• 简易程序适用：事实清楚、权利义务明确、争议不大的案件</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三对罚款50元不服起诉，法院适用简易程序，<span class="highlight-red">45日内</span>要判决！为什么这样举例？因为简易程序快！</p></div>
+                
+                <h3>📌 二、第二审程序（上诉）</h3>
+                <p>• <span class="highlight-blue">上诉期限</span>：判决<span class="highlight-red">15日</span>内，裁定<span class="highlight-red">10日</span>内</p>
+                <p>• <span class="highlight-blue">二审审限</span>：<span class="highlight-red">3个月</span>内作出终审判决</p>
+                <p>• <span class="highlight-blue">两审终审</span>：二审判决是终审判决</p>
+                <div class="example"><p><strong>🌰 举例：</strong>一审判决后，张三上诉，二审法院<span class="highlight-red">3个月内</span>要作出终审判决！为什么这样举例？因为二审有期限限制！</p></div>
+                
+                <h3>📌 三、判决类型</h3>
+                <p><span class="highlight-red">根据不同情况作出不同判决：</span></p>
+                <p>1. <span class="highlight-blue">维持判决</span>：行政行为正确，合法</p>
+                <p>2. <span class="highlight-blue">撤销判决</span>：行政行为违法</p>
+                <p>3. <span class="highlight-blue">履行判决</span>：行政机关不履行法定职责</p>
+                <p>4. <span class="highlight-blue">变更判决</span>：行政处罚明显不当（只审合理性例外）</p>
+                <p>5. <span class="highlight-blue">确认违法判决</span>：行为违法但不宜撤销</p>
+                <div class="example"><p><strong>🌰 举例：</strong>法院判决撤销公安的拘留决定 → <span class="highlight-red">撤销判决</span>！公安不履行法定职责 → <span class="highlight-red">履行判决</span>！为什么这样举例？因为判决类型要区分！</p></div>
+                
+                <h3>📌 四、行政首长出庭应诉</h3>
+                <p><span class="highlight-blue">告官要见官！</span></p>
+                <p>• 行政机关负责人应当出庭应诉</p>
+                <p>• 不能出庭的应当说明情况</p>
+                <p>• 可以委托1-2名诉讼代理人</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三告公安局，公安局局长<span class="highlight-red">应当出庭</span>！如果实在来不了，要说明情况。为什么这样举例？因为告官要见官！</p></div>
+                
+                <h3>📌 五、不适用调解（特殊！）</h3>
+                <p>• 审理行政案件<span class="highlight-red">不适用调解</span></p>
+                <p>• 例外：<span class="highlight-blue">行政赔偿</span>、<span class="highlight-blue">行政补偿</span>、<span class="highlight-blue">自由裁量权</span>案件可以调解</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三告公安局罚款2000元，法院<span class="highlight-red">不能调解</span>！但如果是行政赔偿案件，双方可以调解。为什么这样举例？因为调解有例外！</p></div>
+                
+                <p class="memory-tip"><strong><span class="highlight-purple">记忆口诀：</span></strong>审理期限：普通6月，简易45天，二审3月！判决类型：维持撤销履行变更确认！口诀：一审普通半年，简易45天，二审三个月！</p>
+                <p class="warning">⚠️ <strong>易错点：</strong>二审期限是<span class="highlight-red">3个月</span>，不是6个月！一审普通程序才是6个月！</p>
+            </div>
+            <div id="quiz-module10" class="quiz-container"></div>
+        </section>
+
+        <section id="framework" class="framework-section">
+            <h2>📋 知识框架总览</h2>
+            <div class="framework-grid">
+                <div class="framework-card">
+                    <h3>1. 行政诉讼概念</h3>
+                    <p><span class="highlight-red">核心：</span>民告官到法院，只查合法不查合理</p>
+                    <p><span class="highlight-purple">口诀：</span>告官到法院，只查合法！</p>
+                    <p><span class="highlight-orange">易错：</span>诉讼只查合法，复议双重审查！</p>
+                </div>
+                <div class="framework-card">
+                    <h3>2. 基本原则</h3>
+                    <p><span class="highlight-red">核心：</span>独立审判、合法审查、地位平等、辩论</p>
+                    <p><span class="highlight-purple">口诀：</span>独立审判只查合法，地位平等能辩论！</p>
+                    <p><span class="highlight-orange">易错：</span>只查合法性，不查合理性！</p>
+                </div>
+                <div class="framework-card">
+                    <h3>3. 复议与诉讼区别</h3>
+                    <p><span class="highlight-red">核心：</span>复议到机关告，诉讼到法院告</p>
+                    <p><span class="highlight-purple">口诀：</span>复议告机关，诉讼告法院！</p>
+                    <p><span class="highlight-orange">易错：</span>诉讼终局不能再复议！</p>
+                </div>
+                <div class="framework-card">
+                    <h3>4. 受案范围</h3>
+                    <p><span class="highlight-red">核心：</span>处罚强制许可确认征收给付可诉</p>
+                    <p><span class="highlight-purple">口诀：</span>处罚强可诉，抽象内部不可诉！</p>
+                    <p><span class="highlight-orange">易错：</span>抽象行为可附带审查！</p>
+                </div>
+                <div class="framework-card">
+                    <h3>5. 级别管辖</h3>
+                    <p><span class="highlight-red">核心：</span>基层管大多数，中级管特殊</p>
+                    <p><span class="highlight-purple">口诀：</span>国务院部门县级以上，海关全部中级管！</p>
+                    <p><span class="highlight-orange">易错：</span>省公安厅到基层，省政府到中级！</p>
+                </div>
+                <div class="framework-card">
+                    <h3>6. 地域管辖</h3>
+                    <p><span class="highlight-red">核心：</span>原告就被告，复议可选</p>
+                    <p><span class="highlight-purple">口诀：</span>一般原告就被告，复议可选，限制自由随便选！</p>
+                    <p><span class="highlight-orange">易错：</span>不动产专属管辖！</p>
+                </div>
+                <div class="framework-card">
+                    <h3>7. 诉讼参加人</h3>
+                    <p><span class="highlight-red">核心：</span>原告是民，被告是官</p>
+                    <p><span class="highlight-purple">口诀：</span>原告是民，被告是官！</p>
+                    <p><span class="highlight-orange">易错：</span>被委托的不是被告！</p>
+                </div>
+                <div class="framework-card">
+                    <h3>8. 被告确定规则</h3>
+                    <p><span class="highlight-red">核心：</span>维持共同告，改变单独告，不作为选择告</p>
+                    <p><span class="highlight-purple">口诀：</span>维持共同，改变单独，不作为随便！</p>
+                    <p><span class="highlight-orange">易错：</span>复议维持=共同被告！</p>
+                </div>
+                <div class="framework-card">
+                    <h3>9. 起诉期限与举证</h3>
+                    <p><span class="highlight-red">核心：</span>直接6个月，复议后15天，被告举证</p>
+                    <p><span class="highlight-purple">口诀：</span>直接六个月，复议半月，被告举证！</p>
+                    <p><span class="highlight-orange">易错：</span>复议后起诉只有15天！</p>
+                </div>
+                <div class="framework-card">
+                    <h3>10. 审理与判决</h3>
+                    <p><span class="highlight-red">核心：</span>普通6月，简易45天，二审3月</p>
+                    <p><span class="highlight-purple">口诀：</span>普通六个月，简易四十五，二审三个月！</p>
+                    <p><span class="highlight-orange">易错：</span>二审是3个月！</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="practice" class="practice-section">
+            <h2>📝 练习专区（50题综合练习）</h2>
+            <div id="practiceQuestions" class="quiz-container"></div>
+        </section>
+    </main>
+    
+    <script>
+
+        // ========== 工具函数 ==========
+        function closeTopNav() {
+            document.getElementById('topNav').style.display = 'none';
+        }
+        
+        function scrollToSection(element, event) {
+            event.preventDefault();
+            const targetId = element.getAttribute('href').slice(1);
+            const target = document.getElementById(targetId);
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            element.classList.add('active');
+        }
+        
+        // ========== 答题状态 ==========
+        let totalAnswered = 0;
+        let totalCorrect = 0;
+        
+        function updateScore() {
+            const scoreDisplay = document.getElementById('totalScore');
+            if (scoreDisplay) {
+                scoreDisplay.textContent = `已答: ${totalAnswered}/100`;
+            }
+            const progress = document.getElementById('mainProgress');
+            if (progress) {
+                const totalQuestions = 100;
+                progress.style.width = `${(totalAnswered / totalQuestions) * 100}%`;
+            }
+        }
+        
+        // ========== 渲染题目 ==========
+        function renderQuiz(containerId, quizData) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            quizData.forEach((quiz, index) => {
+                const quizCard = document.createElement('div');
+                quizCard.className = 'quiz-card';
+                quizCard.innerHTML = `
+                    <div class="question">
+                        <span class="question-num">${index + 1}</span>
+                        ${quiz.question}
+                    </div>
+                    <div class="options">
+                        ${quiz.options.map((opt, optIndex) => `
+                            <button class="option-btn" onclick="checkAnswer(this, ${quiz.correct === optIndex}, '${containerId}', ${index}, ${optIndex})">
+                                <span class="option-letter">${String.fromCharCode(65 + optIndex)}</span>
+                                ${opt}
+                            </button>
+                        `).join('')}
+                    </div>
+                    <div class="explanation" id="exp-${containerId}-${index}">
+                        <div class="result"></div>
+                        <div class="detail"></div>
+                    </div>
+                `;
+                container.appendChild(quizCard);
+            });
+        }
+        
+        // ========== 检查答案 ==========
+        function checkAnswer(button, isCorrect, containerId, questionIndex, optionIndex) {
+            const container = document.getElementById(containerId);
+            const quizCard = button.closest('.quiz-card');
+            const buttons = quizCard.querySelectorAll('.option-btn');
+            
+            // 禁用所有按钮
+            buttons.forEach(btn => btn.classList.add('disabled'));
+            buttons.forEach(btn => btn.onclick = null);
+            
+            // 标记正确和错误选项
+            buttons.forEach((btn, idx) => {
+                if (idx === getCorrectIndex(containerId, questionIndex)) {
+                    btn.classList.add('correct');
+                } else if (btn === button && !isCorrect) {
+                    btn.classList.add('wrong');
+                }
+            });
+            
+            // 显示解析
+            const explanation = document.getElementById(`exp-${containerId}-${questionIndex}`);
+            if (explanation) {
+                const explanationText = getExplanation(containerId, questionIndex);
+                explanation.style.display = 'block';
+                explanation.querySelector('.result').textContent = isCorrect ? '✅ 回答正确！' : '❌ 回答错误！';
+                explanation.querySelector('.result').className = `result ${isCorrect ? 'correct' : 'wrong'}`;
+                explanation.querySelector('.detail').innerHTML = explanationText;
+            }
+            
+            // 更新分数
+            totalAnswered++;
+            if (isCorrect) totalCorrect++;
+            updateScore();
+        }
+        
+        function getCorrectIndex(containerId, questionIndex) {
+            let quizData;
+            if (containerId === 'quiz-module1') quizData = quiz1Data;
+            else if (containerId === 'quiz-module2') quizData = quiz2Data;
+            else if (containerId === 'quiz-module3') quizData = quiz3Data;
+            else if (containerId === 'quiz-module4') quizData = quiz4Data;
+            else if (containerId === 'quiz-module5') quizData = quiz5Data;
+            else if (containerId === 'quiz-module6') quizData = quiz6Data;
+            else if (containerId === 'quiz-module7') quizData = quiz7Data;
+            else if (containerId === 'quiz-module8') quizData = quiz8Data;
+            else if (containerId === 'quiz-module9') quizData = quiz9Data;
+            else if (containerId === 'quiz-module10') quizData = quiz10Data;
+            else if (containerId === 'practiceQuestions') quizData = practiceData;
+            return quizData[questionIndex].correct;
+        }
+        
+        function getExplanation(containerId, questionIndex) {
+            let quizData;
+            if (containerId === 'quiz-module1') quizData = quiz1Data;
+            else if (containerId === 'quiz-module2') quizData = quiz2Data;
+            else if (containerId === 'quiz-module3') quizData = quiz3Data;
+            else if (containerId === 'quiz-module4') quizData = quiz4Data;
+            else if (containerId === 'quiz-module5') quizData = quiz5Data;
+            else if (containerId === 'quiz-module6') quizData = quiz6Data;
+            else if (containerId === 'quiz-module7') quizData = quiz7Data;
+            else if (containerId === 'quiz-module8') quizData = quiz8Data;
+            else if (containerId === 'quiz-module9') quizData = quiz9Data;
+            else if (containerId === 'quiz-module10') quizData = quiz10Data;
+            else if (containerId === 'practiceQuestions') quizData = practiceData;
+            return quizData[questionIndex].explanation;
+        }
+
+        // ========== 题库数据 ==========
+        const quiz1Data = [
+            {
+                question: "行政诉讼是什么性质的行为？",
+                options: ["民事行为", "行政行为", "司法行为", "立法行为"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！行政诉讼不是民事行为，民事行为是平等主体之间的行为。<br>B. 错误！行政诉讼不是行政行为，作出行政行为的是行政机关。<br>C. 正确！<span class='highlight-red'>行政诉讼是司法行为</span>！法院是司法机关，作出的是司法判决！<span class='highlight-orange'>记住：</span><span class='highlight-red'>诉讼到法院，法院是司法机关</span>！<br>D. 错误！行政诉讼不是立法行为，立法行为是制定法律法规的行为。<br><span class='highlight-purple'>💡 小白记忆口诀：</span>行政诉讼=司法行为！复议=行政行为！这是本质区别！"
+            },
+            {
+                question: "行政诉讼审查的内容是什么？",
+                options: ["只审查合法性", "只审查合理性", "既审查合法性又审查合理性", "不审查"],
+                correct: 0,
+                explanation: "✅ 正确答案是 A<br>【逐项解析】<br>A. 正确！<span class='highlight-red'>行政诉讼只审查合法性</span>！这是行政诉讼的特点！<br>B. 错误！行政诉讼不审查合理性，合理性是复议审查的！<br>C. 错误！既审查合法又审查合理是行政复议，不是行政诉讼！<br>D. 错误！行政诉讼要审查合法性！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>诉讼只查合法，复议双重审查！这是两者的核心区别！"
+            },
+            {
+                question: "张三被公安局拘留10天，他想到法院起诉，应该告谁？",
+                options: ["派出所", "公安局", "市政府", "以上都不是"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！如果拘留是派出所作出的，可以告派出所。但题目没说派出所，是公安局直接拘留。<br>B. 正确！<span class='highlight-red'>公安局拘留张三，被告是公安局</span>！谁作行为告谁！<br>C. 错误！市政府不是作出拘留决定的机关。<br>D. 错误！有正确答案。<br><span class='highlight-purple'>💡 小白记忆口诀：</span>谁作行政行为，谁就是被告！"
+            },
+            {
+                question: "关于行政诉讼和行政复议的区别，下列说法正确的是？",
+                options: ["复议到行政机关，诉讼到法院", "复议只查合法性，诉讼查双重", "复议是司法行为，诉讼是行政行为", "复议不能申请，诉讼可以"],
+                correct: 0,
+                explanation: "✅ 正确答案是 A<br>【逐项解析】<br>A. 正确！<span class='highlight-red'>行政复议到行政机关告</span>，<span class='highlight-red'>行政诉讼到法院告</span>！这是最本质的区别！<br>B. 错误！说反了！复议双重审查，诉讼只查合法性。<br>C. 错误！说反了！复议是行政行为，诉讼是司法行为。<br>D. 错误！复议和诉讼都可以申请！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>复议告机关，诉讼告法院！"
+            },
+            {
+                question: "下列关于行政诉讼的说法，正确的是？",
+                options: ["行政机关可以当原告", "只审查合理性不审查合法性", "两审终审", "不适用于调解"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！行政机关不能当原告，只能当被告！民告官，官永远是被告！<br>B. 错误！只审查合法性，不审查合理性！<br>C. 正确！<span class='highlight-red'>行政诉讼两审终审</span>！一审判决后可以上诉，二审是终审判决！<br>D. 错误！不适用调解是原则，但行政赔偿、行政补偿、自由裁量权案件可以调解。<br><span class='highlight-purple'>💡 小白记忆口诀：</span>行政诉讼两审终审，复议一级终局！"
+            }
+        ];
+        
+        const quiz2Data = [
+            {
+                question: "行政诉讼的基本原则中，核心原则是什么？",
+                options: ["独立审判原则", "合法性审查原则", "辩论原则", "当事人地位平等原则"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！独立审判是原则，但不是核心原则。<br>B. 正确！<span class='highlight-red'>合法性审查原则</span>是行政诉讼的核心原则！只审查合法性是行政诉讼区别于行政复议的关键！<br>C. 错误！辩论原则是基本原则，但不是核心原则。<br>D. 错误！当事人地位平等是原则，但不是核心原则。<br><span class='highlight-purple'>💡 小白记忆口诀：</span>合法性审查是核心！只查合法不查合理！"
+            },
+            {
+                question: "关于行政诉讼的合法性审查原则，下列说法正确的是？",
+                options: ["法院可以审查处罚轻重是否适当", "法院可以改变不合理的罚款数额", "法院只审查行为是否合法", "法院可以替行政机关做决定"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！处罚轻重是合理性问题，<span class='highlight-red'>法院不审查合理性</span>！<br>B. 错误！法院不能改变罚款数额，除非明显不当（这是例外）。<br>C. 正确！<span class='highlight-red'>法院只审查行政行为是否合法</span>：有没有法律依据、程序对不对！<br>D. 错误！法院是审查机关，不是行政机关。<br><span class='highlight-purple'>💡 小白记忆口诀：</span>只查合法不查合理！"
+            },
+            {
+                question: "行政复议和行政诉讼在审查内容上的主要区别是？",
+                options: ["复议查合法，诉讼查双重", "复议查双重，诉讼查合法", "两者都只查合法性", "两者都查双重"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！说反了！<br>B. 正确！<span class='highlight-red'>行政复议既查合法性又查合理性</span>，<span class='highlight-red'>行政诉讼只查合法性</span>！这是两者的核心区别！<br>C. 错误！复议还查合理性！<br>D. 错误！诉讼只查合法性！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>复议双重审查，诉讼单一审查！"
+            },
+            {
+                question: "在行政诉讼中，原告和被告的关系是？",
+                options: ["原告是官，被告是民", "原告是民，被告是官", "原告被告都是民", "原告被告都是官"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！说反了！<br>B. 正确！<span class='highlight-red'>原告是民（公民、法人），被告是官（行政机关）</span>！这就是【民告官】！<br>C. 错误！被告是官，不是民！<br>D. 错误！原告是民，不是官！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>民告官！原告是民，被告是官！"
+            },
+            {
+                question: "行政诉讼中，法院判决后，当事人上诉的期限是多久？",
+                options: ["7日", "10日", "15日", "30日"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！7日不对。<br>B. 错误！10日是裁定不服的上诉期限，不是判决。<br>C. 正确！<span class='highlight-red'>判决不服上诉期限是15日</span>！<br>D. 错误！30日不对。<br><span class='highlight-purple'>💡 小白记忆口诀：</span>判决上诉15日，裁定上诉10日！"
+            }
+        ];
+
+        const quiz3Data = [
+            {
+                question: "行政复议和行政诉讼的主要区别是？",
+                options: ["受理机关不同", "审查内容不同", "程序衔接不同", "以上都对"],
+                correct: 3,
+                explanation: "✅ 正确答案是 D<br>【逐项解析】<br>A. 错误！受理机关不同确实是区别，但不是全部。<br>B. 错误！审查强度不同也是区别，但不是全部。<br>C. 错误！程序衔接不同也是区别，但不是全部。<br>D. 正确！<span class='highlight-red'>受理机关、审查强度、程序衔接都不同</span>！复议到机关告，诉讼到法院告；复议双重审查，诉讼单一审查；复议后可以诉讼，诉讼后不能再复议！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>复议和诉讼三大区别：机关不同、审查不同、程序不同！"
+            },
+            {
+                question: "经过行政复议后，当事人仍然不服，能否再提起行政诉讼？",
+                options: ["不能，只能再申请复议", "可以，但诉讼是终局的", "可以，且可以再复议", "不能，行政复议是终局的"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！复议后可以诉讼！<br>B. 正确！<span class='highlight-red'>复议后可以诉讼</span>！但诉讼是终局的，<span class='highlight-red'>诉讼后不能再复议</span>！<br>C. 错误！诉讼后不能再复议！<br>D. 错误！复议不是终局的，诉讼才是终局的！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>复议→诉讼→终局！诉讼后不能再复议！"
+            },
+            {
+                question: "自然资源确权案件，当事人能否直接到法院起诉？",
+                options: ["可以直接起诉", "必须先申请行政复议", "可以到检察院起诉", "不可以起诉"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！自然资源确权是复议前置案件！<br>B. 正确！<span class='highlight-red'>自然资源确权案件必须先申请行政复议</span>，不服才能诉讼！这是复议前置情形！<br>C. 错误！不能到检察院起诉！<br>D. 错误！可以起诉，但必须先复议！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>自然资源确权，复议前置！"
+            },
+            {
+                question: "下列关于复议前置的说法，正确的是？",
+                options: ["所有行政案件都必须先复议后诉讼", "自然资源确权必须先复议", "治安拘留可以直接诉讼", "复议前置后不能再诉讼"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！不是所有案件都复议前置！<br>B. 正确！<span class='highlight-red'>自然资源确权必须先申请行政复议</span>，这是复议前置！<br>C. 错误！治安拘留也是复议前置！<br>D. 错误！复议前置后可以诉讼！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>自然资源确权，复议前置！"
+            },
+            {
+                question: "复议和诉讼在审查强度上的区别是？",
+                options: ["复议只审合法，诉讼审双重", "复议审双重，诉讼只审合法", "两者都只审合法", "两者都审双重"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！说反了！<br>B. 正确！<span class='highlight-red'>行政复议既审合法性又审合理性</span>，<span class='highlight-red'>行政诉讼只审合法性</span>！<br>C. 错误！复议还审合理性！<br>D. 错误！诉讼只审合法性！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>复议双重审查，诉讼单一审查！"
+            }
+        ];
+        
+        const quiz4Data = [
+            {
+                question: "下列哪项可以提起行政诉讼？",
+                options: ["国防外交行为", "行政处罚", "内部行政行为", "国务院的决定"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！国防外交行为不可诉！<br>B. 正确！<span class='highlight-red'>行政处罚可以提起行政诉讼</span>！罚款、拘留、警告等都可以告！<br>C. 错误！内部行政行为（奖惩任免）不可诉！<br>D. 错误！国务院的决定是最终裁决，不可诉！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>处罚强可诉，国防抽象内部不可诉！"
+            },
+            {
+                question: "下列哪项不能提起行政诉讼？",
+                options: ["行政强制", "行政许可", "行政指导", "行政确认"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！行政强制（查封、扣押）可以诉讼！<br>B. 错误！行政许可可以诉讼！<br>C. 正确！<span class='highlight-red'>行政指导不可诉</span>！行政指导是建议、引导，没有强制性！<br>D. 错误！行政确认可以诉讼！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>行政指导不可诉！"
+            },
+            {
+                question: "抽象行政行为能否单独提起行政诉讼？",
+                options: ["可以", "不可以", "可以附带审查", "B和C都对"],
+                correct: 3,
+                explanation: "✅ 正确答案是 D<br>【逐项解析】<br>A. 错误！不能单独诉讼！<br>B. 正确！抽象行政行为不能单独提起行政诉讼！<br>C. 正确！但可以附带审查！起诉具体行政行为时，可以要求审查附带的相关规范性文件！<br>D. 正确！B和C都对！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>抽象行为不能单独诉，但可附带审查！"
+            },
+            {
+                question: "张三不服乡政府发布的征地补偿标准，能否直接到法院起诉？",
+                options: ["可以直接起诉", "不能起诉", "可以附带审查", "B和C都对"],
+                correct: 3,
+                explanation: "✅ 正确答案是 D<br>【逐项解析】<br>A. 错误！征地补偿标准是抽象行政行为，不能直接起诉！<br>B. 正确！抽象行政行为不能单独提起诉讼！<br>C. 正确！但可以附带审查！如果有具体征地行为，可以一并起诉并要求审查这个标准！<br>D. 正确！B和C都对！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>抽象行为不能单独诉，但可附带审查！"
+            },
+            {
+                question: "下列可以提起行政诉讼的是？",
+                options: ["刑事拘留", "行政拘留", "行政调解", "国防行为"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！刑事拘留是刑事司法行为，不可诉！<br>B. 正确！<span class='highlight-red'>行政拘留是行政处罚，可以诉讼！</span><br>C. 错误！行政调解不可诉！<br>D. 错误！国防行为不可诉！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>行政拘留可诉，刑事拘留不可诉！"
+            }
+        ];
+        
+        const quiz5Data = [
+            {
+                question: "告公安部，应该到哪个法院？",
+                options: ["基层法院", "中级法院", "高级法院", "最高法院"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！告公安部不是基层法院管辖！<br>B. 正确！<span class='highlight-red'>公安部是国务院部门，应该到中级人民法院起诉！</span><br>C. 错误！高级法院不是一般管辖。<br>D. 错误！最高法院管辖全国重大复杂案件。<br><span class='highlight-purple'>💡 小白记忆口诀：</span>国务院部门中级管！"
+            },
+            {
+                question: "告深圳市政府，应该到哪个法院？",
+                options: ["基层法院", "中级法院", "高级法院", "最高法院"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！市级政府不是基层法院管辖！<br>B. 正确！<span class='highlight-red'>市政府是县级以上人民政府，应该到中级人民法院起诉！</span><br>C. 错误！高级法院不是一般管辖。<br>D. 错误！最高法院管辖全国重大复杂案件。<br><span class='highlight-purple'>💡 小白记忆口诀：</span>县级以上政府中级管！"
+            },
+            {
+                question: "告广东省公安厅，应该到哪个法院？",
+                options: ["基层法院", "中级法院", "高级法院", "最高法院"],
+                correct: 0,
+                explanation: "✅ 正确答案是 A<br>【逐项解析】<br>A. 正确！<span class='highlight-red'>省公安厅是省级部门，不是国务院部门，应该到基层法院起诉！</span><br>B. 错误！中级法院管国务院部门，不是省级部门！<br>C. 错误！高级法院不是一般管辖。<br>D. 错误！最高法院管辖全国重大复杂案件。<br><span class='highlight-purple'>💡 小白记忆口诀：</span>省级部门基层管，国务院部门中级管！不要看【省】字！"
+            },
+            {
+                question: "告某乡政府，应该到哪个法院？",
+                options: ["基层法院", "中级法院", "高级法院", "最高法院"],
+                correct: 0,
+                explanation: "✅ 正确答案是 A<br>【逐项解析】<br>A. 正确！<span class='highlight-red'>乡政府是最基层的行政机关，应该到基层法院起诉！</span><br>B. 错误！中级法院不管乡政府！<br>C. 错误！高级法院不是一般管辖。<br>D. 错误！最高法院管辖全国重大复杂案件。<br><span class='highlight-purple'>💡 小白记忆口诀：</span>乡政府基层管！"
+            },
+            {
+                question: "告某海关，应该到哪个法院？",
+                options: ["基层法院", "中级法院", "高级法院", "最高法院"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！海关不是基层法院管辖！<br>B. 正确！<span class='highlight-red'>海关处理的案件，不管什么级别，都由中级人民法院管辖！</span><br>C. 错误！高级法院不是一般管辖。<br>D. 错误！最高法院管辖全国重大复杂案件。<br><span class='highlight-purple'>💡 小白记忆口诀：</span>海关全部中级管！"
+            }
+        ];
+        
+        const quiz6Data = [
+            {
+                question: "行政诉讼的地域管辖一般原则是？",
+                options: ["被告就原告", "原告就被告", "选择管辖", "专属管辖"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！【被告就原告】没有这个原则！<br>B. 正确！<span class='highlight-red'>一般地域管辖遵循【原告就被告】原则！</span>到被告所在地法院起诉！<br>C. 错误！选择管辖是复议案件的特殊情况！<br>D. 错误！专属管辖是特殊案件！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>一般原告就被告！"
+            },
+            {
+                question: "经过复议的案件，地域管辖如何确定？",
+                options: ["只能到原机关所在地", "只能到复议机关所在地", "可以选择原机关或复议机关所在地", "由法院指定"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！不是只能到原机关所在地！<br>B. 错误！不是只能到复议机关所在地！<br>C. 正确！<span class='highlight-red'>经复议的案件，可以选择到原机关所在地或复议机关所在地的法院起诉！</span>但只能选一个！<br>D. 错误！不是法院指定！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>复议案件可选择！"
+            },
+            {
+                question: "因不动产提起的行政诉讼，由哪个法院管辖？",
+                options: ["被告所在地法院", "原告所在地法院", "不动产所在地法院", "任意法院"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！不是被告所在地！<br>B. 错误！不是原告所在地！<br>C. 正确！<span class='highlight-red'>因不动产提起的行政诉讼，由不动产所在地法院专属管辖！</span><br>D. 错误！不是任意法院！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>不动产案件专属管辖！"
+            },
+            {
+                question: "被限制人身自由的行政强制措施，当事人可以选择哪些法院起诉？",
+                options: ["只能被告所在地", "只能原告户籍地", "被告所在地、原告户籍地、经常居住地、被限制地都可以", "只能省会城市"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！不只是被告所在地！<br>B. 错误！不只是原告户籍地！<br>C. 正确！<span class='highlight-red'>限制人身自由的案件，当事人可以选择被告所在地、原告户籍所在地、原告经常居住地、被限制人身自由地的法院起诉！</span><br>D. 错误！不是只能省会城市！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>限制自由随便选！"
+            },
+            {
+                question: "张三被广州警方在北京拘留，张三可以在哪个法院起诉？",
+                options: ["只能在广州", "只能在北京", "可以在广州或北京", "只能省会城市"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！不只能在广州！<br>B. 错误！不只能在北京！<br>C. 正确！<span class='highlight-red'>限制人身自由案件，可以在被告所在地（广州）、原告户籍地/经常居住地、北京（被限制地）起诉！</span><br>D. 错误！不是只能省会城市！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>限制自由随便选！"
+            }
+        ];
+
+        const quiz7Data = [
+            {
+                question: "行政诉讼的原告可以是？",
+                options: ["行政机关", "公民、法人或其他组织", "只能是自然人", "只能是法人"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！行政机关不能当原告，只能当被告！<br>B. 正确！<span class='highlight-red'>原告是公民、法人或其他组织</span>！是民，不是官！<br>C. 错误！不只能是自然人，法人也可以！<br>D. 错误！不只能是法人，自然人也可以！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>原告是民，被告是官！"
+            },
+            {
+                question: "张三建房子影响了邻居李四的采光，李四能否起诉？",
+                options: ["不能，李四不是相对人", "可以，李四是利害关系人", "只能张三起诉", "都不能起诉"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！李四虽然不是直接相对人，但可以是利害关系人！<br>B. 正确！<span class='highlight-red'>利害关系人也可以当原告！</span>李四因采光受影响，是利害关系人，可以起诉！<br>C. 错误！不只能张三起诉！<br>D. 错误！利害关系人可以起诉！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>利害关系人可当原告！"
+            },
+            {
+                question: "治安联防队抓人，当事人应该告谁？",
+                options: ["联防队", "派出所", "公安局", "B或C"],
+                correct: 3,
+                explanation: "✅ 正确答案是 D<br>【逐项解析】<br>A. 错误！<span class='highlight-red'>联防队是被委托的组织，不能当被告</span>！<br>B. 正确！如果联防队是派出所委托的，可以告派出所！<br>C. 正确！如果联防队是公安局委托的，可以告公安局！<br>D. 正确！B或C都对，看谁委托的！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>被委托的不是被告！"
+            },
+            {
+                question: "个体工商户【美宜家】被罚款，原告应该是？",
+                options: ["美宜家", "经营者张三", "无所谓", "A或B都行"],
+                correct: 0,
+                explanation: "✅ 正确答案是 A<br>【逐项解析】<br>A. 正确！<span class='highlight-red'>有字号的个体工商户，以字号为原告</span>！美宜家是字号，所以原告是美宜家！<br>B. 错误！有字号的情况下，字号是原告！<br>C. 错误！有讲究！<br>D. 错误！有字号的以字号为准！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>有字号以字号，无字号以经营者！"
+            },
+            {
+                question: "下列可以作为行政诉讼第三人的是？",
+                options: ["与案件无关的人", "与案件有利害关系的人", "法官", "被告"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！无关的人不能当第三人！<br>B. 正确！<span class='highlight-red'>与案件有利害关系的人可以作为第三人</span>！<br>C. 错误！法官不是当事人！<br>D. 错误！被告不是第三人！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>利害关系人可当第三人！"
+            }
+        ];
+        
+        const quiz8Data = [
+            {
+                question: "直接起诉派出所罚款，被告是？",
+                options: ["派出所", "公安局", "县政府", "市政府"],
+                correct: 0,
+                explanation: "✅ 正确答案是 A<br>【逐项解析】<br>A. 正确！<span class='highlight-red'>直接诉讼，谁作行政行为谁就是被告！派出所罚款，被告就是派出所！</span><br>B. 错误！派出所可以自己的名义当被告！<br>C. 错误！县政府不是被告！<br>D. 错误！市政府不是被告！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>直接诉讼谁作谁被告！"
+            },
+            {
+                question: "经过复议维持原行政行为的案件，被告是？",
+                options: ["原机关", "复议机关", "原机关和复议机关（共同被告）", "只能选一个"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！不只是原机关！<br>B. 错误！不只是复议机关！<br>C. 正确！<span class='highlight-red'>复议维持是共同被告！原机关和复议机关一起当被告！</span><br>D. 错误！不是选择，是共同被告！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>复议维持共同告！"
+            },
+            {
+                question: "经过复议改变原行政行为的案件，被告是？",
+                options: ["原机关", "复议机关", "原机关和复议机关", "可以选择"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！不只是原机关！<br>B. 正确！<span class='highlight-red'>复议改变是单独告！只告复议机关！</span><br>C. 错误！不是共同被告！<br>D. 错误！不是选择！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>复议改变单独告！"
+            },
+            {
+                question: "复议机关逾期不作决定，当事人可以告谁？",
+                options: ["只能告原机关", "只能告复议机关", "可以选择告原机关或复议机关", "都不能告"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！不只能告原机关！<br>B. 错误！不只能告复议机关！<br>C. 正确！<span class='highlight-red'>复议不作为是选择告！可以选择告原机关或复议机关！</span><br>D. 错误！可以选择告！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>复议不作为选择告！"
+            },
+            {
+                question: "复议改变罚款金额从200元为500元，被告是？",
+                options: ["原机关", "复议机关", "原机关和复议机关", "可以选择"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！不只是原机关！<br>B. 正确！<span class='highlight-red'>复议改变是单独告复议机关！</span>罚款从200改为500，改变了处理结果，只告复议机关！<br>C. 错误！不是共同被告！<br>D. 错误！不是选择！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>复议改变单独告！"
+            }
+        ];
+
+        const quiz9Data = [
+            {
+                question: "公民直接到法院起诉的期限是多久？",
+                options: ["30日", "3个月", "6个月", "1年"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！30日不对！<br>B. 错误！3个月不对！<br>C. 正确！<span class='highlight-red'>直接到法院起诉的期限是6个月！</span><br>D. 错误！1年是最长保护期！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>直接起诉六个月！"
+            },
+            {
+                question: "经过行政复议后，当事人到法院起诉的期限是多久？",
+                options: ["15日", "30日", "3个月", "6个月"],
+                correct: 0,
+                explanation: "✅ 正确答案是 A<br>【逐项解析】<br>A. 正确！<span class='highlight-red'>复议后再起诉的期限是15日！</span><br>B. 错误！30日不对！<br>C. 错误！3个月不对！<br>D. 错误！6个月是直接起诉的期限！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>复议后再诉只有15天！"
+            },
+            {
+                question: "行政诉讼中，谁承担举证责任？",
+                options: ["原告", "被告", "法院", "第三人"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！原告一般不承担举证责任！<br>B. 正确！<span class='highlight-red'>被告（行政机关）承担举证责任！</span>官举证！<br>C. 错误！法院不是举证方！<br>D. 错误！第三人不承担主要举证责任！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>民告官，还是官举证！"
+            },
+            {
+                question: "被告应当在什么期限内向法院提交证据？",
+                options: ["开庭前", "收到起诉状副本后15日内", "一审判决前", "随时都可以"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！不是开庭前！<br>B. 正确！<span class='highlight-red'>被告应当在收到起诉状副本后15日内向法院提交证据和答辩状！</span><br>C. 错误！不是一审判决前！<br>D. 错误！不是随时都可以！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>被告15日内举证！"
+            },
+            {
+                question: "原告证明自己申请过政府信息公开，属于什么情形？",
+                options: ["被告举证", "原告举证", "法院调查", "不需要举证"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！证明自己申请过不是被告举证范围！<br>B. 正确！<span class='highlight-red'>原告需要证明自己申请过、自己受过损害！</span>这是原告的特殊举证责任！<br>C. 错误！不是法院调查！<br>D. 错误！需要举证！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>原告要证明自己申请过、自己受过损害！"
+            }
+        ];
+        
+        const quiz10Data = [
+            {
+                question: "行政诉讼一审普通程序的审理期限是多久？",
+                options: ["45日", "3个月", "6个月", "1年"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！45日是简易程序！<br>B. 错误！3个月是二审！<br>C. 正确！<span class='highlight-red'>一审普通程序6个月内审结！</span><br>D. 错误！1年不对！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>一审普通六个月！"
+            },
+            {
+                question: "简易程序的审理期限是多久？",
+                options: ["30日", "45日", "3个月", "6个月"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！30日不对！<br>B. 正确！<span class='highlight-red'>简易程序45日内审结！</span><br>C. 错误！3个月是二审！<br>D. 错误！6个月是普通程序！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>简易程序四十五天！"
+            },
+            {
+                question: "二审程序的审理期限是多久？",
+                options: ["45日", "3个月", "6个月", "1年"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！45日是简易程序！<br>B. 正确！<span class='highlight-red'>二审程序3个月内作出终审判决！</span><br>C. 错误！6个月是一审普通程序！<br>D. 错误！1年不对！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>二审程序三个月！"
+            },
+            {
+                question: "行政诉讼判决中，维持判决适用于什么情形？",
+                options: ["行政行为违法", "行政行为合理", "行政行为合法正确", "行政不作为"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！违法是撤销判决！<br>B. 错误！合理性不是诉讼审查范围！<br>C. 正确！<span class='highlight-red'>行政行为合法正确，适用维持判决！</span><br>D. 错误！不作为是履行判决！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>行为合法就维持！"
+            },
+            {
+                question: "下列关于行政诉讼调解的说法，正确的是？",
+                options: ["所有行政案件都可以调解", "所有行政案件都不能调解", "行政赔偿案件可以调解", "被告可以随时调解"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！不是所有案件都能调解！<br>B. 错误！有例外情形！<br>C. 正确！<span class='highlight-red'>行政赔偿、行政补偿、自由裁量权案件可以调解！</span><br>D. 错误！不是随时都能调解！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>调解三例外：赔偿、补偿、自由裁量！"
+            }
+        ];
+
+        const practiceData = [
+            {
+                question: "行政诉讼的被告是恒定的行政机关，对吗？",
+                options: ["对", "不对", "视情况而定", "以上都不对"],
+                correct: 0,
+                explanation: "✅ 正确答案是 A<br>【逐项解析】<br>A. 正确！<span class='highlight-red'>行政诉讼的被告恒定是行政机关</span>！民告官，官永远是被告！<br>B. 错误！是对的！<br>C. 错误！没有例外！<br>D. 错误！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>民告官，被告恒定是官！"
+            },
+            {
+                question: "下列关于行政诉讼受案范围的说法，正确的是？",
+                options: ["所有行政行为都可以诉讼", "抽象行政行为可以诉讼", "行政处罚可以诉讼", "内部行政行为可以诉讼"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！不是所有！抽象、内部等不能诉讼！<br>B. 错误！抽象行政行为不能单独诉讼！<br>C. 正确！<span class='highlight-red'>行政处罚可以诉讼！</span><br>D. 错误！内部行政行为不能诉讼！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>处罚可诉！"
+            },
+            {
+                question: "行政诉讼和行政复议的关系是？",
+                options: ["只能复议", "只能诉讼", "可以复议后诉讼", "诉讼后可以复议"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！不是只能复议！<br>B. 错误！不是只能诉讼！<br>C. 正确！<span class='highlight-red'>可以复议后诉讼！</span>复议不服可以诉讼！<br>D. 错误！诉讼是终局的，不能再复议！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>复议→诉讼→终局！"
+            },
+            {
+                question: "张三不服县公安局的拘留决定，申请行政复议后维持原决定，张三想到法院起诉，被告是？",
+                options: ["县公安局", "市政府", "县公安局和市政府", "只能选一个"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！不只县公安局！<br>B. 错误！不只市政府！<br>C. 正确！<span class='highlight-red'>复议维持是共同被告！原机关和复议机关一起当被告！</span><br>D. 错误！不是选择，是共同被告！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>复议维持共同告！"
+            },
+            {
+                question: "行政诉讼的举证责任由谁承担？",
+                options: ["原告", "被告", "法院", "双方"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！原告一般不承担！<br>B. 正确！<span class='highlight-red'>被告（行政机关）承担举证责任！</span><br>C. 错误！法院不是举证方！<br>D. 错误！不是双方！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>民告官，还是官举证！"
+            },
+            {
+                question: "直接到法院起诉的期限是？",
+                options: ["15日", "30日", "3个月", "6个月"],
+                correct: 3,
+                explanation: "✅ 正确答案是 D<br>【逐项解析】<br>A. 错误！15日是复议后再诉的期限！<br>B. 错误！30日不对！<br>C. 错误！3个月不对！<br>D. 正确！<span class='highlight-red'>直接到法院起诉的期限是6个月！</span><br><span class='highlight-purple'>💡 小白记忆口诀：</span>直接起诉六个月！"
+            },
+            {
+                question: "一审普通程序的审理期限是？",
+                options: ["45日", "3个月", "6个月", "1年"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！45日是简易程序！<br>B. 错误！3个月是二审！<br>C. 正确！<span class='highlight-red'>一审普通程序6个月内审结！</span><br>D. 错误！1年不对！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>一审普通六个月！"
+            },
+            {
+                question: "告公安部，应该到哪个法院起诉？",
+                options: ["基层法院", "中级法院", "高级法院", "最高法院"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！不是基层！<br>B. 正确！<span class='highlight-red'>公安部是国务院部门，应该到中级人民法院起诉！</span><br>C. 错误！不是高级！<br>D. 错误！不是最高！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>国务院部门中级管！"
+            },
+            {
+                question: "行政诉讼的地域管辖一般原则是？",
+                options: ["原告就被告", "被告就原告", "选择管辖", "专属管辖"],
+                correct: 0,
+                explanation: "✅ 正确答案是 A<br>【逐项解析】<br>A. 正确！<span class='highlight-red'>一般地域管辖遵循【原告就被告】原则！</span><br>B. 错误！没有这个原则！<br>C. 错误！选择管辖是复议案件！<br>D. 错误！专属管辖是特殊案件！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>一般原告就被告！"
+            },
+            {
+                question: "因不动产提起的诉讼，由哪个法院管辖？",
+                options: ["被告所在地", "原告所在地", "不动产所在地", "任意法院"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！不是被告所在地！<br>B. 错误！不是原告所在地！<br>C. 正确！<span class='highlight-red'>因不动产提起的诉讼，由不动产所在地法院专属管辖！</span><br>D. 错误！不是任意！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>不动产专属管辖！"
+            },
+            {
+                question: "复议维持原行政行为的，被告是？",
+                options: ["原机关", "复议机关", "原机关和复议机关", "只能选一个"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！不只原机关！<br>B. 错误！不只复议机关！<br>C. 正确！<span class='highlight-red'>复议维持是共同被告！</span><br>D. 错误！不是选择！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>复议维持共同告！"
+            },
+            {
+                question: "复议改变原行政行为的，被告是？",
+                options: ["原机关", "复议机关", "原机关和复议机关", "可以选择"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！不只原机关！<br>B. 正确！<span class='highlight-red'>复议改变是单独告复议机关！</span><br>C. 错误！不是共同！<br>D. 错误！不是选择！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>复议改变单独告！"
+            },
+            {
+                question: "复议不作为的，被告可以是？",
+                options: ["只能是原机关", "只能是复议机关", "可以选择", "只能选原机关"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！不只能原机关！<br>B. 错误！不只能复议机关！<br>C. 正确！<span class='highlight-red'>复议不作为是选择告！可以选择原机关或复议机关！</span><br>D. 错误！不是只能选一个！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>复议不作为选择告！"
+            },
+            {
+                question: "派出所对张三罚款200元，张三直接到法院起诉，被告是？",
+                options: ["派出所", "公安局", "县政府", "市政府"],
+                correct: 0,
+                explanation: "✅ 正确答案是 A<br>【逐项解析】<br>A. 正确！<span class='highlight-red'>直接诉讼谁作谁被告！派出所罚款，被告是派出所！</span><br>B. 错误！派出所可以自己当被告！<br>C. 错误！县政府不是被告！<br>D. 错误！市政府不是被告！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>直接诉讼谁作谁被告！"
+            },
+            {
+                question: "经过行政复议后起诉，期限是多久？",
+                options: ["15日", "30日", "3个月", "6个月"],
+                correct: 0,
+                explanation: "✅ 正确答案是 A<br>【逐项解析】<br>A. 正确！<span class='highlight-red'>复议后再起诉的期限是15日！</span><br>B. 错误！30日不对！<br>C. 错误！3个月不对！<br>D. 错误！6个月是直接起诉的！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>复议后再诉只有15天！"
+            },
+            {
+                question: "限制人身自由的行政案件，当事人可以选择哪些法院起诉？",
+                options: ["只能被告所在地", "只能原告户籍地", "被告所在地、原告户籍地、经常居住地、被限制地都可以", "只能省会城市"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！不只是被告所在地！<br>B. 错误！不只是户籍地！<br>C. 正确！<span class='highlight-red'>限制自由案件四选一！</span><br>D. 错误！不是只能省会！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>限制自由随便选！"
+            },
+            {
+                question: "二审程序的审理期限是？",
+                options: ["45日", "3个月", "6个月", "1年"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！45日是简易！<br>B. 正确！<span class='highlight-red'>二审3个月内作出终审判决！</span><br>C. 错误！6个月是一审！<br>D. 错误！1年不对！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>二审程序三个月！"
+            },
+            {
+                question: "简易程序的审理期限是？",
+                options: ["30日", "45日", "3个月", "6个月"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！30日不对！<br>B. 正确！<span class='highlight-red'>简易程序45日内审结！</span><br>C. 错误！3个月是二审！<br>D. 错误！6个月是普通！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>简易程序四十五天！"
+            },
+            {
+                question: "告某海关，应该到哪个法院？",
+                options: ["基层法院", "中级法院", "高级法院", "最高法院"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！不是基层！<br>B. 正确！<span class='highlight-red'>海关全部中级管！</span><br>C. 错误！不是高级！<br>D. 错误！不是最高！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>海关全部中级管！"
+            },
+            {
+                question: "告广东省政府，应该到哪个法院？",
+                options: ["基层法院", "中级法院", "高级法院", "最高法院"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！不是基层！<br>B. 正确！<span class='highlight-red'>县级以上政府中级管！省政府是县级以上政府！</span><br>C. 错误！不是高级！<br>D. 错误！不是最高！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>县级以上政府中级管！"
+            },
+            {
+                question: "下列可以提起行政诉讼的是？",
+                options: ["国防外交", "行政处罚", "内部任免", "国务院决定"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！国防外交不可诉！<br>B. 正确！<span class='highlight-red'>行政处罚可以诉讼！</span><br>C. 错误！内部任免不可诉！<br>D. 错误！国务院决定不可诉！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>处罚可诉！"
+            },
+            {
+                question: "下列不能提起行政诉讼的是？",
+                options: ["行政强制", "行政拘留", "刑事拘留", "行政许可"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！行政强制可以！<br>B. 错误！行政拘留可以！<br>C. 正确！<span class='highlight-red'>刑事拘留是刑事司法行为，不可诉！</span><br>D. 错误！行政许可可以！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>刑事拘留不可诉！"
+            },
+            {
+                question: "行政诉讼审查的核心原则是？",
+                options: ["合理性审查", "合法性审查", "适当性审查", "程序性审查"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！不查合理性！<br>B. 正确！<span class='highlight-red'>合法性审查是核心原则！</span><br>C. 错误！不是适当性！<br>D. 错误！不只是程序性！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>只查合法不查合理！"
+            },
+            {
+                question: "行政复议和行政诉讼在审查内容上的主要区别是？",
+                options: ["复议查合法，诉讼查双重", "复议查双重，诉讼查合法", "两者都只查合法", "两者都查双重"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！说反了！<br>B. 正确！<span class='highlight-red'>复议双重审查，诉讼单一审查！</span><br>C. 错误！复议还查合理性！<br>D. 错误！诉讼只查合法性！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>复议双重，诉讼单一！"
+            },
+            {
+                question: "不服一审判决上诉的期限是？",
+                options: ["7日", "10日", "15日", "30日"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！7日不对！<br>B. 错误！10日是裁定上诉期限！<br>C. 正确！<span class='highlight-red'>判决上诉15日！</span><br>D. 错误！30日不对！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>判决上诉15日，裁定上诉10日！"
+            },
+            {
+                question: "行政诉讼中的原告可以是？",
+                options: ["只能是公民", "只能是法人", "公民、法人或其他组织", "只能是行政机关"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！不只是公民！<br>B. 错误！不只是法人！<br>C. 正确！<span class='highlight-red'>公民、法人和其他组织都可以当原告！</span><br>D. 错误！行政机关不能当原告！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>民都能告！不管是个人、公司还是其他组织，只要有利益受损就能告！"
+            },
+            {
+                question: "利害关系人能否作为行政诉讼原告？",
+                options: ["不能", "能", "只有公民能", "只有法人能"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！利害关系人可以当原告！<br>B. 正确！<span class='highlight-red'>利害关系人也可以当原告！</span>比如邻居觉得你盖房子影响采光，就能告！<br>C. 错误！不只是公民！<br>D. 错误！不只是法人！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>不只是直接被处罚的人，间接受影响的人也能告！"
+            },
+            {
+                question: "治安联防队作出行政处罚，张三不服，被告是？",
+                options: ["联防队", "公安局", "派出所", "区政府"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！联防队不能当被告！<br>B. 正确！<span class='highlight-red'>联防队是公安局委托的，被告是公安局！</span><br>C. 错误！派出所没有参与！<br>D. 错误！区政府没有参与！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>临时工干活，正式工担责！协管员联防队都是临时工，派出他们的是正式被告！"
+            },
+            {
+                question: "行政诉讼中的第三人是指？",
+                options: ["证人", "与案件有利害关系的人", "法官", "原告的家属"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！证人是证人！<br>B. 正确！<span class='highlight-red'>同案件有利害关系的人可以作为第三人参加诉讼！</span><br>C. 错误！法官不是第三人！<br>D. 错误！家属不一定是第三人！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>第三人就是跟这个案子有瓜葛的人，法院可以让他来参加！"
+            },
+            {
+                question: "张三被县公安局罚款，张三申请行政复议到市政府，市政府改变了罚款数额。张三想到法院起诉，应该告谁？",
+                options: ["只告县公安局", "只告市政府", "县政府和市政府一起告", "只能选一个"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！不只告县公安局！<br>B. 正确！<span class='highlight-red'>复议改变，只告复议机关（市政府）！</span><br>C. 错误！不是共同被告！<br>D. 错误！不是选择！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>复议改变了结果，就只告改决定的那个机关！市政府改了，就告市政府！"
+            },
+            {
+                question: "经过行政复议，机关逾期不作出决定，张三想到法院起诉，应该告谁？",
+                options: ["只能告原机关", "只能告复议机关", "可以选择告原机关或复议机关", "两个都要告"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！不是只能告原机关！<br>B. 错误！不是只能告复议机关！<br>C. 正确！<span class='highlight-red'>复议不作为，可以选择告原机关或复议机关！</span><br>D. 错误！不是两个都要告！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>复议磨洋工不干活，你可以挑一个告！原机关和复议机关随便选！"
+            },
+            {
+                question: "行政诉讼中的共同诉讼是指？",
+                options: ["多个原告告一个被告", "一个原告告多个被告", "多个原告告多个被告或一个被告被多个原告告", "原被告各一人"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！不只是一方多人！<br>B. 错误！不只是一方一人！<br>C. 正确！<span class='highlight-red'>共同诉讼是指原告或被告一方或双方为两人以上的诉讼！</span><br>D. 错误！原被告各一人是普通诉讼！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>人多了就是共同诉讼，一方或双方都好几个人！"
+            },
+            {
+                question: "行政诉讼中的诉讼代理人可以是？",
+                options: ["只能是律师", "只能是当事人亲属", "律师、当事人的近亲属或推荐的人", "只能是单位推荐的人"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！不只能是律师！<br>B. 错误！不只能是亲属！<br>C. 正确！<span class='highlight-red'>当事人可以委托律师、近亲属或有关社会团体推荐的人代理诉讼！</span><br>D. 错误！不只是单位推荐的！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>请人帮忙打官司，可以请律师，可以请亲戚朋友，也可以请社团推荐的人！"
+            },
+            {
+                question: "行政诉讼中，原告应当在知道具体行政行为之日起多久内起诉？",
+                options: ["15日", "30日", "3个月", "6个月"],
+                correct: 3,
+                explanation: "✅ 正确答案是 D<br>【逐项解析】<br>A. 错误！15日是复议后再诉的期限！<br>B. 错误！30日不是行政诉讼期限！<br>C. 错误！3个月不对！<br>D. 正确！<span class='highlight-red'>直接到法院起诉的期限是6个月！</span><br><span class='highlight-purple'>💡 小白记忆口诀：</span>直接告官6个月内，复议后再告只有15天！时间记混了要吃亏！"
+            },
+            {
+                question: "公民、法人不知道行政机关作出具体行政行为内容的，其起诉期限从知道或者应当知道该具体行政行为之日起计算，但从知道之日起不得超过多久？",
+                options: ["6个月", "1年", "2年", "5年"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！6个月是一般期限！<br>B. 正确！<span class='highlight-red'>不知道内容的，最长不超过知道后1年！</span><br>C. 错误！2年不对！<br>D. 错误！5年不对！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>不知道被处分了？没关系，1年内发现都能告！但别拖太久！"
+            },
+            {
+                question: "行政诉讼中，被告应当在收到起诉状副本之日起多久内提供作出具体行政行为的证据和依据？",
+                options: ["5日", "7日", "10日", "15日"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！5日不对！<br>B. 错误！7日不对！<br>C. 正确！<span class='highlight-red'>被告收到起诉状副本后10日内要提供证据！</span><br>D. 错误！15日是复议后再诉的期限！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>官要在10天内拿出证据来证明自己没错！超过时间就麻烦了！"
+            },
+            {
+                question: "行政诉讼中，法院应当在立案之日起多久内作出第一审判决？",
+                options: ["45日", "3个月", "6个月", "1年"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！45日是简易程序！<br>B. 错误！3个月是二审！<br>C. 正确！<span class='highlight-red'>一审普通程序6个月内判决！</span><br>D. 错误！1年不对！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>普通程序半年审完，简易程序更快只要45天！"
+            },
+            {
+                question: "适用简易程序审理的行政案件，法院应当在立案之日起多久内审结？",
+                options: ["30日", "45日", "3个月", "6个月"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！30日不对！<br>B. 正确！<span class='highlight-red'>简易程序45日内审结！</span><br>C. 错误！3个月是二审！<br>D. 错误！6个月是普通程序！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>简单案子45天搞定，快的！"
+            },
+            {
+                question: "当事人不服一审裁定，上诉期限是多久？",
+                options: ["7日", "10日", "15日", "30日"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！7日不对！<br>B. 正确！<span class='highlight-red'>裁定上诉期限是10日！</span><br>C. 错误！15日是判决上诉期限！<br>D. 错误！30日不对！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>判决15天，裁定10天！判决是解决案子对不对，裁定是先解决程序问题！"
+            },
+            {
+                question: "第二审程序中，法院应当在收到上诉状之日起多久内作出终审判决？",
+                options: ["1个月", "2个月", "3个月", "6个月"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！1个月不对！<br>B. 错误！2个月不对！<br>C. 正确！<span class='highlight-red'>二审3个月内作出终审判决！</span><br>D. 错误！6个月是一审！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>上诉后等3个月就有最终结果了！"
+            },
+            {
+                question: "行政诉讼的判决类型中，法院认为行政处罚显示公平的，可以作出什么判决？",
+                options: ["维持判决", "撤销判决", "变更判决", "履行判决"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！维持是觉得对的！<br>B. 错误！撤销是觉得违法的！<br>C. 正确！<span class='highlight-red'>行政处罚明显不当的，法院可以作出变更判决！</span><br>D. 错误！履行是让官去做事！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>处罚太离谱，法院直接改！这是诉讼中唯一能审合理性的例外！"
+            },
+            {
+                question: "行政机关拒绝履行法定职责，法院可以作出什么判决？",
+                options: ["维持判决", "撤销判决", "履行判决", "赔偿判决"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！维持是觉得对的！<br>B. 错误！撤销是觉得违法要撤销！<br>C. 正确！<span class='highlight-red'>行政机关不履行法定职责，法院可以作出履行判决，责令其履行！</span><br>D. 错误！赔偿判决是赔钱的！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>告官不干活，法院判决让他干！"
+            },
+            {
+                question: "行政行为违法但不适宜撤销的，法院可以作出什么判决？",
+                options: ["维持判决", "撤销判决", "确认违法判决", "变更判决"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！维持是觉得对的！<br>B. 错误！撤销是撤销掉！<br>C. 正确！<span class='highlight-red'>行为违法但不宜撤销的，法院可以作出确认违法判决！</span><br>D. 错误！变更是改内容！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>违法了但撤销会造成更大麻烦？法院就确认你违法，但不撤销！"
+            },
+            {
+                question: "行政诉讼中的缺席判决是指？",
+                options: ["原告不到庭", "被告不到庭", "原告或被告不到庭均可缺席判决", "法官不出席"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！不只是原告！<br>B. 错误！不只是被告！<br>C. 正确！<span class='highlight-red'>原告或被告经传票传唤无正当理由不到庭的，可以缺席判决！</span><br>D. 错误！法官必须出席！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>传你你不来，法院自己判！不来是你的损失！"
+            },
+            {
+                question: "行政诉讼过程中，哪些案件可以适用调解？",
+                options: ["所有案件", "行政赔偿案件", "行政处罚案件", "行政强制案件"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！不是所有案件！<br>B. 正确！<span class='highlight-red'>行政赔偿、行政补偿和自由裁量权案件可以调解！</span><br>C. 错误！行政处罚一般不能调解！<br>D. 错误！行政强制一般不能调解！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>赔钱分东西可以商量，处罚强制一般不行！"
+            },
+            {
+                question: "公民甲不服某区公安分局的罚款决定，想到法院起诉，以下说法正确的是？",
+                options: ["只能到基层法院起诉", "只能到中级法院起诉", "可以到基层法院起诉", "可以到高级法院起诉"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！也可以到中级！<br>B. 错误！不是只能中级！<br>C. 正确！<span class='highlight-red'>区公安分局是区级部门，一般到基层法院起诉，但也可以在特定情况下到中级法院！</span><br>D. 错误！不能直接到高级！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>告区里的局，一般去基层法院就行！"
+            },
+            {
+                question: "两个以上人民法院都有管辖权的案件，原告可以向哪个法院起诉？",
+                options: ["只能向其中一个", "可以向其中一个人民法院起诉", "必须向级别高的", "只能向被告所在地"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！可以选择！<br>B. 正确！<span class='highlight-red'>两个以上法院都有管辖权时，原告可以选择向其中一个法院起诉！</span><br>C. 错误！不是必须向级别高的！<br>D. 错误！不是只能向被告所在地！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>两个法院都能告？原告可以挑一个自己方便的！"
+            },
+            {
+                question: "在行政诉讼中，如果原告错列被告，法院应当如何处理？",
+                options: ["直接驳回起诉", "告知原告变更，原告不变更的，驳回起诉", "直接变更被告", "不予受理"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！不是直接驳回！<br>B. 正确！<span class='highlight-red'>法院应当告知原告变更，原告不变更的，驳回起诉！</span><br>C. 错误！法院不能直接变更！<br>D. 错误！不是直接不受理！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>告错人了？法院告诉你改，改了继续告，不改就驳回！"
+            },
+            {
+                question: "行政诉讼中，复议机关改变原具体行政行为，原告不服起诉的，被告是？",
+                options: ["原机关", "复议机关", "原机关和复议机关", "法院"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！不是只告原机关！<br>B. 正确！<span class='highlight-red'>复议改变，只告复议机关！</span><br>C. 错误！不是共同被告！<br>D. 错误！法院不是被告！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>复议动手改了，就告改的人！市政府改了，就告市政府！"
+            },
+            {
+                question: "行政诉讼的受案范围中，下列哪项属于不可诉行为？",
+                options: ["行政拘留", "吊销营业执照", "国防行为", "责令停产停业"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！行政拘留可以告！<br>B. 错误！吊销执照可以告！<br>C. 正确！<span class='highlight-red'>国防外交行为不可诉！</span><br>D. 错误！责令停产停业可以告！<br><span class='highlight-purple'>💡 小白记忆口诀：</span>处罚强制许可都能告，但国防外交红头文件内部任命不能告！"
+            }
+        ];
+
+        // ========== 初始化 ==========
+        window.onload = function() {
+            renderQuiz('quiz-module1', quiz1Data);
+            renderQuiz('quiz-module2', quiz2Data);
+            renderQuiz('quiz-module3', quiz3Data);
+            renderQuiz('quiz-module4', quiz4Data);
+            renderQuiz('quiz-module5', quiz5Data);
+            renderQuiz('quiz-module6', quiz6Data);
+            renderQuiz('quiz-module7', quiz7Data);
+            renderQuiz('quiz-module8', quiz8Data);
+            renderQuiz('quiz-module9', quiz9Data);
+            renderQuiz('quiz-module10', quiz10Data);
+            renderQuiz('practiceQuestions', practiceData);
+            updateScore();
+        };
+    </script>
+</body>
+</html>

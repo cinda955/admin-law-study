@@ -1,0 +1,1286 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>行政复议法学习 - 辅警备考</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: linear-gradient(135deg, #e67e22 0%, #d35400 100%); min-height: 100vh; color: #333; }
+        .progress-bar { position: fixed; top: 0; left: 0; width: 100%; height: 4px; background: rgba(255,255,255,0.1); z-index: 1000; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #ff9f43, #feca57); width: 0%; transition: width 0.3s ease; }
+        .top-nav { position: fixed; top: 4px; left: 0; right: 0; background: rgba(230, 126, 34, 0.95); backdrop-filter: blur(10px); padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 999; border-bottom: 1px solid rgba(255,255,255,0.2); }
+        .logo { color: #fff; font-size: 18px; font-weight: bold; display: flex; align-items: center; gap: 8px; }
+        .score-display { background: rgba(255,255,255,0.2); color: #fff; padding: 8px 16px; border-radius: 20px; font-size: 14px; }
+        .sidebar { position: fixed; left: 0; top: 50px; width: 260px; height: calc(100vh - 50px); background: rgba(255,255,255,0.95); overflow-y: auto; padding: 20px 0; box-shadow: 2px 0 10px rgba(0,0,0,0.1); z-index: 998; }
+        .sidebar-title { color: #2c3e50; padding: 0 20px 15px; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid #eee; margin-bottom: 15px; }
+        .nav-item { padding: 12px 20px; color: #666; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 10px; font-size: 14px; border-left: 3px solid transparent; text-decoration: none; }
+        .nav-item:hover { background: rgba(230, 126, 34, 0.1); color: #e67e22; }
+        .nav-item.active { background: rgba(230, 126, 34, 0.15); color: #e67e22; border-left-color: #e67e22; font-weight: bold; }
+        .main-content { margin-left: 260px; padding: 70px 30px 30px; max-width: 900px; }
+        .section-header { text-align: center; margin-bottom: 40px; }
+        .section-header h1 { font-size: 42px; color: #fff; margin-bottom: 10px; text-shadow: 0 0 30px rgba(0,0,0,0.2); }
+        .section-header p { color: rgba(255,255,255,0.8); font-size: 16px; }
+        .knowledge-card { background: #fff; border-radius: 20px; padding: 30px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); scroll-margin-top: 100px; }
+        .knowledge-card h2 { font-size: 24px; color: #333; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; border-bottom: 2px solid #e67e22; padding-bottom: 15px; }
+        .knowledge-card h3 { font-size: 18px; color: #555; margin: 20px 0 10px; padding-left: 15px; border-left: 4px solid #e67e22; }
+        .knowledge-content p { line-height: 1.8; color: #555; margin-bottom: 15px; }
+        .highlight-red { color: #e74c3c; font-weight: bold; background: rgba(231, 76, 60, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .highlight-blue { color: #3498db; font-weight: bold; background: rgba(52, 152, 219, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .highlight-green { color: #27ae60; font-weight: bold; background: rgba(39, 174, 96, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .highlight-orange { color: #e67e22; font-weight: bold; background: rgba(230, 126, 34, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .highlight-purple { color: #9b59b6; font-weight: bold; background: rgba(155, 89, 182, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .example { background: linear-gradient(135deg, #fff3e0, #ffe0b2); border-left: 4px solid #ff9800; padding: 15px 20px; border-radius: 0 10px 10px 0; margin: 15px 0; }
+        .example p { color: #e65100; margin: 8px 0; }
+        .memory-tip { background: linear-gradient(135deg, #e8f5e9, #c8e6c9); border-left: 4px solid #4caf50; padding: 15px 20px; border-radius: 0 10px 10px 0; margin: 15px 0; }
+        .memory-tip p { color: #2e7d32; margin: 0; }
+        .warning { background: linear-gradient(135deg, #ffebee, #ffcdd2); border-left: 4px solid #f44336; padding: 15px 20px; border-radius: 0 10px 10px 0; margin: 15px 0; }
+        .warning p { color: #c62828; margin: 0; }
+        .quiz-container { margin-top: 30px; }
+        .quiz-card { background: #f8f9fa; border-radius: 15px; padding: 20px; margin-bottom: 20px; border: 1px solid #e9ecef; }
+        .question { font-size: 16px; color: #333; margin-bottom: 15px; font-weight: 500; }
+        .question-num { display: inline-block; background: #e67e22; color: #fff; width: 28px; height: 28px; border-radius: 50%; text-align: center; line-height: 28px; margin-right: 10px; font-size: 14px; }
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .option-btn { padding: 12px 20px; background: #fff; border: 2px solid #e9ecef; border-radius: 10px; cursor: pointer; text-align: left; font-size: 15px; color: #555; transition: all 0.3s ease; }
+        .option-btn:hover { border-color: #e67e22; background: rgba(230, 126, 34, 0.05); }
+        .option-letter { display: inline-block; width: 26px; height: 26px; background: #e9ecef; border-radius: 50%; text-align: center; line-height: 26px; margin-right: 10px; font-weight: bold; color: #e67e22; }
+        .option-btn.correct { background: #d4edda; border-color: #28a745; }
+        .option-btn.correct .option-letter { background: #28a745; color: #fff; }
+        .option-btn.wrong { background: #f8d7da; border-color: #dc3545; }
+        .option-btn.wrong .option-letter { background: #dc3545; color: #fff; }
+        .option-btn.disabled { cursor: not-allowed; opacity: 0.7; }
+        .explanation { background: linear-gradient(135deg, #fff8e1, #ffecb3); border-radius: 10px; padding: 15px 20px; margin-top: 15px; display: none; line-height: 1.8; border: 1px solid #ffc107; }
+        .explanation .result { font-size: 18px; font-weight: bold; margin-bottom: 10px; }
+        .explanation .result.correct { color: #28a745; }
+        .explanation .result.wrong { color: #dc3545; }
+        .framework-section { background: #fff; border-radius: 20px; padding: 30px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); scroll-margin-top: 100px; }
+        .framework-section h2 { font-size: 28px; color: #333; margin-bottom: 25px; text-align: center; border-bottom: 2px solid #e67e22; padding-bottom: 15px; }
+        .framework-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .framework-card { background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-radius: 15px; padding: 20px; border-left: 4px solid #e67e22; }
+        .framework-card h3 { font-size: 18px; color: #e67e22; margin-bottom: 10px; }
+        .framework-card p { color: #666; font-size: 14px; margin: 5px 0; line-height: 1.6; }
+        .practice-section { background: #fff; border-radius: 20px; padding: 30px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); scroll-margin-top: 100px; }
+        .practice-section h2 { font-size: 28px; color: #333; margin-bottom: 25px; text-align: center; border-bottom: 2px solid #d35400; padding-bottom: 15px; }
+        .table-section { background: #f8f9fa; border-radius: 10px; padding: 20px; margin: 15px 0; overflow-x: auto; }
+        .table-section table { width: 100%; border-collapse: collapse; }
+        .table-section th, .table-section td { padding: 12px 15px; text-align: left; border: 1px solid #ddd; }
+        .table-section th { background: #e67e22; color: #fff; }
+        .table-section tr:nth-child(even) { background: #fff; }
+        @media (max-width: 768px) { .sidebar { width: 100%; height: auto; position: relative; margin-top: 50px; } .main-content { margin-left: 0; padding-top: 80px; } }
+        .close-nav-btn { background: rgba(255,255,255,0.2); border: none; color: #fff; font-size: 18px; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.3s; }
+        .close-nav-btn:hover { background: rgba(255,255,255,0.3); }
+    </style>
+</head>
+<body>
+    <div class="progress-bar"><div class="progress-fill" id="mainProgress"></div></div>
+    <nav class="top-nav" id="topNav">
+        <div class="logo">⚖️ 行政复议法基础知识学习</div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <div class="score-display" id="totalScore">已答: 0/0</div>
+            <button class="close-nav-btn" onclick="closeTopNav()">✕</button>
+        </div>
+    </nav>
+    <aside class="sidebar">
+        <div class="sidebar-title">📖 目录导航</div>
+        <a href="#module1" class="nav-item active" onclick="scrollToSection(this, event)">📜 模块1: 行政复议的概念</a>
+        <a href="#module2" class="nav-item" onclick="scrollToSection(this, event)">📋 模块2: 基本原则</a>
+        <a href="#module3" class="nav-item" onclick="scrollToSection(this, event)">🎯 模块3: 受案范围</a>
+        <a href="#module4" class="nav-item" onclick="scrollToSection(this, event)">📄 模块4: 附带性审查</a>
+        <a href="#module5" class="nav-item" onclick="scrollToSection(this, event)">👥 模块5: 复议参加人</a>
+        <a href="#module6" class="nav-item" onclick="scrollToSection(this, event)">🏛️ 模块6: 管辖与申请</a>
+        <a href="#module7" class="nav-item" onclick="scrollToSection(this, event)">⚖️ 模块7: 举证责任</a>
+        <a href="#module8" class="nav-item" onclick="scrollToSection(this, event)">📝 模块8: 复议决定类型</a>
+        <a href="#module9" class="nav-item" onclick="scrollToSection(this, event)">⏰ 模块9: 决定期限与程序</a>
+        <a href="#module10" class="nav-item" onclick="scrollToSection(this, event)">🚨 模块10: 复议执行</a>
+        <a href="#framework" class="nav-item" onclick="scrollToSection(this, event)">📋 知识框架总览</a>
+        <a href="#practice" class="nav-item" onclick="scrollToSection(this, event)">📝 练习专区</a>
+    </aside>
+    <main class="main-content">
+        <div class="section-header">
+            <h1>⚖️ 行政复议法基础知识学习</h1>
+            <p>系统学习行政复议法知识，轻松应对辅警考试</p>
+        </div>
+        
+        <section id="module1" class="knowledge-card">
+            <h2>📜 模块1: 行政复议的概念</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">核心概念</span>：行政复议就是<span class="highlight-blue">"民告官"</span>！老百姓认为行政机关的行政行为侵犯了自己的合法权益，到行政机关那里去"告状"，让行政机关来审查这个行政行为合不合法、合不合理！</p>
+                
+                <h3>📌 一、什么是行政复议</h3>
+                <p>简单说就是：<span class="highlight-red">申请人（老百姓）到复议机关（行政机关）去告被申请人（行政机关）！</span></p>
+                <p>• <span class="highlight-blue">申请人</span>：就是老百姓，认为行政机关侵犯了自己权益的人</p>
+                <p>• <span class="highlight-blue">被申请人</span>：就是做出行政行为的行政机关（被告）</p>
+                <p>• <span class="highlight-blue">复议机关</span>：审查案件的行政机关（一般是被申请人的上级）</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三被公安局拘留了5天，他不服，怎么办？他可以到<span class="highlight-red">公安局的上级</span>（比如市政府）去申请行政复议！这时候：张三=申请人，公安局=被申请人，市政府=复议机关。为什么这样举例？因为考试会考这三个身份的区分——<span style='color: #e67e22;'>记住：</span>申请人告被申请人，到复议机关那里告！</p></div>
+                
+                <h3>📌 二、行政复议的特点</h3>
+                <p><span class="highlight-red">复议机关还是行政机关</span>，做出的决定还是行政行为！</p>
+                <p>• 复议机关不是法院，是行政机关！</p>
+                <p>• <span style='color: #e74c3c;'>复议决定是行政行为</span>，不是司法行为！</p>
+                <p>• 审查的是行政行为的<span class="highlight-blue">合法性+合理性</span>（<span style='color: #e74c3c;'>双重审查</span>）</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三打架被拘留10天，他申请行政复议。复议机关发现：张三只是轻轻推了对方一下，情节很轻，拘留10天太重了！这就是<span class="highlight-red">不合理</span>（合法但不合理）！复议机关可以变更决定，拘留3天。为什么这样举例？因为考试会考行政复议和行政诉讼的<span style='color: #e67e22;'>区别</span>——行政复议<span class="highlight-red">既审查合法性也审查合理性</span>，行政诉讼只审查合法性！</p></div>
+                
+                <h3>📌 三、合法性与合理性<span style='color: #e74c3c;'>双重审查</span></h3>
+                <p><span class="highlight-red">合法性</span>：有没有法律依据？程序合不合法？</p>
+                <p><span class="highlight-red">合理性</span>：处罚过不过当？同案不同罚公不公正？</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三和李四打架，情节一样，张三被拘留5天，李四被拘留10天。这就叫<span class="highlight-red">不合理</span>！明明情节一样，处罚却不一样，不公平！行政复议机关可以变更。为什么这样举例？因为考试会考"合理性审查"——<span style='color: #e67e22;'>记住：</span><span class="highlight-red">同案不同罚就是不合理！</span></p></div>
+                
+                <p class="memory-tip"><strong><span class='highlight-purple'>记忆口诀：</span></strong>行政复议=民告官！申请人告被申请人，到复议机关那里告！复议机关审查合法性+合理性！</p>
+                <p class="warning">⚠️ <strong>易错点：</strong>行政复议和行政诉讼的<span style='color: #e67e22;'>区别</span>！复议是到行政机关告，诉讼是到法院告！复议既查合法性又查合理性，诉讼只查合法性！<span style='color: #e67e22;'>记住：</span>复议是<span class="highlight-red"><span style='color: #e74c3c;'>双重审查</span></span>，诉讼是<span class="highlight-red">单一审查</span>！</p>
+            </div>
+            <div id="quiz-module1" class="quiz-container"></div>
+        </section>
+        
+        <section id="module2" class="knowledge-card">
+            <h2>📋 模块2: 基本原则</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">核心概念</span>：行政复议的六大原则！考试必考！</p>
+                
+                <h3>📌 一、坚持党的领导原则</h3>
+                <p>所有国家工作都要<span class="highlight-blue">坚持中国共产党的领导</span>！</p>
+                <div class="example"><p><strong>🌰 举例：</strong>考试中出现"行政复议工作应当坚持中国共产党的领导"——<span class="highlight-red">是对的！</span>为什么这样举例？因为所有国家工作都要坚持党的领导，这是宪法规定的！</p></div>
+                
+                <h3>📌 二、合法、公正、公开、高效、便民、为民原则</h3>
+                <p>• <span class="highlight-blue">合法</span>：以法律为依据，以事实为准绳</p>
+                <p>• <span class="highlight-blue">公正</span>：不偏私，同案同判</p>
+                <p>• <span class="highlight-blue">公开</span>：除涉密外，复议过程和结果要公开</p>
+                <p>• <span class="highlight-blue">高效</span>：在规定时限内作出决定</p>
+                <p>• <span class="highlight-blue">便民</span>：可以书面申请，也可以口头申请</p>
+                <p>• <span class="highlight-blue">为民</span>：为老百姓着想，不因申请复议而加重处罚</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三不服行政处罚申请行政复议，复议机关能不能因为他申请复议而加重处罚？<span class="highlight-red">不能！</span>这是为民原则！为什么这样举例？因为考试会考"复议不加重处罚"——<span style='color: #e67e22;'>记住：</span>不能因为老百姓告状就报复！</p></div>
+                
+                <h3>📌 三、<span style='color: #e74c3c;'>一级复议制</span>原则（重要！）</h3>
+                <p><span class="highlight-red">复议机会只有一次！</span>复议决定作出后，不能再申请复议！</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三被拘留，申请行政复议，复议决定维持拘留。张三不服，能不能再申请复议？<span class="highlight-red">不能！</span>复议机会只有一次！他只能提起行政诉讼。为什么这样举例？因为考试会考"<span style='color: #e74c3c;'>一级复议制</span>"——<span style='color: #e67e22;'>记住：</span><span class="highlight-red">复议只有一次，诉讼可以两次！</span></p></div>
+                
+                <h3>📌 四、复议不停止执行原则</h3>
+                <p>申请复议后，原行政行为<span class="highlight-red">不停止执行</span>！</p>
+                <p>例外情形：</p>
+                <p>• 被申请人认为需要停止的</p>
+                <p>• 复议机关认为需要停止的</p>
+                <p>• 申请人、第三人申请停止，复议机关认为合理并决定停止的</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三被拘留，他申请行政复议。拘留要不要停止执行？<span class="highlight-red">不停止！</span>除非被申请人（公安局）认为要停止，或者复议机关认为要停止。为什么这样举例？因为考试会考"不停止执行原则"——<span style='color: #e67e22;'>记住：</span><span class="highlight-red">复议不停止执行，例外要停止！</span></p></div>
+                
+                <p class="memory-tip"><strong><span class='highlight-purple'>记忆口诀：</span></strong>六大原则：党的领导、合法公正公开高效便民为民、<span style='color: #e74c3c;'>一级复议制</span>、不停止执行、<span style='color: #e74c3c;'>双重审查</span>！口诀：党领导，六合法，一级复议不停止！</p>
+                <p class="warning">⚠️ <strong>易错点：</strong><span style='color: #e74c3c;'>一级复议制</span>vs两审终审制！复议是<span class="highlight-red">一级复议</span>（只能复议一次），诉讼是<span class="highlight-red">两审终审</span>（可以上诉一次）！</p>
+            </div>
+            <div id="quiz-module2" class="quiz-container"></div>
+        </section>
+        
+        <section id="module3" class="knowledge-card">
+            <h2>🎯 模块3: 受案范围</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">核心概念</span>：哪些行政行为可以申请行政复议？哪些不能？考试必考！</p>
+                
+                <h3>📌 一、可以申请复议的行政行为</h3>
+                <p><span class="highlight-blue">大部分具体行政行为都可以复议！</span></p>
+                <p>• 行政处罚（警告、罚款、拘留、吊销许可证等）</p>
+                <p>• 行政强制（限制人身自由、查封扣押冻结等）</p>
+                <p>• 行政许可（颁发或吊销许可证）</p>
+                <p>• 行政确认（结婚登记、工伤认定、宅基地确权等）</p>
+                <p>• 行政征收征用（征税、征用土地等）</p>
+                <p>• 行政给付（发放抚恤金、低保金等）</p>
+                <p>• 行政不作为（不履行法定职责）</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三被罚款200元，他不服，能不能申请复议？<span class="highlight-red">能！</span>罚款是行政处罚，属于复议范围。为什么这样举例？因为考试会考"哪些可以复议"——<span style='color: #e67e22;'>记住：</span><span class="highlight-red">具体行政行为一般都可以复议！</span></p></div>
+                
+                <h3>📌 二、不能申请复议的情形</h3>
+                <p><span class="highlight-red">四种不能复议！</span></p>
+                <p>• <span class="highlight-blue">人事处理决定</span>：对公务员的奖惩、任免等内部行政行为</p>
+                <p>• <span class="highlight-blue">行政调解</span>：行政机关对民事纠纷的调解</p>
+                <p>• <span class="highlight-blue">国防、外交等国家行为</span>：级别太高，离老百姓太远</p>
+                <p>• <span class="highlight-blue">抽象行政行为</span>：行政法规、规章等规范性文件（不能单独复议）</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三是公务员，被单位开除。他能不能申请行政复议？<span class="highlight-red">不能！</span>这是内部人事处理，只能按公务员法申诉，不能复议。为什么这样举例？因为考试会考"人事处理不能复议"——<span style='color: #e67e22;'>记住：</span><span class="highlight-red">内部行为不能复议！</span></p></div>
+                
+                <div class="example"><p><strong>🌰 举例：</strong>邻居打架，派出所调解了。张三不服调解，能不能申请复议？<span class="highlight-red">不能！</span>行政调解不能复议，只能提起民事诉讼。为什么这样举例？因为考试会考"调解不能复议"——<span style='color: #e67e22;'>记住：</span><span class="highlight-red">调解是民事纠纷，走民事诉讼！</span></p></div>
+                
+                <p class="memory-tip"><strong><span class='highlight-purple'>记忆口诀：</span></strong>不能复议四情形：人事处理、行政调解、国防外交、抽象行政行为！口诀：人事调解国防抽象，这四不能复议！</p>
+                <p class="warning">⚠️ <strong>易错点：</strong>抽象行政行为不能<span class="highlight-red">单独</span>复议，但可以<span class="highlight-red">附带</span>复议！就是说：你不能直接告文件，但如果该文件被用来处罚你，你可以一起告！</p>
+            </div>
+            <div id="quiz-module3" class="quiz-container"></div>
+        </section>
+        
+        <section id="module4" class="knowledge-card">
+            <h2>📄 模块4: 附带性审查</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">核心概念</span>：规范性文件不能单独复议，但如果该文件被用来作出具体行政行为，可以<span class="highlight-blue">附带审查</span>！</p>
+                
+                <h3>📌 一、什么是附带性审查</h3>
+                <p><span class="highlight-blue">不能单独告文件，但可以一起告！</span></p>
+                <p>• 你不能直接对规范性文件申请复议</p>
+                <p>• 但如果该文件被用来处罚你，你可以在对处罚申请复议时，一并要求审查该文件</p>
+                <div class="example"><p><strong>🌰 举例：</strong>深圳市政府出台"春节期间禁止燃放烟花爆竹"的规定。张三燃放烟花被罚款5000元。张三不服，申请复议时，可以一并要求审查这个规定合不合法！这就是附带性审查。为什么这样举例？因为考试会考"附带性审查"——<span style='color: #e67e22;'>记住：</span><span class="highlight-red">先有具体行为，才能附带审查文件！</span></p></div>
+                
+                <h3>📌 二、<span style='color: #e74c3c;'>可以附带审查</span>的规范性文件</h3>
+                <p>以下规范性文件<span style='color: #e74c3c;'>可以附带审查</span>：</p>
+                <p>• 国务院部门的规定（不是规章）</p>
+                <p>• 县级以上地方各级政府及其工作部门的规定</p>
+                <p>• 乡镇政府的规定</p>
+                <div class="example"><p><strong>🌰 举例：</strong>某县政府出台"禁止养狗"的规定。张三养狗被罚款。张三申请复议时，可以一并要求审查这个规定！为什么这样举例？因为考试会考"哪些<span style='color: #e74c3c;'>可以附带审查</span>"——<span style='color: #e67e22;'>记住：</span><span class="highlight-red">县乡两级政府的规定<span style='color: #e74c3c;'>可以附带审查</span>！</span></p></div>
+                
+                <h3>📌 三、不能附带审查的文件</h3>
+                <p><span class="highlight-red">两类文件连附带都不行！</span></p>
+                <p>• <span class="highlight-blue">行政法规</span>：国务院制定的法规，级别太高</p>
+                <p>• <span class="highlight-blue">规章</span>：部门规章和地方政府规章，级别较高</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三被处罚，处罚依据是国务院的行政法规。张三能不能附带审查这个行政法规？<span class="highlight-red">不能！</span>行政法规级别太高，连附带审查都不行。为什么这样举例？因为考试会考"哪些不能附带审查"——<span style='color: #e67e22;'>记住：</span><span class="highlight-red">行政法规和规章不能附带审查！</span></p></div>
+                
+                <p class="memory-tip"><strong><span class='highlight-purple'>记忆口诀：</span></strong>附带审查口诀：规范性文件可附带，行政法规规章不行！县乡政府的规定，都<span style='color: #e74c3c;'>可以附带审查</span>！</p>
+                <p class="warning">⚠️ <strong>易错点：</strong>地方性法规能不能附带审查？<span class="highlight-red">可以！</span>地方性法规不是规章，也不是行政法规，<span style='color: #e74c3c;'>可以附带审查</span>！</p>
+            </div>
+            <div id="quiz-module4" class="quiz-container"></div>
+        </section>
+        
+        <section id="module5" class="knowledge-card">
+            <h2>👥 模块5: 复议参加人</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">核心概念</span>：复议参加人有哪些？考试必考！</p>
+                
+                <h3>📌 一、申请人</h3>
+                <p><span class="highlight-blue">申请人就是"民"！</span>认为行政行为侵犯自己合法权益的老百姓！</p>
+                <p>• 公民、法人、其他组织都可以做申请人</p>
+                <p>• 必须是认为权益受到侵害的人</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三被罚款200元，他不服申请复议。张三就是申请人！为什么这样举例？因为考试会考"申请人的身份"——<span style='color: #e67e22;'>记住：</span><span class="highlight-red">申请人是认为权益受侵害的老百姓！</span></p></div>
+                
+                <h3>📌 二、被申请人</h3>
+                <p><span class="highlight-blue">被申请人就是"官"！</span>做出行政行为的行政机关！</p>
+                <p>• 是作出具体行政行为的机关</p>
+                <p>• 如果是<span style='color: #e74c3c;'>经批准的行为，批准机关是被申请人</span></p>
+                <div class="example"><p><strong>🌰 举例：</strong>派出所对张三作出行政拘留。派出所是行政机关吗？<span class="highlight-red">是！</span>但派出所是公安局的派出机构，如果拘留是经公安局批准的，被申请人是<span class="highlight-red">公安局</span>！为什么这样举例？因为考试会考"谁是被申请人"——<span style='color: #e67e22;'>记住：</span><span class="highlight-red"><span style='color: #e74c3c;'>经批准的行为，批准机关是被申请人</span>！</span></p></div>
+                
+                <h3>📌 三、第三人</h3>
+                <p><span class="highlight-blue">第三人</span>：与复议案件有利害关系，但不是申请人也不是被申请人的人！</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三打伤李四，派出所拘留张三10天。李四觉得拘留太轻了，能不能参加复议？<span class="highlight-red">能！</span>李四可以作为第三人参加复议！为什么这样举例？因为考试会考"第三人"——<span style='color: #e67e22;'>记住：</span><span class="highlight-red">有利害关系的人可以作为第三人！</span></p></div>
+                
+                <h3>📌 四、复议机关</h3>
+                <p><span class="highlight-blue">复议机关</span>：受理复议申请、作出复议决定的行政机关！</p>
+                <p>• 一般是被申请人的上级机关</p>
+                <p>• 复议机关还是行政机关，不是法院！</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三不服区公安分局的拘留，申请复议。复议机关是谁？<span class="highlight-red">市公安局或区政府！</span>因为它们是区公安分局的上级。为什么这样举例？因为考试会考"复议机关是谁"——<span style='color: #e67e22;'>记住：</span><span class="highlight-red">复议机关一般是被申请人的上级！</span></p></div>
+                
+                <p class="memory-tip"><strong><span class='highlight-purple'>记忆口诀：</span></strong>复议参加人：申请人（民）、被申请人（官）、第三人（利害关系人）、复议机关（上级机关）！</p>
+                <p class="warning">⚠️ <strong>易错点：</strong>复议机关和法院的<span style='color: #e67e22;'>区别</span>！复议机关是<span class="highlight-red">行政机关</span>，法院是<span class="highlight-red">司法机关</span>！<span style='color: #e74c3c;'>复议决定是行政行为</span>，法院判决是司法行为！</p>
+            </div>
+            <div id="quiz-module5" class="quiz-container"></div>
+        </section>
+
+        <section id="module6" class="knowledge-card">
+            <h2>🏛️ 模块6: 管辖与申请</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">核心概念</span>：到哪里申请复议？多久内申请？怎么申请？考试必考！</p>
+                
+                <h3>📌 一、复议管辖</h3>
+                <p><span class="highlight-blue">一般管辖：向被申请人的上级机关申请！</span></p>
+                <p>• 对县级以上地方政府工作部门的行为不服：向本级政府或上一级主管部门申请</p>
+                <p>• 对地方政府的行为不服：向上一级政府申请</p>
+                <p>• 对国务院部门或省政府的行为不服：向作出行为的机关申请（自己复议自己）</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三不服区公安分局的拘留，向谁申请复议？向<span class="highlight-red">市公安局或区政府</span>申请！因为它们是区公安分局的上级。为什么这样举例？因为考试会考"复议管辖"——<span style='color: #e67e22;'>记住：</span><span class="highlight-red">一般找上级机关！</span></p></div>
+                
+                <h3>📌 二、申请期限</h3>
+                <p><span class="highlight-red"><span style='color: #3498db;'>60日</span>内申请！</span></p>
+                <p>• 自知道或应当知道行政行为之日起<span class="highlight-blue"><span style='color: #3498db;'>60日</span>内</span>申请</p>
+                <p>• 因不可抗力或其他正当理由耽误的，期限可以延长</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三1月1日被拘留，1月5日收到拘留决定书。他必须在<span class="highlight-red">3月6日前</span>申请复议（<span style='color: #3498db;'>60日</span>内）！为什么这样举例？因为考试会考"申请期限"——<span style='color: #e67e22;'>记住：</span><span class="highlight-red">知道行为之日起<span style='color: #3498db;'>60日</span>内申请！</span></p></div>
+                
+                <h3>📌 三、申请方式</h3>
+                <p><span class="highlight-blue">书面申请为主，口头申请为辅！</span></p>
+                <p>• 可以书面申请（提交复议申请书）</p>
+                <p>• 书面申请有困难的，可以口头申请（复议机关当场记录）</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三不会写字，能不能申请复议？<span class="highlight-red">能！</span>可以口头申请，复议机关帮他记录。为什么这样举例？因为考试会考"便民原则"——<span style='color: #e67e22;'>记住：</span><span class="highlight-red">书面口头都可以！</span></p></div>
+                
+                <p class="memory-tip"><strong><span class='highlight-purple'>记忆口诀：</span></strong>复议管辖：一般找上级！申请期限：<span style='color: #3498db;'>60日</span>内！申请方式：书面口头都可以！</p>
+                <p class="warning">⚠️ <strong>易错点：</strong>申请期限是<span class="highlight-red"><span style='color: #3498db;'>60日</span></span>不是60天！日=自然日，天=工作日！<span style='color: #e67e22;'>记住：</span>包括节假日！</p>
+            </div>
+            <div id="quiz-module6" class="quiz-container"></div>
+        </section>
+        
+        <section id="module7" class="knowledge-card">
+            <h2>⚖️ 模块7: 举证责任</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">核心概念</span>：复议中谁来举证？<span class="highlight-blue">被申请人（行政机关）承担主要举证责任！</span></p>
+                
+                <h3>📌 一、举证责任分配</h3>
+                <p><span class="highlight-red"><span style='color: #e74c3c;'>被申请人承担主要举证责任</span>！</span></p>
+                <p>• 被申请人要证明行政行为合法、适当</p>
+                <p>• 申请人一般不需要举证</p>
+                <p>• 但在某些情况下申请人也要举证</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三申请复议，说公安局拘留他不合法。张三要不要证明拘留不合法？<span class="highlight-red">不需要！</span>是公安局要证明拘留合法！为什么这样举例？因为考试会考"举证责任"——<span style='color: #e67e22;'>记住：</span><span class="highlight-red">官告民，官举证；民告官，还是官举证！</span></p></div>
+                
+                <h3>📌 二、申请人需要举证的情形</h3>
+                <p>以下情况申请人需要举证：</p>
+                <p>• <span class="highlight-blue">申请行政机关履行法定职责</span>，行政机关拒绝履行的</p>
+                <p>• <span class="highlight-blue">提出行政赔偿请求</span>的，要证明自己受到损害</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三申请政府信息公开，行政机关不理。张三申请复议，要证明什么？要证明<span class="highlight-red">自己申请过政府信息公开</span>！为什么这样举例？因为考试会考"申请人举证"——<span style='color: #e67e22;'>记住：</span><span class="highlight-red">申请人要证明自己申请过、自己受过损害！</span></p></div>
+                
+                <h3>📌 三、调查取证</h3>
+                <p><span class="highlight-red"><span style='color: #e74c3c;'>调查取证<span style='color: #3498db;'>不得少于2人</span></span>！</span></p>
+                <p>• 复议机关有权调查取证</p>
+                <p>• <span style='color: #e74c3c;'>调查取证<span style='color: #3498db;'>不得少于2人</span></span></p>
+                <p>• 要出示工作证件</p>
+                <p>• 被申请人不得自行向申请人收集证据</p>
+                <div class="example"><p><strong>🌰 举例：</strong>复议机关去调查取证，能不能派1个人去？<span class="highlight-red">不能！</span><span style='color: #3498db;'>至少2人</span>！为什么这样举例？因为考试会考"调查取证"——<span style='color: #e67e22;'>记住：</span><span class="highlight-red">调查取证<span style='color: #3498db;'>至少2人</span>！</span></p></div>
+                
+                <p class="memory-tip"><strong><span class='highlight-purple'>记忆口诀：</span></strong>举证责任：被申请人主要举证！申请人特殊情况举证！调查取证<span style='color: #3498db;'>至少2人</span>！</p>
+                <p class="warning">⚠️ <strong>易错点：</strong>被申请人<span class="highlight-red">不得自行向申请人收集证据</span>！就是说：行政机关不能在复议期间去找申请人要证据，这样收集的证据是非法证据！</p>
+            </div>
+            <div id="quiz-module7" class="quiz-container"></div>
+        </section>
+        
+        <section id="module8" class="knowledge-card">
+            <h2>📝 模块8: 复议决定类型</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">核心概念</span>：复议机关可以作出哪些决定？考试必考！</p>
+                
+                <h3>📌 一、维持决定</h3>
+                <p><span class="highlight-blue">行政行为完全正确，维持！</span></p>
+                <p>• 事实清楚，证据确凿</p>
+                <p>• 适用依据正确</p>
+                <p>• 程序合法</p>
+                <p>• 内容适当</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三打架，情节严重，公安拘留他10天，事实清楚、证据确凿、程序合法。复议机关怎么决定？<span class="highlight-red">维持！</span>为什么这样举例？因为考试会考"维持决定"——<span style='color: #e67e22;'>记住：</span><span class="highlight-red">行政行为完全正确就维持！</span></p></div>
+                
+                <h3>📌 二、变更决定</h3>
+                <p><span class="highlight-blue">行政行为合法但不合理，变更！</span></p>
+                <p>• 事实清楚，证据确凿</p>
+                <p>• 但内容不适当（过罚不当）</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三第一次违章停车，交警直接罚款2000元。虽然罚款有法律依据，但<span class="highlight-red">太重了</span>！复议机关怎么决定？变更罚款为200元！为什么这样举例？因为考试会考"变更决定"——<span style='color: #e67e22;'>记住：</span><span class="highlight-red">合法但不合理，变更！</span></p></div>
+                
+                <h3>📌 三、撤销决定</h3>
+                <p><span class="highlight-blue">行政行为违法，撤销！</span></p>
+                <p>• 主要事实不清，证据不足</p>
+                <p>• 适用依据错误</p>
+                <p>• 违反法定程序</p>
+                <p>• 超越职权或滥用职权</p>
+                <div class="example"><p><strong>🌰 举例：</strong>派出所拘留张三，但没有证据证明张三违法。复议机关怎么决定？<span class="highlight-red">撤销拘留决定！</span>为什么这样举例？因为考试会考"撤销决定"——<span style='color: #e67e22;'>记住：</span><span class="highlight-red">事实不清、程序违法、越权，撤销！</span></p></div>
+                
+                <h3>📌 四、确认违法</h3>
+                <p><span class="highlight-blue">行为违法但不宜撤销，确认违法！</span></p>
+                <p>• 撤销会给国家利益造成重大损害</p>
+                <p>• 不具有可撤销的内容</p>
+                <div class="example"><p><strong>🌰 举例：</strong>行政机关违法批准某企业建厂，企业已投资数亿。如果撤销，企业损失巨大。复议机关怎么决定？<span class="highlight-red">确认违法但不撤销！</span>为什么这样举例？因为考试会考"确认违法"——<span style='color: #e67e22;'>记住：</span><span class="highlight-red">撤销会造成重大损失，确认违法！</span></p></div>
+                
+                <p class="memory-tip"><strong><span class='highlight-purple'>记忆口诀：</span></strong>复议决定类型：维持（全对）、变更（不合理）、撤销（违法）、确认违法（不宜撤销）！</p>
+                <p class="warning">⚠️ <strong>易错点：</strong>复议机关<span class="highlight-red">不得作出对申请人更为不利的决定</span>！就是说：不能因为申请复议而加重处罚！</p>
+            </div>
+            <div id="quiz-module8" class="quiz-container"></div>
+        </section>
+        
+        <section id="module9" class="knowledge-card">
+            <h2>⏰ 模块9: 决定期限与程序</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">核心概念</span>：复议机关多久作出决定？考试必考！</p>
+                
+                <h3>📌 一、普通程序期限</h3>
+                <p><span class="highlight-blue"><span style='color: #3498db;'>60日</span>内作出决定！</span></p>
+                <p>• 一般情况：<span class="highlight-red"><span style='color: #3498db;'>60日</span></span></p>
+                <p>• 情况复杂：可以延长<span class="highlight-red"><span style='color: #3498db;'>30日</span></span>（需书面告知申请人）</p>
+                <p>• 最长：<span class="highlight-red">60+30=<span style='color: #3498db;'>90日</span></span></p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三1月1日申请复议，复议机关一般要在<span class="highlight-red">3月2日前</span>作出决定（<span style='color: #3498db;'>60日</span>内）。如果情况复杂，可以延长到<span class="highlight-red">4月1日前</span>（<span style='color: #3498db;'>90日</span>内）。为什么这样举例？因为考试会考"普通程序期限"——<span style='color: #e67e22;'>记住：</span><span class="highlight-red"><span style='color: #3498db;'>60日</span>+延长<span style='color: #3498db;'>30日</span>=最多<span style='color: #3498db;'>90日</span>！</span></p></div>
+                
+                <h3>📌 二、简易程序期限</h3>
+                <p><span class="highlight-blue">简易程序<span style='color: #3498db;'>30日</span>内作出决定！</span></p>
+                <p>• 事实清楚、争议不大的案件可以适用简易程序</p>
+                <p>• 简易程序<span class="highlight-red"><span style='color: #3498db;'>30日</span>内</span>作出决定</p>
+                <p>• 简易程序<span class="highlight-red">不能延长</span>（需要延长就转为普通程序）</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三对罚款50元不服申请复议。案情简单，适用简易程序，<span class="highlight-red"><span style='color: #3498db;'>30日</span>内</span>就要作出决定！为什么这样举例？因为考试会考"简易程序期限"——<span style='color: #e67e22;'>记住：</span><span class="highlight-red">简易程序<span style='color: #3498db;'>30日</span>，不能延长！</span></p></div>
+                
+                <h3>📌 三、繁简分流</h3>
+                <p><span class="highlight-blue">普通程序vs简易程序</span></p>
+                <p>• 普通程序：一般案件，<span style='color: #3498db;'>60日</span>（可延长<span style='color: #3498db;'>30日</span>）</p>
+                <p>• 简易程序：简单案件，<span style='color: #3498db;'>30日</span>（不能延长）</p>
+                <div class="example"><p><strong>🌰 举例：</strong>考试问：行政复议机关应当自受理申请之日起多少日内作出决定？<span class="highlight-red">不能一概而论！</span>要看是普通程序还是简易程序！普通程序<span style='color: #3498db;'>60日</span>，简易程序<span style='color: #3498db;'>30日</span>！为什么这样举例？因为考试会考"决定期限"——<span style='color: #e67e22;'>记住：</span><span class="highlight-red">普通60，简易30，要看程序！</span></p></div>
+                
+                <p class="memory-tip"><strong><span class='highlight-purple'>记忆口诀：</span></strong>决定期限：普通程序<span style='color: #3498db;'>60日</span>（可延30），简易程序<span style='color: #3498db;'>30日</span>（不能延）！口诀：普通六十可延长，简易三十不能延！</p>
+                <p class="warning">⚠️ <strong>易错点：</strong>新法增加了<span class="highlight-red">简易程序</span>！以前只有一种期限，现在有两种！考试要注意区分！</p>
+            </div>
+            <div id="quiz-module9" class="quiz-container"></div>
+        </section>
+        
+        <section id="module10" class="knowledge-card">
+            <h2>🚨 模块10: 复议执行</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">核心概念</span>：复议决定作出后，不履行怎么办？考试必考！</p>
+                
+                <h3>📌 一、被申请人（行政机关）不履行</h3>
+                <p><span class="highlight-blue">行政机关不履行，上级可以责令、约谈、通报批评！</span></p>
+                <p>• 复议机关或上级行政机关<span class="highlight-red">责令限期履行</span></p>
+                <p>• 对拒不履行的，可以<span class="highlight-red">约谈负责人</span></p>
+                <p>• 可以<span class="highlight-red">通报批评</span></p>
+                <div class="example"><p><strong>🌰 举例：</strong>复议决定撤销了某局的处罚决定，但某局不执行。怎么办？复议机关可以<span class="highlight-red">责令限期履行、约谈负责人、通报批评</span>！为什么这样举例？因为考试会考"行政机关不履行"——<span style='color: #e67e22;'>记住：</span><span class="highlight-red">上级责令、约谈、通报！</span></p></div>
+                
+                <h3>📌 二、申请人（老百姓）不履行</h3>
+                <p><span class="highlight-blue">老百姓不履行，强制执行！</span></p>
+                <p>• 逾期不起诉又不履行复议决定：</p>
+                <p>  - 维持决定的，由作出原行政行为的机关强制执行</p>
+                <p>  - 变更决定的，由复议机关强制执行</p>
+                <p>• 没有强制执行权的，申请法院强制执行</p>
+                <div class="example"><p><strong>🌰 举例：</strong>复议决定维持罚款500元，张三不交罚款也不起诉。怎么办？作出处罚的机关（如公安局）可以<span class="highlight-red">强制执行</span>（从张三银行账户划扣）！为什么这样举例？因为考试会考"老百姓不履行"——<span style='color: #e67e22;'>记住：</span><span class="highlight-red">维持决定，原机关执行；变更决定，复议机关执行！</span></p></div>
+                
+                <h3>📌 三、第三人不履行</h3>
+                <p><span class="highlight-blue">第三人不履行的，也是强制执行！</span></p>
+                <div class="example"><p><strong>🌰 举例：</strong>复议决定要求第三人返还财产，第三人不返还。怎么办？<span class="highlight-red">强制执行！</span>为什么这样举例？因为考试会考"第三人不履行"——<span style='color: #e67e22;'>记住：</span><span class="highlight-red">第三人不履行，强制执行！</span></p></div>
+                
+                <p class="memory-tip"><strong><span class='highlight-purple'>记忆口诀：</span></strong>不履行后果：官不履行，责令约谈通报；民不履行，强制执行！</p>
+                <p class="warning">⚠️ <strong>易错点：</strong>申请人不履行时，要看复议决定类型：<span class="highlight-red">维持决定→原机关执行；变更决定→复议机关执行！</span></p>
+            </div>
+            <div id="quiz-module10" class="quiz-container"></div>
+        </section>
+
+        <section id="framework" class="framework-section">
+            <h2>📋 知识框架总览</h2>
+            <div class="framework-grid">
+                <div class="framework-card">
+                    <h3>1. 行政复议概念</h3>
+                    <p><span class="highlight-red">核心：</span>民告官，申请人告被申请人到复议机关</p>
+                    <p><span class="highlight-purple">口诀：</span>复议=民告官！</p>
+                    <p><span class="highlight-orange">易错：</span>复议既查合法性又查合理性！</p>
+                </div>
+                <div class="framework-card">
+                    <h3>2. 基本原则</h3>
+                    <p><span class="highlight-red">核心：</span>党的领导、合法公正公开高效便民为民</p>
+                    <p><span class="highlight-purple">口诀：</span>党领导，六合法，一级复议不停止！</p>
+                    <p><span class="highlight-orange">易错：</span><span style='color: #e74c3c;'>一级复议制</span>vs两审终审制！</p>
+                </div>
+                <div class="framework-card">
+                    <h3>3. 受案范围</h3>
+                    <p><span class="highlight-red">核心：</span>具体行政行为可以复议</p>
+                    <p><span class="highlight-purple">口诀：</span>人事调解国防抽象，这四不能复议！</p>
+                    <p><span class="highlight-orange">易错：</span>抽象行政行为不能单独复议，但可附带！</p>
+                </div>
+                <div class="framework-card">
+                    <h3>4. 附带性审查</h3>
+                    <p><span class="highlight-red">核心：</span>规范性文件不能单独复议，可附带审查</p>
+                    <p><span class="highlight-purple">口诀：</span>行政法规规章不能附带！</p>
+                    <p><span class="highlight-orange">易错：</span>地方性法规<span style='color: #e74c3c;'>可以附带审查</span>！</p>
+                </div>
+                <div class="framework-card">
+                    <h3>5. 复议参加人</h3>
+                    <p><span class="highlight-red">核心：</span>申请人、被申请人、第三人、复议机关</p>
+                    <p><span class="highlight-purple">口诀：</span>申请人（民）、被申请人（官）、第三人（利害关系）</p>
+                    <p><span class="highlight-orange">易错：</span><span style='color: #e74c3c;'>复议机关是行政机关</span>，不是法院！</p>
+                </div>
+                <div class="framework-card">
+                    <h3>6. 管辖与申请</h3>
+                    <p><span class="highlight-red">核心：</span>一般向被申请人的上级申请，<span style='color: #3498db;'>60日</span>内申请</p>
+                    <p><span class="highlight-purple">口诀：</span>管辖找上级，期限<span style='color: #3498db;'>60日</span>，书面口头都可！</p>
+                    <p><span class="highlight-orange">易错：</span>期限是<span style='color: #3498db;'>60日</span>不是60天！</p>
+                </div>
+                <div class="framework-card">
+                    <h3>7. 举证责任</h3>
+                    <p><span class="highlight-red">核心：</span><span style='color: #e74c3c;'>被申请人承担主要举证责任</span></p>
+                    <p><span class="highlight-purple">口诀：</span>官举证为主，民举证为辅，调查<span style='color: #3498db;'>至少2人</span>！</p>
+                    <p><span class="highlight-orange">易错：</span>被申请人不得自行向申请人收集证据！</p>
+                </div>
+                <div class="framework-card">
+                    <h3>8. 复议决定类型</h3>
+                    <p><span class="highlight-red">核心：</span>维持、变更、撤销、确认违法</p>
+                    <p><span class="highlight-purple">口诀：</span>维持（全对）、变更（不合理）、撤销（违法）</p>
+                    <p><span class="highlight-orange">易错：</span>复议不得作出对申请人更不利的决定！</p>
+                </div>
+                <div class="framework-card">
+                    <h3>9. 决定期限与程序</h3>
+                    <p><span class="highlight-red">核心：</span>普通程序<span style='color: #3498db;'>60日</span>，简易程序<span style='color: #3498db;'>30日</span></p>
+                    <p><span class="highlight-purple">口诀：</span>普通六十可延长，简易三十不能延！</p>
+                    <p><span class="highlight-orange">易错：</span>新法增加简易程序！</p>
+                </div>
+                <div class="framework-card">
+                    <h3>10. 复议执行</h3>
+                    <p><span class="highlight-red">核心：</span>官不履行责令约谈，民不履行强制执行</p>
+                    <p><span class="highlight-purple">口诀：</span>官不履行责令约谈，民不履行强制执行！</p>
+                    <p><span class="highlight-orange">易错：</span>维持决定原机关执行，变更决定复议机关执行！</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="practice" class="practice-section">
+            <h2>📝 练习专区（50题综合练习）</h2>
+            <div id="practiceQuestions" class="quiz-container"></div>
+        </section>
+    </main>
+    
+    <script>
+        // ========== 工具函数 ==========
+        function closeTopNav() {
+            document.getElementById('topNav').style.display = 'none';
+        }
+        
+        function scrollToSection(element, event) {
+            event.preventDefault();
+            const targetId = element.getAttribute('href').slice(1);
+            const target = document.getElementById(targetId);
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            element.classList.add('active');
+        }
+        
+        // ========== 答题状态 ==========
+        let totalAnswered = 0;
+        let totalCorrect = 0;
+        
+        function updateScore() {
+            const scoreDisplay = document.getElementById('totalScore');
+            if (scoreDisplay) {
+                scoreDisplay.textContent = `已答: ${totalAnswered}/100`;
+            }
+            const progress = document.getElementById('mainProgress');
+            if (progress) {
+                const totalQuestions = 100;
+                progress.style.width = `${(totalAnswered / totalQuestions) * 100}%`;
+            }
+        }
+        
+        // ========== 渲染题目 ==========
+        function renderQuiz(containerId, quizData) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            quizData.forEach((quiz, index) => {
+                const quizCard = document.createElement('div');
+                quizCard.className = 'quiz-card';
+                quizCard.innerHTML = `
+                    <div class="question">
+                        <span class="question-num">${index + 1}</span>
+                        ${quiz.question}
+                    </div>
+                    <div class="options">
+                        ${quiz.options.map((opt, optIndex) => `
+                            <button class="option-btn" onclick="checkAnswer(this, ${quiz.correct === optIndex}, '${containerId}', ${index}, ${optIndex})">
+                                <span class="option-letter">${String.fromCharCode(65 + optIndex)}</span>
+                                ${opt}
+                            </button>
+                        `).join('')}
+                    </div>
+                    <div class="explanation" id="exp-${containerId}-${index}">
+                        <div class="result"></div>
+                        <div class="detail"></div>
+                    </div>
+                `;
+                container.appendChild(quizCard);
+            });
+        }
+        
+        // ========== 检查答案 ==========
+        function checkAnswer(button, isCorrect, containerId, questionIndex, optionIndex) {
+            const container = document.getElementById(containerId);
+            const quizCard = button.closest('.quiz-card');
+            const buttons = quizCard.querySelectorAll('.option-btn');
+            
+            // 禁用所有按钮
+            buttons.forEach(btn => btn.classList.add('disabled'));
+            buttons.forEach(btn => btn.onclick = null);
+            
+            // 标记正确和错误选项
+            buttons.forEach((btn, idx) => {
+                if (idx === getCorrectIndex(containerId, questionIndex)) {
+                    btn.classList.add('correct');
+                } else if (btn === button && !isCorrect) {
+                    btn.classList.add('wrong');
+                }
+            });
+            
+            // 显示解析
+            const explanation = document.getElementById(`exp-${containerId}-${questionIndex}`);
+            if (explanation) {
+                const explanationText = getExplanation(containerId, questionIndex);
+                explanation.style.display = 'block';
+                explanation.querySelector('.result').textContent = isCorrect ? '✅ 回答正确！' : '❌ 回答错误！';
+                explanation.querySelector('.result').className = `result ${isCorrect ? 'correct' : 'wrong'}`;
+                explanation.querySelector('.detail').innerHTML = explanationText;
+            }
+            
+            // 更新分数
+            totalAnswered++;
+            if (isCorrect) totalCorrect++;
+            updateScore();
+        }
+        
+        function getCorrectIndex(containerId, questionIndex) {
+            let quizData;
+            if (containerId === 'quiz-module1') quizData = quiz1Data;
+            else if (containerId === 'quiz-module2') quizData = quiz2Data;
+            else if (containerId === 'quiz-module3') quizData = quiz3Data;
+            else if (containerId === 'quiz-module4') quizData = quiz4Data;
+            else if (containerId === 'quiz-module5') quizData = quiz5Data;
+            else if (containerId === 'quiz-module6') quizData = quiz6Data;
+            else if (containerId === 'quiz-module7') quizData = quiz7Data;
+            else if (containerId === 'quiz-module8') quizData = quiz8Data;
+            else if (containerId === 'quiz-module9') quizData = quiz9Data;
+            else if (containerId === 'quiz-module10') quizData = quiz10Data;
+            else if (containerId === 'practiceQuestions') quizData = practiceData;
+            return quizData[questionIndex].correct;
+        }
+        
+        function getExplanation(containerId, questionIndex) {
+            let quizData;
+            if (containerId === 'quiz-module1') quizData = quiz1Data;
+            else if (containerId === 'quiz-module2') quizData = quiz2Data;
+            else if (containerId === 'quiz-module3') quizData = quiz3Data;
+            else if (containerId === 'quiz-module4') quizData = quiz4Data;
+            else if (containerId === 'quiz-module5') quizData = quiz5Data;
+            else if (containerId === 'quiz-module6') quizData = quiz6Data;
+            else if (containerId === 'quiz-module7') quizData = quiz7Data;
+            else if (containerId === 'quiz-module8') quizData = quiz8Data;
+            else if (containerId === 'quiz-module9') quizData = quiz9Data;
+            else if (containerId === 'quiz-module10') quizData = quiz10Data;
+            else if (containerId === 'practiceQuestions') quizData = practiceData;
+            return quizData[questionIndex].explanation;
+        }
+
+        // ========== 题库数据 ==========
+        const quiz1Data = [
+            {
+                question: "行政复议是什么性质的行为？",
+                options: ["民事行为", "行政行为", "司法行为", "立法行为"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！行政复议不是民事行为，民事行为是平等主体之间的行为，行政复议是行政机关行使职权的行为。<br>B. 正确！<span style='color: #e74c3c;'>行政复议是行政机关作出的行政行为</span>！<span style='color: #e74c3c;'>复议机关是行政机关</span>，作出的决定是行政行为。<span style='color: #e67e22;'>记住：</span><span style='color: #e74c3c;'>复议机关还是官</span>，不是法院！<br>C. 错误！行政复议不是司法行为，司法行为是法院作出的判决裁定。行政复议虽然类似司法审查，但本质还是行政行为。<br>D. 错误！行政复议不是立法行为，立法行为是制定法律法规的行为。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>复议是行政行为，不是司法行为！<span style='color: #e74c3c;'>复议机关还是官</span>！"
+            },
+            {
+                question: "行政复议审查的内容包括哪些？",
+                options: ["只审查合法性", "只审查合理性", "既审查合法性又审查合理性", "不审查合法性也不审查合理性"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！行政复议不仅审查合法性，还审查合理性。这是行政复议和行政诉讼的重要<span style='color: #e67e22;'>区别</span>。<br>B. 错误！行政复议不仅审查合理性，还审查合法性。两个都要审查！<br>C. 正确！<span style='color: #e74c3c;'>行政复议既审查合法性又审查合理性</span>！这是行政复议的特点，也是和行政诉讼的<span style='color: #e67e22;'>区别</span>（行政诉讼只审查合法性）。<br>D. 错误！行政复议要审查合法性和合理性，不可能都不审查。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>复议<span style='color: #e74c3c;'>双重审查</span>，既查合法又查合理！诉讼只查合法，这是<span style='color: #e67e22;'>区别</span>！"
+            },
+            {
+                question: "张三被公安局拘留5天，他不服申请行政复议。谁是申请人？",
+                options: ["公安局", "张三", "市政府", "派出所"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！公安局是作出行政行为的机关，是被申请人，不是申请人。<br>B. 正确！张三是认为权益受到侵害的老百姓，是申请人！<span style='color: #e74c3c;'>申请人就是民</span>，是被处罚的人。<br>C. 错误！市政府可能是复议机关，不是申请人。复议机关是审查案件的机关。<br>D. 错误！派出所是作出行政行为的机关（如果是派出所作出的），是被申请人，不是申请人。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span><span style='color: #e74c3c;'>申请人=民</span>，<span style='color: #e74c3c;'>被申请人=官</span>，<span style='color: #e74c3c;'>复议机关=上级官</span>！"
+            },
+            {
+                question: "关于行政复议，下列说法正确的是？",
+                options: ["复议机关是司法机关", "复议决定是司法行为", "<span style='color: #e74c3c;'>复议机关是行政机关</span>", "复议决定不能被提起行政诉讼"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！复议机关不是司法机关，司法机关是法院。<span style='color: #e74c3c;'>复议机关是行政机关</span>。<br>B. 错误！复议决定不是司法行为，司法行为是法院作出的判决裁定。<span style='color: #e74c3c;'>复议决定是行政行为</span>。<br>C. 正确！<span style='color: #e74c3c;'>复议机关是行政机关</span>！复议机关一般是被申请人的上级机关，还是行政机关，不是法院。<br>D. 错误！复议决定可以被提起行政诉讼！对复议决定不服的，可以提起行政诉讼。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span><span style='color: #e74c3c;'>复议机关是行政机关</span>，<span style='color: #e74c3c;'>复议决定是行政行为</span>！"
+            },
+            {
+                question: "行政复议和行政诉讼的<span style='color: #e67e22;'>区别</span>是什么？",
+                options: ["复议到行政机关告，诉讼到法院告", "复议只查合法性，诉讼查合法性和合理性", "复议不能变更决定，诉讼可以变更", "复议是司法行为，诉讼是行政行为"],
+                correct: 0,
+                explanation: "✅ 正确答案是 A<br>【逐项解析】<br>A. 正确！<span style='color: #e74c3c;'>行政复议到行政机关告</span>，<span style='color: #e74c3c;'>行政诉讼到法院告</span>！这是最本质的<span style='color: #e67e22;'>区别</span>。<br>B. 错误！说反了！行政复议既查合法性又查合理性，行政诉讼只查合法性。<br>C. 错误！行政复议可以变更决定，复议机关可以变更原行政行为。<br>D. 错误！说反了！行政复议是行政行为，行政诉讼是司法行为。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>复议到机关告，诉讼到法院告！复议<span style='color: #e74c3c;'>双重审查</span>，诉讼单一审查！"
+            }
+        ];
+        
+        const quiz2Data = [
+            {
+                question: "行政复议应当坚持什么原则？",
+                options: ["坚持党的领导原则", "合法、公正、公开、高效、便民、为民原则", "<span style='color: #e74c3c;'>一级复议制</span>原则", "以上都要坚持"],
+                correct: 3,
+                explanation: "✅ 正确答案是 D<br>【逐项解析】<br>A. 错误！虽然要坚持党的领导原则，但不是只坚持这一个原则，还有其他原则。<br>B. 错误！虽然要坚持合法公正公开高效便民为民原则，但不是只坚持这一个原则，还有其他原则。<br>C. 错误！虽然要坚持<span style='color: #e74c3c;'>一级复议制</span>原则，但不是只坚持这一个原则，还有其他原则。<br>D. 正确！行政复议要坚持所有原则：党的领导、合法公正公开高效便民为民、<span style='color: #e74c3c;'>一级复议制</span>、不停止执行、<span style='color: #e74c3c;'>双重审查</span>等原则！<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>复议原则都要坚持，不是只坚持某一个！"
+            },
+            {
+                question: "关于<span style='color: #e74c3c;'>一级复议制</span>原则，下列说法正确的是？",
+                options: ["可以申请多次复议", "复议机会只有一次", "复议后可以再复议", "复议和诉讼都可以多次"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！<span style='color: #e74c3c;'>一级复议制</span>意味着只能申请一次复议，不能申请多次。<br>B. 正确！<span style='color: #e74c3c;'>一级复议制</span>意味着复议机会只有一次！复议决定作出后，不能再申请复议，只能提起行政诉讼。<br>C. 错误！复议后不能再复议，只能提起行政诉讼。<br>D. 错误！复议只有一次，诉讼是两审终审（可以上诉一次）。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span><span style='color: #e74c3c;'>一级复议制</span>：复议只有一次！不服复议决定只能起诉！"
+            },
+            {
+                question: "张三被拘留后申请行政复议，拘留是否停止执行？",
+                options: ["停止执行", "不停止执行", "由张三决定是否停止", "由法院决定是否停止"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！申请复议<span style='color: #e74c3c;'>不停止执行是原则</span>，不是停止执行。<br>B. 正确！申请复议不停止执行！这是原则。例外：被申请人认为需要停止、复议机关认为需要停止、申请人申请停止且复议机关认为合理并决定停止。<br>C. 错误！张三不能决定是否停止，只有被申请人、复议机关可以决定。<br>D. 错误！法院不参与行政复议，复议是行政机关审理。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>复议<span style='color: #e74c3c;'>不停止执行是原则</span>，例外要停止！"
+            },
+            {
+                question: "行政复议的便民原则体现在哪里？",
+                options: ["只能书面申请", "只能口头申请", "可以书面申请也可以口头申请", "不能申请复议"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！不是只能书面申请，也可以口头申请。<br>B. 错误！不是只能口头申请，也可以书面申请。<br>C. 正确！便民原则体现在：可以书面申请，也可以口头申请！书面申请有困难的，可以口头申请，复议机关当场记录。<br>D. 错误！当然可以申请复议，便民原则就是为了方便老百姓申请复议。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>便民原则：书面口头都可以！"
+            },
+            {
+                question: "张三和李四打架，情节一样，张三被拘留5天，李四被拘留10天。张三申请复议，复议机关应该怎么处理？",
+                options: ["维持原处罚决定", "变更处罚决定", "撤销处罚决定", "确认违法"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！不能维持，因为处罚明显不合理，同案不同罚。<br>B. 正确！应该变更处罚决定！张三和李四情节一样，处罚却不同，这叫不合理（过罚不当），复议机关应该变更。<br>C. 错误！不是撤销，原处罚有法律依据，只是不合理，不是违法。<br>D. 错误！不是确认违法，原处罚不是违法，只是不合理。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>同案不同罚就是不合理，复议机关应该变更！"
+            }
+        ];
+        
+        const quiz3Data = [
+            {
+                question: "下列哪些行政行为可以申请行政复议？",
+                options: ["行政处罚", "行政强制", "行政许可", "以上都可以"],
+                correct: 3,
+                explanation: "✅ 正确答案是 D<br>【逐项解析】<br>A. 错误！虽然行政处罚可以申请复议，但不是只能处罚可以复议，还有其他行为也可以。<br>B. 错误！虽然行政强制可以申请复议，但不是只能强制可以复议，还有其他行为也可以。<br>C. 错误！虽然行政许可可以申请复议，但不是只能许可可以复议，还有其他行为也可以。<br>D. 正确！行政处罚、行政强制、行政许可等具体行政行为都可以申请行政复议！大部分具体行政行为都可以复议。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>具体行政行为一般都可以复议！"
+            },
+            {
+                question: "张三是公务员，被单位开除，他不服，可以申请行政复议吗？",
+                options: ["可以申请复议", "不能申请复议，只能按公务员法申诉", "可以提起行政诉讼", "可以直接申请国家赔偿"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！人事处理不能申请行政复议，这是内部行政行为。<br>B. 正确！人事处理不能申请行政复议，只能按公务员法申诉！人事处理是行政机关内部的人事管理行为，属于内部行政行为，不能复议。<br>C. 错误！人事处理一般也不能提起行政诉讼，只能申诉。<br>D. 错误！人事处理不能申请国家赔偿，只能申诉。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>人事处理不能复议，只能申诉！"
+            },
+            {
+                question: "下列哪种行为不能申请行政复议？",
+                options: ["罚款200元", "拘留5天", "行政调解", "吊销许可证"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！罚款是行政处罚，可以申请行政复议。<br>B. 错误！拘留是行政处罚，可以申请行政复议。<br>C. 正确！行政调解不能申请行政复议！调解是行政机关对民事纠纷的调解，不能复议，只能提起民事诉讼。<br>D. 错误！吊销许可证是行政处罚，可以申请行政复议。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>行政调解不能复议，只能民事诉讼！"
+            },
+            {
+                question: "关于抽象行政行为，下列说法正确的是？",
+                options: ["可以单独申请复议", "<span style='color: #e74c3c;'>不能单独申请复议</span>，但<span style='color: #e74c3c;'>可以附带审查</span>", "可以申请复议也<span style='color: #e74c3c;'>可以附带审查</span>", "完全不能审查"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！抽象行政行为<span style='color: #e74c3c;'>不能单独申请复议</span>，因为它是针对不特定多数人的规范性文件。<br>B. 正确！抽象行政行为<span style='color: #e74c3c;'>不能单独申请复议</span>，但<span style='color: #e74c3c;'>可以附带审查</span>！就是说：当该文件被用来作出具体行政行为时，可以在申请复议时一并要求审查该文件。<br>C. 错误！抽象行政行为<span style='color: #e74c3c;'>不能单独申请复议</span>，只能附带审查。<br>D. 错误！抽象行政行为<span style='color: #e74c3c;'>可以附带审查</span>，不是完全不能审查。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>抽象行为不能单独复议，但可附带审查！"
+            },
+            {
+                question: "下列哪种行为属于行政复议的受案范围？",
+                options: ["国防行为", "外交行为", "不发放抚恤金", "行政机关制定的规章"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！国防行为不能申请行政复议，国防行为是国家行为，级别太高。<br>B. 错误！外交行为不能申请行政复议，外交行为是国家行为，级别太高。<br>C. 正确！不发放抚恤金可以申请行政复议！这是行政给付行为，属于复议范围。<br>D. 错误！行政机关制定的规章不能申请行政复议，规章是抽象行政行为，不能单独复议。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>国防外交不能复议，不发放抚恤金可以复议！"
+            }
+        ];
+        
+        const quiz4Data = [
+            {
+                question: "规范性文件可以单独申请行政复议吗？",
+                options: ["可以单独申请", "不能单独申请，但可附带审查", "完全不能审查", "只能申请审查不能申请复议"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！规范性文件不能单独申请行政复议，因为它是针对不特定多数人的文件。<br>B. 正确！规范性文件<span style='color: #e74c3c;'>不能单独申请复议</span>，但<span style='color: #e74c3c;'>可以附带审查</span>！就是说：当该文件被用来作出具体行政行为时，可以在申请复议时一并要求审查该文件。<br>C. 错误！规范性文件<span style='color: #e74c3c;'>可以附带审查</span>，不是完全不能审查。<br>D. 错误！表述不准确，正确说法是：不能单独复议，但可附带审查。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>规范性文件不能单独复议，但可附带审查！"
+            },
+            {
+                question: "下列哪些文件<span style='color: #e74c3c;'>可以附带审查</span>？",
+                options: ["国务院的行政法规", "部门规章", "县政府的规范性文件", "地方政府规章"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！行政法规不能附带审查，级别太高，连附带都不行。<br>B. 错误！部门规章不能附带审查，级别较高，连附带都不行。<br>C. 正确！县政府的规范性文件<span style='color: #e74c3c;'>可以附带审查</span>！县级以上地方各级政府及其工作部门的规范性文件都<span style='color: #e74c3c;'>可以附带审查</span>。<br>D. 错误！地方政府规章不能附带审查，级别较高，连附带都不行。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>行政法规和规章不能附带审查，县乡政府的规定可以！"
+            },
+            {
+                question: "张三被处罚，处罚依据是某乡政府制定的规范性文件，张三申请复议时能否一并要求审查该文件？",
+                options: ["<span style='color: #e74c3c;'>可以附带审查</span>", "不能附带审查", "只能单独申请审查", "只能提起行政诉讼时审查"],
+                correct: 0,
+                explanation: "✅ 正确答案是 A<br>【逐项解析】<br>A. 正确！<span style='color: #e74c3c;'>可以附带审查</span>！乡镇政府的规范性文件<span style='color: #e74c3c;'>可以附带审查</span>。张三在对处罚申请复议时，可以一并要求审查该规范性文件。<br>B. 错误！乡政府的规范性文件<span style='color: #e74c3c;'>可以附带审查</span>，不是说不能附带审查。<br>C. 错误！规范性文件不能单独申请审查，只能附带审查。<br>D. 错误！附带审查是在申请复议时提出的，不是提起行政诉讼时提出。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>乡政府规定<span style='color: #e74c3c;'>可以附带审查</span>！"
+            },
+            {
+                question: "地方性法规能否附带审查？",
+                options: ["能附带审查", "不能附带审查", "只能单独审查", "视情况而定"],
+                correct: 0,
+                explanation: "✅ 正确答案是 A<br>【逐项解析】<br>A. 正确！地方性法规能附带审查！地方性法规不是行政法规也不是规章，属于<span style='color: #e74c3c;'>可以附带审查</span>的范围。<br>B. 错误！地方性法规<span style='color: #e74c3c;'>可以附带审查</span>，不是不能附带审查。<br>C. 错误！地方性法规不能单独审查，只能附带审查。<br>D. 错误！地方性法规明确<span style='color: #e74c3c;'>可以附带审查</span>，不是视情况而定。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>地方性法规<span style='color: #e74c3c;'>可以附带审查</span>！"
+            },
+            {
+                question: "附带性审查的前提条件是什么？",
+                options: ["规范性文件违法", "规范性文件被用来作出具体行政行为", "申请人认为文件不合法", "复议机关认为需要审查"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！规范性文件是否违法是审查后的结论，不是前提条件。<br>B. 正确！附带性审查的前提条件是：规范性文件被用来作出具体行政行为！就是说：行政机关依据该文件作出了具体行政行为，申请人不服该行为申请复议时，可以一并要求审查该文件。<br>C. 错误！申请人认为文件不合法是申请附带审查的理由，不是前提条件。<br>D. 错误！复议机关认为需要审查不是前提条件，附带审查是申请人提出的。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>附带审查前提：文件被用来作出具体行为！"
+            }
+        ];
+        
+        const quiz5Data = [
+            {
+                question: "张三被罚款200元申请复议，谁是申请人？",
+                options: ["作出罚款决定的机关", "张三", "复议机关", "张三的代理人"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！作出罚款决定的机关是被申请人，不是申请人。<br>B. 正确！张三是申请人！申请人就是认为权益受到侵害的老百姓，是申请复议的人。<br>C. 错误！复议机关是受理复议申请的行政机关，不是申请人。<br>D. 错误！张三的代理人是帮张三申请复议的人，不是申请人本人。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span><span style='color: #e74c3c;'>申请人=民</span>=认为权益受侵害的老百姓！"
+            },
+            {
+                question: "派出所经公安分局批准对张三作出拘留决定，谁是行政复议的被申请人？",
+                options: ["派出所", "公安分局", "市公安局", "区政府"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！派出所不是被申请人，因为拘留是经公安分局批准的，批准机关是被申请人。<br>B. 正确！公安分局是被申请人！经批准的具体行政行为，批准机关是被申请人。<br>C. 错误！市公安局是复议机关，不是被申请人。<br>D. 错误！区政府是复议机关，不是被申请人。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span><span style='color: #e74c3c;'>经批准的行为，批准机关是被申请人</span>！"
+            },
+            {
+                question: "张三打伤李四，派出所拘留张三10天，李四认为拘留太轻，李四在复议中的身份是什么？",
+                options: ["申请人", "被申请人", "第三人", "复议机关"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！李四不是申请人，申请人是张三（被拘留的人）。<br>B. 错误！李四不是被申请人，被申请人是派出所（作出拘留决定的机关）。<br>C. 正确！李四是第三人！第三人是与复议案件有利害关系，但不是申请人也不是被申请人的人。李四认为拘留太轻，与案件有利害关系。<br>D. 错误！李四不是复议机关，复议机关是审查案件的行政机关。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>第三人=利害关系人=既不是申请人也不是被申请人！"
+            },
+            {
+                question: "行政复议机关的性质是什么？",
+                options: ["司法机关", "行政机关", "立法机关", "检察机关"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！行政复议机关不是司法机关，司法机关是法院。<br>B. 正确！行政<span style='color: #e74c3c;'>复议机关是行政机关</span>！复议机关一般是被申请人的上级机关，还是行政机关，作出的<span style='color: #e74c3c;'>复议决定是行政行为</span>。<br>C. 错误！行政复议机关不是立法机关，立法机关是人大。<br>D. 错误！行政复议机关不是检察机关，检察机关是检察院。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span><span style='color: #e74c3c;'>复议机关是行政机关</span>，不是法院！"
+            },
+            {
+                question: "张三不服区公安分局的拘留申请复议，复议机关可能是谁？",
+                options: ["区公安分局", "市公安局或区政府", "派出所", "法院"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！区公安分局是被申请人，不能自己复议自己（特殊情况下国务院部门或省政府可以自己复议自己）。<br>B. 正确！市公安局或区政府是复议机关！对县级以上地方政府工作部门的行为不服，向本级政府或上一级主管部门申请复议。<br>C. 错误！派出所是区公安分局的派出机构，不是复议机关。<br>D. 错误！法院是司法机关，<span style='color: #e74c3c;'>复议机关是行政机关</span>。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>对区局不服，找市局或区政府！"
+            }
+        ];
+
+        const quiz6Data = [
+            {
+                question: "申请行政复议的期限是多久？",
+                options: ["<span style='color: #3498db;'>30日</span>内", "<span style='color: #3498db;'>60日</span>内", "<span style='color: #3498db;'>90日</span>内", "6个月内"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！<span style='color: #3498db;'>30日</span>内是简易程序作出决定的期限，不是申请期限。<br>B. 正确！申请行政复议的期限是<span style='color: #3498db;'>60日</span>内！自知道或应当知道行政行为之日起<span style='color: #3498db;'>60日</span>内申请复议。<br>C. 错误！<span style='color: #3498db;'>90日</span>内是普通程序最长作出决定的期限（60+30），不是申请期限。<br>D. 错误！6个月内是提起行政诉讼的期限，不是申请复议的期限。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>申请复议<span style='color: #3498db;'>60日</span>内，提起诉讼6个月内！"
+            },
+            {
+                question: "张三不服区公安分局的处罚，应当向谁申请复议？",
+                options: ["向区公安分局申请", "向市公安局或区政府申请", "向派出所申请", "向法院申请"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！区公安分局是被申请人，不能向被申请人申请复议。<br>B. 正确！向市公安局或区政府申请！对县级以上地方政府工作部门的行为不服，向本级政府或上一级主管部门申请复议。<br>C. 错误！派出所不是复议机关，派出所是区公安分局的派出机构。<br>D. 错误！法院是提起行政诉讼的地方，不是申请复议的地方。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>对区局不服，找市局或区政府！"
+            },
+            {
+                question: "申请行政复议的方式有哪些？",
+                options: ["只能书面申请", "只能口头申请", "可以书面申请也可以口头申请", "必须委托律师申请"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！不是只能书面申请，也可以口头申请，这是便民原则的体现。<br>B. 错误！不是只能口头申请，也可以书面申请。<br>C. 正确！可以书面申请也可以口头申请！书面申请有困难的，可以口头申请，复议机关当场记录。<br>D. 错误！不需要必须委托律师申请，老百姓自己就可以申请复议。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>申请复议：书面口头都可以，便民原则！"
+            },
+            {
+                question: "张三1月1日被拘留，1月5日收到拘留决定书，他最晚什么时候申请复议？",
+                options: ["2月4日前", "3月6日前", "4月5日前", "7月5日前"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！<span style='color: #3498db;'>30日</span>内不是申请复议的期限。<br>B. 正确！3月6日前申请！张三1月5日收到拘留决定书，自收到之日起<span style='color: #3498db;'>60日</span>内申请复议，最晚3月6日前（1月5日+<span style='color: #3498db;'>60日</span>）。<br>C. 错误！<span style='color: #3498db;'>90日</span>内是作出复议决定的期限，不是申请期限。<br>D. 错误！6个月内是提起行政诉讼的期限，不是申请复议的期限。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>收到决定书之日起<span style='color: #3498db;'>60日</span>内申请复议！"
+            },
+            {
+                question: "对国务院部门的具体行政行为不服，应当向谁申请复议？",
+                options: ["向国务院申请", "向作出行为的部门申请", "向全国人大申请", "向法院申请"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！国务院不受理行政复议申请，国务院部门自己复议自己。<br>B. 正确！向作出行为的部门申请！对国务院部门的行为不服，向该部门申请复议，由该部门自己复议自己。<br>C. 错误！全国人大不受理行政复议申请。<br>D. 错误！法院是提起行政诉讼的地方，不是申请复议的地方。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>国务院部门和省政府的行为，自己复议自己！"
+            }
+        ];
+        
+        const quiz7Data = [
+            {
+                question: "行政复议中，举证责任主要由谁承担？",
+                options: ["申请人承担", "被申请人承担", "复议机关承担", "双方共同承担"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！申请人一般不承担举证责任，是<span style='color: #e74c3c;'>被申请人承担主要举证责任</span>。<br>B. 正确！<span style='color: #e74c3c;'>被申请人承担主要举证责任</span>！被申请人要证明行政行为合法、适当。官告民，官举证；民告官，还是官举证！<br>C. 错误！复议机关不承担举证责任，复议机关是审理案件的机关。<br>D. 错误！不是双方共同承担，是<span style='color: #e74c3c;'>被申请人承担主要举证责任</span>。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>举证责任：被申请人（官）承担主要举证责任！"
+            },
+            {
+                question: "调查取证时，调查人员不得少于几人？",
+                options: ["1人", "2人", "3人", "4人"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！不能只有1人调查取证，<span style='color: #3498db;'>至少2人</span>。<br>B. 正确！<span style='color: #e74c3c;'>调查取证<span style='color: #3498db;'>不得少于2人</span></span>！这是法律规定，防止调查人员徇私舞弊。<br>C. 错误！法律规定<span style='color: #3498db;'>不得少于2人</span>，不是3人。<br>D. 错误！法律规定<span style='color: #3498db;'>不得少于2人</span>，不是4人。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>调查取证<span style='color: #3498db;'>至少2人</span>！"
+            },
+            {
+                question: "被申请人能否在复议期间自行向申请人收集证据？",
+                options: ["可以收集", "不能收集", "经复议机关批准可以收集", "经申请人同意可以收集"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！被申请人不能自行向申请人收集证据，这样收集的证据是非法证据。<br>B. 正确！被申请人不能在复议期间自行向申请人收集证据！如果被申请人在复议期间自行向申请人收集证据，这样收集的证据是非法证据，不能作为认定案件事实的依据。<br>C. 错误！即使经复议机关批准，被申请人也不能向申请人收集证据。<br>D. 错误！即使经申请人同意，被申请人也不能向申请人收集证据。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>被申请人不得自行向申请人收集证据！"
+            },
+            {
+                question: "申请人何时需要提供证据？",
+                options: ["所有案件都要举证", "申请行政机关履行法定职责被拒绝时", "被申请人要求时", "复议机关要求时"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！申请人不是所有案件都要举证，是<span style='color: #e74c3c;'>被申请人承担主要举证责任</span>。<br>B. 正确！申请行政机关履行法定职责被拒绝时，申请人需要提供证据！申请人要证明自己申请过行政机关履行法定职责。还有提出行政赔偿请求时，申请人要证明自己受到损害。<br>C. 错误！不是被申请人要求时举证，而是特定情形下需要举证。<br>D. 错误！不是复议机关要求时举证，而是特定情形下需要举证。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>申请人举证情形：申请履职被拒绝、提出赔偿请求！"
+            },
+            {
+                question: "被申请人要举证证明什么？",
+                options: ["只证明合法性", "只证明合理性", "证明合法性和适当性", "不需要举证"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！被申请人不仅要证明合法性，还要证明适当性（合理性）。<br>B. 错误！被申请人不仅要证明适当性，还要证明合法性。<br>C. 正确！被申请人要证明合法性和适当性！被申请人要证明行政行为有法律依据、程序合法（合法性），以及处罚适当、过罚相当（适当性）。<br>D. 错误！<span style='color: #e74c3c;'>被申请人承担主要举证责任</span>，当然需要举证。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>被申请人举证：合法性+适当性！"
+            }
+        ];
+        
+        const quiz8Data = [
+            {
+                question: "复议机关认为行政行为事实清楚、证据确凿、程序合法、适用依据正确、内容适当，应当作出什么决定？",
+                options: ["变更决定", "撤销决定", "维持决定", "确认违法决定"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！变更决定适用于合法但不合理的情况，不是全部正确的情况。<br>B. 错误！撤销决定适用于违法的情况，不是全部正确的情况。<br>C. 正确！维持决定！行政行为完全正确（事实清楚、证据确凿、程序合法、适用依据正确、内容适当），复议机关应当作出维持决定。<br>D. 错误！确认违法决定适用于违法但不宜撤销的情况，不是全部正确的情况。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>全对就维持！"
+            },
+            {
+                question: "复议机关认为行政行为合法但不合理，应当作出什么决定？",
+                options: ["维持决定", "变更决定", "撤销决定", "确认违法决定"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！维持决定适用于全部正确的情况，不是合法但不合理的情况。<br>B. 正确！变更决定！行政行为合法但不合理（如过罚不当、同案不同罚），复议机关应当作出变更决定。<br>C. 错误！撤销决定适用于违法的情况，不是合法但不合理的情况。<br>D. 错误！确认违法决定适用于违法但不宜撤销的情况，不是合法但不合理的情况。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>合法但不合理，变更！"
+            },
+            {
+                question: "复议机关认为行政行为主要事实不清、证据不足，应当作出什么决定？",
+                options: ["维持决定", "变更决定", "撤销决定", "驳回申请决定"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！维持决定适用于全部正确的情况，不是事实不清的情况。<br>B. 错误！变更决定适用于合法但不合理的情况，不是事实不清的情况。<br>C. 正确！撤销决定！行政行为主要事实不清、证据不足，复议机关应当作出撤销决定。可以责令被申请人重新作出行政行为。<br>D. 错误！驳回申请决定适用于其他情形，不是事实不清的情况。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>事实不清证据不足，撤销！"
+            },
+            {
+                question: "复议机关能否作出对申请人更为不利的的规定？",
+                options: ["可以作出更不利的决定", "不能作出更不利的决定", "经被申请人申请可以", "经复议机关负责人批准可以"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！复议机关不能作出对申请人更为不利的决定，这是保护申请人权益的规定。<br>B. 正确！不能作出更不利的决定！行政复议机关不得作出对申请人更为不利的决定，类似刑事诉讼中的上诉不加刑原则。<br>C. 错误！即使经被申请人申请，复议机关也不能作出更不利的决定。<br>D. 错误！即使经复议机关负责人批准，也不能作出更不利的决定。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>复议不得加重处罚，保护申请人权益！"
+            },
+            {
+                question: "撤销会给国家利益造成重大损害的，复议机关应当作出什么决定？",
+                options: ["维持决定", "变更决定", "撤销决定", "确认违法决定"],
+                correct: 3,
+                explanation: "✅ 正确答案是 D<br>【逐项解析】<br>A. 错误！维持决定适用于全部正确的情况，不是违法的情况。<br>B. 错误！变更决定适用于合法但不合理的情况，不是违法的情况。<br>C. 错误！虽然行政行为违法，但撤销会给国家利益造成重大损害，所以不能撤销，只能确认违法。<br>D. 正确！确认违法决定！行政行为违法，但撤销会给国家利益、社会公共利益造成重大损害的，复议机关应当作出确认违法决定，不撤销行政行为。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>撤销造成重大损失，确认违法不撤销！"
+            }
+        ];
+        
+        const quiz9Data = [
+            {
+                question: "行政复议普通程序作出决定的期限是多久？",
+                options: ["<span style='color: #3498db;'>30日</span>内", "<span style='color: #3498db;'>60日</span>内", "<span style='color: #3498db;'>90日</span>内", "6个月内"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！<span style='color: #3498db;'>30日</span>内是简易程序作出决定的期限，不是普通程序。<br>B. 正确！<span style='color: #3498db;'>60日</span>内！行政复议普通程序应当自受理申请之日起<span style='color: #3498db;'>60日</span>内作出行政复议决定。情况复杂的可以延长<span style='color: #3498db;'>30日</span>。<br>C. 错误！<span style='color: #3498db;'>90日</span>内是普通程序最长作出决定的期限（60+30），不是一般期限。<br>D. 错误！6个月内不是行政复议作出决定的期限。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>普通程序<span style='color: #3498db;'>60日</span>，可延长<span style='color: #3498db;'>30日</span>！"
+            },
+            {
+                question: "行政复议简易程序作出决定的期限是多久？",
+                options: ["<span style='color: #3498db;'>30日</span>内", "<span style='color: #3498db;'>60日</span>内", "<span style='color: #3498db;'>90日</span>内", "不能延长"],
+                correct: 0,
+                explanation: "✅ 正确答案是 A<br>【逐项解析】<br>A. 正确！<span style='color: #3498db;'>30日</span>内！行政复议简易程序应当自受理申请之日起<span style='color: #3498db;'>30日</span>内作出行政复议决定。<br>B. 错误！<span style='color: #3498db;'>60日</span>内是普通程序作出决定的期限，不是简易程序。<br>C. 错误！<span style='color: #3498db;'>90日</span>内是普通程序最长作出决定的期限，不是简易程序。<br>D. 错误！虽然简易程序不能延长是正确的，但题干问的是期限，答案应该是<span style='color: #3498db;'>30日</span>内。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>简易程序<span style='color: #3498db;'>30日</span>，不能延长！"
+            },
+            {
+                question: "关于行政复议作出决定的期限，下列说法正确的是？",
+                options: ["普通程序一律<span style='color: #3498db;'>60日</span>，不能延长", "简易程序可以延长<span style='color: #3498db;'>30日</span>", "普通程序<span style='color: #3498db;'>60日</span>，情况复杂可延长<span style='color: #3498db;'>30日</span>", "简易程序和普通程序期限相同"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！普通程序可以延长，情况复杂的可以延长<span style='color: #3498db;'>30日</span>，不是一律<span style='color: #3498db;'>60日</span>。<br>B. 错误！简易程序不能延长，需要延长就转为普通程序。<br>C. 正确！普通程序<span style='color: #3498db;'>60日</span>，情况复杂可延长<span style='color: #3498db;'>30日</span>！普通程序一般<span style='color: #3498db;'>60日</span>内作出决定，情况复杂的可以延长<span style='color: #3498db;'>30日</span>，但要书面告知申请人。<br>D. 错误！简易程序和普通程序期限不同，简易程序<span style='color: #3498db;'>30日</span>，普通程序<span style='color: #3498db;'>60日</span>。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>普通六十可延长，简易三十不能延！"
+            },
+            {
+                question: "适用简易程序的条件是什么？",
+                options: ["所有案件都可以适用简易程序", "事实清楚、争议不大的案件", "申请人要求适用简易程序", "被申请人要求适用简易程序"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！不是所有案件都可以适用简易程序，简易程序只适用于简单案件。<br>B. 正确！事实清楚、争议不大的案件可以适用简易程序！简易程序是为了提高效率，适用于简单案件。<br>C. 错误！不是申请人要求就适用简易程序，要符合条件才能适用。<br>D. 错误！不是被申请人要求就适用简易程序，要符合条件才能适用。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>事实清楚争议不大，适用简易程序！"
+            },
+            {
+                question: "简易程序需要延长的，怎么处理？",
+                options: ["可以延长<span style='color: #3498db;'>30日</span>", "直接延长", "转为普通程序", "不能处理"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！简易程序不能延长，需要延长就转为普通程序。<br>B. 错误！简易程序不能直接延长，需要延长就转为普通程序。<br>C. 正确！转为普通程序！简易程序不能延长，需要延长的，应当转为普通程序审理。<br>D. 错误！可以处理，就是转为普通程序。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>简易不能延长，需要延长转普通！"
+            }
+        ];
+        
+        const quiz10Data = [
+            {
+                question: "被申请人不履行复议决定的，怎么处理？",
+                options: ["强制执行", "责令限期履行，可以约谈负责人、通报批评", "直接罚款", "提起行政诉讼"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！强制执行适用于申请人或第三人不履行，不适用于被申请人（行政机关）不履行。<br>B. 正确！责令限期履行，可以约谈负责人、通报批评！被申请人（行政机关）不履行复议决定的，复议机关或上级行政机关可以责令限期履行，可以约谈被申请人的负责人、予以通报批评。<br>C. 错误！不能直接罚款，行政机关不履行不是罚款的问题。<br>D. 错误！不能提起行政诉讼，行政诉讼是老百姓告行政机关，不是行政机关告行政机关。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>官不履行，责令约谈通报！"
+            },
+            {
+                question: "申请人逾期不起诉又不履行复议决定的，怎么处理？",
+                options: ["责令限期履行", "约谈负责人", "强制执行", "通报批评"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！责令限期履行适用于被申请人（行政机关）不履行，不适用于申请人不履行。<br>B. 错误！约谈负责人适用于被申请人（行政机关）不履行，不适用于申请人不履行。<br>C. 正确！强制执行！申请人或第三人逾期不起诉又不履行复议决定的，由行政机关依法强制执行。没有强制执行权的，申请人民法院强制执行。<br>D. 错误！通报批评适用于被申请人（行政机关）不履行，不适用于申请人不履行。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>民不履行，强制执行！"
+            },
+            {
+                question: "复议决定维持原行政行为，申请人不履行的，由谁强制执行？",
+                options: ["复议机关", "作出原行政行为的机关", "法院", "公安机关"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！复议决定维持的，由作出原行政行为的机关强制执行，不是复议机关。<br>B. 正确！作出原行政行为的机关！复议决定维持原行政行为的，由作出原行政行为的机关依法强制执行。<br>C. 错误！法院强制执行是在行政机关没有强制执行权时申请法院执行，不是直接由法院执行。<br>D. 错误！公安机关只是行政机关的一种，不是所有案件都由公安机关执行。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>维持决定，原机关执行；变更决定，复议机关执行！"
+            },
+            {
+                question: "复议决定变更原行政行为，申请人不履行的，由谁强制执行？",
+                options: ["作出原行政行为的机关", "复议机关", "法院", "上级行政机关"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！复议决定变更的，由复议机关强制执行，不是作出原行政行为的机关。<br>B. 正确！复议机关！复议决定变更原行政行为的，由行政复议机关依法强制执行。<br>C. 错误！法院强制执行是在行政机关没有强制执行权时申请法院执行，不是直接由法院执行。<br>D. 错误！上级行政机关不是执行机关，复议机关才是执行机关。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>变更决定，复议机关执行；维持决定，原机关执行！"
+            },
+            {
+                question: "行政机关没有强制执行权的，怎么处理？",
+                options: ["不能执行", "申请人民法院强制执行", "委托其他机关执行", "放弃执行"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！行政机关没有强制执行权不代表不能执行，可以申请法院执行。<br>B. 正确！申请人民法院强制执行！行政机关没有强制执行权的，应当申请人民法院强制执行。<br>C. 错误！不能委托其他机关执行，只能申请法院执行。<br>D. 错误！不能放弃执行，要申请法院执行。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>没权执行，申请法院执行！"
+            }
+        ];
+
+        const practiceData = [
+            {
+                question: "行政复议是民告官的制度，申请人是谁？",
+                options: ["作出行政行为的行政机关", "认为权益受侵害的老百姓", "复议机关", "法院"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！作出行政行为的行政机关是被申请人，不是申请人。<br>B. 正确！申请人是认为权益受侵害的老百姓！行政复议是民告官，申请人是民。<br>C. 错误！复议机关是审理案件的行政机关，不是申请人。<br>D. 错误！法院是提起行政诉讼的地方，不是申请人。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span><span style='color: #e74c3c;'>申请人=民</span>=老百姓！"
+            },
+            {
+                question: "行政复议审查的内容是什么？",
+                options: ["只审查合法性", "只审查合理性", "既审查合法性又审查合理性", "都不审查"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！行政复议不仅审查合法性，还审查合理性，这是<span style='color: #e74c3c;'>双重审查</span>。<br>B. 错误！行政复议不仅审查合理性，还审查合法性，两个都要审查。<br>C. 正确！既审查合法性又审查合理性！这是行政复议的特点，也是和行政诉讼的<span style='color: #e67e22;'>区别</span>。<br>D. 错误！行政复议要审查合法性和合理性，不可能都不审查。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>复议<span style='color: #e74c3c;'>双重审查</span>：合法+合理！"
+            },
+            {
+                question: "下列哪种行为不能申请行政复议？",
+                options: ["罚款", "拘留", "人事处理决定", "吊销许可证"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！罚款是行政处罚，可以申请行政复议。<br>B. 错误！拘留是行政处罚，可以申请行政复议。<br>C. 正确！人事处理决定不能申请行政复议！人事处理是内部行政行为，只能按公务员法申诉。<br>D. 错误！吊销许可证是行政处罚，可以申请行政复议。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>人事处理不能复议，只能申诉！"
+            },
+            {
+                question: "申请行政复议的期限是多久？",
+                options: ["15日", "<span style='color: #3498db;'>30日</span>", "<span style='color: #3498db;'>60日</span>", "<span style='color: #3498db;'>90日</span>"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！15日不是申请复议的期限。<br>B. 错误！<span style='color: #3498db;'>30日</span>是简易程序作出决定的期限，不是申请期限。<br>C. 正确！<span style='color: #3498db;'>60日</span>！自知道或应当知道行政行为之日起<span style='color: #3498db;'>60日</span>内申请行政复议。<br>D. 错误！<span style='color: #3498db;'>90日</span>是普通程序最长作出决定的期限，不是申请期限。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>申请复议<span style='color: #3498db;'>60日</span>内！"
+            },
+            {
+                question: "行政复议决定作出后，还能再申请复议吗？",
+                options: ["能申请复议", "不能申请复议，只能提起行政诉讼", "可以申请复议也可以起诉", "可以申请国家赔偿"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！<span style='color: #e74c3c;'>一级复议制</span>意味着复议机会只有一次，不能再申请复议。<br>B. 正确！不能申请复议，只能提起行政诉讼！<span style='color: #e74c3c;'>一级复议制</span>，复议机会只有一次。<br>C. 错误！不能申请复议，只能提起行政诉讼。<br>D. 错误！不是申请国家赔偿的问题，是不服复议决定的救济途径。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span><span style='color: #e74c3c;'>一级复议制</span>：复议只有一次，不服只能起诉！"
+            },
+            {
+                question: "行政复议中，举证责任主要由谁承担？",
+                options: ["申请人", "被申请人", "复议机关", "法院"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！申请人一般不承担举证责任。<br>B. 正确！<span style='color: #e74c3c;'>被申请人承担主要举证责任</span>！官举证，民不举证。<br>C. 错误！复议机关不承担举证责任，是审理案件的机关。<br>D. 错误！法院不参与行政复议，复议是行政机关审理。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>举证责任：官举证，民不举证！"
+            },
+            {
+                question: "行政复议普通程序作出决定的期限是多久？",
+                options: ["<span style='color: #3498db;'>30日</span>", "<span style='color: #3498db;'>60日</span>", "<span style='color: #3498db;'>90日</span>", "180日"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！<span style='color: #3498db;'>30日</span>是简易程序的期限。<br>B. 正确！<span style='color: #3498db;'>60日</span>！普通程序应当自受理申请之日起<span style='color: #3498db;'>60日</span>内作出决定。<br>C. 错误！<span style='color: #3498db;'>90日</span>是最长期限（60+30），不是一般期限。<br>D. 错误！180日不是复议作出决定的期限。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>普通程序<span style='color: #3498db;'>60日</span>，可延<span style='color: #3498db;'>30日</span>！"
+            },
+            {
+                question: "行政复议简易程序作出决定的期限是多久？",
+                options: ["<span style='color: #3498db;'>30日</span>", "<span style='color: #3498db;'>60日</span>", "<span style='color: #3498db;'>90日</span>", "能延长<span style='color: #3498db;'>30日</span>"],
+                correct: 0,
+                explanation: "✅ 正确答案是 A<br>【逐项解析】<br>A. 正确！<span style='color: #3498db;'>30日</span>！简易程序应当自受理申请之日起<span style='color: #3498db;'>30日</span>内作出决定。<br>B. 错误！<span style='color: #3498db;'>60日</span>是普通程序的期限。<br>C. 错误！<span style='color: #3498db;'>90日</span>是普通程序最长期限。<br>D. 错误！简易程序不能延长，需要延长就转为普通程序。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>简易程序<span style='color: #3498db;'>30日</span>，不能延长！"
+            },
+            {
+                question: "规范性文件能否单独申请行政复议？",
+                options: ["能单独申请", "不能单独申请，但可附带审查", "完全不能审查", "视情况而定"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！规范性文件<span style='color: #e74c3c;'>不能单独申请复议</span>。<br>B. 正确！不能单独申请，但可附带审查！规范性文件不能单独复议，但当该文件被用来作出具体行政行为时，可以一并要求审查。<br>C. 错误！规范性文件<span style='color: #e74c3c;'>可以附带审查</span>，不是完全不能审查。<br>D. 错误！规范性文件明确不能单独复议但可附带审查，不是视情况而定。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>规范性文件：不能单独复议，但可附带审查！"
+            },
+            {
+                question: "下列哪些文件不能附带审查？",
+                options: ["县政府的规范性文件", "行政法规", "乡政府的规范性文件", "地方性法规"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！县政府的规范性文件<span style='color: #e74c3c;'>可以附带审查</span>。<br>B. 正确！行政法规不能附带审查！行政法规和规章不能附带审查，级别太高。<br>C. 错误！乡政府的规范性文件<span style='color: #e74c3c;'>可以附带审查</span>。<br>D. 错误！地方性法规<span style='color: #e74c3c;'>可以附带审查</span>。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>行政法规和规章不能附带审查！"
+            },
+            {
+                question: "被申请人不履行复议决定的，怎么处理？",
+                options: ["强制执行", "责令限期履行", "罚款", "拘留"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！强制执行适用于申请人不履行，不适用于被申请人。<br>B. 正确！责令限期履行！还可以约谈负责人、通报批评。<br>C. 错误！不能罚款，这是行政机关不履行的问题。<br>D. 错误！不能拘留，这是行政机关不履行的问题。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>官不履行，责令约谈通报！"
+            },
+            {
+                question: "申请人不履行复议决定的，怎么处理？",
+                options: ["责令履行", "约谈负责人", "强制执行", "通报批评"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！责令履行适用于被申请人，不适用于申请人。<br>B. 错误！约谈负责人适用于被申请人，不适用于申请人。<br>C. 正确！强制执行！申请人不履行的，强制执行。<br>D. 错误！通报批评适用于被申请人，不适用于申请人。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>民不履行，强制执行！"
+            },
+            {
+                question: "复议决定维持原行政行为，申请人不履行的，由谁执行？",
+                options: ["复议机关", "作出原行为的机关", "法院", "上级机关"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！维持决定由原机关执行，变更决定由复议机关执行。<br>B. 正确！作出原行为的机关！维持决定由作出原行政行为的机关强制执行。<br>C. 错误！法院执行是在行政机关没有执行权时申请法院执行。<br>D. 错误！上级机关不是执行机关。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>维持决定，原机关执行！"
+            },
+            {
+                question: "复议决定变更原行政行为，申请人不履行的，由谁执行？",
+                options: ["作出原行为的机关", "复议机关", "法院", "上级机关"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！变更决定由复议机关执行，维持决定由原机关执行。<br>B. 正确！复议机关！变更决定由复议机关强制执行。<br>C. 错误！法院执行是在行政机关没有执行权时申请法院执行。<br>D. 错误！上级机关不是执行机关。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>变更决定，复议机关执行！"
+            },
+            {
+                question: "行政行为完全正确，复议机关应当作出什么决定？",
+                options: ["变更决定", "撤销决定", "维持决定", "确认违法"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！变更决定适用于合法但不合理的情况。<br>B. 错误！撤销决定适用于违法的情况。<br>C. 正确！维持决定！行政行为完全正确，维持原决定。<br>D. 错误！确认违法适用于违法但不宜撤销的情况。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>全对就维持！"
+            },
+            {
+                question: "行政行为合法但不合理，复议机关应当作出什么决定？",
+                options: ["维持决定", "变更决定", "撤销决定", "确认违法"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！维持决定适用于全部正确的情况。<br>B. 正确！变更决定！合法但不合理，变更原决定。<br>C. 错误！撤销决定适用于违法的情况。<br>D. 错误！确认违法适用于违法但不宜撤销的情况。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>合法但不合理，变更！"
+            },
+            {
+                question: "行政行为主要事实不清，复议机关应当作出什么决定？",
+                options: ["维持决定", "变更决定", "撤销决定", "驳回申请"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！维持决定适用于全部正确的情况。<br>B. 错误！变更决定适用于合法但不合理的情况。<br>C. 正确！撤销决定！主要事实不清、证据不足，撤销原决定。<br>D. 错误！驳回申请适用于其他情形。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>事实不清证据不足，撤销！"
+            },
+            {
+                question: "调查取证不得少于几人？",
+                options: ["1人", "2人", "3人", "4人"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！不能只有1人，<span style='color: #3498db;'>至少2人</span>。<br>B. 正确！<span style='color: #3498db;'>不得少于2人</span>！防止徇私舞弊。<br>C. 错误！法律规定<span style='color: #3498db;'>不得少于2人</span>，不是3人。<br>D. 错误！法律规定<span style='color: #3498db;'>不得少于2人</span>，不是4人。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>调查取证<span style='color: #3498db;'>至少2人</span>！"
+            },
+            {
+                question: "被申请人能否自行向申请人收集证据？",
+                options: ["能收集", "不能收集", "经批准能收集", "经同意能收集"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！被申请人不能自行向申请人收集证据。<br>B. 正确！不能收集！自行收集的证据是非法证据。<br>C. 错误！即使经批准也不能收集。<br>D. 错误！即使经同意也不能收集。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>被申请人不得自行向申请人收集证据！"
+            },
+            {
+                question: "行政复议机关的性质是什么？",
+                options: ["司法机关", "行政机关", "立法机关", "监察机关"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！复议机关不是司法机关，司法机关是法院。<br>B. 正确！行政机关！复议机关还是行政机关。<br>C. 错误！复议机关不是立法机关，立法机关是人大。<br>D. 错误！复议机关不是监察机关，监察机关是监委。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span><span style='color: #e74c3c;'>复议机关是行政机关</span>！"
+            },
+            {
+                question: "行政复议和行政诉讼的<span style='color: #e67e22;'>区别</span>是什么？",
+                options: ["复议到机关告，诉讼到法院告", "复议只查合法，诉讼查合法合理", "复议不能变更，诉讼能变更", "复议是司法行为，诉讼是行政行为"],
+                correct: 0,
+                explanation: "✅ 正确答案是 A<br>【逐项解析】<br>A. 正确！复议到行政机关告，诉讼到法院告！这是最本质的<span style='color: #e67e22;'>区别</span>。<br>B. 错误！说反了，复议既查合法又查合理，诉讼只查合法。<br>C. 错误！复议可以变更决定。<br>D. 错误！说反了，复议是行政行为，诉讼是司法行为。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>复议到机关告，诉讼到法院告！"
+            },
+            {
+                question: "下列哪种情形不能申请行政复议？",
+                options: ["罚款", "拘留", "行政调解", "吊销许可证"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！罚款可以申请行政复议。<br>B. 错误！拘留可以申请行政复议。<br>C. 正确！行政调解不能申请行政复议！调解是民事纠纷，只能民事诉讼。<br>D. 错误！吊销许可证可以申请行政复议。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>行政调解不能复议，只能民事诉讼！"
+            },
+            {
+                question: "申请复议后，原行政行为是否停止执行？",
+                options: ["停止执行", "不停止执行", "由申请人决定", "由法院决定"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！申请复议<span style='color: #e74c3c;'>不停止执行是原则</span>。<br>B. 正确！不停止执行！这是原则，例外情形才停止。<br>C. 错误！申请人不能决定是否停止。<br>D. 错误！法院不参与行政复议。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>复议<span style='color: #e74c3c;'>不停止执行是原则</span>！"
+            },
+            {
+                question: "行政复议应当坚持什么原则？",
+                options: ["只坚持合法原则", "只坚持公正原则", "坚持合法公正公开高效便民为民原则", "只坚持便民原则"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！不是只坚持合法原则，还有其他原则。<br>B. 错误！不是只坚持公正原则，还有其他原则。<br>C. 正确！坚持合法公正公开高效便民为民原则！这是行政复议的基本原则。<br>D. 错误！不是只坚持便民原则，还有其他原则。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>复议原则：合法公正公开高效便民为民！"
+            },
+            {
+                question: "行政复议决定的类型有哪些？",
+                options: ["只有维持决定", "只有撤销决定", "维持、变更、撤销、确认违法", "只有变更决定"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！不止维持决定，还有其他决定类型。<br>B. 错误！不止撤销决定，还有其他决定类型。<br>C. 正确！维持、变更、撤销、确认违法！这是复议决定的主要类型。<br>D. 错误！不止变更决定，还有其他决定类型。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>复议决定：维持变更撤销确认违法！"
+            },
+            {
+                question: "张三被区公安分局拘留，向谁申请复议？",
+                options: ["区公安分局", "市公安局或区政府", "派出所", "法院"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！区公安分局是被申请人。<br>B. 正确！市公安局或区政府！对区局不服，找市局或区政府。<br>C. 错误！派出所不是复议机关。<br>D. 错误！法院是提起行政诉讼的地方。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>对区局不服，找市局或区政府！"
+            },
+            {
+                question: "派出所经公安分局批准拘留张三，谁是被申请人？",
+                options: ["派出所", "公安分局", "市公安局", "区政府"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！派出所不是被申请人，拘留是经分局批准的。<br>B. 正确！公安分局！<span style='color: #e74c3c;'>经批准的行为，批准机关是被申请人</span>。<br>C. 错误！市公安局是复议机关。<br>D. 错误！区政府是复议机关。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span><span style='color: #e74c3c;'>经批准的行为，批准机关是被申请人</span>！"
+            },
+            {
+                question: "行政复议的便民原则体现在？",
+                options: ["只能书面申请", "只能口头申请", "书面口头都可以申请", "必须委托律师"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！不是只能书面申请，也可以口头申请。<br>B. 错误！不是只能口头申请，也可以书面申请。<br>C. 正确！书面口头都可以申请！这是便民原则的体现。<br>D. 错误！不必须委托律师。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>便民原则：书面口头都可以！"
+            },
+            {
+                question: "撤销会给国家利益造成重大损害的，作出什么决定？",
+                options: ["维持决定", "变更决定", "撤销决定", "确认违法决定"],
+                correct: 3,
+                explanation: "✅ 正确答案是 D<br>【逐项解析】<br>A. 错误！维持决定适用于全部正确的情况。<br>B. 错误！变更决定适用于合法但不合理的情况。<br>C. 错误！撤销会造成重大损害，不能撤销。<br>D. 正确！确认违法决定！撤销会造成重大损害，确认违法不撤销。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>撤销造成重大损失，确认违法不撤销！"
+            },
+            {
+                question: "复议机关能否作出对申请人更不利的决定？",
+                options: ["能作出", "不能作出", "经批准能作出", "经同意能作出"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！复议机关不能作出更不利的决定。<br>B. 正确！不能作出！保护申请人权益，不能加重处罚。<br>C. 错误！即使经批准也不能作出。<br>D. 错误！即使经同意也不能作出。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>复议不得加重处罚！"
+            },
+            {
+                question: "简易程序需要延长的，怎么处理？",
+                options: ["延长<span style='color: #3498db;'>30日</span>", "直接延长", "转为普通程序", "不能处理"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！简易程序不能延长。<br>B. 错误！简易程序不能直接延长。<br>C. 正确！转为普通程序！简易程序不能延长，需要延长转普通程序。<br>D. 错误！可以处理，转为普通程序。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>简易不能延长，转普通程序！"
+            },
+            {
+                question: "行政机关没有强制执行权的，怎么处理？",
+                options: ["不能执行", "申请法院执行", "委托其他机关", "放弃执行"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！可以申请法院执行。<br>B. 正确！申请法院执行！没有执行权，申请法院执行。<br>C. 错误！不能委托其他机关。<br>D. 错误！不能放弃执行。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>没权执行，申请法院执行！"
+            },
+            {
+                question: "张三打伤李四，派出所拘留张三10天，李四的身份是什么？",
+                options: ["申请人", "被申请人", "第三人", "复议机关"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！张三是申请人。<br>B. 错误！派出所是被申请人。<br>C. 正确！第三人！李四与案件有利害关系，是第三人。<br>D. 错误！李四不是复议机关。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>第三人=利害关系人！"
+            },
+            {
+                question: "下列哪种行为可以申请行政复议？",
+                options: ["人事处理", "行政调解", "国防行为", "罚款"],
+                correct: 3,
+                explanation: "✅ 正确答案是 D<br>【逐项解析】<br>A. 错误！人事处理不能申请行政复议。<br>B. 错误！行政调解不能申请行政复议。<br>C. 错误！国防行为不能申请行政复议。<br>D. 正确！罚款可以申请行政复议！罚款是行政处罚，可以复议。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>具体行政行为可以复议！"
+            },
+            {
+                question: "行政复议的基本原则包括哪些？",
+                options: ["只包括合法原则", "只包括公正原则", "包括合法公正公开高效便民为民原则", "只包括<span style='color: #e74c3c;'>一级复议制</span>原则"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！不止合法原则，还有其他原则。<br>B. 错误！不止公正原则，还有其他原则。<br>C. 正确！包括合法公正公开高效便民为民原则！这是基本原则。<br>D. 错误！<span style='color: #e74c3c;'>一级复议制</span>也是原则，但不是只包括这一原则。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>复议原则：合法公正公开高效便民为民！"
+            },
+            {
+                question: "地方性法规能否附带审查？",
+                options: ["能附带审查", "不能附带审查", "只能单独审查", "视情况而定"],
+                correct: 0,
+                explanation: "✅ 正确答案是 A<br>【逐项解析】<br>A. 正确！能附带审查！地方性法规不是行政法规也不是规章，<span style='color: #e74c3c;'>可以附带审查</span>。<br>B. 错误！地方性法规<span style='color: #e74c3c;'>可以附带审查</span>。<br>C. 错误！地方性法规不能单独审查，只能附带审查。<br>D. 错误！地方性法规明确<span style='color: #e74c3c;'>可以附带审查</span>。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>地方性法规<span style='color: #e74c3c;'>可以附带审查</span>！"
+            },
+            {
+                question: "行政复议的申请人是谁？",
+                options: ["行政机关", "认为权益受侵害的老百姓", "复议机关", "法院"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！行政机关是被申请人。<br>B. 正确！认为权益受侵害的老百姓！申请人是民。<br>C. 错误！复议机关是审理案件的机关。<br>D. 错误！法院不参与行政复议。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span><span style='color: #e74c3c;'>申请人=民</span>！"
+            },
+            {
+                question: "行政复议的被申请人是谁？",
+                options: ["老百姓", "作出行政行为的行政机关", "复议机关", "法院"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！老百姓是申请人。<br>B. 正确！作出行政行为的行政机关！被申请人是官。<br>C. 错误！复议机关是审理案件的机关。<br>D. 错误！法院不参与行政复议。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span><span style='color: #e74c3c;'>被申请人=官</span>！"
+            },
+            {
+                question: "行政复议的复议机关是谁？",
+                options: ["法院", "检察院", "行政机关", "人大"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！法院是司法机关。<br>B. 错误！检察院是检察机关。<br>C. 正确！行政机关！复议机关一般是被申请人的上级机关。<br>D. 错误！人大是立法机关。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span><span style='color: #e74c3c;'>复议机关是行政机关</span>！"
+            },
+            {
+                question: "行政复议决定是什么性质的行为？",
+                options: ["民事行为", "行政行为", "司法行为", "立法行为"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！复议决定不是民事行为。<br>B. 正确！行政行为！复议决定是行政机关作出的，是行政行为。<br>C. 错误！复议决定不是司法行为。<br>D. 错误！复议决定不是立法行为。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span><span style='color: #e74c3c;'>复议决定是行政行为</span>！"
+            },
+            {
+                question: "行政复议申请的方式有哪些？",
+                options: ["只能书面申请", "只能口头申请", "书面口头都可以", "必须委托律师"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！不是只能书面申请。<br>B. 错误！不是只能口头申请。<br>C. 正确！书面口头都可以！便民原则。<br>D. 错误！不必须委托律师。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>申请方式：书面口头都可以！"
+            },
+            {
+                question: "行政复议<span style='color: #e74c3c;'>一级复议制</span>是什么意思？",
+                options: ["可以多次复议", "复议机会只有一次", "可以上诉", "可以再审"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！不能多次复议。<br>B. 正确！复议机会只有一次！不服复议决定只能起诉。<br>C. 错误！复议不是诉讼，没有上诉。<br>D. 错误！复议没有再审。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span><span style='color: #e74c3c;'>一级复议制</span>：复议只有一次！"
+            },
+            {
+                question: "下列哪种文件<span style='color: #e74c3c;'>可以附带审查</span>？",
+                options: ["行政法规", "部门规章", "县政府的规范性文件", "地方政府规章"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！行政法规不能附带审查。<br>B. 错误！部门规章不能附带审查。<br>C. 正确！县政府的规范性文件<span style='color: #e74c3c;'>可以附带审查</span>！<br>D. 错误！地方政府规章不能附带审查。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>县乡政府规定<span style='color: #e74c3c;'>可以附带审查</span>！"
+            },
+            {
+                question: "行政复议举证责任分配原则是什么？",
+                options: ["谁主张谁举证", "<span style='color: #e74c3c;'>被申请人承担主要举证责任</span>", "申请人承担主要举证责任", "复议机关举证"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！那是民事诉讼原则。<br>B. 正确！<span style='color: #e74c3c;'>被申请人承担主要举证责任</span>！官举证。<br>C. 错误！申请人不承担主要举证责任。<br>D. 错误！复议机关不举证。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>举证责任：官举证！"
+            },
+            {
+                question: "行政复议普通程序可以延长多久？",
+                options: ["不能延长", "延长15日", "延长<span style='color: #3498db;'>30日</span>", "延长<span style='color: #3498db;'>60日</span>"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！普通程序可以延长。<br>B. 错误！不是延长15日。<br>C. 正确！延长<span style='color: #3498db;'>30日</span>！情况复杂可以延长<span style='color: #3498db;'>30日</span>。<br>D. 错误！不是延长<span style='color: #3498db;'>60日</span>。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>普通程序可延<span style='color: #3498db;'>30日</span>！"
+            },
+            {
+                question: "行政复议简易程序能否延长？",
+                options: ["能延长", "不能延长", "延长15日", "延长<span style='color: #3498db;'>30日</span>"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！简易程序不能延长。<br>B. 正确！不能延长！需要延长转普通程序。<br>C. 错误！简易程序不能延长。<br>D. 错误！简易程序不能延长。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>简易程序不能延长！"
+            },
+            {
+                question: "张三被拘留，申请复议后拘留是否停止执行？",
+                options: ["停止执行", "不停止执行", "由张三决定", "由公安局决定"],
+                correct: 1,
+                explanation: "✅ 正确答案是 B<br>【逐项解析】<br>A. 错误！申请复议<span style='color: #e74c3c;'>不停止执行是原则</span>。<br>B. 正确！不停止执行！这是原则。<br>C. 错误！张三不能决定。<br>D. 错误！公安局可以决定停止，但题干问的是原则。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>复议<span style='color: #e74c3c;'>不停止执行是原则</span>！"
+            },
+            {
+                question: "行政复议审查合法性和合理性，行政诉讼审查什么？",
+                options: ["只审查合法性", "只审查合理性", "既审查合法性又审查合理性", "都不审查"],
+                correct: 0,
+                explanation: "✅ 正确答案是 A<br>【逐项解析】<br>A. 正确！只审查合法性！行政诉讼只审查合法性，不审查合理性。<br>B. 错误！行政诉讼不审查合理性。<br>C. 错误！行政诉讼只审查合法性，不审查合理性。<br>D. 错误！行政诉讼要审查合法性。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>诉讼只查合法，复议查合法合理！"
+            },
+            {
+                question: "下列哪种行为属于行政复议受案范围？",
+                options: ["国防行为", "外交行为", "不予发放抚恤金", "行政机关制定的规章"],
+                correct: 2,
+                explanation: "✅ 正确答案是 C<br>【逐项解析】<br>A. 错误！国防行为不能申请行政复议。<br>B. 错误！外交行为不能申请行政复议。<br>C. 正确！不予发放抚恤金可以申请行政复议！行政给付行为。<br>D. 错误！行政机关制定的规章不能申请行政复议。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>不发放抚恤金可以复议！"
+            },
+            {
+                question: "行政复议的基本原则有哪些？",
+                options: ["合法原则", "公正原则", "公开原则", "以上都是"],
+                correct: 3,
+                explanation: "✅ 正确答案是 D<br>【逐项解析】<br>A. 错误！合法原则是原则之一，但不是全部。<br>B. 错误！公正原则是原则之一，但不是全部。<br>C. 错误！公开原则是原则之一，但不是全部。<br>D. 正确！以上都是！行政复议的基本原则包括合法、公正、公开、高效、便民、为民等。<br><span style='color: #9b59b6;'>💡 小白记忆口诀：</span>复议原则：合法公正公开高效便民为民！"
+            }
+        ];
+        
+        // ========== 初始化 ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            renderQuiz('quiz-module1', quiz1Data);
+            renderQuiz('quiz-module2', quiz2Data);
+            renderQuiz('quiz-module3', quiz3Data);
+            renderQuiz('quiz-module4', quiz4Data);
+            renderQuiz('quiz-module5', quiz5Data);
+            renderQuiz('quiz-module6', quiz6Data);
+            renderQuiz('quiz-module7', quiz7Data);
+            renderQuiz('quiz-module8', quiz8Data);
+            renderQuiz('quiz-module9', quiz9Data);
+            renderQuiz('quiz-module10', quiz10Data);
+            renderQuiz('practiceQuestions', practiceData);
+            
+            window.addEventListener('scroll', function() {
+                const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrolled = (winScroll / height) * 100;
+                document.getElementById('mainProgress').style.width = scrolled + '%';
+            });
+        });
+    </script>
+</body>
+</html>
