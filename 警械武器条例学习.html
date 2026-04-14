@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>人民警察使用警械和武器条例学习 - 辅警备考</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); min-height: 100vh; color: #333; }
+        .progress-bar { position: fixed; top: 0; left: 0; width: 100%; height: 4px; background: rgba(255,255,255,0.1); z-index: 1000; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #e74c3c, #ff6b6b); width: 0%; transition: width 0.3s ease; }
+        .top-nav { position: fixed; top: 4px; left: 0; right: 0; background: rgba(231, 76, 60, 0.95); backdrop-filter: blur(10px); padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 999; border-bottom: 1px solid rgba(255,255,255,0.2); }
+        .logo { color: #fff; font-size: 18px; font-weight: bold; display: flex; align-items: center; gap: 8px; }
+        .score-display { background: rgba(255,255,255,0.2); color: #fff; padding: 8px 16px; border-radius: 20px; font-size: 14px; }
+        .sidebar { position: fixed; left: 0; top: 50px; width: 260px; height: calc(100vh - 50px); background: rgba(255,255,255,0.95); overflow-y: auto; padding: 20px 0; box-shadow: 2px 0 10px rgba(0,0,0,0.1); z-index: 998; }
+        .sidebar-title { color: #2c3e50; padding: 0 20px 15px; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid #eee; margin-bottom: 15px; }
+        .nav-item { padding: 12px 20px; color: #666; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 10px; font-size: 14px; border-left: 3px solid transparent; text-decoration: none; }
+        .nav-item:hover { background: rgba(231, 76, 60, 0.1); color: #e74c3c; }
+        .nav-item.active { background: rgba(231, 76, 60, 0.15); color: #e74c3c; border-left-color: #e74c3c; font-weight: bold; }
+        .main-content { margin-left: 260px; padding: 70px 30px 30px; max-width: 900px; }
+        .section-header { text-align: center; margin-bottom: 40px; }
+        .section-header h1 { font-size: 42px; color: #fff; margin-bottom: 10px; text-shadow: 0 0 30px rgba(0,0,0,0.2); }
+        .section-header p { color: rgba(255,255,255,0.8); font-size: 16px; }
+        .knowledge-card { background: #fff; border-radius: 20px; padding: 30px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); scroll-margin-top: 100px; }
+        .knowledge-card h2 { font-size: 24px; color: #333; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; border-bottom: 2px solid #e74c3c; padding-bottom: 15px; }
+        .knowledge-card h3 { font-size: 18px; color: #555; margin: 20px 0 10px; padding-left: 15px; border-left: 4px solid #e74c3c; }
+        .knowledge-content p { line-height: 1.8; color: #555; margin-bottom: 15px; }
+        .highlight-red { color: #e74c3c; font-weight: bold; background: rgba(231, 76, 60, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .highlight-blue { color: #3498db; font-weight: bold; background: rgba(52, 152, 219, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .highlight-green { color: #27ae60; font-weight: bold; background: rgba(39, 174, 96, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .highlight-orange { color: #e67e22; font-weight: bold; background: rgba(230, 126, 34, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .highlight-purple { color: #9b59b6; font-weight: bold; background: rgba(155, 89, 182, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .example { background: linear-gradient(135deg, #fff5f5, #ffe6e6); border-left: 4px solid #e74c3c; padding: 15px 20px; border-radius: 0 10px 10px 0; margin: 15px 0; }
+        .example p { color: #c62828; margin: 8px 0; }
+        .memory-tip { background: linear-gradient(135deg, #f3e5f5, #e1bee7); border-left: 4px solid #9b59b6; padding: 15px 20px; border-radius: 0 10px 10px 0; margin: 15px 0; }
+        .memory-tip p { color: #6a1b9a; margin: 0; }
+        .warning { background: linear-gradient(135deg, #fff3e0, #ffe0b2); border-left: 4px solid #e67e22; padding: 15px 20px; border-radius: 0 10px 10px 0; margin: 15px 0; }
+        .warning p { color: #e65100; margin: 0; }
+        .quiz-container { margin-top: 30px; }
+        .quiz-card { background: #f8f9fa; border-radius: 15px; padding: 20px; margin-bottom: 20px; border: 1px solid #e9ecef; }
+        .question { font-size: 16px; color: #333; margin-bottom: 15px; font-weight: 500; }
+        .question-num { display: inline-block; background: #e74c3c; color: #fff; width: 28px; height: 28px; border-radius: 50%; text-align: center; line-height: 28px; margin-right: 10px; font-size: 14px; }
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .option-btn { padding: 12px 20px; background: #fff; border: 2px solid #e9ecef; border-radius: 10px; cursor: pointer; text-align: left; font-size: 15px; color: #555; transition: all 0.3s ease; }
+        .option-btn:hover { border-color: #e74c3c; background: rgba(231, 76, 60, 0.05); }
+        .option-letter { display: inline-block; width: 26px; height: 26px; background: #e9ecef; border-radius: 50%; text-align: center; line-height: 26px; margin-right: 10px; font-weight: bold; color: #e74c3c; }
+        .option-btn.correct { background: #d4edda; border-color: #28a745; }
+        .option-btn.correct .option-letter { background: #28a745; color: #fff; }
+        .option-btn.wrong { background: #f8d7da; border-color: #dc3545; }
+        .option-btn.wrong .option-letter { background: #dc3545; color: #fff; }
+        .option-btn.disabled { cursor: not-allowed; opacity: 0.7; }
+        .explanation { background: linear-gradient(135deg, #fff8e1, #ffecb3); border-radius: 10px; padding: 15px 20px; margin-top: 15px; display: none; line-height: 1.8; border: 1px solid #ffc107; }
+        .explanation .result { font-size: 18px; font-weight: bold; margin-bottom: 10px; }
+        .explanation .result.correct { color: #28a745; }
+        .explanation .result.wrong { color: #dc3545; }
+        .framework-section { background: #fff; border-radius: 20px; padding: 30px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); scroll-margin-top: 100px; }
+        .framework-section h2 { font-size: 28px; color: #333; margin-bottom: 25px; text-align: center; border-bottom: 2px solid #e74c3c; padding-bottom: 15px; }
+        .framework-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .framework-card { background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-radius: 15px; padding: 20px; border-left: 4px solid #e74c3c; }
+        .framework-card h3 { font-size: 18px; color: #e74c3c; margin-bottom: 10px; }
+        .framework-card p { color: #666; font-size: 14px; margin: 5px 0; line-height: 1.6; }
+        .practice-section { background: #fff; border-radius: 20px; padding: 30px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); scroll-margin-top: 100px; }
+        .practice-section h2 { font-size: 28px; color: #333; margin-bottom: 25px; text-align: center; border-bottom: 2px solid #c0392b; padding-bottom: 15px; }
+        .table-section { background: #f8f9fa; border-radius: 10px; padding: 20px; margin: 15px 0; overflow-x: auto; }
+        .table-section table { width: 100%; border-collapse: collapse; }
+        .table-section th, .table-section td { padding: 12px 15px; text-align: left; border: 1px solid #ddd; }
+        .table-section th { background: #e74c3c; color: #fff; }
+        .table-section tr:nth-child(even) { background: #fff; }
+        @media (max-width: 768px) { .sidebar { width: 100%; height: auto; position: relative; margin-top: 50px; } .main-content { margin-left: 0; padding-top: 80px; } }
+        .close-nav-btn { background: rgba(255,255,255,0.2); border: none; color: #fff; font-size: 18px; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.3s; }
+        .close-nav-btn:hover { background: rgba(255,255,255,0.3); }
+    </style>
+</head>
+<body>
+    <div class="progress-bar"><div class="progress-fill" id="mainProgress"></div></div>
+    <nav class="top-nav" id="topNav">
+        <div class="logo">⚔️ 警械武器条例学习</div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <div class="score-display" id="totalScore">已答: 0/0</div>
+            <button class="close-nav-btn" onclick="closeTopNav()">✕</button>
+        </div>
+    </nav>
+    <aside class="sidebar">
+        <div class="sidebar-title">📖 目录导航</div>
+        <a href="#module1" class="nav-item active" onclick="scrollToSection(this, event)">📜 模块1: 条例概述</a>
+        <a href="#module2" class="nav-item" onclick="scrollToSection(this, event)">🔫 模块2: 警械武器分类</a>
+        <a href="#module3" class="nav-item" onclick="scrollToSection(this, event)">⚖️ 模块3: 使用原则</a>
+        <a href="#module4" class="nav-item" onclick="scrollToSection(this, event)">🛡️ 模块4: 警械使用情形</a>
+        <a href="#module5" class="nav-item" onclick="scrollToSection(this, event)">💥 模块5: 武器使用情形</a>
+        <a href="#module6" class="nav-item" onclick="scrollToSection(this, event)">🚫 模块6: 不得使用武器</a>
+        <a href="#module7" class="nav-item" onclick="scrollToSection(this, event)">⏹️ 模块7: 停止使用武器</a>
+        <a href="#module8" class="nav-item" onclick="scrollToSection(this, event)">📝 模块8: 报告义务</a>
+        <a href="#module9" class="nav-item" onclick="scrollToSection(this, event)">⚖️ 模块9: 法律责任</a>
+        <a href="#framework" class="nav-item" onclick="scrollToSection(this, event)">📋 知识框架总览</a>
+        <a href="#practice" class="nav-item" onclick="scrollToSection(this, event)">📝 练习专区</a>
+    </aside>
+    <main class="main-content">
+        <div class="section-header">
+            <h1>⚔️ 警械武器条例学习</h1>
+            <p>17条法条，年年考8-9题，性价比超高！</p>
+        </div>
+        
+        <section id="module1" class="knowledge-card">
+            <h2>📜 模块1: 条例概述</h2>
+            <div class="knowledge-content">
+                <p><span class='highlight-red'>核心概念</span>：《人民警察使用警械和武器条例》是<span class='highlight-blue'>国务院</span>制定的行政法规，一共才<span class='highlight-blue'>17条</span>！别看它短，每年考试要考<span class='highlight-red'>8-9道题</span>！性价比超高！</p>
+                
+                <h3>📌 一、立法目的（第1条）</h3>
+                <p>为什么要制定这个条例？想象一下：警察拿着枪、警棍，这些东西威力很大！如果乱用，分分钟伤害无辜群众！所以必须把警察使用警械武器的权力<span class='highlight-red'>关进笼子里</span>！</p>
+                <p>条例的目的是：</p>
+                <p>• <span class='highlight-blue'>依法履行职责</span>：警察执法要有法可依</p>
+                <p>• <span class='highlight-blue'>正确使用警械武器</span>：不是让你随便用，而是规范使用</p>
+                <p>• <span class='highlight-blue'>维护公共安全和秩序</span>：保护社会</p>
+                <p>• <span class='highlight-blue'>保障公民合法权益</span>：不能伤害无辜！</p>
+                <div class="example"><p><strong>🌰 举例：</strong>警察抓小偷，小偷反抗。警察可以依法使用警械制服小偷，但不能把小偷偷打一顿！因为要保障公民合法权益！</p></div>
+                
+                <h3>📌 二、条例基本信息</h3>
+                <p>• 制定机关：<span class='highlight-red'>国务院</span></p>
+                <p>• 条文数量：<span class='highlight-blue'>17条</span></p>
+                <p>• 性质：行政法规</p>
+                <p>• 施行时间：1995年</p>
+                <div class="example"><p><strong>🌰 举例：</strong>考试常考：这部条例是谁制定的？答案就是国务院！别和公安机关搞混了！</p></div>
+                
+                <h3>📌 三、警察使用警械武器受保护（第5条）</h3>
+                <p>警察依法使用警械武器，是<span class='highlight-red'>受法律保护的</span>！什么意思？就是你配合执法，不要妨碍，否则警察可以依法采取措施！</p>
+                <div class="example"><p><strong>🌰 举例：</strong>有人阻碍警察执法，推搡警察。这时候警察可以依法使用警械。因为警察依法执法受保护！</p></div>
+                
+                <p class="memory-tip"><strong><span class='highlight-purple'>记忆口诀：</span></strong>条例虽短17条，考试8-9题跑不掉！立法目的是保护，既保执法又保公民！国务院制定要记牢！</p>
+                <p class="warning">⚠️ <strong>易错点：</strong>有人以为是公安部制定的，错！是<span class='highlight-red'>国务院</span>制定的！</p>
+            </div>
+            <div id="quiz-module1" class="quiz-container"></div>
+        </section>
+        
+        <section id="module2" class="knowledge-card">
+            <h2>🔫 模块2: 警械和武器的分类</h2>
+            <div class="knowledge-content">
+                <p><span class='highlight-red'>核心概念</span>：这是<span class='highlight-red'>年年必考的知识点</span>！必须分清什么是警械、什么是武器！</p>
+                
+                <h3>📌 一、什么是警械（第3条）</h3>
+                <p><span class='highlight-red'>警械</span>就是警察按规定装备的非致命性器械！简单说就是：<span class='highlight-blue'>一般不致命</span>！</p>
+                <p>具体包括：</p>
+                <p>• <span class='highlight-blue'>驱逐性警械</span>：警棍、催泪弹、高压水枪、特种防暴枪</p>
+                <p>• <span class='highlight-blue'>约束性警械</span>：手铐、脚镣、警绳</p>
+                <p>• <span class='highlight-blue'>震慑性警械</span>：警笛、警报器、红色回旋警灯</p>
+                <p>• <span class='highlight-blue'>自卫性警械</span>：防弹衣、头盔、盾牌</p>
+                <div class="example"><p><strong>🌰 举例：</strong>警察抓人时给对方戴上手铐→约束性警械！追逃跑的人时用警棍→驱逐性警械！</p></div>
+                
+                <h3>📌 二、什么是武器（第3条）</h3>
+                <p><span class='highlight-red'>武器</span>就是警察按规定装备的<span class='highlight-red'>致命性警用器械</span>！说白了就是：<span class='highlight-blue'>枪支弹药</span>！</p>
+                <p>记住这个：<span class='highlight-red'>武器 = 枪支弹药 = 致命性</span>！</p>
+                <div class="example"><p><strong>🌰 举例：</strong>警察腰间的手枪、子弹，就是武器！防爆枪虽然有个枪字，但属于警械的驱逐性警械！</p></div>
+                
+                <h3>📌 三、警械和武器的核心区别</h3>
+                <div class="table-section">
+                    <table>
+                        <tr><th>对比项</th><th>警械</th><th>武器</th></tr>
+                        <tr><td>本质</td><td>非致命性</td><td>致命性</td></tr>
+                        <tr><td>代表物品</td><td>警棍、手铐、催泪弹</td><td>枪支、弹药</td></tr>
+                        <tr><td>使用频率</td><td>较高（日常执法）</td><td>较低（严重情况）</td></tr>
+                        <tr><td>使用条件</td><td>相对宽松</td><td>严格限制</td></tr>
+                    </table>
+                </div>
+                
+                <p class="memory-tip"><strong><span class='highlight-purple'>记忆口诀：</span></strong>警械武器分清楚：武器就是枪和弹，警棍手铐催泪弹！武器致命警械非，分类考试年年追！口诀：武器=枪弹，警械=棍铐绳弹！</p>
+                <p class="warning">⚠️ <strong>易错点：</strong>特种防暴枪是警械不是武器！别看到枪字就以为是武器！</p>
+            </div>
+            <div id="quiz-module2" class="quiz-container"></div>
+        </section>
+        
+        <section id="module3" class="knowledge-card">
+            <h2>⚖️ 模块3: 使用原则（第4条）</h2>
+            <div class="knowledge-content">
+                <p><span class='highlight-red'>核心原则</span>：这个原则<span class='highlight-red'>贯穿整个条例</span>！后面所有条款都从这里派生出来！必须牢牢记住！</p>
+                
+                <h3>📌 一、两大原则</h3>
+                <p><span class='highlight-red'>原则一：以制止违法犯罪行为为目的</span></p>
+                <p>使用警械武器的唯一目的是：<span class='highlight-blue'>制止违法犯罪</span>！不是为了报复、不是为了打人！</p>
+                <div class="example"><p><strong>🌰 举例：</strong>小偷已经停止盗窃，乖乖投降了。这时候警察就不能再动手打他了！因为目的已经达到！</p></div>
+                
+                <p><span class='highlight-red'>原则二：尽量减少人员伤亡和财产损失</span></p>
+                <p>能用轻的解决，就不要用重的！层层递进！</p>
+                
+                <h3>📌 二、使用强度的递进原则（从轻到重）</h3>
+                <p>记住这个顺序：</p>
+                <p>1. <span class='highlight-blue'>口头制止</span>：喊话、警告（最轻）</p>
+                <p>2. <span class='highlight-blue'>徒手制止</span>：不用工具，徒手控制</p>
+                <p>3. <span class='highlight-blue'>使用警械</span>：警棍、催泪弹等</p>
+                <p>4. <span class='highlight-blue'>使用武器</span>：枪支（最重！）</p>
+                <div class="example"><p><strong>🌰 举例：</strong>有人闹事，警察先喊话：别闹了！对方不听，警察上去徒手按住他。还是不服，警察拿出警棍。还是不行，最后才开枪！这就叫从轻到重！</p></div>
+                
+                <h3>📌 三、必须先警告（第7条、第9条）</h3>
+                <p>使用警械武器之前，一般都要<span class='highlight-red'>先警告</span>！让对方知道后果！</p>
+                <p>例外情况：<span class='highlight-blue'>来不及警告或警告会导致更严重后果</span>的，可以直接使用！</p>
+                <div class="example"><p><strong>🌰 举例：</strong>杀人犯正在砍人，每一秒都在威胁生命！你喊三遍住手可能人都死了！这时候来不及警告，直接开枪！</p></div>
+                
+                <h3>📌 四、使用前命令无关人员躲避（第6条）</h3>
+                <p>使用警械武器之前，应当<span class='highlight-red'>命令在场无关人员躲避</span>！避免误伤！</p>
+                <div class="example"><p><strong>🌰 举例：</strong>警察要开枪了，先喊：没关系的闪开！然后才能开枪。这就是为了避免误伤无辜！</p></div>
+                
+                <p class="memory-tip"><strong><span class='highlight-purple'>记忆口诀：</span></strong>使用原则有两点：制止违法是目的，减少伤亡和财产！从轻到重层层递：口头→徒手→警械→武器！</p>
+                <p class="warning">⚠️ <strong>易错点：</strong>警告不是必须的！当来不及警告或警告会导致更严重后果时，可以<span class='highlight-red'>直接使用武器</span>！</p>
+            </div>
+            <div id="quiz-module3" class="quiz-container"></div>
+        </section>
+        
+        <section id="module4" class="knowledge-card">
+            <h2>🛡️ 模块4: 警械使用情形</h2>
+            <div class="knowledge-content">
+                <p><span class='highlight-red'>核心概念</span>：警察在什么情况下可以使用警械？这是考试<span class='highlight-red'>高频考点</span>！</p>
+                
+                <h3>📌 一、驱逐性、制服性警械的使用（第7条）</h3>
+                <p><span class='highlight-red'>前提条件</span>：经警告无效！</p>
+                <p>可以使用驱逐性、制服性警械（警棍、催泪弹、高压水枪、特种防暴枪）的情况：</p>
+                <p>1. <span class='highlight-blue'>结伙斗殴、殴打他人、寻衅滋事</span>、侮辱妇女或进行其他流氓活动的</p>
+                <p>2. <span class='highlight-blue'>聚众扰乱</span>车站、码头、民用航空站、运动场等公共场所秩序的</p>
+                <p>3. <span class='highlight-blue'>非法举行</span>集会、游行、示威的</p>
+                <p>4. <span class='highlight-blue'>强行冲越</span>人民警察为履行职责设置的警戒线的</p>
+                <p>5. <span class='highlight-blue'>以暴力方法抗拒</span>或者阻碍人民警察依法履行职责的</p>
+                <p>6. <span class='highlight-blue'>袭击</span>人民警察的</p>
+                <p>7. <span class='highlight-blue'>危害公共安全、社会秩序</span>和公民人身安全的其他行为，需要当场制止的</p>
+                <div class="example"><p><strong>🌰 举例：</strong>有人醉酒闹事打砸餐厅，警察来了喊他住手，他不听还打警察。这时候可以用警棍！因为：警告无效 + 袭击警察 + 以暴力抗拒执法！</p></div>
+                
+                <h3>📌 二、约束性警械的使用（第8条）</h3>
+                <p>可以使用约束性警械（手铐、脚镣、警绳）的情况：</p>
+                <p>1. 遇有违法犯罪分子<span class='highlight-blue'>可能脱逃</span>的</p>
+                <p>2. 遇有违法犯罪分子<span class='highlight-blue'>可能行凶</span>的</p>
+                <p>3. 遇有违法犯罪分子<span class='highlight-blue'>可能自杀、自伤</span>的</p>
+                <p>4. 遇有违法犯罪分子<span class='highlight-blue'>有其他危险行为</span>的</p>
+                <p>5. 执行<span class='highlight-blue'>逮捕、拘留、看押、押解、审讯、拘传、强制传唤</span>任务的</p>
+                <div class="example"><p><strong>🌰 举例：</strong>抓到一个杀人犯，罪行很重，他可能要逃跑→可以戴手铐！抓到后要押送去看守所，他可能会自杀→可以戴手铐脚镣！</p></div>
+                
+                <h3>📌 三、使用限度（第7条第2款）</h3>
+                <p>使用警械必须以<span class='highlight-red'>制止违法犯罪行为为限度</span>！一旦制止了，就<span class='highlight-red'>立即停止使用</span>！</p>
+                <div class="example"><p><strong>🌰 举例：</strong>小偷已经被制服，手铐已经戴上了。这时候就不能再对他喷射催泪弹了！因为已经达到目的了！</p></div>
+                
+                <p class="memory-tip"><strong><span class='highlight-purple'>记忆口诀：</span></strong>驱逐警械用7条，警告无效才用到！流氓斗殴闹游警，暴力抗法袭击警！约束警械戴手铐，脱逃行凶自杀跑！</p>
+                <p class="warning">⚠️ <strong>易错点：</strong>使用警械的前提是<span class='highlight-red'>警告无效</span>！不是一上来就用！</p>
+            </div>
+            <div id="quiz-module4" class="quiz-container"></div>
+        </section>
+        
+        <section id="module5" class="knowledge-card">
+            <h2>💥 模块5: 武器使用情形（第9条）</h2>
+            <div class="knowledge-content">
+                <p><span class='highlight-red'>核心概念</span>：武器是<span class='highlight-red'>致命性</span>的！使用条件比警械<span class='highlight-red'>严格得多</span>！必须是严重暴力犯罪！</p>
+                
+                <h3>📌 一、使用武器的前提</h3>
+                <p>1. <span class='highlight-red'>判明</span>有暴力犯罪的紧急情形</p>
+                <p>2. <span class='highlight-red'>经警告无效</span></p>
+                <p>3. <span class='highlight-blue'>来不及警告或警告会导致更严重后果</span>的，可以直接使用</p>
+                
+                <h3>📌 二、可以使用武器的15种情形</h3>
+                <p>1. <span class='highlight-blue'>放火、决水、爆炸</span>等严重危害公共安全的</p>
+                <p>2. <span class='highlight-blue'>劫持</span>航空器、船舰、火车、机动车或驾驶车船等机动交通工具，故意危害公共安全的</p>
+                <p>3. <span class='highlight-blue'>抢夺、抢劫枪支弹药</span>、爆炸、剧毒等危险物品，严重危害公共安全的</p>
+                <p>4. 使用<span class='highlight-blue'>枪支、爆炸、剧毒</span>等危险物品实施犯罪或以使用这些物品相威胁实施犯罪的</p>
+                <p>5. <span class='highlight-blue'>破坏</span>军事、通讯、交通、能源、防险等重要设施，足以对公共安全造成严重、紧迫危险的</p>
+                <p>6. <span class='highlight-blue'>实施凶杀、劫持人质</span>等暴力行为，危及公民生命安全的</p>
+                <p>7. 国家规定的<span class='highlight-blue'>警卫、守卫、警戒</span>的对象和目标受到暴力袭击、破坏或有受到袭击、破坏的紧迫危险的</p>
+                <p>8. <span class='highlight-blue'>结伙抢劫</span>或者持械抢劫公私财物的</p>
+                <p>9. <span class='highlight-blue'>聚众械斗、暴乱</span>等严重破坏社会治安秩序，用其他方法不能制止的</p>
+                <p>10. 以暴力方法抗拒或阻碍人民警察依法履行职责或<span class='highlight-blue'>暴力袭击人民警察</span>，危及人民警察生命安全的</p>
+                <p>11. <span class='highlight-blue'>在押人犯、罪犯聚众骚乱、暴乱、行凶或者脱逃</span>的</p>
+                <p>12. <span class='highlight-blue'>劫夺在押人犯、罪犯</span>的</p>
+                <p>13. 实施<span class='highlight-blue'>放火、决水、爆炸、凶杀、抢劫</span>或其他严重暴力犯罪行为后拒捕、逃跑的</p>
+                <p>14. 犯罪分子<span class='highlight-blue'>携带枪支、爆炸、剧毒</span>等危险物品拒捕、逃跑的</p>
+                <p>15. 法律、行政法规规定可以使用武器的其他情形</p>
+                <div class="example"><p><strong>🌰 举例：</strong>恐怖分子在火车站持刀砍人→可以用武器！因为：实施凶杀等暴力行为，危及公民生命安全！</p></div>
+                
+                <h3>📌 三、不用警告的情况</h3>
+                <p>来不及警告，或者警告后可能导致<span class='highlight-red'>更为严重危害后果</span>的，可以<span class='highlight-red'>直接使用武器</span>！</p>
+                <div class="example"><p><strong>🌰 举例：</strong>杀人犯正在拿刀砍人，你喊三遍住手他根本不听。这时候没时间警告了！直接开枪！</p></div>
+                
+                <p class="memory-tip"><strong><span class='highlight-purple'>记忆口诀：</span></strong>武器使用条件严，暴力犯罪才能用！放火爆炸和劫持，凶杀抢劫杀警察！记住原则：能用警械就不用武器！</p>
+                <p class="warning">⚠️ <strong>易错点：</strong>普通的小偷小摸、治安案件，<span class='highlight-red'>不能用武器</span>！只能用警械！</p>
+            </div>
+            <div id="quiz-module5" class="quiz-container"></div>
+        </section>
+        
+        <section id="module6" class="knowledge-card">
+            <h2>🚫 模块6: 不得使用武器的情形（第10条）</h2>
+            <div class="knowledge-content">
+                <p><span class='highlight-red'>核心概念</span>：武器是致命的！不到万不得已不能用！法律明确规定了<span class='highlight-red'>两种不得使用武器</span>的情形！</p>
+                
+                <h3>📌 一、不得使用武器的两种情形</h3>
+                <p><span class='highlight-red'>情形一：犯罪分子是怀孕妇女或儿童</span></p>
+                <p>发现实施犯罪的人为<span class='highlight-blue'>怀孕妇女、儿童的</span>，不得使用武器！</p>
+                <div class="example"><p><strong>🌰 举例：</strong>一个怀孕的妇女在偷东西，警察抓到后不能对她开枪！但是要注意下面说的例外！</p></div>
+                
+                <p><span class='highlight-red'>情形二：犯罪分子处于危险场所</span></p>
+                <p>犯罪分子处于<span class='highlight-blue'>群众聚集的场所</span>或者<span class='highlight-blue'>存放大量易燃、易爆、剧毒、放射性</span>等危险物品的场所的，不得使用武器！</p>
+                <div class="example"><p><strong>🌰 举例：</strong>犯罪分子在加油站挟持人质。这时候不能用枪！因为一旦打中油罐，整个加油站都完了！</p></div>
+                
+                <h3>📌 二、例外情况（可以用武器！）</h3>
+                <p>虽然有上面两个不得使用武器的情形，但有<span class='highlight-red'>例外</span>！</p>
+                <p><span class='highlight-blue'>例外一：</span>怀孕妇女、儿童使用<span class='highlight-red'>枪支、爆炸、剧毒</span>等危险物品实施暴力犯罪的，<span class='highlight-red'>可以使用武器</span>！</p>
+                <p><span class='highlight-blue'>例外二：</span>不使用武器予以制止，将发生<span class='highlight-red'>更为严重危害后果</span>的，可以使用武器！</p>
+                <div class="example"><p><strong>🌰 举例：</strong>怀孕的妇女拿着炸弹要炸人群，这时候必须用武器！不炸，人群更惨！</p></div>
+                
+                <h3>📌 三、重要理解</h3>
+                <p>为什么对怀孕妇女、儿童和危险场所特殊保护？</p>
+                <p>• 怀孕妇女和儿童属于<span class='highlight-blue'>弱势群体</span>，社会应当给予特殊保护</p>
+                <p>• 危险场所使用武器可能造成<span class='highlight-blue'>二次伤害</span>，后果更严重</p>
+                <p>• 但如果危害太大、不制止会更惨，就可以用了！</p>
+                
+                <p class="memory-tip"><strong><span class='highlight-purple'>记忆口诀：</span></strong>不得用枪有两种：妇幼犯罪不能用，危险场所不能用！但是例外要记住：危险物品实施暴力，或者不用更惨的！</p>
+                <p class="warning">⚠️ <strong>易错点：</strong>不是所有妇幼犯罪都不能用武器！如果她们使用<span class='highlight-red'>枪支、爆炸、剧毒</span>等危险物品，<span class='highlight-red'>可以用武器</span>！</p>
+            </div>
+            <div id="quiz-module6" class="quiz-container"></div>
+        </section>
+        
+        <section id="module7" class="knowledge-card">
+            <h2>⏹️ 模块7: 停止使用武器的情形（第11条）</h2>
+            <div class="knowledge-content">
+                <p><span class='highlight-red'>核心概念</span>：武器是用来制止犯罪的！一旦目的达到了，就要<span class='highlight-red'>立即停止</span>！不能继续打！</p>
+                
+                <h3>📌 一、应当立即停止使用武器的两种情形</h3>
+                <p><span class='highlight-red'>情形一：犯罪分子停止实施犯罪，服从人民警察命令</span></p>
+                <p>当犯罪分子<span class='highlight-blue'>停止犯罪</span>，并且<span class='highlight-blue'>服从警察的命令</span>时，应当立即停止使用武器！</p>
+                <div class="example"><p><strong>🌰 举例：</strong>小偷被警察拿枪指着，小偷说别开枪我不跑了，乖乖蹲下。这时候警察必须立即停止开枪！</p></div>
+                
+                <p><span class='highlight-red'>情形二：犯罪分子失去继续实施犯罪的能力</span></p>
+                <p>当犯罪分子<span class='highlight-blue'>失去了实施犯罪的能力</span>时，应当立即停止使用武器！</p>
+                <div class="example"><p><strong>🌰 举例：</strong>杀人犯拿刀砍人，刀飞出去了，他手无寸铁了。这时候警察必须立即停止开枪！因为对方已经没有能力继续犯罪了！</p></div>
+                
+                <h3>📌 二、重要理解</h3>
+                <p>为什么要规定停止使用武器的情形？</p>
+                <p>• 武器是用于<span class='highlight-blue'>制止犯罪</span>的，不是用来惩罚的！</p>
+                <p>• 犯罪停止了，目的就达到了，不能再伤害对方</p>
+                <p>• 即使犯罪分子有罪，也应该由法院审判，不能由警察直接处决！</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三拿刀砍人，警察开枪打中他的腿，张三倒地不起。这时候警察必须停枪！因为张三已经失去继续犯罪的能力了！</p></div>
+                
+                <h3>📌 三、停止使用后怎么办</h3>
+                <p>停止使用武器后：</p>
+                <p>1. 应当<span class='highlight-blue'>立即停止射击</span></p>
+                <p>2. 应当<span class='highlight-blue'>及时抢救受伤人员</span>（包括犯罪分子和无辜人员）</p>
+                <p>3. 应当<span class='highlight-blue'>保护现场</span></p>
+                <p>4. 应当<span class='highlight-blue'>立即报告</span></p>
+                
+                <p class="memory-tip"><strong><span class='highlight-purple'>记忆口诀：</span></strong>停止用枪有两种：停止犯罪服从命，失去能力不能动！武器只是制止用，不是用来惩罚人！</p>
+                <p class="warning">⚠️ <strong>易错点：</strong>不是犯罪分子<span class='highlight-red'>放弃抵抗</span>就可以停，是要<span class='highlight-red'>停止犯罪 + 服从命令</span>两个条件！</p>
+            </div>
+            <div id="quiz-module7" class="quiz-container"></div>
+        </section>
+        
+        <section id="module8" class="knowledge-card">
+            <h2>📝 模块8: 使用后的报告义务（第12条）</h2>
+            <div class="knowledge-content">
+                <p><span class='highlight-red'>核心概念</span>：使用武器后，必须<span class='highlight-red'>立即报告</span>！不能偷偷摸摸的！</p>
+                
+                <h3>📌 一、使用武器后的紧急处置</h3>
+                <p>使用武器造成<span class='highlight-red'>犯罪分子或者无辜人员伤亡</span>的：</p>
+                <p>1. <span class='highlight-blue'>及时抢救</span>受伤人员（包括犯罪分子！）</p>
+                <p>2. <span class='highlight-blue'>保护现场</span></p>
+                <p>3. <span class='highlight-blue'>立即向</span>当地公安机关或者该人民警察所属机关<span class='highlight-blue'>报告</span></p>
+                <div class="example"><p><strong>🌰 举例：</strong>警察开枪打伤了一个持刀砍人的恐怖分子，打伤了旁边一个无辜路人。警察必须：1. 抢救恐怖分子 2. 抢救无辜路人 3. 保护现场 4. 立即报告！</p></div>
+                
+                <h3>📌 二、接到报告后的处置</h3>
+                <p>当地公安机关或人民警察所属机关接到报告后：</p>
+                <p>1. <span class='highlight-blue'>及时进行勘验、调查</span></p>
+                <p>2. <span class='highlight-blue'>及时通知当地人民检察院</span>（因为涉及犯罪！）</p>
+                <p>3. <span class='highlight-blue'>及时通知</span>伤亡人员家属或者所在单位</p>
+                <div class="example"><p><strong>🌰 举例：</strong>区公安分局接到警察用枪的报告后，要派人去现场勘验，调查清楚怎么回事，然后通知检察院有人被枪打伤了，最后还要通知被打伤的人的家属！</p></div>
+                
+                <h3>📌 三、书面报告义务（第13条）</h3>
+                <p>人民警察使用武器的，应当将使用武器的情况<span class='highlight-red'>如实向所属机关书面报告</span>！</p>
+                <p><span class='highlight-orange'>注意：口头报告不行！必须是书面报告！</span></p>
+                <div class="example"><p><strong>🌰 举例：</strong>警察用枪后，打个电话给领导说一声行不行？不行！必须写书面报告！写清楚：为什么用枪、怎么用的、结果怎么样！</p></div>
+                
+                <h3>📌 四、警械使用是否需要书面报告？</h3>
+                <p><span class='highlight-orange'>警械使用不需要书面报告！</span>只有武器使用需要！</p>
+                <div class="example"><p><strong>🌰 举例：</strong>警察用手铐铐了一个小偷，不用写报告。但如果警察开枪了，必须写书面报告！这就是武器和警械的区别！</p></div>
+                
+                <p class="memory-tip"><strong><span class='highlight-purple'>记忆口诀：</span></strong>用枪之后四步走：抢救伤员保护场，报告领导和检察！书面报告不能少，警械不用写报告！</p>
+                <p class="warning">⚠️ <strong>易错点：</strong>抢救的不只是无辜人员，<span class='highlight-red'>犯罪分子也要抢救</span>！</p>
+            </div>
+            <div id="quiz-module8" class="quiz-container"></div>
+        </section>
+        
+        <section id="module9" class="knowledge-card">
+            <h2>⚖️ 模块9: 法律责任（第14-15条）</h2>
+            <div class="knowledge-content">
+                <p><span class='highlight-red'>核心概念</span>：警察使用警械武器造成伤亡，涉及两个法律问题：<span class='highlight-blue'>赔偿</span>和<span class='highlight-blue'>补偿</span>！必须分清！</p>
+                
+                <h3>📌 一、违法使用警械武器（第14条）</h3>
+                <p>人民警察<span class='highlight-red'>违法</span>使用警械武器，造成无辜人员伤亡或者财产损失的：</p>
+                <p>由该人民警察所属机关<span class='highlight-red'>依照</span>《国家赔偿法》的有关规定给予<span class='highlight-red'>赔偿</span>！</p>
+                <div class="example"><p><strong>🌰 举例：</strong>警察在抓小偷时，小偷已经投降了，警察还把他打了一顿，打伤了。这叫违法使用！由警察局赔钱！</p></div>
+                
+                <h3>📌 二、依法使用警械武器（第15条）</h3>
+                <p>人民警察<span class='highlight-red'>依法</span>使用警械武器，造成无辜人员伤亡或者财产损失的：</p>
+                <p>由该人民警察所属机关<span class='highlight-red'>参照</span>《国家赔偿法》的有关规定给予<span class='highlight-red'>补偿</span>！</p>
+                <div class="example"><p><strong>🌰 举例：</strong>恐怖分子拿刀砍人，警察依法开枪打伤了他，同时误伤了一个路人。这是依法使用！由警察局补偿路人损失！</p></div>
+                
+                <h3>📌 三、赔偿和补偿的核心区别</h3>
+                <div class="table-section">
+                    <table>
+                        <tr><th>对比项</th><th>第14条（违法）</th><th>第15条（依法）</th></tr>
+                        <tr><td>使用性质</td><td>违法使用</td><td>依法使用</td></tr>
+                        <tr><td>适用法律</td><td>依照《国家赔偿法》</td><td>参照《国家赔偿法》</td></tr>
+                        <tr><td>结果类型</td><td>赔偿</td><td>补偿</td></tr>
+                        <tr><td>性质</td><td>有法律依据，必须赔</td><td>没有法律依据，参照赔</td></tr>
+                        <tr><td>金额</td><td>全额赔偿</td><td>酌情补偿</td></tr>
+                    </table>
+                </div>
+                
+                <h3>📌 四、依照vs参照（考试重点！）</h3>
+                <p><span class='highlight-red'>依照</span>：严格按照法律条文执行！有法可依！</p>
+                <p><span class='highlight-orange'>参照</span>：参考着执行，但不是必须按照！因为没有专门的法律规定怎么补偿！</p>
+                <div class="example"><p><strong>🌰 举例：</strong>违法→依照→赔偿→有法必依！依法→参照→补偿→参考着办！考试经常考这两个词的区别！</p></div>
+                
+                <p class="memory-tip"><strong><span class='highlight-purple'>记忆口诀：</span></strong>违法依照来赔偿，依法参照来补偿！依照必须有依据，参照只是参考！赔偿补偿要分清：违法=赔，依法=补！</p>
+                <p class="warning">⚠️ <strong>易错点：</strong>依照和参照<span class='highlight-red'>不能互换</span>！违法用→依照→赔偿！依法用→参照→补偿！</p>
+            </div>
+            <div id="quiz-module9" class="quiz-container"></div>
+        </section>
+        
+        <section id="framework" class="framework-section">
+            <h2>📋 知识框架总览</h2>
+            <div class="framework-grid">
+                <div class="framework-card">
+                    <h3>🔫 警械武器分类</h3>
+                    <p>• <span class='highlight-blue'>武器</span>=枪支弹药（致命）</p>
+                    <p>• <span class='highlight-blue'>驱逐性警械</span>=警棍、催泪弹、高压水枪</p>
+                    <p>• <span class='highlight-blue'>约束性警械</span>=手铐、脚镣、警绳</p>
+                    <p>• <span class='highlight-blue'>震慑性警械</span>=警笛、警报器</p>
+                    <p>• <span class='highlight-blue'>自卫性警械</span>=防弹衣、头盔、盾牌</p>
+                </div>
+                <div class="framework-card">
+                    <h3>⚖️ 使用原则</h3>
+                    <p>• 目的：制止违法犯罪</p>
+                    <p>• 要求：尽量减少伤亡</p>
+                    <p>• 强度：从轻到重</p>
+                    <p>• 顺序：口头→徒手→警械→武器</p>
+                    <p>• 前提：一般要先警告</p>
+                </div>
+                <div class="framework-card">
+                    <h3>🛡️ 警械使用情形</h3>
+                    <p>• <span class='highlight-orange'>第7条</span>：驱逐性警械（8种情形）</p>
+                    <p>• <span class='highlight-orange'>第8条</span>：约束性警械（多种情形）</p>
+                    <p>• 前提：警告无效</p>
+                    <p>• 限度：以制止为限，立即停止</p>
+                </div>
+                <div class="framework-card">
+                    <h3>💥 武器使用情形</h3>
+                    <p>• <span class='highlight-red'>第9条</span>：15种严重暴力犯罪</p>
+                    <p>• 必须：判明+警告无效</p>
+                    <p>• 例外：来不及警告可直接用</p>
+                    <p>• <span class='highlight-orange'>不得用</span>：妇幼+危险场所</p>
+                    <p>• <span class='highlight-orange'>停止用</span>：停止犯罪+失去能力</p>
+                </div>
+                <div class="framework-card">
+                    <h3>📝 报告义务</h3>
+                    <p>• 立即抢救受伤人员</p>
+                    <p>• 保护现场</p>
+                    <p>• 立即报告</p>
+                    <p>• 书面报告（仅武器）</p>
+                    <p>• 通知检察院</p>
+                    <p>• 通知家属</p>
+                </div>
+                <div class="framework-card">
+                    <h3>⚖️ 法律责任</h3>
+                    <p>• <span class='highlight-red'>第14条</span>：违法使用→依照→赔偿</p>
+                    <p>• <span class='highlight-blue'>第15条</span>：依法使用→参照→补偿</p>
+                    <p>• 赔偿：有法律依据</p>
+                    <p>• 补偿：参考法律</p>
+                    <p>• 依照≠参照！</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="practice" class="practice-section">
+            <h2>📝 练习专区（50道综合题）</h2>
+            <p style="text-align:center;color:#666;margin-bottom:20px;">检验学习成果，看看你掌握了多少！</p>
+            <div id="quiz-practice" class="quiz-container"></div>
+        </section>
+    </main>
+    
+<script>
+let totalAnswered = 0;
+let totalCorrect = 0;
+
+function renderQuiz(containerId, quizData) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    
+    let html = '';
+    quizData.forEach((quiz, index) => {
+        html += `<div class="quiz-card" id="${containerId}-card-${index}">
+            <div class="question">
+                <span class="question-num">${index + 1}</span>${quiz.question}
+            </div>
+            <div class="options">
+                ${quiz.options.map((opt, i) => `<button class="option-btn" onclick="checkAnswer('${containerId}', ${index}, ${i}, this)">${String.fromCharCode(65 + i)}、${opt}</button>`).join('')}
+            </div>
+            <div class="explanation" id="${containerId}-ex-${index}"></div>
+        </div>`;
+    });
+    container.innerHTML = html;
+}
+
+function checkAnswer(containerId, index, selectedIndex, btn) {
+    let quizData;
+    if (containerId === 'quiz-module1') quizData = quiz1Data;
+    else if (containerId === 'quiz-module2') quizData = quiz2Data;
+    else if (containerId === 'quiz-module3') quizData = quiz3Data;
+    else if (containerId === 'quiz-module4') quizData = quiz4Data;
+    else if (containerId === 'quiz-module5') quizData = quiz5Data;
+    else if (containerId === 'quiz-module6') quizData = quiz6Data;
+    else if (containerId === 'quiz-module7') quizData = quiz7Data;
+    else if (containerId === 'quiz-module8') quizData = quiz8Data;
+    else if (containerId === 'quiz-module9') quizData = quiz9Data;
+    else if (containerId === 'quiz-practice') quizData = practiceData;
+    
+    const quiz = quizData[index];
+    const buttons = btn.parentElement.querySelectorAll('.option-btn');
+    
+    if (btn.classList.contains('disabled')) return;
+    
+    buttons.forEach(b => b.classList.add('disabled'));
+    
+    const isCorrect = selectedIndex === quiz.correctIndex;
+    totalAnswered++;
+    if (isCorrect) totalCorrect++;
+    
+    if (isCorrect) {
+        btn.classList.add('correct');
+    } else {
+        btn.classList.add('wrong');
+        buttons[quiz.correctIndex].classList.add('correct');
+    }
+    
+    const explanationEl = document.getElementById(`${containerId}-ex-${index}`);
+    explanationEl.innerHTML = `<div class="result ${isCorrect ? 'correct' : 'wrong'}">${isCorrect ? '✅ 回答正确！' : '❌ 回答错误'}</div>${quiz.explanation}`;
+    explanationEl.style.display = 'block';
+    
+    updateTotalScore();
+}
+
+function updateTotalScore() {
+    const scoreEl = document.getElementById('totalScore');
+    if (scoreEl) {
+        scoreEl.textContent = `已答: ${totalAnswered}/${totalCorrect}`;
+    }
+}
+
+function scrollToSection(link, event) {
+    event.preventDefault();
+    const targetId = link.getAttribute('href').substring(1);
+    const target = document.getElementById(targetId);
+    if (target) {
+        target.scrollIntoView({ behavior: 'smooth' });
+    }
+    
+    document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+    link.classList.add('active');
+}
+
+function closeTopNav() {
+    document.getElementById('topNav').style.display = 'none';
+}
+
+const quiz1Data = [
+    { question: "《人民警察使用警械和武器条例》是由哪个机关制定的？", options: ["公安部", "国务院", "全国人大常委会", "最高人民法院"], correctIndex: 1, explanation: "【逐项解析】<br>A. 公安部：公安部是国务院组成部门，负责公安工作，但不是立法机关<br><br>B. 国务院：<span class='highlight-green'>正确！</span>条例<span class='highlight-blue'>第1条</span>规定是为了依法履行职责，正确使用警械武器...本条例由国务院制定<br><br>C. 全国人大常委会：不是本题答案<br><br>D. 最高人民法院：这是司法机关，不制定行政法规<br><br>【小白记忆】考试常考：条例是谁制定的？记住是<span class='highlight-red'>国务院</span>！别和公安机关搞混了！制定机关=国务院，适用机关=公安机关！<span class='highlight-purple'>口诀：国务院定规则，警察来执行！</span>" },
+    { question: "《人民警察使用警械和武器条例》一共多少条？", options: ["15条", "17条", "20条", "22条"], correctIndex: 1, explanation: "【逐项解析】<br>A. 15条：<span class='highlight-red'>不对</span><br><br>B. 17条：<span class='highlight-green'>正确！</span>条例一共17条，内容不多，但每年考试8-9题，性价比超高！<br><br>C. 20条：<span class='highlight-red'>不对</span><br><br>D. 22条：<span class='highlight-red'>不对</span><br><br>【小白记忆】17条要记牢！别看它短，考试年年考8-9题！<span class='highlight-purple'>口诀：条例虽短17条，8-9分拿到手！</span>" },
+    { question: "条例的立法目的是什么？", options: ["方便警察执法", "保护警察人身安全", "依法履行职责，正确使用警械武器，维护公共安全和秩序，保障公民合法权益", "扩大警察执法权限"], correctIndex: 2, explanation: "【逐项解析】<br>A. 方便警察执法：立法目的不是方便，而是规范！<br><br>B. 保护警察人身安全：虽然有保护作用，但不是主要目的<br><br>C. 依法履行职责，正确使用警械武器，维护公共安全和秩序，保障公民合法权益：<span class='highlight-green'>正确！</span>这是<span class='highlight-blue'>第1条</span>明确规定的！<br><br>D. 扩大警察执法权限：<span class='highlight-red'>错！</span>是规范权力，不是扩大权力！<br><br>【小白记忆】记住两个关键词：<span class='highlight-red'>规范使用</span>和<span class='highlight-red'>保障公民</span>！既保护执法，也保护公民！<span class='highlight-purple'>口诀：规范权力是核心，公民权益要保护！</span>" },
+    { question: "警察依法使用警械武器，受到什么保护？", options: ["不受任何保护", "受法律保护", "受上级保护", "受媒体保护"], correctIndex: 1, explanation: "【逐项解析】<br>A. 不受任何保护：<span class='highlight-red'>错！</span><br><br>B. 受法律保护：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第5条</span>规定：人民警察依法使用警械和武器的行为，受法律保护！<br><br>C. 受上级保护：<span class='highlight-red'>不对</span><br><br>D. 受媒体保护：<span class='highlight-red'>不对</span><br><br>【小白记忆】依法执法有保护！警察叔叔依法执勤时，法律是站在你这边的！<span class='highlight-purple'>口诀：依法执法有底气，法律站在你这边！</span>" },
+    { question: "条例的适用范围包括哪些？", options: ["仅限公安机关", "公安机关和国家安全机关", "公安机关、国家安全机关、监狱、劳动教养管理机关的人民警察和人民法院、人民检察院的司法警察", "所有公务员"], correctIndex: 2, explanation: "【逐项解析】<br>A. 仅限公安机关：不全面<br><br>B. 公安机关和国家安全机关：不完整<br><br>C. 公安机关、国家安全机关、监狱、劳动教养管理机关的人民警察和人民法院、人民检察院的司法警察：<span class='highlight-green'>正确！</span>根据人民警察法规定，人民警察包括这些<br><br>D. 所有公务员：<span class='highlight-red'>错！</span>不是所有公务员<br><br>【小白记忆】不是只有公安局的警察才用这个条例！法院检察院的司法警察、武警等都适用！<span class='highlight-purple'>口诀：公安国安和监狱，司法警察都适用！</span>" }
+];
+
+const quiz2Data = [
+    { question: "根据条例规定，下列哪项属于武器？", options: ["警棍", "手铐", "枪支弹药", "催泪弹"], correctIndex: 2, explanation: "【逐项解析】<br>A. 警棍：属于驱逐性警械，不是武器！<br><br>B. 手铐：属于约束性警械，不是武器！<br><br>C. 枪支弹药：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第3条</span>规定：武器是指人民警察按照规定装备的枪支、弹药等致命性警用武器！<br><br>D. 催泪弹：属于驱逐性警械，不是武器！<br><br>【小白记忆】武器=枪+弹=致命！警棍手铐催泪弹都是警械！考试常考：特种防暴枪虽然有枪字，但属于警械不是武器！<span class='highlight-purple'>口诀：武器就是枪和弹，警棍手铐是警械！</span>" },
+    { question: "下列哪项属于约束性警械？", options: ["警棍", "催泪弹", "手铐", "高压水枪"], correctIndex: 2, explanation: "【逐项解析】<br>A. 警棍：驱逐性警械<br><br>B. 催泪弹：驱逐性警械<br><br>C. 手铐：<span class='highlight-green'>正确！</span>约束性警械=手铐、脚镣、警绳！用来限制人身自由<br><br>D. 高压水枪：驱逐性警械<br><br>【小白记忆】约束性=把人绑住/铐住，动弹不得！驱逐性=把人赶走制服！<span class='highlight-purple'>口诀：约束=铐住绑住，驱逐=赶走制服！</span>" },
+    { question: "特种防暴枪属于哪种警械？", options: ["武器", "驱逐性警械", "约束性警械", "自卫性警械"], correctIndex: 1, explanation: "【逐项解析】<br>A. 武器：<span class='highlight-red'>错！</span>虽然有枪字，但不是武器！武器=枪支弹药（致命性）<br><br>B. 驱逐性警械：<span class='highlight-green'>正确！</span>特种防暴枪属于驱逐性、制服性警械！<br><br>C. 约束性警械：错<br><br>D. 自卫性警械：错<br><br>【小白记忆】考试最爱考这个坑！别看到枪就以为是武器！特种防暴枪是警械！<span class='highlight-purple'>口诀：特种防暴枪是警械，不是武器要记清！</span>" },
+    { question: "警笛、警报器属于哪种警械？", options: ["驱逐性警械", "约束性警械", "震慑性警械", "自卫性警械"], correctIndex: 2, explanation: "【逐项解析】<br>A. 驱逐性警械：错<br><br>B. 约束性警械：错<br><br>C. 震慑性警械：<span class='highlight-green'>正确！</span>震慑性警械包括警笛、警报器、红色回旋警灯！用来发出警告、震慑<br><br>D. 自卫性警械：错<br><br>【小白记忆】震慑=吓唬人、警告！警笛一响，大家让开！<span class='highlight-purple'>口诀：警笛警报是震慑，吓唬警告用的！</span>" },
+    { question: "警械和武器的本质区别是什么？", options: ["价格不同", "使用频率不同", "致命性不同", "颜色不同"], correctIndex: 2, explanation: "【逐项解析】<br>A. 价格不同：不是本质区别<br><br>B. 使用频率不同：不是本质区别<br><br>C. 致命性不同：<span class='highlight-green'>正确！</span>武器是致命性的，警械是非致命性的！这是最核心的区别！<br><br>D. 颜色不同：明显<span class='highlight-red'>不对</span><br><br>【小白记忆】记住这个核心区别：武器=致命，警械=非致命！<span class='highlight-purple'>口诀：武器致命警械非，核心区别要记对！</span>" }
+];
+
+const quiz3Data = [
+    { question: "使用警械武器的首要原则是什么？", options: ["快速制服犯罪分子", "以制止违法犯罪行为为原则", "尽量减少自身伤亡", "按领导指示执行"], correctIndex: 1, explanation: "【逐项解析】<br>A. 快速制服犯罪分子：不是首要原则<br><br>B. 以制止违法犯罪行为为原则：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第4条</span>规定：人民警察使用警械和武器，应当以制止违法犯罪行为为原则！<br><br>C. 尽量减少自身伤亡：这是原则之一，但不是首要的<br><br>D. 按领导指示执行：<span class='highlight-red'>不对</span><br><br>【小白记忆】使用警械武器只有一个目的：制止违法犯罪！不是为了打人、报复！<span class='highlight-purple'>口诀：使用警械为制止，不是为了打人和报复！</span>" },
+    { question: "关于使用强度，下列排序正确的是？", options: ["口头警告→警械→武器→徒手制止", "口头警告→徒手制止→警械→武器", "警械→武器→徒手制止→口头警告", "武器→警械→徒手制止→口头警告"], correctIndex: 1, explanation: "【逐项解析】<br>A. 口头警告→警械→武器→徒手制止：顺序错了！<br><br>B. 口头警告→徒手制止→警械→武器：<span class='highlight-green'>正确！</span>从轻到重，层层递进！<br><br>C. 警械→武器→徒手制止→口头警告：完全反了<br><br>D. 武器→警械→徒手制止→口头警告：完全反了<br><br>【小白记忆】记住顺序：先用嘴，不行上手，再不行用警械，最后才用枪！能用轻的就不用重的！<span class='highlight-purple'>口诀：口→手→警→武，从轻到重要牢记！</span>" },
+    { question: "使用武器前必须先警告吗？", options: ["必须警告，否则违法", "来不及警告时可以不用警告", "只需要警告一次", "警告后对方仍不停才能用武器"], correctIndex: 1, explanation: "【逐项解析】<br>A. 必须警告，否则违法：太绝对了！<br><br>B. 来不及警告时可以不用警告：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第9条</span>规定：来不及警告或者警告后可能导致更为严重危害后果的，可以直接使用武器！<br><br>C. 只需要警告一次：<span class='highlight-red'>不对</span>，没有次数限制<br><br>D. 警告后对方仍不停才能用武器：这是正常情况，但不是唯一情况<br><br>【小白记忆】正常情况要警告，但紧急情况来不及时可以不用警告！杀人犯正在砍人，你喊三遍住手他根本不听，没时间了！<span class='highlight-purple'>口诀：一般情况先警告，紧急来不及直接用！</span>" },
+    { question: "使用警械武器前，应当命令什么？", options: ["犯罪分子投降", "在场无关人员躲避", "记者离开", "领导先走"], correctIndex: 1, explanation: "【逐项解析】<br>A. 犯罪分子投降：<span class='highlight-red'>不对</span><br><br>B. 在场无关人员躲避：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第6条</span>规定：人民警察使用警械和武器前，应当命令在场无关人员躲避！<br><br>C. 记者离开：<span class='highlight-red'>不对</span><br><br>D. 领导先走：<span class='highlight-red'>不对</span><br><br>【小白记忆】目的是避免误伤无辜！开枪前喊一声：没关系的闪开！<span class='highlight-purple'>口诀：用枪之前喊一声，无关人员请躲开！</span>" },
+    { question: "条例规定的使用原则包括哪些？", options: ["以制止违法犯罪行为为原则", "尽量减少人员伤亡和财产损失", "使用武力的强度要适当", "以上全部"], correctIndex: 3, explanation: "【逐项解析】<br>A. 以制止违法犯罪行为为原则：正确<br><br>B. 尽量减少人员伤亡和财产损失：正确<br><br>C. 使用武力的强度要适当：正确<br><br>D. 以上全部：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第4条</span>完整规定了这些原则！<br><br>【小白记忆】<span class='highlight-blue'>第4条</span>是核心原则，后面所有条款都从这里派生！<span class='highlight-purple'>口诀：制止违法是目的，减少伤亡和损失！</span>" }
+];
+
+const quiz4Data = [
+    { question: "使用驱逐性、制服性警械的前提是什么？", options: ["发现犯罪分子", "经警告无效", "领导批准", "群众报警"], correctIndex: 1, explanation: "【逐项解析】<br>A. 发现犯罪分子：<span class='highlight-red'>不够</span><br><br>B. 经警告无效：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第7条</span>规定：经警告无效的，可以使用警棍、催泪弹、高压水枪、特种防暴枪等驱逐性、制服性警械！<br><br>C. 领导批准：<span class='highlight-red'>不对</span><br><br>D. 群众报警：<span class='highlight-red'>不对</span><br><br>【小白记忆】不是一上来就用警械！先口头警告，无效才用！<span class='highlight-purple'>口诀：警告无效才用警械！</span>" },
+    { question: "下列哪种情形可以使用驱逐性警械？", options: ["张三在街上和人吵架", "李四酒后寻衅滋事，经警告无效的", "王五正常行走", "赵六在公园遛狗"], correctIndex: 1, explanation: "【逐项解析】<br>A. 张三在街上和人吵架：一般情况，不需要用警械<br><br>B. 李四酒后寻衅滋事，经警告无效的：<span class='highlight-green'>正确！</span>属于<span class='highlight-blue'>第7条</span>第1项：结伙斗殴、殴打他人、寻衅滋事...经警告无效的，可以使用驱逐性警械！<br><br>C. 王五正常行走：不需要<br><br>D. 赵六在公园遛狗：不需要<br><br>【小白记忆】必须是：违法+警告+无效！三个条件缺一不可！<span class='highlight-purple'>口诀：寻衅滋事是流氓，警告无效用警棍！</span>" },
+    { question: "对正在执行逮捕任务的犯罪嫌疑人，可以用什么警械？", options: ["警棍", "催泪弹", "高压水枪", "手铐"], correctIndex: 3, explanation: "【逐项解析】<br>A. 警棍：驱逐性警械，一般不用来押解<br><br>B. 催泪弹：驱逐性警械<br><br>C. 高压水枪：驱逐性警械<br><br>D. 手铐：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第8条</span>规定：执行逮捕、拘留、看押、押解、审讯、拘传、强制传唤的，可以使用手铐、脚镣、警绳等约束性警械！<br><br>【小白记忆】押解犯人用约束性警械：手铐、脚镣、警绳！<span class='highlight-purple'>口诀：逮捕押解戴手铐，约束性警械来帮忙！</span>" },
+    { question: "使用警械的限度是什么？", options: ["把犯罪分子打伤为止", "以制止违法犯罪行为为限度", "可以使用任意强度", "打到犯罪分子求饶为止"], correctIndex: 1, explanation: "【逐项解析】<br>A. 把犯罪分子打伤为止：<span class='highlight-red'>错！</span><br><br>B. 以制止违法犯罪行为为限度：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第7条</span>第2款规定：应当以制止违法犯罪行为为限度；当违法犯罪行为得到制止时，应当立即停止使用！<br><br>C. 可以使用任意强度：<span class='highlight-red'>错！</span><br><br>D. 打到犯罪分子求饶为止：<span class='highlight-red'>错！</span><br><br>【小白记忆】达到目的就停手！不能多打！<span class='highlight-purple'>口诀：制止为止就停手，多打一下都是<span class='highlight-red'>错！</span></span>" },
+    { question: "对可能脱逃的犯罪嫌疑人，可以使用什么警械？", options: ["警棍", "催泪弹", "手铐", "高压水枪"], correctIndex: 2, explanation: "【逐项解析】<br>A. 警棍：驱逐性警械<br><br>B. 催泪弹：驱逐性警械<br><br>C. 手铐：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第8条</span>规定：遇有违法犯罪分子可能脱逃、行凶、自杀、自伤或者有其他危险行为的，可以使用手铐、脚镣、警绳等约束性警械！<br><br>D. 高压水枪：驱逐性警械<br><br>【小白记忆】脱逃、行凶、自杀、自伤→用约束性警械（手铐脚镣）！<span class='highlight-purple'>口诀：想跑想死想打人，戴上手铐跑不成！</span>" }
+];
+
+const quiz5Data = [
+    { question: "下列哪种情形可以使用武器？", options: ["张三在商场偷东西", "李四在地铁站持刀砍人", "王五在公园遛狗没牵绳", "赵六酒后闹事打人"], correctIndex: 1, explanation: "【逐项解析】<br>A. 张三在商场偷东西：治安案件，不能用武器！<br><br>B. 李四在地铁站持刀砍人：<span class='highlight-green'>正确！</span>属于<span class='highlight-blue'>第9条</span>第6项：实施凶杀、劫持人质等暴力行为，危及公民生命安全的！这是严重暴力犯罪！<br><br>C. 王五在公园遛狗没牵绳：不是违法<br><br>D. 赵六酒后闹事打人：治安案件，不能用武器！<br><br>【小白记忆】武器只能用对付严重暴力犯罪！普通治安案件用警械就够了！<span class='highlight-purple'>口诀：普通案件用警械，暴力犯罪才用枪！</span>" },
+    { question: "实施放火、决水、爆炸等严重危害公共安全的行为，可以用什么？", options: ["口头警告", "警械", "武器", "停止执法"], correctIndex: 2, explanation: "【逐项解析】<br>A. 口头警告：<span class='highlight-red'>不够</span><br><br>B. 警械：<span class='highlight-red'>不够</span><br><br>C. 武器：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第9条</span>第1项：放火、决水、爆炸等严重危害公共安全的，可以使用武器！<br><br>D. 停止执法：<span class='highlight-red'>错！</span><br><br>【小白记忆】放火爆炸太危险了，不用枪不行了！<span class='highlight-purple'>口诀：放火爆炸危害大，只能用枪来制止！</span>" },
+    { question: "来不及警告的紧急情况，可以怎么做？", options: ["等领导批准再行动", "可以直接使用武器", "放弃执法", "只能用警械"], correctIndex: 1, explanation: "【逐项解析】<br>A. 等领导批准再行动：来不及了！<br><br>B. 可以直接使用武器：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第9条</span>第2款：来不及警告或者警告后可能导致更为严重危害后果的，可以直接使用武器！<br><br>C. 放弃执法：<span class='highlight-red'>错！</span><br><br>D. 只能用警械：<span class='highlight-red'>错！</span><br><br>【小白记忆】紧急情况没时间废话！杀人犯正在砍人，没时间警告！<span class='highlight-purple'>口诀：紧急情况来不及，直接用枪保平安！</span>" },
+    { question: "劫持人质的行为，可以使用武器吗？", options: ["不可以", "可以，但必须先谈判", "可以", "只能等上级指示"], correctIndex: 2, explanation: "【逐项解析】<br>A. 不可以：<span class='highlight-red'>错！</span><br><br>B. 可以，但必须先谈判：一般情况要警告，但不是必须先谈判<br><br>C. 可以：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第9条</span>第6项：实施凶杀、劫持人质等暴力行为，危及公民生命安全的，可以使用武器！<br><br>D. 只能等上级指示：<span class='highlight-red'>不对</span><br><br>【小白记忆】劫持人质危及生命，可以使用武器！但一般也要警告，除非来不及！<span class='highlight-purple'>口诀：劫持人质危及命，武器可以使用保安全！</span>" },
+    { question: "下列哪种不属于可以使用武器的情形？", options: ["聚众械斗", "在押人犯脱逃", "张三在广场摆地摊", "结伙抢劫"], correctIndex: 2, explanation: "【逐项解析】<br>A. 聚众械斗：属于<span class='highlight-blue'>第9条</span>第9项，可以用武器！<br><br>B. 在押人犯脱逃：属于<span class='highlight-blue'>第9条</span>第11项，可以用武器！<br><br>C. 张三在广场摆地摊：<span class='highlight-green'>正确！</span>摆地摊不是犯罪，更不是暴力犯罪，不能用武器！<br><br>D. 结伙抢劫：属于<span class='highlight-blue'>第9条</span>第8项，可以用武器！<br><br>【小白记忆】普通摆地摊是合法经营！不是违法，更不是犯罪！<span class='highlight-purple'>口诀：合法摆摊不是罪，武器千万不能用！</span>" }
+];
+
+const quiz6Data = [
+    { question: "发现犯罪分子是怀孕妇女，可以对其使用武器吗？", options: ["绝对不可以", "一般不可以，但使用枪支等危险物品实施暴力犯罪的除外", "可以直接使用", "必须先用警械"], correctIndex: 1, explanation: "【逐项解析】<br>A. 绝对不可以：<span class='highlight-red'>不对</span>，有例外<br><br>B. 一般不可以，但使用枪支等危险物品实施暴力犯罪的除外：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第10条</span>第1项规定了一般不得使用武器的情形，但有例外！<br><br>C. 可以直接使用：<span class='highlight-red'>错！</span><br><br>D. 必须先用警械：<span class='highlight-red'>不对</span><br><br>【小白记忆】妇幼一般保护，但如果她们用枪用炸弹，那就不能再客气了！<span class='highlight-purple'>口诀：妇幼一般不能用，但如果用炸弹就可以！</span>" },
+    { question: "犯罪分子在加油站挟持人质，可以对其使用武器吗？", options: ["可以", "不可以，因为可能引爆加油站", "必须使用", "只能谈判"], correctIndex: 1, explanation: "【逐项解析】<br>A. 可以：<span class='highlight-red'>错！</span><br><br>B. 不可以，因为可能引爆加油站：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第10条</span>第2项：犯罪分子处于群众聚集的场所或者存放大量易燃、易爆、剧毒、放射性等危险物品的场所的，不得使用武器！但是...<br><br>C. 必须使用：错<br><br>D. 只能谈判：<span class='highlight-red'>不完全</span>对<br><br>【小白记忆】加油站是危险场所！开枪可能引爆！但如果不用枪会造成更大危害，就有例外了！<span class='highlight-purple'>口诀：加油站是危险地，一般不能用枪支！但若不用更惨的，就可以！</span>" },
+    { question: "使用武器的禁止情形有哪些？", options: ["只有一种", "有两种", "有三种", "有四种"], correctIndex: 1, explanation: "【逐项解析】<br>A. 只有一种：<span class='highlight-red'>不对</span><br><br>B. 有两种：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第10条</span>规定了两种不得使用武器的情形：1. 犯罪分子为怀孕妇女、儿童的；2. 犯罪分子处于危险场所的！<br><br>C. 有三种：<span class='highlight-red'>不对</span><br><br>D. 有四种：<span class='highlight-red'>不对</span><br><br>【小白记忆】两种不得用：妇幼+危险场所！<span class='highlight-purple'>口诀：两种情况不得用：妇幼犯罪和危险场所！</span>" },
+    { question: "怀孕妇女实施暴力犯罪，可以使用武器吗？", options: ["不可以", "可以", "只能谈判", "必须经过家属同意"], correctIndex: 1, explanation: "【逐项解析】<br>A. 不可以：<span class='highlight-red'>错！</span><br><br>B. 可以：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第10条</span>但书：发现实施犯罪的人为怀孕妇女、儿童的，但是使用枪支、爆炸、剧毒等危险物品实施暴力犯罪的除外！<br><br>C. 只能谈判：<span class='highlight-red'>不对</span><br><br>D. 必须经过家属同意：<span class='highlight-red'>不对</span><br><br>【小白记忆】用危险物品暴力犯罪，就是例外！<span class='highlight-purple'>口诀：妇幼用炸弹，那就可以用枪！</span>" },
+    { question: "不用武器会造成更大危害的，可以怎么做？", options: ["必须停止执法", "可以使用武器", "只能等待", "只能使用警械"], correctIndex: 1, explanation: "【逐项解析】<br>A. 必须停止执法：<span class='highlight-red'>错！</span><br><br>B. 可以使用武器：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第10条</span>第2项但书：犯罪分子处于危险场所...但是不使用武器予以制止，将发生更为严重危害后果的除外！<br><br>C. 只能等待：<span class='highlight-red'>错！</span><br><br>D. 只能使用警械：<span class='highlight-red'>错！</span><br><br>【小白记忆】两害相权取其轻！不用枪会死更多人，那就用！<span class='highlight-purple'>口诀：不用更惨就可以用！</span>" }
+];
+
+const quiz7Data = [
+    { question: "犯罪分子停止实施犯罪并服从命令，应当怎么做？", options: ["继续追击", "立即停止使用武器", "继续射击", "等待上级指示"], correctIndex: 1, explanation: "【逐项解析】<br>A. 继续追击：<span class='highlight-red'>错！</span><br><br>B. 立即停止使用武器：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第11条</span>第1项：犯罪分子停止实施犯罪，服从人民警察命令的，应当立即停止使用武器！<br><br>C. 继续射击：<span class='highlight-red'>错！</span><br><br>D. 等待上级指示：<span class='highlight-red'>错！</span><br><br>【小白记忆】对方投降了，还打什么打！<span class='highlight-purple'>口诀：停止犯罪又服从，立即停枪不能再打！</span>" },
+    { question: "犯罪分子失去继续实施犯罪的能力时，应当怎么做？", options: ["继续射击确保安全", "立即停止使用武器", "继续追击", "向领导请示"], correctIndex: 1, explanation: "【逐项解析】<br>A. 继续射击确保安全：<span class='highlight-red'>错！</span><br><br>B. 立即停止使用武器：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第11条</span>第2项：犯罪分子失去继续实施犯罪能力的，应当立即停止使用武器！<br><br>C. 继续追击：<span class='highlight-red'>错！</span><br><br>D. 向领导请示：<span class='highlight-red'>错！</span><br><br>【小白记忆】对方没有能力继续犯罪了，就不能再打了！<span class='highlight-purple'>口诀：失去能力就停枪！</span>" },
+    { question: "杀人犯拿刀砍人，刀飞出去后，警察应当？", options: ["继续开枪", "立即停止开枪", "继续追捕", "警告后再开枪"], correctIndex: 1, explanation: "【逐项解析】<br>A. 继续开枪：<span class='highlight-red'>错！</span><br><br>B. 立即停止开枪：<span class='highlight-green'>正确！</span>刀飞了，杀人犯失去了继续实施犯罪的能力！应当立即停止使用武器！<br><br>C. 继续追捕：可以，但不是继续开枪<br><br>D. 警告后再开枪：<span class='highlight-red'>不对</span><br><br>【小白记忆】刀都没了，还打什么！<span class='highlight-purple'>口诀：刀飞了人就废了，立即停枪不能再打了！</span>" },
+    { question: "停止使用武器后，受伤人员不包括？", options: ["无辜群众", "犯罪分子", "警察本人", "以上都包括"], correctIndex: 2, explanation: "【逐项解析】<br>A. 无辜群众：包括！<br><br>B. 犯罪分子：包括！<span class='highlight-blue'>第12条</span>明确：造成犯罪分子或者无辜人员伤亡的，应当及时抢救受伤人员！<br><br>C. 警察本人：不包括！<span class='highlight-blue'>第12条</span>说的是犯罪分子或者无辜人员，警察是执法人员，不属于这里说的受伤人员！<br><br>D. 以上都包括：<span class='highlight-red'>不对</span><br><br>【小白记忆】犯罪分子也是人，也要救！<span class='highlight-purple'>口诀：停枪之后救伤员，无辜犯罪都要救！</span>" },
+    { question: "停止使用武器的情形有几个？", options: ["1个", "2个", "3个", "4个"], correctIndex: 1, explanation: "【逐项解析】<br>A. 1个：<span class='highlight-red'>不对</span><br><br>B. 2个：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第11条</span>规定了两种应当立即停止使用武器的情形：1. 停止犯罪+服从命令；2. 失去犯罪能力！<br><br>C. 3个：<span class='highlight-red'>不对</span><br><br>D. 4个：<span class='highlight-red'>不对</span><br><br>【小白记忆】两种停止：停止服从，失去能力！<span class='highlight-purple'>口诀：两种情况要停枪：停止服从和失能力！</span>" }
+];
+
+const quiz8Data = [
+    { question: "使用武器造成伤亡后，首先应当怎么做？", options: ["写报告", "及时抢救受伤人员", "通知家属", "封锁消息"], correctIndex: 1, explanation: "【逐项解析】<br>A. 写报告：<span class='highlight-red'>不对</span>！<br><br>B. 及时抢救受伤人员：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第12条</span>第1款：人民警察使用武器造成犯罪分子或者无辜人员伤亡的，应当及时抢救受伤人员！<br><br>C. 通知家属：<span class='highlight-red'>不对</span>，这是后面的步骤<br><br>D. 封锁消息：<span class='highlight-red'>错！</span><br><br>【小白记忆】救人第一！不管对方是好人还是坏人，先救！<span class='highlight-purple'>口诀：救人第一最重要！</span>" },
+    { question: "使用武器后，应当立即向谁报告？", options: ["媒体", "当地公安机关或者该人民警察所属机关", "上级领导个人", "法院"], correctIndex: 1, explanation: "【逐项解析】<br>A. 媒体：<span class='highlight-red'>错！</span><br><br>B. 当地公安机关或者该人民警察所属机关：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第12条</span>！<br><br>C. 上级领导个人：<span class='highlight-red'>不对</span>，要向组织报告！<br><br>D. 法院：<span class='highlight-red'>不对</span><br><br>【小白记忆】向组织报告，不是向个人报告！<span class='highlight-purple'>口诀：用枪之后向组织报告！</span>" },
+    { question: "使用武器后，必须以什么形式报告？", options: ["口头报告", "书面报告", "电话报告", "短信报告"], correctIndex: 1, explanation: "【逐项解析】<br>A. 口头报告：<span class='highlight-red'>错！</span><br><br>B. 书面报告：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第13条</span>：人民警察使用武器的，应当将使用武器的情况如实向所属机关书面报告！<br><br>C. 电话报告：<span class='highlight-red'>错！</span><br><br>D. 短信报告：<span class='highlight-red'>错！</span><br><br>【小白记忆】口头的不算数，必须白纸黑字！<span class='highlight-purple'>口诀：口头报告不算数，必须书面留记录！</span>" },
+    { question: "使用警械后，需要书面报告吗？", options: ["需要", "不需要", "看情况", "领导决定"], correctIndex: 1, explanation: "【逐项解析】<br>A. 需要：<span class='highlight-red'>错！</span><br><br>B. 不需要：<span class='highlight-green'>正确！</span>只有武器使用才需要书面报告！<span class='highlight-blue'>第13条</span>只规定了武器使用的书面报告！<br><br>C. 看情况：<span class='highlight-red'>不对</span><br><br>D. 领导决定：<span class='highlight-red'>不对</span><br><br>【小白记忆】警械使用比武器轻微，不需要书面报告！<span class='highlight-purple'>口诀：警械使用不用写，武器使用才要写！</span>" },
+    { question: "接到使用武器的报告后，公安机关应当通知谁？", options: ["媒体", "当地人民检察院", "法院", "上级政府"], correctIndex: 1, explanation: "【逐项解析】<br>A. 媒体：<span class='highlight-red'>错！</span><br><br>B. 当地人民检察院：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第12条</span>第2款：当地公安机关或者该人民警察所属机关接到报告后，应当及时进行勘验、调查，并及时通知当地人民检察院！<br><br>C. 法院：<span class='highlight-red'>不对</span><br><br>D. 上级政府：<span class='highlight-red'>不对</span><br><br>【小白记忆】用枪涉及犯罪，要通知检察院监督！<span class='highlight-purple'>口诀：用枪之后通知检察院，监督调查不能忘！</span>" }
+];
+
+const quiz9Data = [
+    { question: "警察违法使用警械武器造成伤亡，如何处理？", options: ["警察个人赔偿", "警察所属机关依照《国家赔偿法》赔偿", "不予处理", "受害者自己承担"], correctIndex: 1, explanation: "【逐项解析】<br>A. 警察个人赔偿：<span class='highlight-red'>错！</span><br><br>B. 警察所属机关依照《国家赔偿法》赔偿：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第14条</span>：人民警察违法使用警械武器...由该人民警察所属机关依照《国家赔偿法》的有关规定给予赔偿！<br><br>C. 不予处理：<span class='highlight-red'>错！</span><br><br>D. 受害者自己承担：<span class='highlight-red'>错！</span><br><br>【小白记忆】违法=赔偿！机关赔，不是个人赔！<span class='highlight-purple'>口诀：违法使用机关赔，依照赔偿有依据！</span>" },
+    { question: "警察依法使用警械武器造成伤亡，如何处理？", options: ["警察个人赔偿", "警察所属机关参照《国家赔偿法》补偿", "不予处理", "受害者自己承担"], correctIndex: 1, explanation: "【逐项解析】<br>A. 警察个人赔偿：<span class='highlight-red'>错！</span><br><br>B. 警察所属机关参照《国家赔偿法》补偿：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第15条</span>：人民警察依法使用警械武器...由该人民警察所属机关参照《国家赔偿法》的有关规定给予补偿！<br><br>C. 不予处理：<span class='highlight-red'>错！</span><br><br>D. 受害者自己承担：<span class='highlight-red'>错！</span><br><br>【小白记忆】依法=补偿！不是赔偿！是参照，不是依照！<span class='highlight-purple'>口诀：依法使用机关补，参照补偿来办理！</span>" },
+    { question: "依照和参照的主要区别是什么？", options: ["没有区别", "一个有依据，一个没完全依据", "参照标准更高", "依照标准更高"], correctIndex: 1, explanation: "【逐项解析】<br>A. 没有区别：<span class='highlight-red'>错！</span><br><br>B. 一个有依据，一个没完全依据：<span class='highlight-green'>正确！</span>依照=有法律依据，必须执行！参照=没有完全依据，参考执行！<br><br>C. 参照标准更高：<span class='highlight-red'>不对</span><br><br>D. 依照标准更高：<span class='highlight-red'>不对</span><br><br>【小白记忆】违法→依照→赔偿（有依据）；依法→参照→补偿（无完全依据，参考）！<span class='highlight-purple'>口诀：依照有据要执行，参照参考灵活办！</span>" },
+    { question: "违法使用警械武器的法律责任是？", options: ["补偿", "赔偿", "批评教育", "纪律处分"], correctIndex: 1, explanation: "【逐项解析】<br>A. 补偿：<span class='highlight-red'>错！</span><br><br>B. 赔偿：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第14条</span>：依照《国家赔偿法》赔偿！<br><br>C. 批评教育：<span class='highlight-red'>不够</span><br><br>D. 纪律处分：可能有，但这里问的是对受害者的处理<br><br>【小白记忆】违法→赔偿！<span class='highlight-purple'>口诀：违法使用要赔偿！</span>" },
+    { question: "依法使用警械武器造成无辜人员伤亡的法律责任是？", options: ["赔偿", "补偿", "不处理", "追究刑事责任"], correctIndex: 1, explanation: "【逐项解析】<br>A. 赔偿：<span class='highlight-red'>错！</span><br><br>B. 补偿：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第15条</span>：参照《国家赔偿法》补偿！<br><br>C. 不处理：<span class='highlight-red'>错！</span><br><br>D. 追究刑事责任：可能涉及，但不是对受害者的处理<br><br>【小白记忆】依法→补偿！<span class='highlight-purple'>口诀：依法使用是补偿！</span>" }
+];
+
+const practiceData = [
+    { question: "条例第3条规定，警械是指人民警察按照规定装备的哪些器械？", options: ["枪支、弹药", "警棍、催泪弹、高压水枪、特种防暴枪、手铐、脚镣、警绳", "匕首、弹簧刀", "汽车、对讲机"], correctIndex: 1, explanation: "【逐项解析】<br>A. 枪支、弹药：这是武器！<br><br>B. 警棍、催泪弹、高压水枪、特种防暴枪、手铐、脚镣、警绳：<span class='highlight-green'>正确！</span>这是<span class='highlight-blue'>第3条</span>的原话！<br><br>C. 匕首、弹簧刀：这是管制刀具，普通人不能持有！<br><br>D. 汽车、对讲机：这是装备，但不是警械！<br><br>【小白记忆】记住这个分类！<span class='highlight-purple'>口诀：棍弹枪绳铐镣，都是警械要记牢！</span>" },
+    { question: "第9条规定的可以使用武器的情形不包括？", options: ["实施凶杀、劫持人质等暴力行为", "在广场摆摊经营", "聚众械斗、暴乱等严重破坏社会治安秩序", "犯罪分子携带枪支拒捕逃跑"], correctIndex: 1, explanation: "【逐项解析】<br>A. 实施凶杀、劫持人质等暴力行为：包括！<br><br>B. 在广场摆摊经营：<span class='highlight-green'>正确！</span>这是合法经营，不是犯罪！<br><br>C. 聚众械斗、暴乱等严重破坏社会治安秩序：包括！<br><br>D. 犯罪分子携带枪支拒捕逃跑：包括！<br><br>【小白记忆】摆摊是合法的！<span class='highlight-purple'>口诀：合法摆摊不是罪！</span>" },
+    { question: "根据条例规定，人民警察使用警械和武器前，应当命令在场无关人员躲避，这体现了什么原则？", options: ["从重从快原则", "尽量减少人员伤亡和财产损失原则", "服从命令原则", "快速反应原则"], correctIndex: 1, explanation: "【逐项解析】<br>A. 从重从快原则：<span class='highlight-red'>不对</span><br><br>B. 尽量减少人员伤亡和财产损失原则：<span class='highlight-green'>正确！</span>命令无关人员躲避，就是为了避免误伤无辜，体现这个原则！<br><br>C. 服从命令原则：<span class='highlight-red'>不对</span><br><br>D. 快速反应原则：<span class='highlight-red'>不对</span><br><br>【小白记忆】避免误伤=减少伤亡！<span class='highlight-purple'>口诀：用枪之前喊一声，无关人员请躲开！</span>" },
+    { question: "下列哪项不属于驱逐性、制服性警械？", options: ["警棍", "催泪弹", "高压水枪", "手铐"], correctIndex: 3, explanation: "【逐项解析】<br>A. 警棍：驱逐性警械！<br><br>B. 催泪弹：驱逐性警械！<br><br>C. 高压水枪：驱逐性警械！<br><br>D. 手铐：<span class='highlight-green'>正确！</span>约束性警械！用来限制人身自由的！<br><br>【小白记忆】手铐是约束性的！<span class='highlight-purple'>口诀：铐镣绳是约束的！</span>" },
+    { question: "第7条规定的可以使用驱逐性警械的情形不包括？", options: ["结伙斗殴", "正常行走", "非法举行集会游行示威", "袭击人民警察"], correctIndex: 1, explanation: "【逐项解析】<br>A. 结伙斗殴：包括！<br><br>B. 正常行走：<span class='highlight-green'>正确！</span>正常行走不是违法行为！<br><br>C. 非法举行集会游行示威：包括！<br><br>D. 袭击人民警察：包括！<br><br>【小白记忆】正常行走是合法的！<span class='highlight-purple'>口诀：正常行走不违法！</span>" },
+    { question: "对可能自杀的犯罪嫌疑人，可以使用什么警械？", options: ["警棍", "催泪弹", "手铐", "高压水枪"], correctIndex: 2, explanation: "【逐项解析】<br>A. 警棍：驱逐性警械<br><br>B. 催泪弹：驱逐性警械<br><br>C. 手铐：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第8条</span>规定可能自杀的，可以使用约束性警械！<br><br>D. 高压水枪：驱逐性警械<br><br>【小白记忆】怕他自杀→约束住他！<span class='highlight-purple'>口诀：想死想跑想行凶，戴上手铐绑上绳！</span>" },
+    { question: "第11条规定应当立即停止使用武器的情形不包括？", options: ["犯罪分子停止实施犯罪并服从命令", "犯罪分子失去继续实施犯罪的能力", "犯罪分子大声喊叫", "犯罪分子主动放下武器"], correctIndex: 2, explanation: "【逐项解析】<br>A. 犯罪分子停止实施犯罪并服从命令：包括！<br><br>B. 犯罪分子大声喊叫：<span class='highlight-green'>正确！</span>喊叫不等于停止犯罪！<br><br>C. 犯罪分子失去继续实施犯罪的能力：包括！<br><br>D. 犯罪分子主动放下武器：包括！<br><br>【小白记忆】大声喊叫可能是在威胁，不等于停止犯罪！<span class='highlight-purple'>口诀：喊叫不等于投降！</span>" },
+    { question: "使用武器造成伤亡后，不立即向当地公安机关报告的后果是？", options: ["没有后果", "违反条例规定", "会受到表扬", "可能被提拔"], correctIndex: 1, explanation: "【逐项解析】<br>A. 没有后果：<span class='highlight-red'>错！</span><br><br>B. 违反条例规定：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第12条</span>要求立即报告，不报告是违法的！<br><br>C. 会受到表扬：<span class='highlight-red'>错！</span><br><br>D. 可能被提拔：<span class='highlight-red'>错！</span><br><br>【小白记忆】不报告=违法！<span class='highlight-purple'>口诀：用枪之后必须报，不报违法要追责！</span>" },
+    { question: "第13条规定，使用武器后应当如何报告？", options: ["口头报告", "书面报告", "电话报告即可", "不需要报告"], correctIndex: 1, explanation: "【逐项解析】<br>A. 口头报告：<span class='highlight-red'>错！</span><br><br>B. 书面报告：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第13条</span>明确规定：应当将使用武器的情况如实向所属机关书面报告！<br><br>C. 电话报告即可：<span class='highlight-red'>错！</span><br><br>D. 不需要报告：<span class='highlight-red'>错！</span><br><br>【小白记忆】必须白纸黑字！<span class='highlight-purple'>口诀：书面报告要留存！</span>" },
+    { question: "下列关于武器和警械的说法，正确的是？", options: ["武器都是非致命的", "警械都是致命的", "武器是指枪支弹药等致命性警用器械", "警棍是武器"], correctIndex: 2, explanation: "【逐项解析】<br>A. 武器都是非致命的：<span class='highlight-red'>错！</span>武器是致命的！<br><br>B. 警械都是致命的：<span class='highlight-red'>错！</span>警械是非致命的！<br><br>C. 武器是指枪支弹药等致命性警用器械：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第3条</span>规定！<br><br>D. 警棍是武器：<span class='highlight-red'>错！</span>警棍是警械！<br><br>【小白记忆】武器=枪弹=致命！<span class='highlight-purple'>口诀：武器=枪弹=致命！</span>" },
+    { question: "第10条规定的不得使用武器的情形不包括？", options: ["犯罪分子为怀孕妇女", "犯罪分子为儿童", "犯罪分子在人群聚集场所", "犯罪分子使用枪支实施暴力犯罪"], correctIndex: 3, explanation: "【逐项解析】<br>A. 犯罪分子为怀孕妇女：包括！但书之外！<br><br>B. 犯罪分子为儿童：包括！但书之外！<br><br>C. 犯罪分子在人群聚集场所：包括！但书之外！<br><br>D. 犯罪分子使用枪支实施暴力犯罪：<span class='highlight-green'>正确！</span>这属于但书规定的例外，可以使用武器！<br><br>【小白记忆】用枪炸弹的妇幼，可以使用武器！<span class='highlight-purple'>口诀：妇幼用炸弹就可以用枪！</span>" },
+    { question: "第8条规定的可以使用约束性警械的情形不包括？", options: ["执行逮捕任务", "执行拘留任务", "调解邻里纠纷", "押解犯罪嫌疑人"], correctIndex: 2, explanation: "【逐项解析】<br>A. 执行逮捕任务：包括！<br><br>B. 执行拘留任务：包括！<br><br>C. 调解邻里纠纷：<span class='highlight-green'>正确！</span>这是日常工作，不需要用约束性警械！<br><br>D. 押解犯罪嫌疑人：包括！<br><br>【小白记忆】调解纠纷是协调工作，不是执法行动！<span class='highlight-purple'>口诀：调解纠纷用嘴巴，不用手铐来约束！</span>" },
+    { question: "第9条规定来不及警告时可以怎么做？", options: ["放弃执法", "直接使用武器", "等待上级指示", "使用警械代替武器"], correctIndex: 1, explanation: "【逐项解析】<br>A. 放弃执法：<span class='highlight-red'>错！</span><br><br>B. 直接使用武器：<span class='highlight-green'>正确！</span>来不及警告或者警告后可能导致更严重后果的，可以直接使用武器！<br><br>C. 等待上级指示：<span class='highlight-red'>错！</span><br><br>D. 使用警械代替武器：<span class='highlight-red'>错！</span><br><br>【小白记忆】紧急情况来不及警告！<span class='highlight-purple'>口诀：紧急情况来不及，直接用枪保平安！</span>" },
+    { question: "第4条规定的使用原则不包括？", options: ["以制止违法犯罪行为为原则", "尽量减少人员伤亡", "尽量减少财产损失", "可以使用任何手段"], correctIndex: 3, explanation: "【逐项解析】<br>A. 以制止违法犯罪行为为原则：包括！<br><br>B. 尽量减少人员伤亡：包括！<br><br>C. 尽量减少财产损失：包括！<br><br>D. 可以使用任何手段：<span class='highlight-green'>正确！</span>不能使用任何手段！要适度！<br><br>【小白记忆】不能乱来！<span class='highlight-purple'>口诀：制止为止是原则，不是随便打！</span>" },
+    { question: "第12条规定使用武器造成伤亡后，应当及时抢救的人员包括？", options: ["只有无辜人员", "只有犯罪分子", "犯罪分子和无辜人员都要抢救", "不需要抢救"], correctIndex: 2, explanation: "【逐项解析】<br>A. 只有无辜人员：<span class='highlight-red'>错！</span><br><br>B. 只有犯罪分子：<span class='highlight-red'>错！</span><br><br>C. 犯罪分子和无辜人员都要抢救：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第12条</span>原文！<br><br>D. 不需要抢救：<span class='highlight-red'>错！</span><br><br>【小白记忆】救人第一，不管好人坏人！<span class='highlight-purple'>口诀：受伤都要救！</span>" },
+    { question: "第15条规定的补偿是依照还是参照《国家赔偿法》？", options: ["依照", "参照", "依据", "参考"], correctIndex: 1, explanation: "【逐项解析】<br>A. 依照：<span class='highlight-red'>错！</span>这是<span class='highlight-blue'>第14条</span>（违法使用）<br><br>B. 参照：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第15条</span>：依法使用警械武器...参照《国家赔偿法》给予补偿！<br><br>C. 依据：<span class='highlight-red'>不对</span><br><br>D. 参考：<span class='highlight-red'>不对</span><br><br>【小白记忆】依法→参照→补偿！<span class='highlight-purple'>口诀：依法补偿参照办！</span>" },
+    { question: "第14条规定的赔偿是依照还是参照《国家赔偿法》？", options: ["依照", "参照", "参考", "根据"], correctIndex: 0, explanation: "【逐项解析】<br>A. 依照：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第14条</span>：违法使用警械武器...依照《国家赔偿法》给予赔偿！<br><br>B. 参照：<span class='highlight-red'>错！</span>这是<span class='highlight-blue'>第15条</span>（依法使用）<br><br>C. 参考：<span class='highlight-red'>不对</span><br><br>D. 根据：<span class='highlight-red'>不对</span><br><br>【小白记忆】违法→依照→赔偿！<span class='highlight-purple'>口诀：违法赔偿依照办！</span>" },
+    { question: "第6条规定使用警械武器前，应当命令谁躲避？", options: ["犯罪分子", "在场无关人员", "记者", "领导"], correctIndex: 1, explanation: "【逐项解析】<br>A. 犯罪分子：<span class='highlight-red'>不对</span><br><br>B. 在场无关人员：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第6条</span>原文！<br><br>C. 记者：<span class='highlight-red'>不对</span><br><br>D. 领导：<span class='highlight-red'>不对</span><br><br>【小白记忆】无关人员=可能误伤的人！<span class='highlight-purple'>口诀：无关人员快躲开！</span>" },
+    { question: "第7条规定的使用驱逐性警械的前提条件是？", options: ["发现违法行为", "经警告无效", "群众要求", "领导批准"], correctIndex: 1, explanation: "【逐项解析】<br>A. 发现违法行为：<span class='highlight-red'>不够</span><br><br>B. 经警告无效：<span class='highlight-green'>正确！</span>这是<span class='highlight-blue'>第7条</span>明确规定的！<br><br>C. 群众要求：<span class='highlight-red'>不对</span><br><br>D. 领导批准：<span class='highlight-red'>不对</span><br><br>【小白记忆】警告无效才动手！<span class='highlight-purple'>口诀：警告无效才用警械！</span>" },
+    { question: "第11条规定停止使用武器后，应当立即停止什么？", options: ["执法活动", "射击行为", "调查工作", "抓捕行动"], correctIndex: 1, explanation: "【逐项解析】<br>A. 执法活动：<span class='highlight-red'>不对</span>，执法还要继续<br><br>B. 射击行为：<span class='highlight-green'>正确！</span>停止使用武器就是停止射击！<br><br>C. 调查工作：<span class='highlight-red'>不对</span><br><br>D. 抓捕行动：可能还要继续<br><br>【小白记忆】停枪不停工作！<span class='highlight-purple'>口诀：停枪不停抓人！</span>" },
+    { question: "第9条第8项规定可以使用武器的情形是？", options: ["结伙斗殴", "聚众赌博", "结伙抢劫或持械抢劫公私财物", "酒后驾车"], correctIndex: 2, explanation: "【逐项解析】<br>A. 结伙斗殴：这是<span class='highlight-blue'>第7条</span>，用警械！<br><br>B. 聚众赌博：不是暴力犯罪，用警械！<br><br>C. 结伙抢劫或持械抢劫公私财物：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第9条</span>第8项！<br><br>D. 酒后驾车：不是暴力犯罪！<br><br>【小白记忆】抢劫是暴力犯罪！<span class='highlight-purple'>口诀：抢劫要用枪！</span>" },
+    { question: "第9条第6项规定可以使用武器的情形是？", options: ["放火", "决水", "实施凶杀、劫持人质等暴力行为", "非法集会"], correctIndex: 2, explanation: "【逐项解析】<br>A. 放火：属于<span class='highlight-blue'>第9条</span>第1项<br><br>B. 决水：属于<span class='highlight-blue'>第9条</span>第1项<br><br>C. 实施凶杀、劫持人质等暴力行为：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第9条</span>第6项！<br><br>D. 非法集会：<span class='highlight-blue'>第7条</span>，用警械！<br><br>【小白记忆】凶杀劫持危及生命！<span class='highlight-purple'>口诀：凶杀劫持危及命！</span>" },
+    { question: "第10条的但书规定，使用枪支等危险物品实施暴力犯罪的可以使用武器，这里的危险物品不包括？", options: ["枪支", "爆炸物品", "剧毒物品", "水果刀"], correctIndex: 3, explanation: "【逐项解析】<br>A. 枪支：包括！<br><br>B. 爆炸物品：包括！<br><br>C. 剧毒物品：包括！<br><br>D. 水果刀：<span class='highlight-green'>正确！</span>水果刀不是枪支、爆炸物、剧毒物！<br><br>【小白记忆】但书针对的是大杀器！<span class='highlight-purple'>口诀：炸弹枪支和毒物，大杀器才触发但书！</span>" },
+    { question: "第8条规定的可以使用约束性警械的情形不包括？", options: ["可能脱逃", "可能行凶", "正常执行公务无危险的", "可能自杀"], correctIndex: 2, explanation: "【逐项解析】<br>A. 可能脱逃：包括！<br><br>B. 可能行凶：包括！<br><br>C. 正常执行公务无危险的：<span class='highlight-green'>正确！</span>没有危险就不需要约束性警械！<br><br>D. 可能自杀：包括！<br><br>【小白记忆】有危险才需要约束！<span class='highlight-purple'>口诀：没危险不用铐！</span>" },
+    { question: "第9条第10项规定可以使用武器的情形是？", options: ["以暴力方法抗拒人民警察履行职责", "以言语辱骂人民警察", "以不配合态度对待人民警察", "以逃避方式拒绝人民警察盘问"], correctIndex: 0, explanation: "【逐项解析】<br>A. 以暴力方法抗拒人民警察履行职责：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第9条</span>第10项：以暴力方法抗拒或者阻碍人民警察依法履行职责或者暴力袭击人民警察，危及人民警察生命安全的！<br><br>B. 以言语辱骂人民警察：这是侮辱行为，一般用警械<br><br>C. 以不配合态度对待人民警察：<span class='highlight-red'>不对</span><br><br>D. 以逃避方式拒绝人民警察盘问：可能用警械<br><br>【小白记忆】暴力抗法危及警察生命！<span class='highlight-purple'>口诀：暴力抗法打警察，危及生命可用枪！</span>" },
+    { question: "第9条第11项规定可以使用武器的情形是？", options: ["在押人犯正常饮食", "在押人犯睡觉", "在押人犯聚众骚乱、暴乱、行凶或者脱逃", "在押人犯看书"], correctIndex: 2, explanation: "【逐项解析】<br>A. 在押人犯正常饮食：不需要用武器<br><br>B. 在押人犯睡觉：不需要用武器<br><br>C. 在押人犯聚众骚乱、暴乱、行凶或者脱逃：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第9条</span>第11项！<br><br>D. 在押人犯看书：不需要用武器<br><br>【小白记忆】犯人闹事、逃跑！<span class='highlight-purple'>口诀：犯人闹事和逃跑！</span>" },
+    { question: "第9条第13项规定可以使用武器的情形是？", options: ["实施轻微盗窃后拒捕逃跑", "实施放火、决水、爆炸、凶杀、抢劫或其他严重暴力犯罪行为后拒捕逃跑", "实施赌博后逃跑", "实施交通违法后逃跑"], correctIndex: 1, explanation: "【逐项解析】<br>A. 实施轻微盗窃后拒捕逃跑：不是严重暴力犯罪！<br><br>B. 实施放火、决水、爆炸、凶杀、抢劫或其他严重暴力犯罪行为后拒捕逃跑：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第9条</span>第13项！<br><br>C. 实施赌博后逃跑：不是暴力犯罪！<br><br>D. 实施交通违法后逃跑：不是暴力犯罪！<br><br>【小白记忆】严重暴力犯罪后逃跑！<span class='highlight-purple'>口诀：重罪逃跑可用枪！</span>" },
+    { question: "第9条第14项规定可以使用武器的情形是？", options: ["犯罪分子携带水果刀逃跑", "犯罪分子携带棍棒逃跑", "犯罪分子携带枪支、爆炸、剧毒等危险物品拒捕逃跑", "犯罪分子空着手逃跑"], correctIndex: 2, explanation: "【逐项解析】<br>A. 犯罪分子携带水果刀逃跑：不是枪支爆炸物！<br><br>B. 犯罪分子携带棍棒逃跑：不是枪支爆炸物！<br><br>C. 犯罪分子携带枪支、爆炸、剧毒等危险物品拒捕逃跑：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第9条</span>第14项！<br><br>D. 犯罪分子空着手逃跑：不需要用武器<br><br>【小白记忆】带着大杀器跑，太危险！<span class='highlight-purple'>口诀：带炸弹枪支跑，可用武器制服！</span>" },
+    { question: "第3条规定武器是指什么？", options: ["所有警用装备", "枪支、弹药等致命性警用武器", "警棍和手铐", "防护装备"], correctIndex: 1, explanation: "【逐项解析】<br>A. 所有警用装备：<span class='highlight-red'>不对</span>！<br><br>B. 枪支、弹药等致命性警用武器：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第3条</span>原文！<br><br>C. 警棍和手铐：这是警械！<br><br>D. 防护装备：<span class='highlight-red'>不对</span><br><br>【小白记忆】武器=枪弹=致命！<span class='highlight-purple'>口诀：武器就是枪和弹！</span>" },
+    { question: "第12条第2款规定，接到报告后应当及时通知哪个机关？", options: ["公安局", "当地人民检察院", "法院", "政府"], correctIndex: 1, explanation: "【逐项解析】<br>A. 公安局：<span class='highlight-red'>不对</span><br><br>B. 当地人民检察院：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第12条</span>原文！<br><br>C. 法院：<span class='highlight-red'>不对</span><br><br>D. 政府：<span class='highlight-red'>不对</span><br><br>【小白记忆】涉及犯罪，要检察院监督！<span class='highlight-purple'>口诀：用枪之后报检察！</span>" },
+    { question: "第15条规定的补偿主体是谁？", options: ["警察个人", "警察所属机关", "国家财政部门", "受害人自己"], correctIndex: 1, explanation: "【逐项解析】<br>A. 警察个人：<span class='highlight-red'>错！</span><br><br>B. 警察所属机关：<span class='highlight-green'>正确！</span>由该人民警察所属机关给予补偿！<br><br>C. 国家财政部门：<span class='highlight-red'>不对</span><br><br>D. 受害人自己：<span class='highlight-red'>错！</span><br><br>【小白记忆】机关赔/补，不是个人！<span class='highlight-purple'>口诀：机关赔补不是个人！</span>" },
+    { question: "第14条规定的赔偿主体是谁？", options: ["警察个人", "警察所属机关", "国家财政部门", "受害人自己"], correctIndex: 1, explanation: "【逐项解析】<br>A. 警察个人：<span class='highlight-red'>错！</span><br><br>B. 警察所属机关：<span class='highlight-green'>正确！</span>由该人民警察所属机关依照《国家赔偿法》给予赔偿！<br><br>C. 国家财政部门：<span class='highlight-red'>不对</span><br><br>D. 受害人自己：<span class='highlight-red'>错！</span><br><br>【小白记忆】机关赔/补，不是个人！<span class='highlight-purple'>口诀：机关赔补不是个人！</span>" },
+    { question: "第7条规定的驱逐性、制服性警械不包括？", options: ["警棍", "催泪弹", "高压水枪", "手铐"], correctIndex: 3, explanation: "【逐项解析】<br>A. 警棍：包括！<br><br>B. 催泪弹：包括！<br><br>C. 高压水枪：包括！<br><br>D. 手铐：<span class='highlight-green'>正确！</span>这是约束性警械！<br><br>【小白记忆】手铐是约束性的！<span class='highlight-purple'>口诀：铐镣绳是约束的！</span>" },
+    { question: "第8条规定的约束性警械不包括？", options: ["手铐", "脚镣", "警绳", "警棍"], correctIndex: 3, explanation: "【逐项解析】<br>A. 手铐：包括！<br><br>B. 脚镣：包括！<br><br>C. 警绳：包括！<br><br>D. 警棍：<span class='highlight-green'>正确！</span>警棍是驱逐性警械！<br><br>【小白记忆】警棍是驱逐性的！<span class='highlight-purple'>口诀：棍弹枪水是驱逐的！</span>" },
+    { question: "第12条规定，保护现场是使用武器造成伤亡后的义务吗？", options: ["不是", "是", "看情况", "领导决定"], correctIndex: 1, explanation: "【逐项解析】<br>A. 不是：<span class='highlight-red'>错！</span><br><br>B. 是：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第12条</span>第1款规定应当保护现场！<br><br>C. 看情况：<span class='highlight-red'>不对</span><br><br>D. 领导决定：<span class='highlight-red'>不对</span><br><br>【小白记忆】保护现场是法定义务！<span class='highlight-purple'>口诀：用枪之后保护现场！</span>" },
+    { question: "第12条规定应当通知伤亡人员家属，这个通知的时间要求是什么？", options: ["立即通知", "及时通知", "事后通知", "不用通知"], correctIndex: 1, explanation: "【逐项解析】<br>A. 立即通知：<span class='highlight-red'>错！</span><br><br>B. 及时通知：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第12条</span>原文：及时通知其家属或者所在单位！<br><br>C. 事后通知：<span class='highlight-red'>不对</span><br><br>D. 不用通知：<span class='highlight-red'>错！</span><br><br>【小白记忆】及时≠立即！<span class='highlight-purple'>口诀：及时通知家属！</span>" },
+    { question: "第9条第9项规定可以使用武器的情形是？", options: ["结伙斗殴", "聚众械斗、暴乱等严重破坏社会治安秩序，用其他方法不能制止的", "非法集会", "寻衅滋事"], correctIndex: 1, explanation: "【逐项解析】<br>A. 结伙斗殴：<span class='highlight-blue'>第7条</span>，用警械！<br><br>B. 聚众械斗、暴乱等严重破坏社会治安秩序，用其他方法不能制止的：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第9条</span>第9项！<br><br>C. 非法集会：<span class='highlight-blue'>第7条</span>，用警械！<br><br>D. 寻衅滋事：<span class='highlight-blue'>第7条</span>，用警械！<br><br>【小白记忆】械斗暴乱用其他方法不能制止！<span class='highlight-purple'>口诀：械斗暴乱其他方法不能制止的！</span>" },
+    { question: "第9条第5项规定可以使用武器的情形是？", options: ["破坏军事设施", "破坏交通设施", "破坏军事、通讯、交通、能源、防险等重要设施，足以对公共安全造成严重、紧迫危险的", "破坏居民住宅"], correctIndex: 2, explanation: "【逐项解析】<br>A. 破坏军事设施：<span class='highlight-red'>不完全</span><br><br>B. 破坏交通设施：<span class='highlight-red'>不完全</span><br><br>C. 破坏军事、通讯、交通、能源、防险等重要设施，足以对公共安全造成严重、紧迫危险的：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第9条</span>第5项！<br><br>D. 破坏居民住宅：<span class='highlight-red'>不对</span><br><br>【小白记忆】破坏重要公共设施！<span class='highlight-purple'>口诀：破坏重要设施危及公共安全！</span>" },
+    { question: "第9条第4项规定可以使用武器的情形是？", options: ["使用木棍实施犯罪", "使用拳脚实施犯罪", "使用枪支、爆炸、剧毒等危险物品实施犯罪或者以使用这些物品相威胁实施犯罪的", "使用言语威胁"], correctIndex: 2, explanation: "【逐项解析】<br>A. 使用木棍实施犯罪：不是危险物品！<br><br>B. 使用拳脚实施犯罪：不是危险物品！<br><br>C. 使用枪支、爆炸、剧毒等危险物品实施犯罪或者以使用这些物品相威胁实施犯罪的：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第9条</span>第4项！<br><br>D. 使用言语威胁：不是危险物品！<br><br>【小白记忆】枪弹毒爆！<span class='highlight-purple'>口诀：枪弹毒爆威胁！</span>" },
+    { question: "第9条第3项规定可以使用武器的情形是？", options: ["抢夺一般财物", "抢夺、抢劫枪支弹药、爆炸、剧毒等危险物品，严重危害公共安全的", "盗窃", "诈骗"], correctIndex: 1, explanation: "【逐项解析】<br>A. 抢夺一般财物：不是暴力犯罪！<br><br>B. 抢夺、抢劫枪支弹药、爆炸、剧毒等危险物品，严重危害公共安全的：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第9条</span>第3项！<br><br>C. 盗窃：不是暴力犯罪！<br><br>D. 诈骗：不是暴力犯罪！<br><br>【小白记忆】抢枪抢炸弹！<span class='highlight-purple'>口诀：抢枪抢弹危及安全！</span>" },
+    { question: "第9条第2项规定可以使用武器的情形是？", options: ["偷开机动车", "劫持航空器、船舰、火车、机动车或者驾驶车船等机动交通工具，故意危害公共安全的", "酒后驾驶", "闯红灯"], correctIndex: 1, explanation: "【逐项解析】<br>A. 偷开机动车：不是！<br><br>B. 劫持航空器、船舰、火车、机动车或者驾驶车船等机动交通工具，故意危害公共安全的：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第9条</span>第2项！<br><br>C. 酒后驾驶：不是劫持！<br><br>D. 闯红灯：不是！<br><br>【小白记忆】劫持交通工具！<span class='highlight-purple'>口诀：劫持飞机轮船火车！</span>" },
+    { question: "第9条第1项规定可以使用武器的情形是？", options: ["盗窃", "放火、决水、爆炸等严重危害公共安全的", "赌博", "卖淫嫖娼"], correctIndex: 1, explanation: "【逐项解析】<br>A. 盗窃：不是！<br><br>B. 放火、决水、爆炸等严重危害公共安全的：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第9条</span>第1项！<br><br>C. 赌博：不是！<br><br>D. 卖淫嫖娼：不是！<br><br>【小白记忆】放火爆炸最危险！<span class='highlight-purple'>口诀：放火爆炸危害大！</span>" },
+    { question: "第9条第7项规定可以使用武器的情形是？", options: ["一般违法行为", "国家规定的警卫、守卫、警戒的对象和目标受到暴力袭击、破坏或者有受到暴力袭击、破坏的紧迫危险的", "民事纠纷", "行政争议"], correctIndex: 1, explanation: "【逐项解析】<br>A. 一般违法行为：<span class='highlight-red'>不对</span>！<br><br>B. 国家规定的警卫、守卫、警戒的对象和目标受到暴力袭击、破坏或者有受到暴力袭击、破坏的紧迫危险的：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第9条</span>第7项！<br><br>C. 民事纠纷：<span class='highlight-red'>不对</span><br><br>D. 行政争议：<span class='highlight-red'>不对</span><br><br>【小白记忆】警卫目标被袭击！<span class='highlight-purple'>口诀：警卫目标被袭击！</span>" },
+    { question: "第9条第12项规定可以使用武器的情形是？", options: ["正常探视在押人员", "正常押解在押人员", "劫夺在押人犯、罪犯的", "在押人员正常就医"], correctIndex: 2, explanation: "【逐项解析】<br>A. 正常探视在押人员：不需要用武器！<br><br>B. 正常押解在押人员：不需要用武器！<br><br>C. 劫夺在押人犯、罪犯的：<span class='highlight-green'>正确！</span><span class='highlight-blue'>第9条</span>第12项！<br><br>D. 在押人员正常就医：不需要用武器！<br><br>【小白记忆】有人来抢犯人！<span class='highlight-purple'>口诀：有人抢犯人！</span>" }
+];
+
+renderQuiz('quiz-module1', quiz1Data);
+renderQuiz('quiz-module2', quiz2Data);
+renderQuiz('quiz-module3', quiz3Data);
+renderQuiz('quiz-module4', quiz4Data);
+renderQuiz('quiz-module5', quiz5Data);
+renderQuiz('quiz-module6', quiz6Data);
+renderQuiz('quiz-module7', quiz7Data);
+renderQuiz('quiz-module8', quiz8Data);
+renderQuiz('quiz-module9', quiz9Data);
+renderQuiz('quiz-practice', practiceData);
+</script>
+</body>
+</html>

@@ -1,0 +1,1275 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>公安基础知识学习 - 辅警备考</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: linear-gradient(135deg, #3498db 0%, #2980b9 100%); min-height: 100vh; color: #333; }
+        .progress-bar { position: fixed; top: 0; left: 0; width: 100%; height: 4px; background: rgba(255,255,255,0.1); z-index: 1000; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #3498db, #2ecc71); width: 0%; transition: width 0.3s ease; }
+        .top-nav { position: fixed; top: 4px; left: 0; right: 0; background: rgba(52, 152, 219, 0.95); backdrop-filter: blur(10px); padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 999; border-bottom: 1px solid rgba(255,255,255,0.2); }
+        .logo { color: #fff; font-size: 18px; font-weight: bold; display: flex; align-items: center; gap: 8px; }
+        .score-display { background: rgba(255,255,255,0.2); color: #fff; padding: 8px 16px; border-radius: 20px; font-size: 14px; }
+        .sidebar { position: fixed; left: 0; top: 50px; width: 260px; height: calc(100vh - 50px); background: rgba(255,255,255,0.95); overflow-y: auto; padding: 20px 0; box-shadow: 2px 0 10px rgba(0,0,0,0.1); z-index: 998; }
+        .sidebar-title { color: #2c3e50; padding: 0 20px 15px; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid #eee; margin-bottom: 15px; }
+        .nav-item { padding: 12px 20px; color: #666; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 10px; font-size: 14px; border-left: 3px solid transparent; text-decoration: none; }
+        .nav-item:hover { background: rgba(52, 152, 219, 0.1); color: #3498db; }
+        .nav-item.active { background: rgba(52, 152, 219, 0.15); color: #3498db; border-left-color: #3498db; font-weight: bold; }
+        .main-content { margin-left: 260px; padding: 70px 30px 30px; max-width: 900px; }
+        .section-header { text-align: center; margin-bottom: 40px; }
+        .section-header h1 { font-size: 42px; color: #fff; margin-bottom: 10px; text-shadow: 0 0 30px rgba(0,0,0,0.2); }
+        .section-header p { color: rgba(255,255,255,0.8); font-size: 16px; }
+        .knowledge-card { background: #fff; border-radius: 20px; padding: 30px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); scroll-margin-top: 100px; }
+        .knowledge-card h2 { font-size: 24px; color: #333; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; border-bottom: 2px solid #3498db; padding-bottom: 15px; }
+        .knowledge-card h3 { font-size: 18px; color: #555; margin: 20px 0 10px; padding-left: 15px; border-left: 4px solid #3498db; }
+        .knowledge-content p { line-height: 1.8; color: #555; margin-bottom: 15px; }
+        .highlight-red { color: #e74c3c; font-weight: bold; background: rgba(231, 76, 60, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .highlight-blue { color: #3498db; font-weight: bold; background: rgba(52, 152, 219, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .highlight-green { color: #27ae60; font-weight: bold; background: rgba(39, 174, 96, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .highlight-orange { color: #e67e22; font-weight: bold; background: rgba(230, 126, 34, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .highlight-purple { color: #9b59b6; font-weight: bold; background: rgba(155, 89, 182, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .example { background: linear-gradient(135deg, #fff3e0, #ffe0b2); border-left: 4px solid #ff9800; padding: 15px 20px; border-radius: 0 10px 10px 0; margin: 15px 0; }
+        .example p { color: #e65100; margin: 8px 0; }
+        .memory-tip { background: linear-gradient(135deg, #e8f5e9, #c8e6c9); border-left: 4px solid #4caf50; padding: 15px 20px; border-radius: 0 10px 10px 0; margin: 15px 0; }
+        .memory-tip p { color: #2e7d32; margin: 0; }
+        .warning { background: linear-gradient(135deg, #ffebee, #ffcdd2); border-left: 4px solid #f44336; padding: 15px 20px; border-radius: 0 10px 10px 0; margin: 15px 0; }
+        .warning p { color: #c62828; margin: 0; }
+        .quiz-container { margin-top: 30px; }
+        .quiz-card { background: #f8f9fa; border-radius: 15px; padding: 20px; margin-bottom: 20px; border: 1px solid #e9ecef; }
+        .question { font-size: 16px; color: #333; margin-bottom: 15px; font-weight: 500; }
+        .question-num { display: inline-block; background: #3498db; color: #fff; width: 28px; height: 28px; border-radius: 50%; text-align: center; line-height: 28px; margin-right: 10px; font-size: 14px; }
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .option-btn { padding: 12px 20px; background: #fff; border: 2px solid #e9ecef; border-radius: 10px; cursor: pointer; text-align: left; font-size: 15px; color: #555; transition: all 0.3s ease; }
+        .option-btn:hover { border-color: #3498db; background: rgba(52, 152, 219, 0.05); }
+        .option-letter { display: inline-block; width: 26px; height: 26px; background: #e9ecef; border-radius: 50%; text-align: center; line-height: 26px; margin-right: 10px; font-weight: bold; color: #3498db; }
+        .option-btn.correct { background: #d4edda; border-color: #28a745; }
+        .option-btn.correct .option-letter { background: #28a745; color: #fff; }
+        .option-btn.wrong { background: #f8d7da; border-color: #dc3545; }
+        .option-btn.wrong .option-letter { background: #dc3545; color: #fff; }
+        .option-btn.disabled { cursor: not-allowed; opacity: 0.7; }
+        .explanation { background: linear-gradient(135deg, #fff8e1, #ffecb3); border-radius: 10px; padding: 15px 20px; margin-top: 15px; display: none; line-height: 1.8; border: 1px solid #ffc107; }
+        .explanation .result { font-size: 18px; font-weight: bold; margin-bottom: 10px; }
+        .explanation .result.correct { color: #28a745; }
+        .explanation .result.wrong { color: #dc3545; }
+        .framework-section { background: #fff; border-radius: 20px; padding: 30px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); scroll-margin-top: 100px; }
+        .framework-section h2 { font-size: 28px; color: #333; margin-bottom: 25px; text-align: center; border-bottom: 2px solid #3498db; padding-bottom: 15px; }
+        .framework-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .framework-card { background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-radius: 15px; padding: 20px; border-left: 4px solid #3498db; }
+        .framework-card h3 { font-size: 18px; color: #3498db; margin-bottom: 10px; }
+        .framework-card p { color: #666; font-size: 14px; margin: 5px 0; line-height: 1.6; }
+        .practice-section { background: #fff; border-radius: 20px; padding: 30px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); scroll-margin-top: 100px; }
+        .practice-section h2 { font-size: 28px; color: #333; margin-bottom: 25px; text-align: center; border-bottom: 2px solid #2980b9; padding-bottom: 15px; }
+        .table-section { background: #f8f9fa; border-radius: 10px; padding: 20px; margin: 15px 0; overflow-x: auto; }
+        .table-section table { width: 100%; border-collapse: collapse; }
+        .table-section th, .table-section td { padding: 12px 15px; text-align: left; border: 1px solid #ddd; }
+        .table-section th { background: #3498db; color: #fff; }
+        .table-section tr:nth-child(even) { background: #fff; }
+        @media (max-width: 768px) { .sidebar { width: 100%; height: auto; position: relative; margin-top: 50px; } .main-content { margin-left: 0; padding-top: 80px; } }
+        .close-nav-btn { background: rgba(255,255,255,0.2); border: none; color: #fff; font-size: 18px; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.3s; }
+        .close-nav-btn:hover { background: rgba(255,255,255,0.3); }
+    </style>
+</head>
+<body>
+    <div class="progress-bar"><div class="progress-fill" id="mainProgress"></div></div>
+    <nav class="top-nav" id="topNav">
+        <div class="logo">🚔 公安基础知识学习</div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <div class="score-display" id="totalScore">已答: 0/0</div>
+            <button class="close-nav-btn" onclick="closeTopNav()">✕</button>
+        </div>
+    </nav>
+    <aside class="sidebar">
+        <div class="sidebar-title">📖 目录导航</div>
+        <a href="#module1" class="nav-item active" onclick="scrollToSection(this, event)">🏛️ 模块1: 公安机关的性质</a>
+        <a href="#module2" class="nav-item" onclick="scrollToSection(this, event)">⚙️ 模块2: 公安机关的职能</a>
+        <a href="#module3" class="nav-item" onclick="scrollToSection(this, event)">❤️ 模块3: 公安机关的宗旨</a>
+        <a href="#module4" class="nav-item" onclick="scrollToSection(this, event)">📜 模块4: 警察的本质与历史</a>
+        <a href="#module5" class="nav-item" onclick="scrollToSection(this, event)">📋 模块5: 任务和职权</a>
+        <a href="#module6" class="nav-item" onclick="scrollToSection(this, event)">🛡️ 模块6: 工作原则路线方针</a>
+        <a href="#module7" class="nav-item" onclick="scrollToSection(this, event)">⭐ 模块7: 职业道德规范</a>
+        <a href="#module8" class="nav-item" onclick="scrollToSection(this, event)">📜 模块8: 公安政策</a>
+        <a href="#module9" class="nav-item" onclick="scrollToSection(this, event)">📊 模块9: 组织管理与纪律</a>
+        <a href="#framework" class="nav-item" onclick="scrollToSection(this, event)">🗺️ 知识框架总览</a>
+        <a href="#practice" class="nav-item" onclick="scrollToSection(this, event)">✍️ 练习专区</a>
+    </aside>
+    <main class="main-content">
+        <div class="section-header">
+            <h1>🚔 公安基础知识学习</h1>
+            <p>系统学习公安基础知识，轻松应对辅警考试</p>
+        </div>
+        
+        <section id="module1" class="knowledge-card">
+            <h2>🏛️ 模块1: 公安机关的性质</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">核心概念</span>：公安机关是什么？这是考试的基础，必须牢记！简单说就是：<span class="highlight-blue">国家的"刀把子"</span>！</p>
+                
+                <h3>📌 一、三大属性（考试必背！）</h3>
+                <p><span class="highlight-red">阶级属性</span>：公安机关是<span class="highlight-blue">人民民主专政的重要工具</span>。这是根本属性！说明白就是：公安机关是<span class="highlight-red">人民的队伍</span>，保护人民、打倒敌人！</p>
+                <p><span class="highlight-red">组织属性</span>：公安机关是<span class="highlight-blue">武装性质的国家治安行政力量</span>，同时也是<span class="highlight-blue">刑事司法力量</span>。通俗理解：公安机关既能管治安（行政），又能抓罪犯（刑事）！</p>
+                <p><span class="highlight-red">武装性质</span>：公安机关有武器装备，可以动用武力！与普通行政机关不同！</p>
+                <div class="example"><p><strong>🌰 举例：</strong>张三说"公安机关就是抓坏人的"，这句话对不对？对！但是不够准确。准确地说：公安机关是<span class="highlight-red">人民民主专政的工具</span>，既要保护人民（民主），又要镇压敌人（专政）！为什么这样举例？因为考试常考"公安机关的性质"——记住：<span class="highlight-blue">阶级属性是根本属性！</span></p></div>
+                
+                <h3>📌 二、性质的核心内容</h3>
+                <p>公安机关性质表明：</p>
+                <p>• <span class="highlight-blue">鲜明的阶级性</span>：公安机关必须与国体、政体一致</p>
+                <p>• <span class="highlight-blue">重要地位</span>：在国家政权中，军队与警察是最主要的支柱</p>
+                <p>• <span class="highlight-blue">忠实执行者</span>：公安机关是国家意志的忠实执行者</p>
+                <div class="example"><p><strong>🌰 举例：</strong>公安机关接受谁领导？答案是<span class="highlight-red">中国共产党</span>！为什么？因为党代表人民，公安机关是人民的工具，必须听党指挥！这也是"公安姓党"的由来！</p></div>
+                
+                <h3>📌 三、公安机关是行政机关吗？</h3>
+                <p>是！公安机关是<span class="highlight-blue">国家行政机关</span>的重要组成部分，但它同时承担<span class="highlight-blue">刑事司法</span>职能，所以又不仅仅是普通行政机关！</p>
+                <div class="example"><p><strong>🌰 举例：</strong>交警贴罚单——这是行政职能！刑警破案抓人——这是刑事职能！同是公安机关，职能却不同！</p></div>
+                
+                <p class="memory-tip"><strong><span class='highlight-purple'>记忆口诀：</span></strong>公安机关性质三属性，阶级属性是根本！组织属性有两个，治安行政加刑事！还有武装特殊性，国家暴力工具真！口诀解释：阶级属性最重要（人民民主专政工具），组织属性是特点（治安+刑事），武装性质是手段（有枪有武）！</p>
+                <p class="warning">⚠️ <strong>易错点：</strong>公安机关是"人民民主专政的重要工具"，但<span class="highlight-red">不是</span>国家的武装力量！武装力量是指解放军、武警、民兵！公安机关是<span class="highlight-red">具有武装性质的</span>治安行政力量！</p>
+            </div>
+            <div id="quiz-module1" class="quiz-container"></div>
+        </section>
+        
+        <section id="module2" class="knowledge-card">
+            <h2>⚙️ 模块2: 公安机关的职能</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">核心概念</span>：公安机关能干什么？记住两大职能：<span class="highlight-blue">专政职能</span>和<span class="highlight-blue">民主职能</span>！这是考试必考内容！</p>
+                
+                <h3>📌 一、专政职能（对敌人的！）</h3>
+                <p><span class="highlight-red">专政对象</span>：敌对势力、敌对分子、严重刑事犯罪分子</p>
+                <p><span class="highlight-red">专政目的</span>：保卫人民民主专政的政权，巩固社会主义制度</p>
+                <p><span class="highlight-red">专政手段</span>：<span class="highlight-blue">打击、制裁、改造、监督</span></p>
+                <div class="example"><p><strong>🌰 举例：</strong>公安机关打击贩毒分子——这是专政！为什么？因为贩毒是严重刑事犯罪，必须严厉打击！公安机关对敌人绝不手软！</p></div>
+                
+                <h3>📌 二、民主职能（对人民的！）</h3>
+                <p><span class="highlight-red">民主对象</span>：人民群众</p>
+                <p><span class="highlight-red">民主内容</span>：保障人民享有的国家主人翁地位和保障人民的利益</p>
+                <p><span class="highlight-red">具体表现</span>：为群众服务、处理人民内部矛盾、保护公民合法权益</p>
+                <div class="example"><p><strong>🌰 举例：</strong>派出所民警帮大爷找回丢失的电动车——这是民主职能！为什么？因为这是在保护人民的利益！为人民服务！</p></div>
+                
+                <h3>📌 三、两者关系（对立统一！）</h3>
+                <p>• <span class="highlight-blue">专政是民主的基本保障</span>：不打倒敌人，人民就不能当家作主</p>
+                <p>• <span class="highlight-blue">民主是专政的社会基础</span>：人民支持，专政才能有力</p>
+                <p>• 两者<span class="highlight-red">互相依存、互相渗透、互相促进</span></p>
+                <div class="example"><p><strong>🌰 举例：</strong>对敌人专政，就是保护人民民主；对人民民主，就是壮大专政力量。两者就像硬币的两面，缺一不可！</p></div>
+                
+                <p class="memory-tip"><strong><span class='highlight-purple'>记忆口诀：</span></strong>公安职能就两个，专政民主要分清！专政对象是敌人，手段打击制裁改！民主对象是人民，内容服务和保护！专政民主是对头，统一整体不能拆！口诀解释：专政对敌人（打击），民主对人民（保护）！</p>
+                <p class="warning">⚠️ <strong>易错点：</strong>专政职能反映公安机关与<span class="highlight-red">敌人</span>的关系；民主职能反映公安机关与<span class="highlight-red">人民</span>的关系！别搞混了！</p>
+            </div>
+            <div id="quiz-module2" class="quiz-container"></div>
+        </section>
+        
+        <section id="module3" class="knowledge-card">
+            <h2>❤️ 模块3: 公安机关的宗旨</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">核心概念</span>：公安机关的根本宗旨是<span class="highlight-blue">全心全意为人民服务</span>！这是公安机关存在和发展的根本所在！</p>
+                
+                <h3>📌 一、宗旨的由来</h3>
+                <p>• <span class="highlight-blue">1945年</span>，毛泽东在《论联合政府》报告中提出</p>
+                <p>• <span class="highlight-blue">新中国成立后</span>，公安机关把全心全意为人民服务确定为宗旨</p>
+                <p>• <span class="highlight-blue">1995年</span>，《人民警察法》以立法形式明确宗旨</p>
+                <div class="example"><p><strong>🌰 举例：</strong>110报警电话24小时有人接听，警察随叫随到——这就是全心全意为人民服务的体现！</p></div>
+                
+                <h3>📌 二、执法为民（新时期要求）</h3>
+                <p>中共中央《关于进一步加强和改进公安工作的决定》明确提出<span class="highlight-red">"执法为民"</span>是公安机关执法思想的核心！</p>
+                <p>具体标准：</p>
+                <p>• <span class="highlight-blue">第一信号</span>：人民群众的呼声</p>
+                <p>• <span class="highlight-blue">第一选择</span>：人民群众的需要</p>
+                <p>• <span class="highlight-blue">第一考虑</span>：人民群众的利益</p>
+                <p>• <span class="highlight-blue">第一标准</span>：人民群众的满意</p>
+                <div class="example"><p><strong>🌰 举例：</strong>群众反映某地治安不好，公安机关立即加强巡逻——这就是把群众呼声作为第一信号！</p></div>
+                
+                <h3>📌 三、群众路线是公安工作的根本路线</h3>
+                <p>群众路线的内涵：</p>
+                <p>• <span class="highlight-red">一切为了群众</span>——宗旨和出发点</p>
+                <p>• <span class="highlight-red">一切依靠群众</span>——根本态度</p>
+                <p>• <span class="highlight-red">从群众中来，到群众中去</span>——基本方法</p>
+                <div class="example"><p><strong>🌰 举例：</strong>民警在社区建立微信群，居民随时反映问题——这是走群众路线！群众的力量是无穷的！</p></div>
+                
+                <p class="memory-tip"><strong><span class='highlight-purple'>记忆口诀：</span></strong>公安宗旨是什么？全心全意为人民！执法为民是核心，四个第一要记清！呼声第一是信号，需要第一作选择，利益第一来考虑，满意第一是标准！口诀解释：把群众的事当成自己的事来办！</p>
+                <p class="warning">⚠️ <strong>易错点：</strong>"三个代表"的本质是<span class="highlight-red">执政为民</span>，不是"执法为民"！执法为民是公安工作的要求！</p>
+            </div>
+            <div id="quiz-module3" class="quiz-container"></div>
+        </section>
+        
+        <section id="module4" class="knowledge-card">
+            <h2>📜 模块4: 警察的本质特征与历史</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">核心概念</span>：警察是什么？警察是随着<span class="highlight-blue">国家的产生而产生</span>的，原始社会没有警察！</p>
+                
+                <h3>📌 一、警察的本质特征（三个！）</h3>
+                <p><span class="highlight-red">鲜明的阶级性</span>：警察是国家机器的重要组成部分，是阶级专政的工具！</p>
+                <p><span class="highlight-red">手段的特殊性</span>：以暴力为后盾，可以采取强制性手段！</p>
+                <p><span class="highlight-red">广泛的社会性</span>：警察涉及社会生活的各个领域，与每个人有关！</p>
+                <div class="example"><p><strong>🌰 举例：</strong>警察能抓人、拘留人，普通百姓行吗？不行！因为警察有<span class="highlight-red">特殊性手段</span>！这就是警察和普通人的区别！</p></div>
+                
+                <h3>📌 二、古代警察 vs 近代警察</h3>
+                <p><span class="highlight-blue">古代警察</span>特点：</p>
+                <p>• 军警不分、警政合一</p>
+                <p>• 职能由军队、审判机关、行政官吏分别掌管</p>
+                <p>• 行使职权在法律上极不严格</p>
+                <p>• 私刑、私狱普遍存在</p>
+                <p><span class="highlight-blue">近代警察</span>特点：</p>
+                <p>• 从中央到地方形成专职的警察队伍</p>
+                <p>• 强调法制，依法办事</p>
+                <p>• 1829年英国通过《警察法》，建立伦敦警察厅</p>
+                <div class="example"><p><strong>🌰 举例：</strong>古代县官既能审判又能管治安，近代警察是专职的！区别在于：近代警察有<span class="highlight-red">专门组织</span>！</p></div>
+                
+                <h3>📌 三、中国警察史（重要！）</h3>
+                <p>• <span class="highlight-blue">1905年</span>：清政府设立巡警部——中国历史上第一个全国性专职警察机构</p>
+                <p>• <span class="highlight-blue">1927年12月</span>：中国共产党在上海建立中央特科——我党最早保卫组织</p>
+                <p>• <span class="highlight-blue">1931年11月</span>：中华苏维埃成立国家政治保卫局——最早的人民政权公安保卫机关</p>
+                <p>• <span class="highlight-blue">1938年5月</span>：延安市警察队（"边警"）——最早的人民警察队伍</p>
+                <p>• <span class="highlight-blue">1949年11月1日</span>：公安部正式成立，罗瑞卿任首任部长</p>
+                <div class="example"><p><strong>🌰 举例：</strong>中央特科的"龙潭三杰"：钱壮飞、李克农、胡底！他们为保卫党中央作出巨大贡献！考试常考！</p></div>
+                
+                <p class="memory-tip"><strong><span class='highlight-purple'>记忆口诀：</span></strong>警察本质三特征，阶级特殊社会性！古代警察军警合，近代警察专职化！中国警察有历史，1905设巡警部，1927建中央特科，1949公安部成立！口诀解释：记住几个关键年份和事件！</p>
+                <p class="warning">⚠️ <strong>易错点：</strong>公安机关是<span class="highlight-red">人民警察</span>，不是普通的"警察"！公安机关是中国共产党领导下的人民民主专政工具！</p>
+            </div>
+            <div id="quiz-module4" class="quiz-container"></div>
+        </section>
+        
+        <section id="module5" class="knowledge-card">
+            <h2>📋 模块5: 公安机关的任务和职权</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">核心概念</span>：公安机关干什么？记住<span class="highlight-blue">五大基本任务</span>和<span class="highlight-blue">职责权力</span>！</p>
+                
+                <h3>📌 一、公安机关的基本任务</h3>
+                <p>• <span class="highlight-red">维护国家安全</span>——首要任务！</p>
+                <p>• <span class="highlight-red">维护社会治安秩序</span></p>
+                <p>• <span class="highlight-red">保护公民人身安全和人身自由</span></p>
+                <p>• <span class="highlight-red">保护公共财产和个人合法财产</span></p>
+                <p>• <span class="highlight-red">预防、制止和惩治违法犯罪活动</span></p>
+                <div class="example"><p><strong>🌰 举例：</strong>派出所民警抓小偷——这是保护公民财产！调查间谍——这是维护国家安全！都是公安机关的任务！</p></div>
+                
+                <h3>📌 二、公安机关的职责（14项，记重点！）</h3>
+                <p>• 预防、制止侦查违法犯罪活动</p>
+                <p>• 维护社会治安秩序</p>
+                <p>• 维护交通安全秩序</p>
+                <p>• 组织消防和监督检查</p>
+                <p>• 监管公共交通安全</p>
+                <p>• 维护国（边）境秩序</p>
+                <p>• 维护网络安全</p>
+                <p>• 管理户籍、身份证、护照</p>
+                <p>• 监督管理特种行业</p>
+                <p>• 警卫国家规定的特定人员</p>
+                <p>• 管理集会、游行、示威</p>
+                <p>• 监督管理计算机信息系统</p>
+                <p>• 指导和监督单位内部治安保卫</p>
+                <p>• 法律、法规规定的其他职责</p>
+                <div class="example"><p><strong>🌰 举例：</strong>你去派出所办身份证——这是户籍管理职责！你开网吧要办许可证——这是特种行业管理！</p></div>
+                
+                <h3>📌 三、公安机关的权力（四大类！）</h3>
+                <p><span class="highlight-blue">治安行政管理权</span>：</p>
+                <p>• 治安行政处置权（命令、禁止、许可）</p>
+                <p>• 治安行政处罚权（警告、罚款、拘留）</p>
+                <p>• 治安行政强制权（强制传唤、强行带离）</p>
+                
+                <p><span class="highlight-blue">刑事执法权</span>：</p>
+                <p>• 立案权、侦查权、刑事强制权、刑罚执行权</p>
+                
+                <p><span class="highlight-blue">紧急状态处置权</span>：</p>
+                <p>• 紧急优先权和征用权、紧急排险权、管制权、戒严执行权</p>
+                
+                <p class="memory-tip"><strong><span class='highlight-purple'>记忆口诀：</span></strong>公安任务五大项，首要任务是国安！治安秩序要维护，人身财产要保护！职责权力分两类，行政管理加刑事！口诀解释：记住"国家安全优先"！</p>
+                <p class="warning">⚠️ <strong>易错点：</strong>公安机关的权力具有<span class="highlight-red">特殊强制性</span>！特殊性在于：以暴力为后盾，可以采取人身强制！</p>
+            </div>
+            <div id="quiz-module5" class="quiz-container"></div>
+        </section>
+        
+        <section id="module6" class="knowledge-card">
+            <h2>🛡️ 模块6: 公安工作的原则、路线、方针</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">核心概念</span>：这是考试<span class="highlight-blue">超级重点</span>！必须全部掌握！</p>
+                
+                <h3>📌 一、根本原则——党的绝对领导（最重要！）</h3>
+                <p><span class="highlight-red">为什么必须坚持党的领导？</span></p>
+                <p>• 党对公安工作的领导是<span class="highlight-blue">无条件</span>的、全面、直接的</p>
+                <p>• 公安机关是人民手中的"刀把子"，必须牢牢掌握在党和人民手中</p>
+                <p>• 只有坚持党的领导，才能保持公安队伍的纯洁性和战斗力</p>
+                <p><span class="highlight-red">党领导的内容（五项！）：</span></p>
+                <p>• 政治领导——方向、路线、方针政策</p>
+                <p>• 思想领导——培养良好品德和作风</p>
+                <p>• 组织领导——通过组织系统发挥作用</p>
+                <p>• 决策领导——对重大问题作出决策</p>
+                <p>• 法制领导——领导制定和监督执行公安法规</p>
+                <div class="example"><p><strong>🌰 举例：</strong>毛泽东说"我们的原则是党指挥枪，而不允许枪指挥党"！公安机关就是党掌握的"枪"！</p></div>
+                
+                <h3>📌 二、根本路线——群众路线</h3>
+                <p><span class="highlight-red">一切为了群众</span>——宗旨和出发点</p>
+                <p><span class="highlight-red">一切依靠群众</span>——根本态度</p>
+                <p><span class="highlight-red">从群众中来，到群众中去</span>——基本方法</p>
+                <div class="example"><p><strong>🌰 举例：</strong>民警设立"平安社区"微信群，随时听取群众意见——这就是走群众路线！</p></div>
+                
+                <h3>📌 三、基本方针——专门机关与群众相结合</h3>
+                <p><span class="highlight-blue">专门机关</span>：公安机关</p>
+                <p><span class="highlight-blue">广大群众</span>：人民群众</p>
+                <p><span class="highlight-red">核心</span>：在党委领导下，把公安机关职能作用与人民群众积极性结合起来</p>
+                <div class="example"><p><strong>🌰 举例：</strong>"朝阳群众"举报犯罪线索——这就是专群结合！公安机关+群众=无敌！</p></div>
+                
+                <h3>📌 四、基本政策——严肃与谨慎相结合</h3>
+                <p>• <span class="highlight-blue">严肃</span>：对敌人绝不手软</p>
+                <p>• <span class="highlight-blue">谨慎</span>：重证据、重调查研究</p>
+                <p>• 两者<span class="highlight-red">相辅相成、不可分割</span></p>
+                
+                <p class="memory-tip"><strong><span class='highlight-purple'>记忆口诀：</span></strong>公安工作三根本，根本原则党绝对！无条件来要全面，直接领导不能改！根本路线是群众，一切为了依靠民！基本方针专群合，专门机关群众帮！口诀解释：记住"党绝对领导"最重要！</p>
+                <p class="warning">⚠️ <strong>易错点：</strong>党对公安工作的领导是<span class="highlight-red">绝对领导</span>，不是"相对领导"！"绝对"两个字不能丢！</p>
+            </div>
+            <div id="quiz-module6" class="quiz-container"></div>
+        </section>
+        
+        <section id="module7" class="knowledge-card">
+            <h2>⭐ 模块7: 人民警察职业道德规范</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">核心概念</span>：人民警察职业道德有<span class="highlight-blue">10条</span>！每条都要记住！考试必考！</p>
+                
+                <h3>📌 一、忠诚可靠（第一条！）</h3>
+                <p><span class="highlight-red">听党指挥、热爱人民、忠于法律</span></p>
+                <p>对党忠诚是<span class="highlight-blue">政治灵魂</span>，是公安队伍第一位的政治要求！</p>
+                <div class="example"><p><strong>🌰 举例：</strong>民警在关键时刻冲在前面——这是对党忠诚的体现！</p></div>
+                
+                <h3>📌 二、秉公执法</h3>
+                <p><span class="highlight-red">事实为据、秉持公正、惩恶扬善</span></p>
+                <p>核心是"以事实为依据，以法律为准绳"！</p>
+                
+                <h3>📌 三、英勇善战</h3>
+                <p><span class="highlight-red">坚韧不拔、机智果敢、崇尚荣誉</span></p>
+                <p>面对危险不退缩，敢于担当！</p>
+                
+                <h3>📌 四、热诚服务</h3>
+                <p><span class="highlight-red">情系民生、服务社会、热情周到</span></p>
+                <p>把群众的事当成自己的事来办！</p>
+                
+                <h3>📌 五、文明理性</h3>
+                <p><span class="highlight-red">理性平和、文明礼貌、诚信友善</span></p>
+                <p>执法要有温度，不能简单粗暴！</p>
+                
+                <h3>📌 六、严守纪律</h3>
+                <p><span class="highlight-red">遵章守纪、保守秘密、令行禁止</span></p>
+                <p>纪律是公安队伍的生命线！</p>
+                
+                <h3>📌 七、爱岗敬业</h3>
+                <p><span class="highlight-red">恪尽职守、勤学善思、精益求精</span></p>
+                <p>干一行爱一行，精通业务！</p>
+                
+                <h3>📌 八、甘于奉献</h3>
+                <p><span class="highlight-red">任劳任怨、顾全大局、献身使命</span></p>
+                <p>不怕苦、不怕累、不怕牺牲！</p>
+                
+                <h3>📌 九、清正廉洁</h3>
+                <p><span class="highlight-red">艰苦朴素、情趣健康、克己奉公</span></p>
+                <p>拒腐蚀、永不沾！</p>
+                
+                <h3>📌 十、团结协作</h3>
+                <p><span class="highlight-red">精诚合作、勇于担当、积极向上</span></p>
+                <p>团队的力量是无穷的！</p>
+                
+                <p class="memory-tip"><strong><span class='highlight-purple'>记忆口诀：</span></strong>职业道德有十条，忠诚可靠排第一！秉公执法要牢记，英勇善战不含糊！热诚服务为人民，文明理性不粗暴！严守纪律最重要，爱岗敬业讲奉献！清正廉洁不能忘，团结协作共进步！口诀：忠诚秉公英热文，严爱甘清团！</p>
+                <p class="warning">⚠️ <strong>易错点：</strong>10条职业道德规范必须<span class="highlight-red">全部记住</span>！考试可能考顺序，可能考内容，都要会！</p>
+            </div>
+            <div id="quiz-module7" class="quiz-container"></div>
+        </section>
+        
+        <section id="module8" class="knowledge-card">
+            <h2>📜 模块8: 公安政策</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">核心概念</span>：公安政策有<span class="highlight-blue">6个</span>！必须全部掌握！</p>
+                
+                <h3>📌 一、严肃与谨慎相结合</h3>
+                <p><span class="highlight-red">毛泽东1945年</span>在《论联合政府》中提出</p>
+                <p>• <span class="highlight-blue">严肃</span>：对敌人采取严肃态度</p>
+                <p>• <span class="highlight-blue">谨慎</span>：处理时要采取谨慎态度</p>
+                <p>• 两者<span class="highlight-red">辩证统一、相辅相成</span></p>
+                <p><span class="highlight-orange">警示：</span>片面强调严肃→伤害无辜（扩大化）！片面强调谨慎→放纵坏人（打击不力）！</p>
+                
+                <h3>📌 二、惩办与宽大相结合</h3>
+                <p>这是一项<span class="highlight-red">分化瓦解</span>犯罪分子的有效刑事政策</p>
+                <p>• 首恶必办</p>
+                <p>• 胁从者不问</p>
+                <p>• 立功者受奖</p>
+                <div class="example"><p><strong>🌰 举例：</strong>坦白从宽、抗拒从严——这就是惩办与宽大！</p></div>
+                
+                <h3>📌 三、依法从重从快</h3>
+                <p>针对<span class="highlight-blue">严重刑事犯罪</span>和<span class="highlight-blue">重大经济犯罪</span></p>
+                <p>注意：从重从快<span class="highlight-red">不是</span>不讲质量！要事实清楚、证据确实、定性准确、程序合法！</p>
+                
+                <h3>📌 四、重证据、重调查研究、严禁逼供信</h3>
+                <p><span class="highlight-red">严禁</span>以威胁、引诱、欺骗等非法方法收集证据</p>
+                <p>体现公安人员对人民群众高度负责！</p>
+                <p>体现了<span class="highlight-blue">文明办案</span>的原则！</p>
+                
+                <h3>📌 五、教育与处罚相结合</h3>
+                <p><span class="highlight-blue">教育</span>是治安管理的基本手段</p>
+                <p><span class="highlight-blue">处罚</span>是教育的辅助手段</p>
+                <p>坚持<span class="highlight-red">教育多数，处罚少数</span></p>
+                <p>寓教育于处罚的全过程！</p>
+                
+                <h3>📌 六、尊重和保障人权</h3>
+                <p>公安机关必须<span class="highlight-blue">依法保护</span>公民的人身自由、人格尊严等基本人权！</p>
+                
+                <p class="memory-tip"><strong><span class='highlight-purple'>记忆口诀：</span></strong>公安政策有六个，严肃谨慎相结合！惩办宽大来分化，重证重调查反逼供！教育处罚相结合，人权保障要尊重！依法从重又从快，质量第一不马虎！口诀解释：记住政策名字，做题就轻松！</p>
+                <p class="warning">⚠️ <strong>易错点：</strong>从重从快<span class="highlight-red">不是</span>不讲程序！必须在保证质量的前提下从重从快！</p>
+            </div>
+            <div id="quiz-module8" class="quiz-container"></div>
+        </section>
+        
+        <section id="module9" class="knowledge-card">
+            <h2>📊 模块9: 组织管理与纪律</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">核心概念</span>：公安队伍怎么管理？有哪些纪律要求？</p>
+                
+                <h3>📌 一、《公安机关组织管理条例》要点</h3>
+                <p>• 公安部是全国公安工作的<span class="highlight-blue">领导、指挥机关</span></p>
+                <p>• 地方公安机关接受<span class="highlight-blue">同级政府</span>和<span class="highlight-blue">上级公安机关</span>双重领导</p>
+                <p>• 派出机构是<span class="highlight-blue">县级公安机关</span>的派出机构</p>
+                <div class="example"><p><strong>🌰 举例：</strong>派出所是县公安局的派出机构！不是独立机关！</p></div>
+                
+                <h3>📌 二、职务序列</h3>
+                <p><span class="highlight-blue">警官职务序列</span>：省部级正职→乡科级副职</p>
+                <p><span class="highlight-blue">警员职务序列</span>：一级警长→三级警员</p>
+                <p><span class="highlight-blue">执法勤务机构</span>实行队建制：总队长→中队长</p>
+                
+                <h3>📌 三、四统一五规范（重要！）</h3>
+                <p><span class="highlight-red">四统一</span>：</p>
+                <p>• 统一考录制度</p>
+                <p>• 统一训练标准</p>
+                <p>• 统一纪律要求</p>
+                <p>• 统一外观标识</p>
+                <p><span class="highlight-red">五规范</span>：</p>
+                <p>• 规范机构设置</p>
+                <p>• 规范职务序列</p>
+                <p>• 规范编制管理</p>
+                <p>• 规范执法执勤</p>
+                <p>• 规范行为举止</p>
+                
+                <h3>📌 四、五条禁令（必须牢记！）</h3>
+                <p>2003年1月22日公安部颁布：</p>
+                <p>1. 严禁违反枪支管理使用规定，违者予以纪律处分；造成严重后果的，予以辞退或开除</p>
+                <p>2. 严禁携带枪支饮酒，违者予以辞退；造成严重后果的，予以开除</p>
+                <p>3. 严禁酒后驾驶机动车，违者予以辞退；造成严重后果的，予以开除</p>
+                <p>4. 严禁在工作时间饮酒，违者予以纪律处分；造成严重后果的，予以辞退或开除</p>
+                <p>5. 严禁参与赌博，违者予以辞退或开除</p>
+                
+                <h3>📌 五、警衔制度</h3>
+                <p><span class="highlight-blue">五等十三级</span>：</p>
+                <p>• 总警监、副总警监（<span class="highlight-red">部级</span>）</p>
+                <p>• 警监（一、二、三级）——<span class="highlight-red">高级警官</span></p>
+                <p>• 警督（一、二、三级）——<span class="highlight-red">中级警官</span></p>
+                <p>• 警司（一、二、三级）——<span class="highlight-red">初级警官</span></p>
+                <p>• 警员（一、二级）——<span class="highlight-red">基础警官</span></p>
+                
+                <p class="memory-tip"><strong><span class='highlight-purple'>记忆口诀：</span></strong>四统一五规范，队伍正规建设忙！五条禁令要记清，枪酒赌驾莫要碰！警衔五等十三级，监督司员要分明！口诀解释：记住"五条红线"不能碰！</p>
+                <p class="warning">⚠️ <strong>易错点：</strong>五条禁令中，<span class="highlight-red">携带枪支饮酒</span>直接辞退！不是先处分！这是最严的一条！</p>
+            </div>
+            <div id="quiz-module9" class="quiz-container"></div>
+        </section>
+        
+        <section id="framework" class="framework-section">
+            <h2>🗺️ 公安基础知识知识框架总览</h2>
+            <div class="framework-grid">
+                <div class="framework-card">
+                    <h3>🏛️ 公安机关的性质</h3>
+                    <p>阶级属性：人民民主专政工具（根本属性）</p>
+                    <p>组织属性：治安行政+刑事司法</p>
+                    <p>武装性质：有武器装备的国家力量</p>
+                </div>
+                <div class="framework-card">
+                    <h3>⚙️ 公安机关的职能</h3>
+                    <p>专政职能：对象=敌人，手段=打、压、改</p>
+                    <p>民主职能：对象=人民，内容=服务保护</p>
+                    <p>关系：对立统一，互相依存</p>
+                </div>
+                <div class="framework-card">
+                    <h3>❤️ 宗旨</h3>
+                    <p>全心全意为人民服务</p>
+                    <p>执法为民：四个第一</p>
+                    <p>群众路线：依靠、服务、为了群众</p>
+                </div>
+                <div class="framework-card">
+                    <h3>📜 警察历史</h3>
+                    <p>本质：阶级性、特殊性、社会性</p>
+                    <p>1905清巡警部</p>
+                    <p>1949公安部成立</p>
+                </div>
+                <div class="framework-card">
+                    <h3>📋 任务职权</h3>
+                    <p>五大任务</p>
+                    <p>14项职责</p>
+                    <p>四大类权力</p>
+                </div>
+                <div class="framework-card">
+                    <h3>🛡️ 原则路线方针</h3>
+                    <p>根本原则：党绝对领导</p>
+                    <p>根本路线：群众路线</p>
+                    <p>基本方针：专群结合</p>
+                </div>
+                <div class="framework-card">
+                    <h3>⭐ 职业道德</h3>
+                    <p>10条规范：</p>
+                    <p>忠诚、秉公、英勇、热诚</p>
+                    <p>文明、严纪、爱岗、奉献</p>
+                    <p>清廉、团结</p>
+                </div>
+                <div class="framework-card">
+                    <h3>📜 公安政策</h3>
+                    <p>严肃谨慎相结合</p>
+                    <p>惩办宽大相结合</p>
+                    <p>依法从重从快</p>
+                    <p>重证据反逼供</p>
+                    <p>教育处罚结合</p>
+                    <p>尊重保障人权</p>
+                </div>
+                <div class="framework-card">
+                    <h3>📊 组织管理</h3>
+                    <p>双重领导制</p>
+                    <p>四统一五规范</p>
+                    <p>五条禁令</p>
+                    <p>五等十三级警衔</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="practice" class="practice-section">
+            <h2>✍️ 练习专区 - 综合检验</h2>
+            <p style="text-align: center; color: #666; margin-bottom: 20px;">共50道综合练习题，涵盖所有模块知识点</p>
+            <div id="quiz-practice" class="quiz-container"></div>
+        </section>
+    </main>
+    
+    <script>
+        // 分数追踪
+        let totalAnswered = 0;
+        let totalCorrect = 0;
+        
+        // 更新分数显示
+        function updateTotalScore() {
+            document.getElementById('totalScore').textContent = '已答: ' + totalAnswered + '/' + totalCorrect;
+        }
+        
+        // 关闭导航栏
+        function closeTopNav() {
+            document.getElementById('topNav').style.display = 'none';
+        }
+        
+        // 滚动到指定模块
+        function scrollToSection(element, event) {
+            event.preventDefault();
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            element.classList.add('active');
+            const targetId = element.getAttribute('href').substring(1);
+            const target = document.getElementById(targetId);
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+        
+        // 渲染题目函数
+        function renderQuiz(containerId, quizData) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            quizData.forEach((quiz, index) => {
+                const card = document.createElement('div');
+                card.className = 'quiz-card';
+                card.id = containerId + '-q' + (index + 1);
+                
+                let optionsHtml = '';
+                const letters = ['A', 'B', 'C', 'D'];
+                quiz.options.forEach((opt, i) => {
+                    optionsHtml += '<div class="option-btn" onclick="checkAnswer(this, \'' + containerId + '\', ' + index + ', ' + i + ', ' + quiz.correctIndex + ')">' +
+                        '<span class="option-letter">' + letters[i] + '</span>' + opt +
+                    '</div>';
+                });
+                
+                card.innerHTML = '<div class="question"><span class="question-num">' + (index + 1) + '</span>' + quiz.question + '</div>' +
+                    '<div class="options">' + optionsHtml + '</div>' +
+                    '<div class="explanation" id="exp-' + containerId + '-' + index + '"></div>';
+                
+                container.appendChild(card);
+            });
+        }
+        
+        // 检查答案
+        function checkAnswer(btn, containerId, questionIndex, selectedIndex, correctIndex) {
+            const card = btn.closest('.quiz-card');
+            const allBtns = card.querySelectorAll('.option-btn');
+            const explanationDiv = document.getElementById('exp-' + containerId + '-' + questionIndex);
+            
+            // 获取题目数据
+            let quizData;
+            if (containerId === 'quiz-module1') quizData = quiz1Data;
+            else if (containerId === 'quiz-module2') quizData = quiz2Data;
+            else if (containerId === 'quiz-module3') quizData = quiz3Data;
+            else if (containerId === 'quiz-module4') quizData = quiz4Data;
+            else if (containerId === 'quiz-module5') quizData = quiz5Data;
+            else if (containerId === 'quiz-module6') quizData = quiz6Data;
+            else if (containerId === 'quiz-module7') quizData = quiz7Data;
+            else if (containerId === 'quiz-module8') quizData = quiz8Data;
+            else if (containerId === 'quiz-module9') quizData = quiz9Data;
+            else if (containerId === 'quiz-practice') quizData = practiceData;
+            
+            const quiz = quizData[questionIndex];
+            
+            // 禁用所有选项
+            allBtns.forEach(b => {
+                b.classList.add('disabled');
+                b.onclick = null;
+            });
+            
+            // 标记正确和错误答案
+            allBtns.forEach((b, i) => {
+                if (i === correctIndex) {
+                    b.classList.add('correct');
+                } else if (i === selectedIndex && selectedIndex !== correctIndex) {
+                    b.classList.add('wrong');
+                }
+            });
+            
+            // 显示解析
+            if (explanationDiv) {
+                explanationDiv.style.display = 'block';
+                explanationDiv.innerHTML = '<div class="result ' + (selectedIndex === correctIndex ? 'correct' : 'wrong') + '">' +
+                    (selectedIndex === correctIndex ? '<span class=\'highlight-green\'>✓ 正确！</span>' : '<span class=\'highlight-red\'>✗ 错误！</span>') +
+                    '</div><div><strong>【逐项解析】</strong><br>' + quiz.explanation + '</div>';
+            }
+            
+            // 更新总分
+            totalAnswered++;
+            if (selectedIndex === correctIndex) {
+                totalCorrect++;
+            }
+            updateTotalScore();
+        }
+        
+        // 模块1题目：公安机关的性质
+        const quiz1Data = [
+            {
+                question: '公安机关的根本属性是（）',
+                options: ['组织属性', '武装性质', '阶级属性', '社会属性'],
+                correctIndex: 2,
+                explanation: '<span class=\'highlight-green\'>正确答案：C</span><br><br>A错误：组织属性是公安机关的特点之一，但不是根本属性<br>B错误：武装性质是组织属性的一部分<br><span class="highlight-red">C正确：</span>阶级属性是公安机关的根本属性！公安机关是人民民主专政的重要工具，表明了公安机关的阶级本质<br>D错误：社会属性不是公安机关的根本属性<br><br><span class=\'highlight-purple\'>小白记忆：</span>记住"根阶级"——根本属性=阶级属性！'
+            },
+            {
+                question: '公安机关是人民民主专政的重要工具，这是公安机关的（）',
+                options: ['阶级属性', '组织属性', '武装性质', '社会属性'],
+                correctIndex: 0,
+                explanation: '<span class=\'highlight-green\'>正确答案：A</span><br><br><span class="highlight-red">正确：</span>这是公安机关阶级属性的直接表述！阶级属性说明公安机关的阶级本质<br><br>其他选项都是组织属性的一部分：<br>B组织属性：治安行政力量+刑事司法力量<br>C武装性质：具有武器装备<br><br><span class=\'highlight-purple\'>小白记忆：</span>"重要工具"=阶级属性！'
+            },
+            {
+                question: '公安机关的组织属性包括（）',
+                options: ['人民民主专政工具', '治安行政力量和刑事司法力量', '武装性质', '阶级斗争工具'],
+                correctIndex: 1,
+                explanation: '<span class=\'highlight-green\'>正确答案：B</span><br><br>A错误：这是阶级属性，不是组织属性<br><span class="highlight-red">B正确：</span>组织属性有两个：治安行政力量+刑事司法力量！<br>C错误：武装性质是单独的属性<br>D错误：阶级斗争工具是阶级属性的体现<br><br><span class=\'highlight-purple\'>小白记忆：</span>组织属性=两股力量：治安+刑事！'
+            },
+            {
+                question: '下列关于公安机关性质的表述，错误的是（）',
+                options: ['公安机关是人民民主专政的工具', '公安机关具有武装性质', '公安机关是国家的武装力量', '公安机关是国家行政机关'],
+                correctIndex: 2,
+                explanation: '<span class=\'highlight-green\'>正确答案：C</span><br><br>A正确：公安机关是人民民主专政的重要工具<br>B正确：公安机关具有武装性质<br><span class="highlight-red">C错误：</span>公安机关不是国家的武装力量！武装力量是指解放军、武警、民兵！公安机关是"具有武装性质的"行政力量<br>D正确：公安机关是国家行政机关的重要组成部分<br><br><span class=\'highlight-orange\'>易错提醒：</span>公安机关有"武装性质"但不是"武装力量"！'
+            },
+            {
+                question: '在国家政权中，最主要的支柱是（）',
+                options: ['政府机关和司法机关', '军队和警察', '立法机关和检察机关', '行政机关和审判机关'],
+                correctIndex: 1,
+                explanation: '<span class=\'highlight-green\'>正确答案：B</span><br><br><span class="highlight-red">正确：</span>军队和警察是国家政权中最主要的支柱！<br><br>这体现了公安机关的重要地位：<br>• 军队：对外保卫国家安全<br>• 警察：对内维护社会秩序<br>• 两者配合，保障国家政权稳定<br><br><span class=\'highlight-purple\'>小白记忆：</span>记住"军警"是两大支柱！'
+            }
+        ];
+        
+        // 模块2题目：公安机关的职能
+        const quiz2Data = [
+            {
+                question: '公安机关的基本职能是（）',
+                options: ['专政职能和民主职能', '管理职能和服务职能', '打击职能和保护职能', '预防职能和惩治职能'],
+                correctIndex: 0,
+                explanation: '<span class=\'highlight-green\'>正确答案：A</span><br><br><span class="highlight-red">正确：</span>公安机关的基本职能是专政职能和民主职能！这是从调整国家最基本的政治关系的作用来看的<br><br>其他选项都不是"基本"职能：<br>B：管理和服务是具体表现<br>C：打击和保护是工作特点<br>D：预防和惩治是具体任务<br><br><span class=\'highlight-purple\'>小白记忆：</span>基本职能=专政+民主！'
+            },
+            {
+                question: '公安机关专政职能的对象是（）',
+                options: ['人民群众', '敌对势力、敌对分子和严重刑事犯罪分子', '所有违法公民', '外国人'],
+                correctIndex: 1,
+                explanation: '<span class=\'highlight-green\'>正确答案：B</span><br><br>A错误：人民群众是民主职能的对象<br><span class="highlight-red">B正确：</span>专政对象是敌对势力、敌对分子和严重刑事犯罪分子！<br>C错误：不是所有违法公民<br>D错误：外国人不是专政对象<br><br>专政对象要记住三类：<br>1敌对势力<br>2敌对分子<br>3严重刑事犯罪分子<br><span class=\'highlight-purple\'>小白记忆：</span>专政=对敌人！'
+            },
+            {
+                question: '公安机关民主职能的实质是（）',
+                options: ['镇压敌对势力', '惩罚犯罪分子', '保障人民享有国家主人翁地位和保障人民利益', '管理社会秩序'],
+                correctIndex: 2,
+                explanation: '<span class=\'highlight-green\'>正确答案：C</span><br><br>A错误：这是专政职能<br>B错误：这是专政职能<br><span class="highlight-red">C正确：</span>民主职能的实质就是保障人民当家作主！<br>D错误：这是管理职能<br><br>民主职能体现：<br>• 保障人民权益<br>• 为人民服务<br>• 处理人民内部矛盾<br><br><span class=\'highlight-purple\'>小白记忆：</span>民主=人民做主！'
+            },
+            {
+                question: '专政职能和民主职能的关系是（）',
+                options: ['互相矛盾', '对立统一', '毫无关系', '主次关系'],
+                correctIndex: 1,
+                explanation: '<span class=\'highlight-green\'>正确答案：B</span><br><br><span class="highlight-red">正确：</span>专政职能和民主职能是对立统一的关系！<br><br>具体表现：<br>• 专政是民主的基本保障<br>• 民主是专政的社会基础<br>• 两者互相依存、互相渗透、互相促进<br><br>不能片面强调其中一个！<br><span class=\'highlight-purple\'>小白记忆：</span>专政民主是硬币两面，缺一不可！'
+            },
+            {
+                question: '公安机关专政手段不包括（）',
+                options: ['打击', '制裁', '改造', '服务'],
+                correctIndex: 3,
+                explanation: '<span class=\'highlight-green\'>正确答案：D</span><br><br>专政手段包括：<br>A打击<br>B制裁<br>C改造<br><span class="highlight-red">D服务：</span>这是民主职能的手段！不是专政手段！<br><br>简单记忆：<br>• 专政=打、压、改<br>• 民主=服务、保护<br><br><span class=\'highlight-orange\'>易错提醒：</span>千万别把"服务"当成专政手段！'
+            }
+        ];
+        
+        // 模块3题目：公安机关的宗旨
+        const quiz3Data = [
+            {
+                question: '公安机关的根本宗旨是（）',
+                options: ['执法为民', '全心全意为人民服务', '维护社会稳定', '保护人民利益'],
+                correctIndex: 1,
+                explanation: '<span class=\'highlight-green\'>正确答案：B</span><br><br>A错误：执法为民是新时期要求，不是根本宗旨<br><span class="highlight-red">B正确：</span>全心全意为人民服务是公安机关的根本宗旨！<br>C错误：维护社会稳定是任务<br>D错误：保护人民利益是宗旨的体现<br><br>1995年《人民警察法》以立法形式明确了这一宗旨<br><span class=\'highlight-purple\'>小白记忆：</span>宗旨=为人民服务！'
+            },
+            {
+                question: '执法为民的具体标准不包括（）',
+                options: ['人民群众的呼声作为第一信号', '人民群众的需要作为第一选择', '人民群众的满意作为第一标准', '人民群众的要求作为第一行动'],
+                correctIndex: 3,
+                explanation: '<span class=\'highlight-green\'>正确答案：D</span><br><br>执法为民四个第一：<br>A呼声→第一信号<br>B需要→第一选择<br>C满意→第一标准<br><span class="highlight-red">D错误：</span>没有"第一行动"这个说法！<br><br><span class=\'highlight-purple\'>小白记忆：</span>记住"声、选虑、表"（信号、选择、考虑、标准）！'
+            },
+            {
+                question: '公安工作群众路线的核心是（）',
+                options: ['一切为了群众', '一切依靠群众', '从群众中来、到群众中去', '服务群众'],
+                correctIndex: 0,
+                explanation: '<span class=\'highlight-green\'>正确答案：A</span><br><br><span class="highlight-red">正确：</span>"一切为了群众"是公安工作的宗旨和出发点！<br><br>群众路线完整内涵：<br>• 一切为了群众→宗旨和出发点<br>• 一切依靠群众→根本态度<br>• 从群众中来、到群众中去→基本方法<br><br><span class=\'highlight-purple\'>小白记忆：</span>先有"为了"才有"依靠"！'
+            },
+            {
+                question: '下列关于全心全意为人民服务的说法，错误的是（）',
+                options: ['是公安机关的宗旨', '是毛泽东思想的重要组成部分', '是1995年《人民警察法》规定的', '是新时代才提出的'],
+                correctIndex: 3,
+                explanation: '<span class=\'highlight-green\'>正确答案：D</span><br><br>A正确：是公安机关的宗旨<br>B正确：是毛泽东思想的重要组成部分<br>C正确：1995年《人民警察法》以立法形式明确<br><span class="highlight-red">D错误：</span>不是新时代才提出的！1945年毛泽东在《论联合政府》中就提出了<br><br><span class=\'highlight-orange\'>易错提醒：</span>为人民服务思想早就有了！'
+            },
+            {
+                question: '"三个代表"重要思想的本质是（）',
+                options: ['执法为民', '执政为民', '服务为民', '公安为民'],
+                correctIndex: 1,
+                explanation: '<span class=\'highlight-green\'>正确答案：B</span><br><br><span class="highlight-red">正确：</span>"三个代表"的本质是"执政为民"！<br><br>注意区分：<br>• 执政为民→党（三个代表）<br>• 执法为民→公安（执法工作）<br><br><span class=\'highlight-orange\'>易错提醒：</span>别把"执政"和"执法"搞混了！'
+            }
+        ];
+        
+        // 模块4题目：警察的本质特征与历史
+        const quiz4Data = [
+            {
+                question: '警察的本质特征不包括（）',
+                options: ['鲜明的阶级性', '手段的特殊性', '广泛的人民性', '广泛的社会性'],
+                correctIndex: 2,
+                explanation: '<span class=\'highlight-green\'>正确答案：C</span><br><br>警察的三大本质特征：<br>A鲜明的阶级性<br>B手段的特殊性<br>C广泛的社会性<br><span class="highlight-red">D错误：</span>不是"广泛的人民性"！"人民性"是警察职业道德的特征，不是本质特征<br><br><span class=\'highlight-purple\'>小白记忆：</span>记住"阶、社、特"三特征！'
+            },
+            {
+                question: '中国历史上第一个全国性的专职警察机构是（）',
+                options: ['湖南保卫局', '巡警部', '国家政治保卫局', '中央特科'],
+                correctIndex: 1,
+                explanation: '<span class=\'highlight-green\'>正确答案：B</span><br><br>A错误：湖南保卫局是地方性的<br><span class="highlight-red">B正确：</span>1905年清政府在北平设立的巡警部是中国历史上第一个全国性的专职警察机构！<br>C错误：国家政治保卫局是1931年在瑞金设立的<br>D错误：中央特科是1927年设立的<br><br><span class=\'highlight-purple\'>小白记忆：</span>1905年设"巡警部"，全国性！'
+            },
+            {
+                question: '我党在中央机关设立的最早保卫组织是（）',
+                options: ['国家政治保卫局', '中央特科', '中央社会部', '华北公安部'],
+                correctIndex: 1,
+                explanation: '<span class=\'highlight-green\'>正确答案：B</span><br><br><span class="highlight-red">正确：</span>中央特科！1927年12月在上海建立，由周恩来主持领导！<br><br>这是党的最早保卫组织！<br><br>其他选项：<br>A：1931年，国家政权公安保卫机关<br>C：1939年，党的高级组织内成立<br>D：1948年，华北地区<br><span class=\'highlight-purple\'>小白记忆：</span>1927年12月，中央特科！'
+            },
+            {
+                question: '我国最早的人民政权的公安保卫机关是（）',
+                options: ['中央特科', '国家政治保卫局', '延安市警察队', '公安部'],
+                correctIndex: 1,
+                explanation: '<span class=\'highlight-green\'>正确答案：B</span><br><br>A错误：中央特科是党的<br><span class="highlight-red">B正确：</span>国家政治保卫局！1931年11月在瑞金中华苏维埃第一次全国代表大会上成立！<br>C错误：延安市警察队是1938年成立的<br>D错误：公安部是1949年成立的<br><br><span class=\'highlight-purple\'>小白记忆：</span>1931年瑞金，国家政治保卫局！'
+            },
+            {
+                question: '警察是随着（）的产生而产生的',
+                options: ['私有制', '国家', '阶级', '社会'],
+                correctIndex: 1,
+                explanation: '<span class=\'highlight-green\'>正确答案：B</span><br><br><span class="highlight-red">正确：</span>警察是随着国家的产生而产生的！<br><br>原始社会没有国家，所以也没有警察！<br><br>警察产生的条件：<br>• 经济条件：生产力发展<br>• 阶级条件：阶级矛盾不可调和<br>• 社会条件：维护统治秩序需要<br>• 政治条件：国家机器形成<br><br><span class=\'highlight-purple\'>小白记忆：</span>有国家才有警察！'
+            }
+        ];
+        
+        // 模块5题目：任务和职权
+        const quiz5Data = [
+            {
+                question: '公安机关的首要任务是（）',
+                options: ['维护社会治安秩序', '维护国家安全', '保护公民人身安全', '预防犯罪'],
+                correctIndex: 1,
+                explanation: '<span class=\'highlight-green\'>正确答案：B</span><br><br><span class="highlight-red">正确：</span>维护国家安全是公安机关的首要任务！<br><br>五大基本任务：<br>1维护国家安全（首要）<br>2维护社会治安秩序<br>3保护公民人身安全<br>4保护公共财产<br>5预防制止惩治犯罪<br><br><span class=\'highlight-purple\'>小白记忆：</span>国家安全第一！'
+            },
+            {
+                question: '公安机关权力的基本特点是（）',
+                options: ['法定性、强制性、特许性、单向性', '强制性、广泛性、多样性', '法律性、行政性、军事性', '专政性、民主性、服务性'],
+                correctIndex: 0,
+                explanation: '<span class=\'highlight-green\'>正确答案：A</span><br><br><span class="highlight-red">正确：</span>公安机关权力具有四大特点：<br>1法定性：由国家法律赋予<br>2强制性：以暴力为后盾<br>3特许性：只有公安机关才能使用<br>4单向性：被实施者只能服从<br><br><span class=\'highlight-purple\'>小白记忆：</span>记住"法、强、特、单"！'
+            },
+            {
+                question: '治安行政处罚的种类不包括（）',
+                options: ['警告', '罚款', '管制', '行政拘留'],
+                correctIndex: 2,
+                explanation: '<span class=\'highlight-green\'>正确答案：C</span><br><br>治安行政处罚种类：<br>A警告<br>B罚款<br><span class="highlight-red">C管制：</span>这是刑罚的一种，不是治安行政处罚！<br>D行政拘留<br><br>管制属于刑事处罚，由法院判决<br>治安拘留属于行政处罚，由公安机关决定<br><br><span class=\'highlight-orange\'>易错提醒：</span>管制≠拘留！'
+            },
+            {
+                question: '刑事强制权不包括（）',
+                options: ['拘传', '取保候审', '罚款', '逮捕'],
+                correctIndex: 2,
+                explanation: '<span class=\'highlight-green\'>正确答案：C</span><br><br>刑事强制权包括：<br>A拘传<br>B取保候审<br>C罚款：这是行政处罚，不是刑事强制！<br>D逮捕<br><br>刑事强制措施五种：<br>拘传、取保候审、监视居住、拘留、逮捕<br><br><span class=\'highlight-purple\'>小白记忆：</span>记住"拘、取、监、拘、逮"五种强制措施！'
+            },
+            {
+                question: '下列属于公安机关紧急状态处置权的是（）',
+                options: ['行政处罚权', '刑事立案权', '紧急征用权', '行政许可权'],
+                correctIndex: 2,
+                explanation: '<span class=\'highlight-green\'>正确答案：C</span><br><br><span class="highlight-red">正确：</span>紧急征用权属于紧急状态处置权！<br><br>紧急状态处置权包括：<br>1紧急优先权和紧急征用权<br>2紧急排险权<br>3管制权<br>4戒严执行权<br><br>其他选项：<br>A：治安行政管理权<br>B：刑事执法权<br>D：治安行政管理权<br><br><span class=\'highlight-purple\'>小白记忆：</span>紧急状态有四权！'
+            }
+        ];
+        
+        // 模块6题目：工作原则、路线、方针
+        const quiz6Data = [
+            {
+                question: '公安工作的根本原则是（）',
+                options: ['群众路线', '党的绝对领导', '专群结合', '依法治国'],
+                correctIndex: 1,
+                explanation: '<span class=\'highlight-green\'>正确答案：B</span><br><br><span class="highlight-red">正确：</span>坚持党对公安工作的绝对领导是公安工作的根本原则！<br><br>三个重要概念：<br>• 根本原则：党的绝对领导<br>• 根本路线：群众路线<br>• 基本方针：专门机关与群众相结合<br><br><span class=\'highlight-purple\'>小白记忆：</span>记住"原路方"！'
+            },
+            {
+                question: '党对公安工作的领导是（）',
+                options: ['相对领导', '绝对领导', '间接领导', '分散领导'],
+                correctIndex: 1,
+                explanation: '<span class=\'highlight-green\'>正确答案：B</span><br><br><span class="highlight-red">正确：</span>党对公安工作的领导是绝对的、无条件的、全面的、直接的！<br><br>"绝对"二字不能丢！<br><br>四个特点：<br>• 无条件性<br>• 全面性<br>• 直接性<br>• 绝对性<br><br><span class=\'highlight-orange\'>易错提醒：</span>不是"相对领导"！必须是"绝对"！'
+            },
+            {
+                question: '党对公安工作领导的内容不包括（）',
+                options: ['政治领导', '思想领导', '业务领导', '法制领导'],
+                correctIndex: 2,
+                explanation: '<span class=\'highlight-green\'>正确答案：C</span><br><br>党对公安工作领导的五项内容：<br>A政治领导<br>B思想领导<br><span class="highlight-red">C业务领导：</span>不是党领导的范围！<br>D法制领导<br><br>还有：<br>• 组织领导<br>• 决策领导<br><br><span class=\'highlight-orange\'>易错提醒：</span>党不领导具体业务，只领导重大决策！'
+            },
+            {
+                question: '公安工作的基本方针是（）',
+                options: ['党的绝对领导', '专门机关与群众相结合', '从严治警', '依法治国'],
+                correctIndex: 1,
+                explanation: '<span class=\'highlight-green\'>正确答案：B</span><br><br><span class="highlight-red">正确：</span>专门机关与群众相结合是公安工作的基本方针！<br><br>三个重要概念：<br>• 根本原则：党的绝对领导<br>• 根本路线：群众路线<br>• 基本方针：专门机关与群众相结合<br><br><span class=\'highlight-purple\'>小白记忆：</span>记住"方针是专群结合"！'
+            },
+            {
+                question: '毛泽东提出的"我们的原则是党指挥枪"出自（）',
+                options: ['《实践论》', '《矛盾论》', '《论联合政府》', '《星星之火，可以燎原》'],
+                correctIndex: 2,
+                explanation: '<span class=\'highlight-green\'>正确答案：C</span><br><br><span class="highlight-red">正确：</span>1945年《论联合政府》！<br><br>原文："我们的原则是党指挥枪，而不允许枪指挥党"<br><br>这句话体现了党对军队、对公安工作的绝对领导！<br><br><span class=\'highlight-purple\'>小白记忆：</span>《论联合政府》讲原则——党指挥枪！'
+            }
+        ];
+        
+        // 模块7题目：人民警察职业道德规范
+        const quiz7Data = [
+            {
+                question: '人民警察职业道德规范第一条是（）',
+                options: ['忠诚可靠', '秉公执法', '英勇善战', '热诚服务'],
+                correctIndex: 0,
+                explanation: '<span class=\'highlight-green\'>正确答案：A</span><br><br><span class="highlight-red">正确：</span>第一条是忠诚可靠！<br><br>职业道德10条顺序：<br>1忠诚可靠（听党指挥、热爱人民、忠于法律）<br>2秉公执法（事实为据、秉持公正、惩恶扬善）<br>3英勇善战（坚韧不拔、机智果敢、崇尚荣誉）<br>4热诚服务（情系民生、服务社会、热情周到）<br>5文明理性（理性平和、文明礼貌、诚信友善）<br>6严守纪律（遵章守纪、保守秘密、令行禁止）<br>7爱岗敬业（恪尽职守、勤学善思、精益求精）<br>8甘于奉献（任劳任怨、顾全大局、献身使命）<br>9清正廉洁（艰苦朴素、情趣健康、克己奉公）<br>10团结协作（精诚合作、勇于担当、积极向上）<br><br><span class=\'highlight-purple\'>小白记忆口诀：</span>忠公英热文明纪，爱奉清团！'
+            },
+            {
+                question: '人民警察职业道德规范中，体现政治灵魂的是（）',
+                options: ['忠诚可靠', '秉公执法', '英勇善战', '热诚服务'],
+                correctIndex: 0,
+                explanation: '<span class=\'highlight-green\'>正确答案：A</span><br><br><span class="highlight-red">正确：</span>对党忠诚是政治灵魂！<br><br>忠诚可靠的具体内容：<br>• 听党指挥<br>• 热爱人民<br>• 忠于法律<br><br>忠诚决定公安队伍的政治站位和方向！<br><br><span class=\'highlight-purple\'>小白记忆：</span>政治灵魂=忠诚！'
+            },
+            {
+                question: '"以事实为依据，以法律为准绳"体现的是（）职业道德',
+                options: ['忠诚可靠', '秉公执法', '英勇善战', '文明理性'],
+                correctIndex: 1,
+                explanation: '<span class=\'highlight-green\'>正确答案：B</span><br><br><span class="highlight-red">正确：</span>秉公执法！<br><br>秉公执法的核心：<br>• 事实为据<br>• 秉持公正<br>• 惩恶扬善<br><br>这是公安执法的基本原则！<br><br><span class=\'highlight-purple\'>小白记忆：</span>秉公=公正执法！'
+            },
+            {
+                question: '下列不属于人民警察职业道德规范的是（）',
+                options: ['诚实守信', '严守纪律', '爱岗敬业', '团结协作'],
+                correctIndex: 0,
+                explanation: '<span class=\'highlight-green\'>正确答案：A</span><br><br><span class="highlight-red">正确：</span>诚实守信不属于人民警察职业道德规范！<br><br>职业道德规范10条：<br>1忠诚可靠<br>2秉公执法<br>3英勇善战<br>4热诚服务<br>5文明理性<br>6严守纪律<br>7爱岗敬业<br>8甘于奉献<br>9清正廉洁<br>10团结协作<br><br><span class=\'highlight-orange\'>易错提醒：</span>"诚实守信"是社会公德，不是警德！'
+            },
+            {
+                question: '人民警察职业道德规范体现了（）',
+                options: ['鲜明的阶级性和广泛的人民性', '行为的表率性', '以上都是', '以上都不是'],
+                correctIndex: 2,
+                explanation: '<span class=\'highlight-green\'>正确答案：C</span><br><br><span class="highlight-red">正确：</span>人民警察职业道德规范体现了所有特征！<br><br>三个特征：<br>• 鲜明的阶级性<br>• 广泛的人民性<br>• 行为的表率性<br><br>警德是社会主义道德的普遍原则在警察职业活动中的具体体现！<br><br><span class=\'highlight-purple\'>小白记忆：</span>警德=阶级性+人民性+表率性！'
+            }
+        ];
+        
+        // 模块8题目：公安政策
+        const quiz8Data = [
+            {
+                question: '毛泽东提出严肃与谨慎相结合政策的文章是（）',
+                options: ['《星星之火，可以燎原》', '《实践论》', '《论联合政府》', '《矛盾论》'],
+                correctIndex: 2,
+                explanation: '<span class=\'highlight-green\'>正确答案：C</span><br><br><span class="highlight-red">正确：</span>1945年《论联合政府》！<br><br>原文："对暗藏的敌人，必须采取严肃态度，而在处理时，又要采取谨慎的态度"<br><br>严肃与谨慎：<br>• 严肃：对敌人不手软<br>• 谨慎：重证据、重调查研究<br>• 两者相辅相成、不可分割<br><br><span class=\'highlight-purple\'>小白记忆：</span>1945年《论联合政府》——严肃谨慎！'
+            },
+            {
+                question: '依法从重从快政策针对的是（）',
+                options: ['所有违法犯罪', '严重刑事犯罪和重大经济犯罪', '治安违法行为', '一般违法行为'],
+                correctIndex: 1,
+                explanation: '<span class=\'highlight-green\'>正确答案：B</span><br><br><span class="highlight-red">正确：</span>针对严重刑事犯罪和重大经济犯罪！<br><br>注意：从重从快不是不讲质量！<br>必须做到：<br>• 事实清楚<br>• 证据确实充分<br>• 定性准确<br>• 量刑适当<br>• 程序合法<br><br><span class=\'highlight-orange\'>易错提醒：</span>从重从快≠不讲程序！'
+            },
+            {
+                question: '严禁逼供信政策体现了（）',
+                options: ['公安人员对群众不负责', '对公民民主权利的高度重视', '依法治国原则', '严打方针'],
+                correctIndex: 1,
+                explanation: '<span class=\'highlight-green\'>正确答案：B</span><br><br><span class="highlight-red">正确：</span>严禁逼供信体现了公安人员对人民群众高度负责！<br><br>具体体现：<br>• 对人民群众高度负责<br>• 对公民民主权利、人身权利高度重视<br>• 公安机关文明办案<br>• 正确发挥口供的作用<br><br><span class=\'highlight-purple\'>小白记忆：</span>反逼供=保护人权！'
+            },
+            {
+                question: '教育与处罚相结合政策中，教育是（）',
+                options: ['主要手段', '辅助手段', '唯一手段', '强制手段'],
+                correctIndex: 0,
+                explanation: '<span class=\'highlight-green\'>正确答案：A</span><br><br><span class="highlight-red">正确：</span>教育是治安管理的基本手段！<br><br>教育与处罚相结合：<br>• 教育：基本手段<br>• 处罚：辅助手段<br>• 坚持教育多数，处罚少数<br>• 寓教育于处罚全过程<br><br><span class=\'highlight-purple\'>小白记忆：</span>教育为主、处罚为辅！'
+            },
+            {
+                question: '下列不属于公安政策的是（）',
+                options: ['严肃与谨慎相结合', '惩办与宽大相结合', '严格执法、热情服务', '尊重和保障人权'],
+                correctIndex: 2,
+                explanation: '<span class=\'highlight-green\'>正确答案：C</span><br><br><span class="highlight-red">正确：</span>"严格执法、热情服务"不属于公安政策！<br><br>六大公安政策：<br>1严肃与谨慎相结合<br>2惩办与宽大相结合<br>3依法从重从快<br>4重证据、重调查研究、严禁逼供信<br>5教育与处罚相结合<br>6尊重和保障人权<br><br><span class=\'highlight-orange\'>易错提醒：</span>记住这6个！别搞混了！'
+            }
+        ];
+        
+        // 模块9题目：组织管理与纪律
+        const quiz9Data = [
+            {
+                question: '下列不属于"四统一"的是（）',
+                options: ['统一考录制度', '统一训练标准', '统一工资标准', '统一纪律要求'],
+                correctIndex: 2,
+                explanation: '<span class=\'highlight-green\'>正确答案：C</span><br><br><span class="highlight-red">正确：</span>统一工资标准不属于"四统一"！<br><br>四统一：<br>1统一考录制度<br>2统一训练标准<br>3统一纪律要求<br>4统一外观标识<br><br>五规范：<br>1规范机构设置<br>2规范职务序列<br>3规范编制管理<br>4规范执法执勤<br>5规范行为举止<br><br><span class=\'highlight-purple\'>小白记忆：</span>四统一=考训纪标！'
+            },
+            {
+                question: '五条禁令中，携带枪支饮酒的处罚是（）',
+                options: ['予以纪律处分', '予以辞退', '予以开除', '降职使用'],
+                correctIndex: 1,
+                explanation: '<span class=\'highlight-green\'>正确答案：B</span><br><br><span class="highlight-red">正确：</span>携带枪支饮酒→予以辞退！<br><br>五条禁令处罚：<br>1违反枪支管理→纪律处分<br>2携带枪支饮酒→辞退<br>3酒后驾驶机动车→辞退<br>4工作时间饮酒→纪律处分<br>5参与赌博→辞退或开除<br><br>造成严重后果的，处罚更重！<br><br><span class=\'highlight-orange\'>易错提醒：</span>携带枪支饮酒直接辞退，不是先处分！'
+            },
+            {
+                question: '我国警衔分为（）',
+                options: ['四等十二级', '五等十三级', '六等十四级', '三等十级'],
+                correctIndex: 1,
+                explanation: '<span class=\'highlight-green\'>正确答案：B</span><br><br><span class="highlight-red">正确：</span>警衔分五等十三级！<br><br>五等：<br>1总警监、副总警监（部级）<br>2警监（一、二、三级）——高级警官<br>3警督（一、二、三级）——中级警官<br>4警司（一、二、三级）——初级警官<br>5警员（一、二级）——基础警官<br><br><span class=\'highlight-purple\'>小白记忆：</span>五等十三级！'
+            },
+            {
+                question: '下列警衔中，属于高级警官的是（）',
+                options: ['一级警督', '二级警司', '三级警监', '二级警员'],
+                correctIndex: 2,
+                explanation: '<span class=\'highlight-green\'>正确答案：C</span><br><br><span class="highlight-red">正确：</span>警监（一、二、三级）是高级警官！<br><br>警衔等级：<br>• 总警监、副总警监：部级<br>• 警监（一、二、三级）：高级警官<br>• 警督（一、二、三级）：中级警官<br>• 警司（一、二、三级）：初级警官<br>• 警员（一、二级）：基础警官<br><br><span class=\'highlight-purple\'>小白记忆：</span>警监=高级，警督=中级，警司=初级！'
+            },
+            {
+                question: '地方公安机关接受（）的双重领导',
+                options: ['同级政府和上级公安机关', '同级党委和上级公安机关', '同级党委和同级政府', '上级政府和上级党委'],
+                correctIndex: 0,
+                explanation: '<span class=\'highlight-green\'>正确答案：A</span><br><br><span class="highlight-red">正确：</span>地方公安机关接受同级政府和上级公安机关的双重领导！<br><br>领导关系：<br>• 公安部：全国公安工作的领导、指挥机关<br>• 地方公安机关：受同级政府和上级公安机关双重领导<br>• 派出机构：县级公安机关的派出机构<br><br><span class=\'highlight-purple\'>小白记忆：</span>政府+上级公安=双重领导！'
+            }
+        ];
+        
+        // 练习专区题目（综合检验，50道）
+        const practiceData = [
+            {
+                question: '1. 公安机关是人民民主专政的重要工具，这是公安机关的（）',
+                options: ['根本属性', '组织属性', '武装性质', '社会属性'],
+                correctIndex: 0,
+                explanation: '<span class=\'highlight-green\'>正确答案：A</span><br><br><span class="highlight-red">正确：</span>公安机关是人民民主专政的重要工具，这是公安机关的阶级属性，也是根本属性！<br><br>公安机关性质三层含义：<br>①具有鲜明的阶级性<br>②在国家政权中占据重要地位<br>③是国家意志的忠实执行者<br><br><span class=\'highlight-purple\'>小白记忆：</span>记住"根本属性=阶级属性"！'
+            },
+            {
+                question: '2. 下列关于公安机关性质的说法，错误的是（）',
+                options: ['是国家行政机关', '是刑事司法机关', '是国家武装力量', '具有武装性质'],
+                correctIndex: 2,
+                explanation: '<span class=\'highlight-green\'>正确答案：C</span><br><br>A正确：公安机关是国家行政机关<br>B正确：承担刑事司法职能<br><span class="highlight-red">C错误：</span>公安机关不是国家武装力量！武装力量是指解放军、武警、民兵<br>D正确：具有武装性质<br><br><span class=\'highlight-orange\'>易错提醒：</span>"武装性质"≠"武装力量"！'
+            },
+            {
+                question: '3. 公安机关专政职能的对象是（）',
+                options: ['人民', '敌对势力和犯罪分子', '所有违法的人', '外国人'],
+                correctIndex: 1,
+                explanation: '<span class=\'highlight-green\'>正确答案：B</span><br><br><span class="highlight-red">正确：</span>专政对象是敌对势力、敌对分子和严重刑事犯罪分子！<br><br>对比记忆：<br>• 专政→对敌人<br>• 民主→对人民<br><br><span class=\'highlight-purple\'>小白记忆：</span>专政=对敌！'
+            },
+            {
+                question: '4. 公安机关民主职能的实质是（）',
+                options: ['镇压敌人', '保护人民利益', '惩罚犯罪', '管理社会'],
+                correctIndex: 1,
+                explanation: '<span class=\'highlight-green\'>正确答案：B</span><br><br><span class="highlight-red">正确：</span>民主职能的实质是保障人民当家作主的地位和利益！<br><br>民主职能具体表现：<br>• 保障公民合法权益<br>• 为人民服务<br>• 处理人民内部矛盾<br><br><span class=\'highlight-purple\'>小白记忆：</span>民主=人民当家作主！'
+            },
+            {
+                question: '5. 全心全意为人民服务是公安机关的（）',
+                options: ['根本原则', '根本宗旨', '根本任务', '根本路线'],
+                correctIndex: 1,
+                explanation: '<span class=\'highlight-green\'>正确答案：B</span><br><br><span class="highlight-red">正确：</span>全心全意为人民服务是公安机关的根本宗旨！<br><br>注意区分：<br>• 根本原则：党的绝对领导<br>• 根本宗旨：为人民服务<br>• 根本路线：群众路线<br><br><span class=\'highlight-purple\'>小白记忆：</span>宗旨=服务！'
+            },
+            {
+                question: '6. 公安工作的根本原则是（）',
+                options: ['党的绝对领导', '群众路线', '专群结合', '依法治国'],
+                correctIndex: 0,
+                explanation: '<span class=\'highlight-green\'>正确答案：A</span><br><br><span class="highlight-red">正确：</span>坚持党对公安工作的绝对领导是根本原则！<br><br>三个重要概念：<br>• 根本原则：党的绝对领导<br>• 根本路线：群众路线<br>• 基本方针：专群结合<br><br><span class=\'highlight-purple\'>小白记忆：</span>记住"原路方"！'
+            },
+            {
+                question: '7. 党对公安工作的领导是（）',
+                options: ['相对领导', '绝对领导', '间接领导', '分散领导'],
+                correctIndex: 1,
+                explanation: '<span class=\'highlight-green\'>正确答案：B</span><br><br><span class="highlight-red">正确：</span>党对公安工作的领导是绝对的、无条件的、全面的、直接的！<br><br>"绝对"二字不能少！<br><br><span class=\'highlight-orange\'>易错提醒：</span>不是"相对"！'
+            },
+            {
+                question: '8. 公安工作群众路线的核心是（）',
+                options: ['一切为了群众', '一切依靠群众', '从群众中来', '到群众中去'],
+                correctIndex: 0,
+                explanation: '<span class=\'highlight-green\'>正确答案：A</span><br><br><span class="highlight-red">正确：</span>"一切为了群众"是宗旨和出发点！<br><br>群众路线完整内容：<br>• 一切为了群众→宗旨和出发点<br>• 一切依靠群众→根本态度<br>• 从群众中来、到群众中去→基本方法<br><br><span class=\'highlight-purple\'>小白记忆：</span>为了群众是核心！'
+            },
+            {
+                question: '9. 专门机关与群众相结合是公安工作的（）',
+                options: ['根本原则', '根本路线', '基本方针', '基本政策'],
+                correctIndex: 2,
+                explanation: '<span class=\'highlight-green\'>正确答案：C</span><br><br><span class="highlight-red">正确：</span>专门机关与群众相结合是公安工作的基本方针！<br><br><span class=\'highlight-purple\'>小白记忆：</span>方针=专群结合！'
+            },
+            {
+                question: '10. 公安机关的首要任务是（）',
+                options: ['维护社会治安', '维护国家安全', '保护人民利益', '预防犯罪'],
+                correctIndex: 1,
+                explanation: '<span class=\'highlight-green\'>正确答案：B</span><br><br><span class="highlight-red">正确：</span>维护国家安全是公安机关的首要任务！<br><br>五大基本任务：<br>①维护国家安全（首要）<br>②维护社会治安秩序<br>③保护公民人身安全<br>④保护公共财产<br>⑤预防制止惩治犯罪<br><br><span class=\'highlight-purple\'>小白记忆：</span>国安第一！'
+            },
+            {
+                question: '11. 警察的本质特征不包括（）',
+                options: ['鲜明的阶级性', '手段的特殊性', '广泛的人民性', '广泛的社会性'],
+                correctIndex: 2,
+                explanation: '<span class=\'highlight-green\'>正确答案：C</span><br><br><span class="highlight-red">正确：</span>"广泛的人民性"不是警察的本质特征！<br><br>三大本质特征：<br>• 鲜明的阶级性<br>• 手段的特殊性<br>• 广泛的社会性<br><br>"人民性"是警德特征，不是本质特征！<br><br><span class=\'highlight-purple\'>小白记忆：</span>记住"阶、社、特"！'
+            },
+            {
+                question: '12. 警察是随着（）的产生而产生的',
+                options: ['私有制', '阶级', '国家', '法律'],
+                correctIndex: 2,
+                explanation: '<span class=\'highlight-green\'>正确答案：C</span><br><br><span class="highlight-red">正确：</span>警察是随着国家的产生而产生的！<br><br>原始社会没有国家和警察！<br><br><span class=\'highlight-purple\'>小白记忆：</span>有国家才有警察！'
+            },
+            {
+                question: '13. 中国历史上第一个全国性专职警察机构是（）',
+                options: ['中央特科', '湖南保卫局', '巡警部', '国家政治保卫局'],
+                correctIndex: 2,
+                explanation: '<span class=\'highlight-green\'>正确答案：C</span><br><br><span class="highlight-red">正确：</span>1905年清政府设立的巡警部！<br><br>重要时间点：<br>• 1905年：巡警部<br>• 1927年：中央特科<br>• 1931年：国家政治保卫局<br>• 1949年：公安部成立<br><br><span class=\'highlight-purple\'>小白记忆：</span>1905设巡警部！'
+            },
+            {
+                question: '14. 公安部成立于（）',
+                options: ['1949年10月', '1949年11月1日', '1950年1月', '1948年11月'],
+                correctIndex: 1,
+                explanation: '<span class=\'highlight-green\'>正确答案：B</span><br><br><span class="highlight-red">正确：</span>1949年11月1日公安部正式成立！<br><br>1949年10月9日任命罗瑞卿为第一任部长！<br><br><span class=\'highlight-purple\'>小白记忆：</span>1949.11.1！'
+            },
+            {
+                question: '15. 人民警察职业道德规范共有（）',
+                options: ['8条', '10条', '12条', '15条'],
+                correctIndex: 1,
+                explanation: '<span class=\'highlight-green\'>正确答案：B</span><br><br><span class="highlight-red">正确：</span>人民警察职业道德规范有10条！<br><br>1994年公安部颁布！<br><br><span class=\'highlight-purple\'>小白记忆：</span>10条要全部记住！'
+            },
+            {
+                question: '16. 人民警察职业道德规范第一条是（）',
+                options: ['秉公执法', '忠诚可靠', '英勇善战', '热诚服务'],
+                correctIndex: 1,
+                explanation: '<span class=\'highlight-green\'>正确答案：B</span><br><br><span class="highlight-red">正确：</span>第一条是忠诚可靠！<br><br>对党忠诚是政治灵魂！<br><br><span class=\'highlight-purple\'>小白记忆口诀：</span>忠公英热文明纪，爱奉清团！'
+            },
+            {
+                question: '17. 对党忠诚是人民警察的（）',
+                options: ['根本宗旨', '根本任务', '政治灵魂', '职业特征'],
+                correctIndex: 2,
+                explanation: '<span class=\'highlight-green\'>正确答案：C</span><br><br><span class="highlight-red">正确：</span>对党忠诚是政治灵魂！<br><br>决定公安机关的政治站位！<br><br><span class=\'highlight-purple\'>小白记忆：</span>忠诚=政治灵魂！'
+            },
+            {
+                question: '18. 严肃与谨慎相结合政策是（）提出的',
+                options: ['邓小平', '毛泽东', '周恩来', '习近平'],
+                correctIndex: 1,
+                explanation: '<span class=\'highlight-green\'>正确答案：B</span><br><br><span class="highlight-red">正确：</span>毛泽东1945年在《论联合政府》中提出！<br><br><span class=\'highlight-purple\'>小白记忆：</span>1945毛选！'
+            },
+            {
+                question: '19. 依法从重从快针对的是（）',
+                options: ['所有违法行为', '严重刑事犯罪', '轻微违法行为', '职务犯罪'],
+                correctIndex: 1,
+                explanation: '<span class=\'highlight-green\'>正确答案：B</span><br><br><span class="highlight-red">正确：</span>针对严重刑事犯罪和重大经济犯罪！<br><br>注意：从重从快不是不讲程序！<br><br><span class=\'highlight-orange\'>易错提醒：</span>质量第一！'
+            },
+            {
+                question: '20. 严禁逼供信体现了（）',
+                options: ['严厉打击', '保护人权', '提高效率', '从严治警'],
+                correctIndex: 1,
+                explanation: '<span class=\'highlight-green\'>正确答案：B</span><br><br><span class="highlight-red">正确：</span>体现了对公民民主权利和人身权利的高度重视！<br><br>严禁以威胁、引诱、欺骗等非法方法收集证据！<br><br><span class=\'highlight-purple\'>小白记忆：</span>反逼供=保护人权！'
+            },
+            {
+                question: '21. 教育与处罚相结合政策中，教育是（）',
+                options: ['辅助手段', '主要手段', '唯一手段', '特殊手段'],
+                correctIndex: 1,
+                explanation: '<span class=\'highlight-green\'>正确答案：B</span><br><br><span class="highlight-red">正确：</span>教育是治安管理的基本手段！<br><br>坚持教育多数，处罚少数！<br><br><span class=\'highlight-purple\'>小白记忆：</span>教育为主！'
+            },
+            {
+                question: '22. 四统一五规范是（）的要求',
+                options: ['政治建设', '队伍建设正规化', '业务建设', '作风建设'],
+                correctIndex: 1,
+                explanation: '<span class=\'highlight-green\'>正确答案：B</span><br><br><span class="highlight-red">正确：</span>公安队伍正规化建设的要求！<br><br>第二十次全国公安会议提出！<br><br><span class=\'highlight-purple\'>小白记忆：</span>四统一五规范=正规化！'
+            },
+            {
+                question: '23. 五条禁令是（）年颁布的',
+                options: ['2001年', '2002年', '2003年', '2004年'],
+                correctIndex: 2,
+                explanation: '<span class=\'highlight-green\'>正确答案：C</span><br><br><span class="highlight-red">正确：</span>2003年1月22日公安部颁布！<br><br><span class=\'highlight-purple\'>小白记忆：</span>2003五条禁令！'
+            },
+            {
+                question: '24. 携带枪支饮酒的处罚是（）',
+                options: ['纪律处分', '辞退', '开除', '降职'],
+                correctIndex: 1,
+                explanation: '<span class=\'highlight-green\'>正确答案：B</span><br><br><span class="highlight-red">正确：</span>携带枪支饮酒→予以辞退！<br><br>这是最严格的禁令之一！<br><br><span class=\'highlight-orange\'>易错提醒：</span>直接辞退，不是先处分！'
+            },
+            {
+                question: '25. 我国警衔分为（）',
+                options: ['四等十二级', '五等十三级', '六等十四级', '三等十级'],
+                correctIndex: 1,
+                explanation: '<span class=\'highlight-green\'>正确答案：B</span><br><br><span class="highlight-red">正确：</span>警衔分五等十三级！<br><br><span class=\'highlight-purple\'>小白记忆：</span>5×3=15，但去掉两个特殊的=13级！'
+            },
+            {
+                question: '26. 下列属于高级警官的是（）',
+                options: ['警督', '警司', '警监', '警员'],
+                correctIndex: 2,
+                explanation: '<span class=\'highlight-green\'>正确答案：C</span><br><br><span class="highlight-red">正确：</span>警监是高级警官！<br><br>警衔等级：<br>• 警监→高级<br>• 警督→中级<br>• 警司→初级<br>• 警员→基础<br><br><span class=\'highlight-purple\'>小白记忆：</span>监高督中司初级！'
+            },
+            {
+                question: '27. 地方公安机关接受（）的双重领导',
+                options: ['同级党委和上级公安机关', '同级政府和上级公安机关', '上级政府和同级公安机关', '同级政府和上级党委'],
+                correctIndex: 1,
+                explanation: '<span class=\'highlight-green\'>正确答案：B</span><br><br><span class="highlight-red">正确：</span>地方公安机关接受同级政府和上级公安机关的双重领导！<br><br><span class=\'highlight-purple\'>小白记忆：</span>政府+上级公安！'
+            },
+            {
+                question: '28. 公安部是全国公安工作的（）',
+                options: ['领导机关', '指挥机关', '领导、指挥机关', '管理机关'],
+                correctIndex: 2,
+                explanation: '<span class=\'highlight-green\'>正确答案：C</span><br><br><span class="highlight-red">正确：</span>公安部是全国公安工作的领导、指挥机关！<br><br><span class=\'highlight-purple\'>小白记忆：</span>领导+指挥！'
+            },
+            {
+                question: '29. 公安机关的基本职能是（）',
+                options: ['专政职能', '民主职能', '专政和民主职能', '管理和服务职能'],
+                correctIndex: 2,
+                explanation: '<span class=\'highlight-green\'>正确答案：C</span><br><br><span class="highlight-red">正确：</span>公安机关的基本职能是专政职能和民主职能！<br><br><span class=\'highlight-purple\'>小白记忆：</span>基本职能=专政+民主！'
+            },
+            {
+                question: '30. 专政和民主的关系是（）',
+                options: ['对立关系', '统一关系', '对立统一关系', '毫无关系'],
+                correctIndex: 2,
+                explanation: '<span class=\'highlight-green\'>正确答案：C</span><br><br><span class="highlight-red">正确：</span>专政和民主是对立统一的关系！<br><br>• 专政是民主的保障<br>• 民主是专政的基础<br>• 两者相辅相成<br><br><span class=\'highlight-purple\'>小白记忆：</span>硬币两面！'
+            },
+            {
+                question: '31. 群众路线的根本态度是（）',
+                options: ['一切为了群众', '一切依靠群众', '从群众中来', '到群众中去'],
+                correctIndex: 1,
+                explanation: '<span class=\'highlight-green\'>正确答案：B</span><br><br><span class="highlight-red">正确：</span>"一切依靠群众"是根本态度！<br><br><span class=\'highlight-purple\'>小白记忆：</span>依靠群众是态度！'
+            },
+            {
+                question: '32. 从群众中来、到群众中去是（）',
+                options: ['宗旨', '出发点', '基本方法', '根本态度'],
+                correctIndex: 2,
+                explanation: '<span class=\'highlight-green\'>正确答案：C</span><br><br><span class="highlight-red">正确：</span>从群众中来、到群众中去是公安工作的基本方法！<br><br><span class=\'highlight-purple\'>小白记忆：</span>方法！'
+            },
+            {
+                question: '33. 党对公安工作领导的内容不包括（）',
+                options: ['政治领导', '业务领导', '思想领导', '组织领导'],
+                correctIndex: 1,
+                explanation: '<span class=\'highlight-green\'>正确答案：B</span><br><br><span class="highlight-red">正确：</span>业务领导不是党对公安工作领导的内容！<br><br>五项领导内容：<br>• 政治领导<br>• 思想领导<br>• 组织领导<br>• 决策领导<br>• 法制领导<br><br><span class=\'highlight-orange\'>易错提醒：</span>党不管具体业务！'
+            },
+            {
+                question: '34. 惩办与宽大相结合的刑事政策不包括（）',
+                options: ['首恶必办', '胁从不问', '坦白从宽', '从严处理'],
+                correctIndex: 3,
+                explanation: '<span class=\'highlight-green\'>正确答案：D</span><br><br><span class="highlight-red">正确：</span>"从严处理"不是惩办与宽大相结合的内容！<br><br>正确内容：<br>• 首恶必办<br>• 胁从不问<br>• 立功受奖<br>• 坦白从宽<br><br><span class=\'highlight-purple\'>小白记忆：</span>胁从不问≠从宽！'
+            },
+            {
+                question: '35. 尊重和保障人权是（）的内容',
+                options: ['公安政策', '公安原则', '公安方针', '公安纪律'],
+                correctIndex: 0,
+                explanation: '<span class=\'highlight-green\'>正确答案：A</span><br><br><span class="highlight-red">正确：</span>尊重和保障人权是六大公安政策之一！<br><br><span class=\'highlight-purple\'>小白记忆：</span>六大政策之一！'
+            },
+            {
+                question: '36. 下列不属于警衔等级的是（）',
+                options: ['总警监', '警督', '警司', '警长'],
+                correctIndex: 3,
+                explanation: '<span class=\'highlight-green\'>正确答案：D</span><br><br><span class="highlight-red">正确：</span>"警长"不是警衔等级！<br><br>警衔五等：<br>• 总警监<br>• 警监<br>• 警督<br>• 警司<br>• 警员<br><br><span class=\'highlight-purple\'>小白记忆：</span>没有"警长"这个等级！'
+            },
+            {
+                question: '37. 派出所是（）的派出机构',
+                options: ['公安局', '公安厅', '公安部', '政府'],
+                correctIndex: 0,
+                explanation: '<span class=\'highlight-green\'>正确答案：A</span><br><br><span class="highlight-red">正确：</span>派出所是县级公安机关的派出机构！<br><br><span class=\'highlight-purple\'>小白记忆：</span>派出所归公安局管！'
+            },
+            {
+                question: '38. 执法为民的具体标准不包括（）',
+                options: ['呼声第一信号', '需要第一选择', '满意第一标准', '服从第一要求'],
+                correctIndex: 3,
+                explanation: '<span class=\'highlight-green\'>正确答案：D</span><br><br><span class="highlight-red">正确：</span>"服从第一要求"不是执法为民的内容！<br><br>四个第一：<br>• 呼声→第一信号<br>• 需要→第一选择<br>• 利益→第一考虑<br>• 满意→第一标准<br><br><span class=\'highlight-orange\'>易错提醒：</span>不是"服从"！'
+            },
+            {
+                question: '39. 公安机关权力的特点是（）',
+                options: ['法定性、强制性、特许性、单向性', '法定性、民主性、特许性、强制性', '法律性、强制性、主动性、单向性', '法定性、强制性、主动性、双向性'],
+                correctIndex: 0,
+                explanation: '<span class=\'highlight-green\'>正确答案：A</span><br><br><span class="highlight-red">正确：</span>公安机关权力具有四大特点：<br>• 法定性<br>• 强制性<br>• 特许性<br>• 单向性<br><br><span class=\'highlight-purple\'>小白记忆：</span>法强制特单！'
+            },
+            {
+                question: '40. 下列属于刑事强制措施的是（）',
+                options: ['警告', '罚款', '拘传', '拘留'],
+                correctIndex: 2,
+                explanation: '<span class=\'highlight-green\'>正确答案：C</span><br><br><span class="highlight-red">正确：</span>拘传是刑事强制措施！<br><br>刑事强制措施五种：<br>• 拘传<br>• 取保候审<br>• 监视居住<br>• 拘留<br>• 逮捕<br><br><span class=\'highlight-purple\'>小白记忆：</span>取保监拘逮！'
+            },
+            {
+                question: '41. 下列属于紧急状态处置权的是（）',
+                options: ['治安处罚权', '刑事立案权', '紧急征用权', '行政许可权'],
+                correctIndex: 2,
+                explanation: '<span class=\'highlight-green\'>正确答案：C</span><br><br><span class="highlight-red">正确：</span>紧急征用权属于紧急状态处置权！<br><br>紧急状态处置权包括：<br>• 紧急优先权和征用权<br>• 紧急排险权<br>• 管制权<br>• 戒严执行权<br><br><span class=\'highlight-purple\'>小白记忆：</span>紧急四权！'
+            },
+            {
+                question: '42. 公安工作具有（）特点',
+                options: ['阶级性与社会性', '隐蔽性与公开性', '打击与保护', '以上都是'],
+                correctIndex: 3,
+                explanation: '<span class=\'highlight-green\'>正确答案：D</span><br><br><span class="highlight-red">正确：</span>公安工作整体特点包括：<br>• 阶级性与社会性<br>• 隐蔽性与公开性<br>• 打击与保护<br>• 强制性与教育性<br>• 集中性与分散性<br>• 政策性与法律性<br><br><span class=\'highlight-purple\'>小白记忆：</span>六大特点！'
+            },
+            {
+                question: '43. 公安专业工作的特点不包括（）',
+                options: ['复杂性', '艰苦性', '主动性', '易受腐蚀性'],
+                correctIndex: 2,
+                explanation: '<span class=\'highlight-green\'>正确答案：C</span><br><br><span class="highlight-red">正确：</span>"主动性"不是公安专业工作的特点！<br><br>公安专业工作特点：<br>• 复杂性<br>• 艰苦性<br>• 危险性<br>• 易受腐蚀性<br><br><span class=\'highlight-purple\'>小白记忆：</span>复艰危腐！'
+            },
+            {
+                question: '44. 公安执法的基本原则不包括（）',
+                options: ['依靠群众', '重证据', '刑讯逼供', '文明执法'],
+                correctIndex: 2,
+                explanation: '<span class=\'highlight-green\'>正确答案：C</span><br><br><span class="highlight-red">正确：</span>刑讯逼供是严禁的！<br><br>公安执法基本原则：<br>• 依靠群众<br>• 重证据、重调查研究<br>• 严禁逼供信<br>• 文明执法<br><br><span class=\'highlight-purple\'>小白记忆：</span>严禁逼供信！'
+            },
+            {
+                question: '45. 公安部隶属于（）',
+                options: ['全国人大', '国务院', '中央军委', '中共中央'],
+                correctIndex: 1,
+                explanation: '<span class=\'highlight-green\'>正确答案：B</span><br><br><span class="highlight-red">正确：</span>公安部在国务院领导下，主管全国公安工作！<br><br><span class=\'highlight-purple\'>小白记忆：</span>公安归政府管！'
+            },
+            {
+                question: '46. 中央特科成立于（）',
+                options: ['1925年', '1927年', '1931年', '1938年'],
+                correctIndex: 1,
+                explanation: '<span class=\'highlight-green\'>正确答案：B</span><br><br><span class="highlight-red">正确：</span>1927年12月，在上海建立中央特科！<br><br>周恩来主持！<br><br><span class=\'highlight-purple\'>小白记忆：</span>1927中央特科！'
+            },
+            {
+                question: '47. 国家政治保卫局成立于（）',
+                options: ['1927年', '1931年', '1938年', '1949年'],
+                correctIndex: 1,
+                explanation: '<span class=\'highlight-green\'>正确答案：B</span><br><br><span class="highlight-red">正确：</span>1931年11月在瑞金成立！<br><br>这是最早的人民政权公安保卫机关！<br><br><span class=\'highlight-purple\'>小白记忆：</span>1931瑞金！'
+            },
+            {
+                question: '48. 我国最早的一支比较正规的人民警察队伍是（）',
+                options: ['中央特科', '国家政治保卫局', '边警', '华北公安部'],
+                correctIndex: 2,
+                explanation: '<span class=\'highlight-green\'>正确答案：C</span><br><br><span class="highlight-red">正确：</span>"边警"——陕甘宁边区人民警察！<br><br>1938年5月成立延安市警察队！<br><br><span class=\'highlight-purple\'>小白记忆：</span>1938边警！'
+            },
+            {
+                question: '49. 龙潭三杰不包括（）',
+                options: ['钱壮飞', '李克农', '胡底', '叶剑英'],
+                correctIndex: 3,
+                explanation: '<span class=\'highlight-green\'>正确答案：D</span><br><br><span class="highlight-red">正确：</span>龙潭三杰是钱壮飞、李克农、胡底！<br><br>叶剑英不在其中！<br><br><span class=\'highlight-purple\'>小白记忆：</span>钱李胡！'
+            },
+            {
+                question: '50. 下列关于公安工作与国家的关系，说法正确的是（）',
+                options: ['警察随着国家的产生而产生', '警察随着私有制的产生而产生', '警察在原始社会就存在', '警察是国家最重要的支柱'],
+                correctIndex: 0,
+                explanation: '<span class=\'highlight-green\'>正确答案：A</span><br><br><span class="highlight-red">正确：</span>警察是随着国家的产生而产生的！<br><br>A正确：<br>B错误：私有制产生早于国家<br>C错误：原始社会没有警察<br>D错误：军队和警察都是支柱<br><br><span class=\'highlight-purple\'>小白记忆：</span>有国家才有警察！'
+            }
+        ];
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            renderQuiz('quiz-module1', quiz1Data);
+            renderQuiz('quiz-module2', quiz2Data);
+            renderQuiz('quiz-module3', quiz3Data);
+            renderQuiz('quiz-module4', quiz4Data);
+            renderQuiz('quiz-module5', quiz5Data);
+            renderQuiz('quiz-module6', quiz6Data);
+            renderQuiz('quiz-module7', quiz7Data);
+            renderQuiz('quiz-module8', quiz8Data);
+            renderQuiz('quiz-module9', quiz9Data);
+            renderQuiz('quiz-practice', practiceData);
+            
+            // 滚动进度条
+            window.addEventListener('scroll', function() {
+                const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrolled = (winScroll / height) * 100;
+                document.getElementById('mainProgress').style.width = scrolled + '%';
+            });
+        });
+    </script>
+</body>
+</html>
