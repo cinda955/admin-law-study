@@ -1,0 +1,1468 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>日期背诵专项 - 辅警备考</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%); min-height: 100vh; color: #333; }
+        .progress-bar { position: fixed; top: 0; left: 0; width: 100%; height: 4px; background: rgba(255,255,255,0.1); z-index: 1000; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #3498db, #2ecc71); width: 0%; transition: width 0.3s ease; }
+        .top-nav { position: fixed; top: 4px; left: 0; right: 0; background: rgba(52, 73, 94, 0.95); backdrop-filter: blur(10px); padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 999; border-bottom: 1px solid rgba(255,255,255,0.2); }
+        .logo { color: #fff; font-size: 18px; font-weight: bold; display: flex; align-items: center; gap: 8px; }
+        .score-display { background: rgba(255,255,255,0.2); color: #fff; padding: 8px 16px; border-radius: 20px; font-size: 14px; }
+        .sidebar { position: fixed; left: 0; top: 50px; width: 260px; height: calc(100vh - 50px); background: rgba(255,255,255,0.95); overflow-y: auto; padding: 20px 0; box-shadow: 2px 0 10px rgba(0,0,0,0.1); z-index: 998; }
+        .sidebar-title { color: #2c3e50; padding: 0 20px 15px; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid #eee; margin-bottom: 15px; }
+        .nav-item { padding: 12px 20px; color: #666; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 10px; font-size: 14px; border-left: 3px solid transparent; text-decoration: none; }
+        .nav-item:hover { background: rgba(52, 73, 94, 0.1); color: #34495e; }
+        .nav-item.active { background: rgba(52, 73, 94, 0.15); color: #34495e; border-left-color: #34495e; font-weight: bold; }
+        .main-content { margin-left: 260px; padding: 70px 30px 30px; max-width: 900px; }
+        .section-header { text-align: center; margin-bottom: 40px; }
+        .section-header h1 { font-size: 42px; color: #fff; margin-bottom: 10px; text-shadow: 0 0 30px rgba(0,0,0,0.2); }
+        .section-header p { color: rgba(255,255,255,0.8); font-size: 16px; }
+        .knowledge-card { background: #fff; border-radius: 20px; padding: 30px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); scroll-margin-top: 100px; }
+        .knowledge-card h2 { font-size: 24px; color: #333; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; border-bottom: 2px solid #34495e; padding-bottom: 15px; }
+        .knowledge-card h3 { font-size: 18px; color: #555; margin: 20px 0 10px; padding-left: 15px; border-left: 4px solid #34495e; }
+        .knowledge-content p { line-height: 1.8; color: #555; margin-bottom: 15px; }
+        .highlight-red { color: #e74c3c; font-weight: bold; background: rgba(231, 76, 60, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .highlight-blue { color: #3498db; font-weight: bold; background: rgba(52, 152, 219, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .highlight-green { color: #27ae60; font-weight: bold; background: rgba(39, 174, 96, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .highlight-orange { color: #e67e22; font-weight: bold; background: rgba(230, 126, 34, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .highlight-purple { color: #9b59b6; font-weight: bold; background: rgba(155, 89, 182, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .example { background: linear-gradient(135deg, #fff3e0, #ffe0b2); border-left: 4px solid #ff9800; padding: 15px 20px; border-radius: 0 10px 10px 0; margin: 15px 0; }
+        .example p { color: #e65100; margin: 8px 0; }
+        .memory-tip { background: linear-gradient(135deg, #e8f5e9, #c8e6c9); border-left: 4px solid #4caf50; padding: 15px 20px; border-radius: 0 10px 10px 0; margin: 15px 0; }
+        .memory-tip p { color: #2e7d32; margin: 0; }
+        .warning { background: linear-gradient(135deg, #ffebee, #ffcdd2); border-left: 4px solid #f44336; padding: 15px 20px; border-radius: 0 10px 10px 0; margin: 15px 0; }
+        .warning p { color: #c62828; margin: 0; }
+        .quiz-container { margin-top: 30px; }
+        .quiz-card { background: #f8f9fa; border-radius: 15px; padding: 20px; margin-bottom: 20px; border: 1px solid #e9ecef; }
+        .question { font-size: 16px; color: #333; margin-bottom: 15px; font-weight: 500; }
+        .question-num { display: inline-block; background: #34495e; color: #fff; width: 28px; height: 28px; border-radius: 50%; text-align: center; line-height: 28px; margin-right: 10px; font-size: 14px; }
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .option-btn { padding: 12px 20px; background: #fff; border: 2px solid #e9ecef; border-radius: 10px; cursor: pointer; text-align: left; font-size: 15px; color: #555; transition: all 0.3s ease; }
+        .option-btn:hover { border-color: #34495e; background: rgba(52, 73, 94, 0.05); }
+        .option-letter { display: inline-block; width: 26px; height: 26px; background: #e9ecef; border-radius: 50%; text-align: center; line-height: 26px; margin-right: 10px; font-weight: bold; color: #34495e; }
+        .option-btn.correct { background: #d4edda; border-color: #28a745; }
+        .option-btn.correct .option-letter { background: #28a745; color: #fff; }
+        .option-btn.wrong { background: #f8d7da; border-color: #dc3545; }
+        .option-btn.wrong .option-letter { background: #dc3545; color: #fff; }
+        .option-btn.disabled { cursor: not-allowed; opacity: 0.7; }
+        .explanation { background: linear-gradient(135deg, #fff8e1, #ffecb3); border-radius: 10px; padding: 15px 20px; margin-top: 15px; display: none; line-height: 1.8; border: 1px solid #ffc107; }
+        .explanation .result { font-size: 18px; font-weight: bold; margin-bottom: 10px; }
+        .explanation .result.correct { color: #28a745; }
+        .explanation .result.wrong { color: #dc3545; }
+        .framework-section { background: #fff; border-radius: 20px; padding: 30px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); scroll-margin-top: 100px; }
+        .framework-section h2 { font-size: 28px; color: #333; margin-bottom: 25px; text-align: center; border-bottom: 2px solid #34495e; padding-bottom: 15px; }
+        .framework-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .framework-card { background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-radius: 15px; padding: 20px; border-left: 4px solid #34495e; }
+        .framework-card h3 { font-size: 18px; color: #34495e; margin-bottom: 10px; }
+        .framework-card p { color: #666; font-size: 14px; margin: 5px 0; line-height: 1.6; }
+        .practice-section { background: #fff; border-radius: 20px; padding: 30px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); scroll-margin-top: 100px; }
+        .practice-section h2 { font-size: 28px; color: #333; margin-bottom: 25px; text-align: center; border-bottom: 2px solid #2c3e50; padding-bottom: 15px; }
+        .table-section { background: #f8f9fa; border-radius: 10px; padding: 20px; margin: 15px 0; overflow-x: auto; }
+        .table-section table { width: 100%; border-collapse: collapse; }
+        .table-section th, .table-section td { padding: 12px 15px; text-align: left; border: 1px solid #ddd; }
+        .table-section th { background: #34495e; color: #fff; }
+        .table-section tr:nth-child(even) { background: #fff; }
+        .date-box { display: inline-block; background: linear-gradient(135deg, #fff3e0, #ffe0b2); padding: 10px 20px; border-radius: 10px; margin: 8px 0; text-align: center; }
+        .date-box .number { font-size: 32px; font-weight: bold; color: #e67e22; }
+        .date-box .unit { font-size: 14px; color: #666; }
+        .date-box .desc { font-size: 12px; color: #888; }
+        .multi-options { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 15px; }
+        .multi-option { padding: 12px 20px; background: #fff; border: 2px solid #e9ecef; border-radius: 10px; cursor: pointer; font-size: 15px; color: #555; transition: all 0.3s ease; display: flex; align-items: center; gap: 8px; }
+        .multi-option:hover { border-color: #34495e; }
+        .multi-option.selected { background: #e3f2fd; border-color: #2196f3; }
+        .multi-option.correct { background: #d4edda; border-color: #28a745; }
+        .multi-option.wrong { background: #f8d7da; border-color: #dc3545; }
+        .multi-option.little { background: #fff9c4; border-color: #f1c40f; }
+        .submit-btn { background: #34495e; color: #fff; border: none; padding: 12px 30px; border-radius: 25px; cursor: pointer; font-size: 16px; margin-top: 15px; }
+        .submit-btn:hover { background: #2c3e50; }
+        @media (max-width: 768px) { .sidebar { width: 100%; height: auto; position: relative; margin-top: 50px; } .main-content { margin-left: 0; padding-top: 80px; } }
+        .close-nav-btn { background: rgba(255,255,255,0.2); border: none; color: #fff; font-size: 18px; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.3s; }
+        .close-nav-btn:hover { background: rgba(255,255,255,0.3); }
+        .countdown-badge { display: inline-block; background: #34495e; color: #fff; padding: 4px 12px; border-radius: 20px; font-size: 12px; margin-left: 10px; }
+        .must-know { background: linear-gradient(135deg, #ffebee, #ffcdd2); border-left: 4px solid #e74c3c; padding: 15px 20px; border-radius: 0 10px 10px 0; margin: 15px 0; }
+        .must-know p { color: #c62828; margin: 0; }
+    </style>
+</head>
+<body>
+    <div class="progress-bar"><div class="progress-fill" id="mainProgress"></div></div>
+    <nav class="top-nav" id="topNav">
+        <div class="logo">📅 日期背诵专项学习</div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <div class="score-display" id="totalScore">已答: 0/0</div>
+            <button class="close-nav-btn" onclick="closeTopNav()">✕</button>
+        </div>
+    </nav>
+    <aside class="sidebar">
+        <div class="sidebar-title">📖 目录导航</div>
+        <a href="#module1" class="nav-item active" onclick="scrollToSection(this, event)">📋 模块1: 行政处罚法日期</a>
+        <a href="#module2" class="nav-item" onclick="scrollToSection(this, event)">🔒 模块2: 行政强制法日期</a>
+        <a href="#module3" class="nav-item" onclick="scrollToSection(this, event)">⚖️ 模块3: 行政复议法日期</a>
+        <a href="#module4" class="nav-item" onclick="scrollToSection(this, event)">📜 模块4: 行政许可法日期</a>
+        <a href="#module5" class="nav-item" onclick="scrollToSection(this, event)">⚔️ 模块5: 刑法日期</a>
+        <a href="#module6" class="nav-item" onclick="scrollToSection(this, event)">🔍 模块6: 刑诉法日期</a>
+        <a href="#module7" class="nav-item" onclick="scrollToSection(this, event)">🚔 模块7: 治安法日期</a>
+        <a href="#module8" class="nav-item" onclick="scrollToSection(this, event)">🏛️ 模块8: 行政诉讼法日期</a>
+        <a href="#module9" class="nav-item" onclick="scrollToSection(this, event)">💰 模块9: 国家赔偿法日期</a>
+        <a href="#module10" class="nav-item" onclick="scrollToSection(this, event)">🔫 模块10: 警械武器条例日期</a>
+        <a href="#compare" class="nav-item" onclick="scrollToSection(this, event)">📊 对比记忆表</a>
+        <a href="#memorize" class="nav-item" onclick="scrollToSection(this, event)">🎯 记忆口诀汇总</a>
+        <a href="#practice" class="nav-item" onclick="scrollToSection(this, event)">📝 练习专区</a>
+    </aside>
+    <main class="main-content">
+        <div class="section-header">
+            <h1>📅 日期背诵专项学习</h1>
+            <p>系统整理辅警考试涉及的所有日期类考点，一网打尽！</p>
+        </div>
+        
+        <!-- 模块1: 行政处罚法日期 -->
+        <section id="module1" class="knowledge-card">
+            <h2>📋 模块1: 行政处罚法日期考点</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">【必备】</span>行政处罚法是辅警考试重点，这些日期必须全部背下来！</p>
+                
+                <h3>📌 一、听证程序相关日期</h3>
+                <p>听证是大事儿才有的程序！涉及<span class="highlight-orange">吊销许可证件、责令停产停业、较大数额罚款</span>等。</p>
+                
+                <div class="date-box">
+                    <div class="number">5日</div>
+                    <div class="unit">内申请听证</div>
+                    <div class="desc">当事人收到告知书后5日内提出申请</div>
+                </div>
+                
+                <div class="date-box">
+                    <div class="number">7日</div>
+                    <div class="unit">前通知听证时间地点</div>
+                    <div class="desc">公安机关提前7日书面通知</div>
+                </div>
+                
+                <p class="memory-tip"><strong><span class='highlight-purple'>记忆口诀：</span></strong>听证时间要记牢：5日申请，7日通知！口诀：我要听证（5），一周后见（7日）！</p>
+                
+                <h3>📌 二、处罚决定送达日期</h3>
+                <p><span class="highlight-orange">7日内</span>送达处罚决定书给当事人！</p>
+                
+                <div class="date-box">
+                    <div class="number">7日</div>
+                    <div class="unit">内送达</div>
+                    <div class="desc">处罚决定书送达当事人的期限</div>
+                </div>
+                
+                <h3>📌 三、简易程序相关日期</h3>
+                <p>简易程序适用于：事实清楚、罚款<span class="highlight-orange">200元以下</span>、当场处罚、仅限<span class="highlight-orange">1人</span>。</p>
+                
+                <div class="date-box">
+                    <div class="number">24小时</div>
+                    <div class="unit">内报备</div>
+                    <div class="desc">简易程序处罚决定报所属公安机关备案</div>
+                </div>
+                
+                <div class="warning"><p>⚠️ <strong>易错点：</strong>简易程序当场处罚，不需要听证！只有普通程序中的大事（吊销、停业、大额罚款）才需要听证！</p></div>
+            </div>
+            <div id="quiz-module1" class="quiz-container"></div>
+        </section>
+        
+        <!-- 模块2: 行政强制法日期 -->
+        <section id="module2" class="knowledge-card">
+            <h2>🔒 模块2: 行政强制法日期考点</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">【必备】</span>查封扣押、冻结存款的期限是考试常客！</p>
+                
+                <h3>📌 一、查封扣押期限（重要！）</h3>
+                <p>行政机关查封、扣押财物的时间限制：</p>
+                
+                <div class="date-box">
+                    <div class="number">30日</div>
+                    <div class="unit">一般期限</div>
+                    <div class="desc">一般情况下查封扣押不得超过30日</div>
+                </div>
+                
+                <div class="date-box">
+                    <div class="number">+30日</div>
+                    <div class="unit">延长</div>
+                    <div class="desc">情况复杂经负责人批准可延长</div>
+                </div>
+                
+                <div class="date-box">
+                    <div class="number">60日</div>
+                    <div class="unit">最长</div>
+                    <div class="desc">30+30=60，最长不超过60日</div>
+                </div>
+                
+                <h3>📌 二、冻结存款汇款期限</h3>
+                <p>冻结银行存款、汇款的期限和查封扣押一样：</p>
+                
+                <div class="date-box">
+                    <div class="number">30日</div>
+                    <div class="unit">+30日</div>
+                    <div class="desc">= 60日最长</div>
+                </div>
+                
+                <h3>📌 三、强制执行催告期</h3>
+                <p>当事人在法定期限内不申请行政复议、不提起行政诉讼，又不履行的，行政机关应当催告：</p>
+                
+                <div class="date-box">
+                    <div class="number">10日</div>
+                    <div class="unit">催告期</div>
+                    <div class="desc">强制执行前应当催告当事人履行义务</div>
+                </div>
+                
+                <h3>📌 四、温情执法时间限制</h3>
+                <p>行政机关不得在<span class="highlight-orange">夜间、法定节假日</span>实施行政强制（紧急情况除外）。</p>
+                
+                <p class="memory-tip"><strong><span class='highlight-purple'>记忆口诀：</span></strong>强制期限30+30=60，催告10日是缓冲！夜间节假日不强制，除非情况特别紧急！口诀：查封扣押冻结，最长都是60天！</p>
+                
+                <div class="must-know"><p><strong>【必备数字】</strong>行政强制期限：30日 + 30日 = 60日！必须脱口而出！</p></div>
+            </div>
+            <div id="quiz-module2" class="quiz-container"></div>
+        </section>
+        
+        <!-- 模块3: 行政复议法日期 -->
+        <section id="module3" class="knowledge-card">
+            <h2>⚖️ 模块3: 行政复议法日期考点</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">【必备】</span>行政复议的申请期限和决定期限！</p>
+                
+                <h3>📌 一、申请复议期限</h3>
+                <p>公民、法人对行政行为不服，申请行政复议的时间：</p>
+                
+                <div class="date-box">
+                    <div class="number">60日</div>
+                    <div class="unit">申请期限</div>
+                    <div class="desc">自知道或应当知道行政行为之日起60日内</div>
+                </div>
+                
+                <div class="example"><p><strong>🌰 举例：</strong>张三1月1日被行政拘留，他最晚要在3月2日前申请复议（60日）！</p></div>
+                
+                <h3>📌 二、复议决定期限</h3>
+                
+                <div class="table-section">
+                    <table>
+                        <tr><th>程序类型</th><th>决定期限</th><th>能否延长</th></tr>
+                        <tr><td>普通程序</td><td><span class="highlight-orange">60日</span></td><td>可延长30日（最长90日）</td></tr>
+                        <tr><td>简易程序</td><td><span class="highlight-orange">30日</span></td><td>不能延长</td></tr>
+                    </table>
+                </div>
+                
+                <p class="memory-tip"><strong><span class='highlight-purple'>记忆口诀：</span></strong>复议申请60日，复议决定分两种！普通60可延长，简易30不能延！口诀：申请六十天，决定六十天（普通），简易三十天！</p>
+                
+                <div class="must-know"><p><strong>【必备数字】</strong>行政复议申请期限：60日！复议决定期限：普通60日（可延30日），简易30日！</p></div>
+            </div>
+            <div id="quiz-module3" class="quiz-container"></div>
+        </section>
+        
+        <!-- 模块4: 行政许可法日期 -->
+        <section id="module4" class="knowledge-card">
+            <h2>📜 模块4: 行政许可法日期考点</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">【必备】</span>行政许可的审查期限是高频考点！</p>
+                
+                <h3>📌 一、补正告知期限</h3>
+                <p>材料不齐全或不符合要求的，一次性告知需要补正的内容：</p>
+                
+                <div class="date-box">
+                    <div class="number">5日</div>
+                    <div class="unit">内一次性告知</div>
+                    <div class="desc">逾期不告知的，视为受理</div>
+                </div>
+                
+                <h3>📌 二、审查期限（重要！）</h3>
+                
+                <div class="table-section">
+                    <table>
+                        <tr><th>许可类型</th><th th="2">审查期限</th><th>能否延长</th></tr>
+                        <tr><td>一般许可</td><td><span class="highlight-orange">20日</span></td><td>可延长10日（最长30日）</td></tr>
+                        <tr><td>统一办理</td><td><span class="highlight-orange">45日</span></td><td>可延长15日（最长60日）</td></tr>
+                        <tr><td>层级审查</td><td><span class="highlight-orange">20日</span></td><td><span class="highlight-red">不得延长</span></td></tr>
+                        <tr><td>即时许可</td><td>当场决定</td><td>—</td></tr>
+                    </table>
+                </div>
+                
+                <p class="memory-tip"><strong><span class='highlight-purple'>记忆口诀：</span></strong>许可期限要记清：一般二十可延十，统一办理四十五！层级审查很特殊，二十天就是二十天，不能延长要记清！口诀：一般20+10=30，统一45+15=60，层级20不延长！</p>
+                
+                <div class="must-know"><p><strong>【必备数字】</strong>许可期限：一般20日（可延10日），统一45日（可延15日），层级20日（不延长）！</p></div>
+            </div>
+            <div id="quiz-module4" class="quiz-container"></div>
+        </section>
+        
+        <!-- 模块5: 刑法日期 -->
+        <section id="module5" class="knowledge-card">
+            <h2>⚔️ 模块5: 刑法日期考点</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">【必备】</span>刑事责任年龄是刑法基础中的基础！</p>
+                
+                <h3>📌 一、刑事责任年龄（必背！）</h3>
+                <p>年龄是判断是否负刑事责任的关键！记住三个数字：<span class="highlight-orange">12周岁、14周岁、16周岁</span></p>
+                
+                <div class="table-section">
+                    <table>
+                        <tr><th>年龄阶段</th><th>刑事责任</th><th>说明</th></tr>
+                        <tr><td><span class="highlight-orange">不满12周岁</span></td><td>完全不负刑事责任</td><td>任何犯罪都不负刑事责任</td></tr>
+                        <tr><td><span class="highlight-orange">12-14周岁</span></td><td>相对不负刑事责任</td><td>故意杀人、故意伤害致人重伤或死亡、强奸、抢劫、贩卖毒品、放火、爆炸、投放危险物质罪 + 最高检核准</td></tr>
+                        <tr><td><span class="highlight-orange">14-16周岁</span></td><td>相对负刑事责任</td><td>上述8种重罪+其他（如绑架也可定罪）</td></tr>
+                        <tr><td><span class="highlight-orange">16周岁以上</span></td><td>完全负刑事责任</td><td>所有犯罪都要负责</td></tr>
+                    </table>
+                </div>
+                
+                <h3>📌 二、追诉时效（了解）</h3>
+                <p>犯罪超过一定期限不再追诉：</p>
+                
+                <div class="table-section">
+                    <table>
+                        <tr><th>法定最高刑</th><th>追诉期限</th></tr>
+                        <tr><td>不满5年有期徒刑</td><td><span class="highlight-orange">5年</span></td></tr>
+                        <tr><td>5年以上不满10年</td><td><span class="highlight-orange">10年</span></td></tr>
+                        <tr><td>10年以上有期徒刑</td><td><span class="highlight-orange">15年</span></td></tr>
+                        <tr><td>无期徒刑、死刑</td><td><span class="highlight-orange">20年</span>（最高检核准可追诉）</td></tr>
+                    </table>
+                </div>
+                
+                <p class="memory-tip"><strong><span class='highlight-purple'>记忆口诀：</span></strong>年龄分段要记牢：十二下无责，十二到十四特残忍需核准，十四到十六八重罪，十六以上全负责！追诉时效：五、十、十五、二十！口诀：不五十五，不十五，不二！</p>
+                
+                <div class="must-know"><p><strong>【必备数字】</strong>刑事责任年龄：12、14、16三个关键年龄！12下无责，12-14特残忍需核准，14-16八重罪，16上全责！</p></div>
+            </div>
+            <div id="quiz-module5" class="quiz-container"></div>
+        </section>
+        
+        <!-- 模块6: 刑诉法日期 -->
+        <section id="module6" class="knowledge-card">
+            <h2>🔍 模块6: 刑事诉讼法日期考点</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">【必备】</span>刑事强制措施的期限是高频考点！</p>
+                
+                <h3>📌 一、拘传期限</h3>
+                
+                <div class="date-box">
+                    <div class="number">12小时</div>
+                    <div class="unit">一般</div>
+                    <div class="desc">拘传持续时间一般不超过12小时</div>
+                </div>
+                
+                <div class="date-box">
+                    <div class="number">24小时</div>
+                    <div class="unit">最长</div>
+                    <div class="desc">案情复杂需拘留逮捕的，不得超过24小时</div>
+                </div>
+                
+                <h3>📌 二、取保候审期限</h3>
+                
+                <div class="date-box">
+                    <div class="number">12个月</div>
+                    <div class="unit">最长</div>
+                    <div class="desc">取保候审最长不超过12个月</div>
+                </div>
+                
+                <h3>📌 三、监视居住期限</h3>
+                
+                <div class="date-box">
+                    <div class="number">6个月</div>
+                    <div class="unit">最长</div>
+                    <div class="desc">监视居住最长不超过6个月</div>
+                </div>
+                
+                <h3>📌 四、刑事拘留期限（超级重要！）</h3>
+                <p>公安机关对现行犯或重大嫌疑人可以先行拘留：</p>
+                
+                <div class="date-box">
+                    <div class="number">3日</div>
+                    <div class="unit">提捕</div>
+                    <div class="desc">公安机关一般在3日内提请批准逮捕</div>
+                </div>
+                
+                <div class="date-box">
+                    <div class="number">4日</div>
+                    <div class="unit">决定</div>
+                    <div class="desc">检察院在7日内审查，4日内决定</div>
+                </div>
+                
+                <div class="date-box">
+                    <div class="number">30日</div>
+                    <div class="unit">延长</div>
+                    <div class="desc">特殊情况可延长至30日</div>
+                </div>
+                
+                <div class="date-box">
+                    <div class="number">37天</div>
+                    <div class="unit">最长</div>
+                    <div class="desc">3+4+30=37天！这是刑事拘留的最长期限！</div>
+                </div>
+                
+                <h3>📌 五、审理期限</h3>
+                
+                <div class="table-section">
+                    <table>
+                        <tr><th>程序</th><th>期限</th></tr>
+                        <tr><td>一审公诉</td><td>一般<span class="highlight-orange">2个月</span>，最长<span class="highlight-orange">3个月</span></td></tr>
+                        <tr><td>简易程序</td><td><span class="highlight-orange">20日</span>内审结（3年以下）</td></tr>
+                        <tr><td>上诉（判决）</td><td><span class="highlight-orange">10日</span>内</td></tr>
+                        <tr><td>上诉（裁定）</td><td><span class="highlight-orange">5日</span>内</td></tr>
+                    </table>
+                </div>
+                
+                <p class="memory-tip"><strong><span class='highlight-purple'>记忆口诀：</span></strong>拘传一般12，最长24！取保12月，监视6月！拘留37天怎么算？3日提捕+4日决定+30日延长=37天！口诀：取十二，监六，拘三七！判决上诉十，裁定上诉五！</p>
+                
+                <div class="must-know"><p><strong>【必备数字】</strong>刑事拘留最长37天（3+4+30）！取保候审12个月！监视居住6个月！拘传12小时（最长24小时）！</p></div>
+            </div>
+            <div id="quiz-module6" class="quiz-container"></div>
+        </section>
+        
+        <!-- 模块7: 治安管理处罚法日期 -->
+        <section id="module7" class="knowledge-card">
+            <h2>🚔 模块7: 治安管理处罚法日期考点</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">【必备】</span>治安拘留和询问时间是高频考点！</p>
+                
+                <h3>📌 一、行政拘留期限</h3>
+                <p>治安拘留是最严厉的行政处罚！</p>
+                
+                <div class="date-box">
+                    <div class="number">5/10/15日</div>
+                    <div class="unit">单处</div>
+                    <div class="desc">可以单处，最长15日</div>
+                </div>
+                
+                <div class="date-box">
+                    <div class="number">20日</div>
+                    <div class="unit">合并最长</div>
+                    <div class="desc">多个拘留合并执行不超过20日</div>
+                </div>
+                
+                <h3>📌 二、询问查证期限</h3>
+                <p>对违反治安管理的人，公安机关可以传唤询问：</p>
+                
+                <div class="date-box">
+                    <div class="number">8小时</div>
+                    <div class="unit">一般</div>
+                    <div class="desc">一般情况下询问查证不超过8小时</div>
+                </div>
+                
+                <div class="date-box">
+                    <div class="number">24小时</div>
+                    <div class="unit">最长</div>
+                    <div class="desc">情况复杂，可能适用拘留的，不超过24小时</div>
+                </div>
+                
+                <h3>📌 三、听证日期（和行政处罚法相同）</h3>
+                
+                <div class="date-box">
+                    <div class="number">3日</div>
+                    <div class="unit">内申请</div>
+                </div>
+                
+                <div class="date-box">
+                    <div class="number">7日</div>
+                    <div class="unit">前通知</div>
+                </div>
+                
+                <h3>📌 四、治安处罚追究时效</h3>
+                
+                <div class="date-box">
+                    <div class="number">6个月</div>
+                    <div class="unit">追究时效</div>
+                    <div class="desc">从违反治安管理行为发生之日起算</div>
+                </div>
+                
+                <p class="memory-tip"><strong><span class='highlight-purple'>记忆口诀：</span></strong>治安拘留有期限，单处最长十五天！多个合并二十天！询问一般八小时，复杂最长二十四！听证三日内申请，七日之前要通知！追究时效六个月！口诀：拘留5、10、15、20天，询问8、24小时！</p>
+                
+                <div class="must-know"><p><strong>【必备数字】</strong>行政拘留：5/10/15/20日！询问查证：8小时（一般）/24小时（最长）！追究时效：6个月！</p></div>
+            </div>
+            <div id="quiz-module7" class="quiz-container"></div>
+        </section>
+        
+        <!-- 模块8: 行政诉讼法日期 -->
+        <section id="module8" class="knowledge-card">
+            <h2>🏛️ 模块8: 行政诉讼法日期考点</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">【必备】</span>行政诉讼的起诉期限是高频考点！</p>
+                
+                <h3>📌 一、直接起诉期限</h3>
+                
+                <div class="date-box">
+                    <div class="number">6个月</div>
+                    <div class="unit">起诉期限</div>
+                    <div class="desc">公民、法人直接向法院起诉的期限（知道具体行政行为之日起）</div>
+                </div>
+                
+                <h3>📌 二、复议后起诉期限</h3>
+                
+                <div class="date-box">
+                    <div class="number">15日</div>
+                    <div class="unit">复议后起诉</div>
+                    <div class="desc">复议机关作出复议决定后，起诉期限为收到决定书之日起15日内</div>
+                </div>
+                
+                <div class="example"><p><strong>🌰 举例：</strong>张三不服治安拘留，先申请复议。复议决定书作出后，张三必须在15日内到法院起诉！如果超过15日，法院就不受理了！</p></div>
+                
+                <p class="memory-tip"><strong><span class='highlight-purple'>记忆口诀：</span></strong>行政诉讼起诉期限：直接起诉6个月，复议后再诉15天！口诀：复议后诉讼只有半个月（15日），直接起诉有半年（6个月）！</p>
+                
+                <div class="must-know"><p><strong>【必备数字】</strong>行政诉讼起诉期限：直接起诉6个月！复议后起诉15日！</p></div>
+            </div>
+            <div id="quiz-module8" class="quiz-container"></div>
+        </section>
+        
+        <!-- 模块9: 国家赔偿法日期 -->
+        <section id="module9" class="knowledge-card">
+            <h2>💰 模块9: 国家赔偿法日期考点</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">【必备】</span>国家赔偿请求时效！</p>
+                
+                <h3>📌 一、赔偿请求时效</h3>
+                
+                <div class="date-box">
+                    <div class="number">2年</div>
+                    <div class="unit">请求时效</div>
+                    <div class="desc">赔偿请求人请求国家赔偿的时效为2年</div>
+                </div>
+                
+                <p>从国家机关及其工作人员行使职权时的行为被依法确认为违法之日起计算。</p>
+                
+                <p>但被羁押等期间不计算在内。</p>
+                
+                <p class="memory-tip"><strong><span class='highlight-purple'>记忆口诀：</span></strong>国家赔偿时效2年！口诀：国赔时效不算短，整整两年记心间！</p>
+            </div>
+            <div id="quiz-module9" class="quiz-container"></div>
+        </section>
+        
+        <!-- 模块10: 警械武器条例日期 -->
+        <section id="module10" class="knowledge-card">
+            <h2>🔫 模块10: 警械武器条例日期考点</h2>
+            <div class="knowledge-content">
+                <p><span class="highlight-red">【必备】</span>使用武器后的报告时间！</p>
+                
+                <h3>📌 一、使用武器后的报告</h3>
+                
+                <div class="date-box">
+                    <div class="number">24小时</div>
+                    <div class="unit">内报告</div>
+                    <div class="desc">人民警察使用武器后，应当及时抢救受伤人员，并立即向所属机关报告</div>
+                </div>
+                
+                <p>使用武器后应当：</p>
+                <p>1. 及时抢救受伤人员（包括犯罪分子和无辜人员）</p>
+                <p>2. 及时进行勘验、调查</p>
+                <p>3. 及时通知当地人民检察院</p>
+                <p>4. 及时通知伤亡人员家属或所在单位</p>
+                
+                <p class="memory-tip"><strong><span class='highlight-purple'>记忆口诀：</span></strong>用武器后24小时要报告！口诀：开枪之后别大意，二十四时要报告！</p>
+            </div>
+            <div id="quiz-module10" class="quiz-container"></div>
+        </section>
+        
+        <!-- 对比记忆表 -->
+        <section id="compare" class="framework-section">
+            <h2>📊 对比记忆表 - 易混淆日期大对比</h2>
+            
+            <h3>📌 一、行政拘留 vs 刑事拘留</h3>
+            <div class="table-section">
+                <table>
+                    <tr><th>对比项</th><th>行政拘留</th><th>刑事拘留</th></tr>
+                    <tr><td>性质</td><td>行政处罚</td><td>刑事强制措施</td></tr>
+                    <tr><td>依据</td><td>治安管理处罚法</td><td>刑事诉讼法</td></tr>
+                    <tr><td>目的</td><td>惩罚违法行为</td><td>预防继续危害社会</td></tr>
+                    <tr><td>最长期限</td><td><span class="highlight-orange">20日</span></td><td><span class="highlight-orange">37日</span></td></tr>
+                </table>
+            </div>
+            
+            <h3>📌 二、行政复议 vs 行政诉讼期限</h3>
+            <div class="table-section">
+                <table>
+                    <tr><th>对比项</th><th>行政复议</th><th>行政诉讼</th></tr>
+                    <tr><td>受理机关</td><td>行政机关（上级）</td><td>人民法院</td></tr>
+                    <tr><td>申请/起诉期限</td><td><span class="highlight-orange">60日</span></td><td><span class="highlight-orange">6个月</span></td></tr>
+                    <tr><td>复议后起诉</td><td>—</td><td>15日</td></tr>
+                </table>
+            </div>
+            
+            <h3>📌 三、刑事强制措施期限对比</h3>
+            <div class="table-section">
+                <table>
+                    <tr><th>强制措施</th><th>最长期限</th><th>记忆口诀</th></tr>
+                    <tr><td>拘传</td><td><span class="highlight-orange">12小时/24小时</span></td><td>十二二四要记牢</td></tr>
+                    <tr><td>取保候审</td><td><span class="highlight-orange">12个月</span></td><td>取十二</td></tr>
+                    <tr><td>监视居住</td><td><span class="highlight-orange">6个月</span></td><td>监六</td></tr>
+                    <tr><td>刑事拘留</td><td><span class="highlight-orange">37天</span></td><td>拘三七</td></tr>
+                </table>
+            </div>
+            
+            <h3>📌 四、询问查证 vs 拘传时间</h3>
+            <div class="table-section">
+                <table>
+                    <tr><th>措施</th><th>适用法律</th><th>一般期限</th><th>最长</th></tr>
+                    <tr><td>询问查证（治安）</td><td>治安管理处罚法</td><td>8小时</td><td>24小时</td></tr>
+                    <tr><td>拘传（刑事）</td><td>刑事诉讼法</td><td>12小时</td><td>24小时</td></tr>
+                </table>
+            </div>
+            
+            <h3>📌 五、各类"30+30=60"日期</h3>
+            <div class="table-section">
+                <table>
+                    <tr><th>事项</th><th>30日</th><th>延长30日</th><th>最长</th></tr>
+                    <tr><td>查封扣押</td><td>✓</td><td>✓</td><td>60日</td></tr>
+                    <tr><td>冻结存款</td><td>✓</td><td>✓</td><td>60日</td></tr>
+                    <tr><td>复议决定（普通）</td><td>✓</td><td>✓</td><td>90日</td></tr>
+                </table>
+            </div>
+            
+            <p class="memory-tip"><strong><span class='highlight-purple'>总口诀：</span></strong>拘留分两种：行政20天，刑事37天！复议60，诉讼6个月！取十二，监六，拘三七！一般三十可延三十！</p>
+        </section>
+        
+        <!-- 记忆口诀汇总 -->
+        <section id="memorize" class="framework-section">
+            <h2>🎯 日期记忆口诀大汇总</h2>
+            
+            <h3>📌 一、行政处罚法口诀</h3>
+            <div class="memory-tip">
+                <p>听证时间要记牢：<span class='highlight-orange'>5日申请，7日通知</span>！处罚决定7日送达！简易程序24h报备！</p>
+            </div>
+            
+            <h3>📌 二、行政强制法口诀</h3>
+            <div class="memory-tip">
+                <p>强制期限<span class='highlight-orange'>30+30=60</span>，催告10日是缓冲！夜间节假日不强制！</p>
+            </div>
+            
+            <h3>📌 三、行政复议法口诀</h3>
+            <div class="memory-tip">
+                <p>申请<span class='highlight-orange'>60日</span>，决定普通<span class='highlight-orange'>60日（可延30日）</span>，简易<span class='highlight-orange'>30日</span>！</p>
+            </div>
+            
+            <h3>📌 四、行政许可法口诀</h3>
+            <div class="memory-tip">
+                <p>一般<span class='highlight-orange'>20日</span>（可延10日），统一<span class='highlight-orange'>45日</span>（可延15日），层级<span class='highlight-orange'>20日</span>不延长！补正告知<span class='highlight-orange'>5日</span>！</p>
+            </div>
+            
+            <h3>📌 五、刑法年龄口诀</h3>
+            <div class="memory-tip">
+                <p><span class='highlight-orange'>12</span>下无责，<span class='highlight-orange'>12-14</span>特残忍需核准，<span class='highlight-orange'>14-16</span>八重罪，<span class='highlight-orange'>16</span>上全责！</p>
+            </div>
+            
+            <h3>📌 六、刑诉法口诀</h3>
+            <div class="memory-tip">
+                <p>拘传<span class='highlight-orange'>12</span>（一般）/<span class='highlight-orange'>24</span>（最长）小时！取<span class='highlight-orange'>12</span>月，监<span class='highlight-orange'>6</span>月，拘<span class='highlight-orange'>37</span>天！判决上诉<span class='highlight-orange'>10</span>日，裁定上诉<span class='highlight-orange'>5</span>日！</p>
+            </div>
+            
+            <h3>📌 七、治安法口诀</h3>
+            <div class="memory-tip">
+                <p>拘留<span class='highlight-orange'>5/10/15</span>日，合并<span class='highlight-orange'>20</span>日！询问<span class='highlight-orange'>8/24</span>小时！追究时效<span class='highlight-orange'>6个月</span>！</p>
+            </div>
+            
+            <h3>📌 八、行政诉讼法口诀</h3>
+            <div class="memory-tip">
+                <p>直接起诉<span class='highlight-orange'>6个月</span>，复议后起诉<span class='highlight-orange'>15日</span>！口诀：复议后只有半个月，直接起诉有半年！</p>
+            </div>
+            
+            <h3>📌 九、国家赔偿法口诀</h3>
+            <div class="memory-tip">
+                <p>赔偿请求时效<span class='highlight-orange'>2年</span>！</p>
+            </div>
+            
+            <h3>📌 十、警械武器条例口诀</h3>
+            <div class="memory-tip">
+                <p>使用武器后<span class='highlight-orange'>24小时</span>内报告！</p>
+            </div>
+            
+            <div class="must-know">
+                <p><strong>【超级口诀】</strong>行政复议60，行政诉讼6个月！取保12月，监视6月，拘留37天！查封扣押冻结，最长都是60天！</p>
+            </div>
+        </section>
+        
+        <!-- 练习专区 -->
+        <section id="practice" class="practice-section">
+            <h2>📝 练习专区 - 30道题综合测试</h2>
+            <p style="color: #666; margin-bottom: 20px;">单选题15道 + 判断题10道 + 多选题5道</p>
+            <div id="quiz-practice" class="quiz-container"></div>
+        </section>
+    </main>
+    
+    <script>
+        // 关闭导航栏
+        function closeTopNav() {
+            document.getElementById('topNav').style.display = 'none';
+        }
+        
+        // 滚动到指定模块
+        function scrollToSection(element, event) {
+            event.preventDefault();
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            element.classList.add('active');
+            const targetId = element.getAttribute('href').substring(1);
+            const targetElement = document.getElementById(targetId);
+            if (targetElement) {
+                targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+        
+        // 更新进度条
+        function updateProgress() {
+            const totalQuestions = document.querySelectorAll('.quiz-card').length;
+            const answeredQuestions = document.querySelectorAll('.explanation[style*="display: block"]').length;
+            const percentage = totalQuestions > 0 ? (answeredQuestions / totalQuestions) * 100 : 0;
+            document.getElementById('mainProgress').style.width = percentage + '%';
+        }
+        
+        // 模块1题目数据
+        const quiz1Data = [
+            {
+                question: "当事人申请听证的期限是收到告知书后多少日内？",
+                options: ["A. 3日", "B. 5日", "C. 7日", "D. 10日"],
+                answer: 1,
+                explanation: "【逐项解析】<br><br>A. 错误！3日不是听证申请期限！<br><br>B. 正确！当事人收到告知书后5日内可以申请听证！<br><br>C. 错误！7日是通知听证时间地点的期限！<br><br>D. 错误！10日不是法定期限！<br><br>【小白记忆】听证申请5日！记成我要听证（五日）！",
+                module: "行政处罚法"
+            },
+            {
+                question: "行政机关应当在举行听证多少日前通知当事人听证的时间、地点？",
+                options: ["A. 3日", "B. 5日", "C. 7日", "D. 10日"],
+                answer: 2,
+                explanation: "【逐项解析】<br><br>A. 错误！3日不是法定期限！<br><br>B. 错误！5日是申请期限！<br><br>C. 正确！应当提前7日通知当事人！<br><br>D. 错误！10日不是法定期限！<br><br>【小白记忆】通知7日前！给人留一周准备时间！",
+                module: "行政处罚法"
+            },
+            {
+                question: "行政处罚决定书应当在什么期限内送达当事人？",
+                options: ["A. 3日内", "B. 5日内", "C. 7日内", "D. 10日内"],
+                answer: 2,
+                explanation: "【逐项解析】<br><br>A. 错误！3日不是送达期限！<br><br>B. 错误！5日是听证申请期限！<br><br>C. 正确！7日内送达！<br><br>D. 错误！10日不是送达期限！<br><br>【小白记忆】处罚决定7日送达！记住和通知听证一样都是7！",
+                module: "行政处罚法"
+            }
+        ];
+        
+        // 模块2题目数据
+        const quiz2Data = [
+            {
+                question: "查封扣押的期限最长不超过多少日？",
+                options: ["A. 30日", "B. 45日", "C. 60日", "D. 90日"],
+                answer: 2,
+                explanation: "【逐项解析】<br><br>A. 错误！30日是一般期限，还可以延长！<br><br>B. 错误！45日不是法定期限！<br><br>C. 正确！一般30日+延长30日=最长60日！<br><br>D. 错误！90日不是！<br><br>【小白记忆】查封扣押最长60日！30+30=60！",
+                module: "行政强制法"
+            },
+            {
+                question: "冻结存款的期限最长不超过多少日？",
+                options: ["A. 30日", "B. 45日", "C. 60日", "D. 90日"],
+                answer: 2,
+                explanation: "【逐项解析】<br><br>A. 错误！30日是一般期限！<br><br>B. 错误！45日不是法定期限！<br><br>C. 正确！和查封扣押一样，最长60日！<br><br>D. 错误！<br><br>【小白记忆】冻结和查封扣押一样，最长都是60天！",
+                module: "行政强制法"
+            },
+            {
+                question: "行政机关强制执行前催告当事人履行的期限是多少日？",
+                options: ["A. 3日", "B. 5日", "C. 10日", "D. 15日"],
+                answer: 2,
+                explanation: "【逐项解析】<br><br>A. 错误！3日不是催告期限！<br><br>B. 错误！5日是许可补正告知期限！<br><br>C. 正确！催告期是10日！<br><br>D. 错误！15日是复议后起诉期限！<br><br>【小白记忆】强制执行催告10日！给当事人10天缓冲期！",
+                module: "行政强制法"
+            }
+        ];
+        
+        // 模块3题目数据
+        const quiz3Data = [
+            {
+                question: "公民申请行政复议的期限是多少日？",
+                options: ["A. 30日", "B. 60日", "C. 3个月", "D. 6个月"],
+                answer: 1,
+                explanation: "【逐项解析】<br><br>A. 错误！30日是简易程序决定期限！<br><br>B. 正确！申请复议期限是60日！<br><br>C. 错误！3个月约90日，超过60日！<br><br>D. 错误！6个月是行政诉讼起诉期限！<br><br>【小白记忆】复议申请60日！比诉讼短多了！",
+                module: "行政复议法"
+            },
+            {
+                question: "行政复议普通程序的决定期限是多少日？",
+                options: ["A. 30日", "B. 60日", "C. 90日", "D. 3个月"],
+                answer: 1,
+                explanation: "【逐项解析】<br><br>A. 错误！30日是简易程序期限！<br><br>B. 正确！普通程序60日内作出决定，可延长30日！<br><br>C. 错误！90日是延长的最长期限，不是法定期限！<br><br>D. 错误！<br><br>【小白记忆】复议普通决定60日，可延30日最长90日！",
+                module: "行政复议法"
+            }
+        ];
+        
+        // 模块4题目数据
+        const quiz4Data = [
+            {
+                question: "行政许可的一般审查期限是多少日？",
+                options: ["A. 15日", "B. 20日", "C. 30日", "D. 45日"],
+                answer: 1,
+                explanation: "【逐项解析】<br><br>A. 错误！15日不是许可审查期限！<br><br>B. 正确！一般审查20日，可延长10日！<br><br>C. 错误！30日是延长的最长期限！<br><br>D. 错误！45日是统一办理的期限！<br><br>【小白记忆】一般许可20日，可延10日=最长30日！",
+                module: "行政许可法"
+            },
+            {
+                question: "行政许可统一办理的期限是多少日？",
+                options: ["A. 20日", "B. 30日", "C. 45日", "D. 60日"],
+                answer: 2,
+                explanation: "【逐项解析】<br><br>A. 错误！20日是一般审查期限！<br><br>B. 错误！30日不是统一办理期限！<br><br>C. 正确！统一办理45日，可延长15日=最长60日！<br><br>D. 错误！<br><br>【小白记忆】统一办理45日，可延15日=最长60日！",
+                module: "行政许可法"
+            },
+            {
+                question: "材料不齐全时，行政机关应当在多少日内一次性告知申请人需要补正的内容？",
+                options: ["A. 3日", "B. 5日", "C. 7日", "D. 10日"],
+                answer: 1,
+                explanation: "【逐项解析】<br><br>A. 错误！3日不是告知期限！<br><br>B. 正确！5日内一次性告知！<br><br>C. 错误！7日是听证通知期限！<br><br>D. 错误！10日是强制执行催告期限！<br><br>【小白记忆】补正告知5日！不能让人跑断腿！",
+                module: "行政许可法"
+            }
+        ];
+        
+        // 模块5题目数据
+        const quiz5Data = [
+            {
+                question: "完全负刑事责任的年龄是？",
+                options: ["A. 12周岁", "B. 14周岁", "C. 16周岁", "D. 18周岁"],
+                answer: 2,
+                explanation: "【逐项解析】<br><br>A. 错误！12周岁以下完全不负刑事责任！<br><br>B. 错误！14-16周岁只对8种重罪负刑事责任！<br><br>C. 正确！16周岁以上对所有犯罪负刑事责任！<br><br>D. 错误！18周岁是成年，但不是负刑责的起点！<br><br>【小白记忆】16上全责！16岁就是大人了！",
+                module: "刑法"
+            },
+            {
+                question: "12-14周岁的人对什么犯罪承担刑事责任需要最高检核准？",
+                options: ["A. 所有犯罪", "B. 8种严重犯罪", "C. 财产犯罪", "D. 暴力犯罪"],
+                answer: 1,
+                explanation: "【逐项解析】<br><br>A. 错误！不是所有犯罪！<br><br>B. 正确！12-14周岁只对故意杀人、故意伤害致人重伤或死亡、强奸、抢劫、贩卖毒品、放火、爆炸、投放危险物质罪负责，需最高检核准！<br><br>C. 错误！<br><br>D. 错误！<br><br>【小白记忆】12-14特残忍需核准！口诀：杀、伤、强、抢、毒、火、爆、危！",
+                module: "刑法"
+            }
+        ];
+        
+        // 模块6题目数据
+        const quiz6Data = [
+            {
+                question: "刑事拘留的最长期限是？",
+                options: ["A. 30日", "B. 37日", "C. 14日", "D. 7日"],
+                answer: 1,
+                explanation: "【逐项解析】<br><br>A. 错误！30日是可延长的期限！<br><br>B. 正确！37天=3日（提捕）+4日（决定）+30日（延长）！<br><br>C. 错误！<br><br>D. 错误！<br><br>【小白记忆】拘留37天！计算：公安3日提捕→检察院4日决定→特殊情况延长30日=37天！",
+                module: "刑事诉讼法"
+            },
+            {
+                question: "取保候审的最长期限是？",
+                options: ["A. 6个月", "B. 12个月", "C. 18个月", "D. 24个月"],
+                answer: 1,
+                explanation: "【逐项解析】<br><br>A. 错误！6个月是监视居住的期限！<br><br>B. 正确！取保候审最长12个月！<br><br>C. 错误！<br><br>D. 错误！<br><br>【小白记忆】取保12月！口诀：取（取保）十二（12个月）！",
+                module: "刑事诉讼法"
+            },
+            {
+                question: "监视居住的最长期限是？",
+                options: ["A. 3个月", "B. 6个月", "C. 12个月", "D. 24个月"],
+                answer: 1,
+                explanation: "【逐项解析】<br><br>A. 错误！<br><br>B. 正确！监视居住最长6个月！<br><br>C. 错误！12个月是取保候审的期限！<br><br>D. 错误！<br><br>【小白记忆】监视6月！口诀：监（监视）六（6个月）！",
+                module: "刑事诉讼法"
+            },
+            {
+                question: "拘传持续时间一般不超过多少小时？",
+                options: ["A. 6小时", "B. 12小时", "C. 24小时", "D. 48小时"],
+                answer: 1,
+                explanation: "【逐项解析】<br><br>A. 错误！<br><br>B. 正确！一般不超过12小时！<br><br>C. 错误！24小时是最长限制！<br><br>D. 错误！<br><br>【小白记忆】拘传一般12小时，最长24小时！",
+                module: "刑事诉讼法"
+            },
+            {
+                question: "刑事一审公诉案件的审理期限一般是多少？",
+                options: ["A. 1个月", "B. 2个月", "C. 3个月", "D. 6个月"],
+                answer: 1,
+                explanation: "【逐项解析】<br><br>A. 错误！1个月是审查起诉期限！<br><br>B. 正确！一审公诉一般2个月，最长不超过3个月！<br><br>C. 错误！3个月是最长期限！<br><br>D. 错误！<br><br>【小白记忆】一审公诉2个月，最长3个月！",
+                module: "刑事诉讼法"
+            }
+        ];
+        
+        // 模块7题目数据
+        const quiz7Data = [
+            {
+                question: "行政拘留合并执行的最长期限是多少日？",
+                options: ["A. 10日", "B. 15日", "C. 20日", "D. 30日"],
+                answer: 2,
+                explanation: "【逐项解析】<br><br>A. 错误！10日是单处的一种！<br><br>B. 错误！15日是单处最长！<br><br>C. 正确！多个拘留合并执行不超过20日！<br><br>D. 错误！<br><br>【小白记忆】合并拘留20日！记住了吗！",
+                module: "治安管理处罚法"
+            },
+            {
+                question: "询问违反治安管理人的一般时间限制是多少小时？",
+                options: ["A. 4小时", "B. 8小时", "C. 12小时", "D. 24小时"],
+                answer: 1,
+                explanation: "【逐项解析】<br><br>A. 错误！<br><br>B. 正确！一般情况下不超过8小时！<br><br>C. 错误！12小时是拘传的般期限！<br><br>D. 错误！24小时是最长期限！<br><br>【小白记忆】询问8小时，一般情况！复杂最长24小时！",
+                module: "治安管理处罚法"
+            },
+            {
+                question: "治安管理处罚的追究时效是多少？",
+                options: ["A. 3个月", "B. 6个月", "C. 1年", "D. 2年"],
+                answer: 1,
+                explanation: "【逐项解析】<br><br>A. 错误！<br><br>B. 正确！治安处罚追究时效是6个月！<br><br>C. 错误！<br><br>D. 错误！2年是国赔请求时效！<br><br>【小白记忆】治安追究6个月！比复议60日长一点！",
+                module: "治安管理处罚法"
+            }
+        ];
+        
+        // 模块8题目数据
+        const quiz8Data = [
+            {
+                question: "公民直接向法院提起行政诉讼的期限是多少？",
+                options: ["A. 30日", "B. 60日", "C. 3个月", "D. 6个月"],
+                answer: 3,
+                explanation: "【逐项解析】<br><br>A. 错误！30日不是诉讼期限！<br><br>B. 错误！60日是复议申请期限！<br><br>C. 错误！<br><br>D. 正确！直接起诉6个月！<br><br>【小白记忆】诉讼起诉有半年（6个月）！比复议60天长很多！",
+                module: "行政诉讼法"
+            },
+            {
+                question: "复议机关作出复议决定后，公民起诉的期限是多少日？",
+                options: ["A. 7日", "B. 15日", "C. 30日", "D. 60日"],
+                answer: 1,
+                explanation: "【逐项解析】<br><br>A. 错误！7日不是诉讼期限！<br><br>B. 正确！复议后起诉期限是15日！<br><br>C. 错误！<br><br>D. 错误！60日是复议申请期限！<br><br>【小白记忆】复议后只有半个月（15日）！口诀：复议后诉讼只有半个月！",
+                module: "行政诉讼法"
+            }
+        ];
+        
+        // 模块9题目数据
+        const quiz9Data = [
+            {
+                question: "赔偿请求人请求国家赔偿的时效是多少年？",
+                options: ["A. 1年", "B. 2年", "C. 3年", "D. 5年"],
+                answer: 1,
+                explanation: "【逐项解析】<br><br>A. 错误！<br><br>B. 正确！国家赔偿请求时效是2年！<br><br>C. 错误！<br><br>D. 错误！<br><br>【小白记忆】国赔时效2年！不长不短刚刚好！",
+                module: "国家赔偿法"
+            }
+        ];
+        
+        // 模块10题目数据
+        const quiz10Data = [
+            {
+                question: "人民警察使用武器后，应当在多少小时内向所属机关报告？",
+                options: ["A. 12小时", "B. 24小时", "C. 48小时", "D. 72小时"],
+                answer: 1,
+                explanation: "【逐项解析】<br><br>A. 错误！12小时是拘传般期限！<br><br>B. 正确！使用武器后24小时内报告！<br><br>C. 错误！<br><br>D. 错误！<br><br>【小白记忆】用武器后24小时要报告！一天之内必须报告！",
+                module: "警械武器条例"
+            }
+        ];
+        
+        // 练习专区题目数据
+        const practiceData = [
+            {
+                question: "【判断】听证程序中，当事人应当在收到告知书后5日内提出听证申请。",
+                options: ["A. 正确", "B. 错误"],
+                answer: 0,
+                explanation: "【逐项解析】<br><br>A. 正确！当事人应当在收到告知书后5日内提出听证申请！<br><br>B. 错误！<br><br>【小白记忆】听证5日申请！",
+                module: "判断题"
+            },
+            {
+                question: "【判断】查封扣押的期限最长不超过60日。",
+                options: ["A. 正确", "B. 错误"],
+                answer: 0,
+                explanation: "【逐项解析】<br><br>A. 正确！查封扣押一般30日，可延长30日，最长60日！<br><br>B. 错误！<br><br>【小白记忆】查封扣押30+30=60！",
+                module: "判断题"
+            },
+            {
+                question: "【判断】行政复议的申请期限是60日。",
+                options: ["A. 正确", "B. 错误"],
+                answer: 0,
+                explanation: "【逐项解析】<br><br>A. 正确！申请行政复议的期限是60日！<br><br>B. 错误！<br><br>【小白记忆】复议申请60日！",
+                module: "判断题"
+            },
+            {
+                question: "【判断】取保候审的最长期限是12个月。",
+                options: ["A. 正确", "B. 错误"],
+                answer: 0,
+                explanation: "【逐项解析】<br><br>A. 正确！取保候审最长12个月！<br><br>B. 错误！<br><br>【小白记忆】取保12月！",
+                module: "判断题"
+            },
+            {
+                question: "【判断】监视居住的最长期限是6个月。",
+                options: ["A. 正确", "B. 错误"],
+                answer: 0,
+                explanation: "【逐项解析】<br><br>A. 正确！监视居住最长6个月！<br><br>B. 错误！<br><br>【小白记忆】监视6月！",
+                module: "判断题"
+            },
+            {
+                question: "【判断】刑事拘留的最长期限是37天。",
+                options: ["A. 正确", "B. 错误"],
+                answer: 0,
+                explanation: "【逐项解析】<br><br>A. 正确！刑事拘留最长37天（3+4+30）！<br><br>B. 错误！<br><br>【小白记忆】拘留37天！",
+                module: "判断题"
+            },
+            {
+                question: "【判断】行政拘留合并执行的最长期限是20日。",
+                options: ["A. 正确", "B. 错误"],
+                answer: 0,
+                explanation: "【逐项解析】<br><br>A. 正确！行政拘留合并执行最长20日！<br><br>B. 错误！<br><br>【小白记忆】合并拘留20日！",
+                module: "判断题"
+            },
+            {
+                question: "【判断】行政诉讼的直接起诉期限是6个月。",
+                options: ["A. 正确", "B. 错误"],
+                answer: 0,
+                explanation: "【逐项解析】<br><br>A. 正确！直接起诉6个月！<br><br>B. 错误！<br><br>【小白记忆】诉讼起诉6个月！",
+                module: "判断题"
+            },
+            {
+                question: "【判断】复议后起诉的期限是15日。",
+                options: ["A. 正确", "B. 错误"],
+                answer: 0,
+                explanation: "【逐项解析】<br><br>A. 正确！复议后起诉期限是15日！<br><br>B. 错误！<br><br>【小白记忆】复议后只有15天！",
+                module: "判断题"
+            },
+            {
+                question: "【判断】国家赔偿请求时效是2年。",
+                options: ["A. 正确", "B. 错误"],
+                answer: 0,
+                explanation: "【逐项解析】<br><br>A. 正确！国家赔偿请求时效是2年！<br><br>B. 错误！<br><br>【小白记忆】国赔时效2年！",
+                module: "判断题"
+            },
+            {
+                question: "完全负刑事责任的年龄是？",
+                options: ["A. 14周岁", "B. 16周岁", "C. 18周岁", "D. 20周岁"],
+                answer: 1,
+                explanation: "【逐项解析】<br><br>A. 错误！14-16周岁只对8种重罪负责！<br><br>B. 正确！16周岁以上对所有犯罪负刑事责任！<br><br>C. 错误！18周岁是成年！<br><br>D. 错误！<br><br>【小白记忆】16上全责！",
+                module: "单选题"
+            },
+            {
+                question: "询问违反治安管理人的最长时间限制是多少小时？",
+                options: ["A. 8小时", "B. 12小时", "C. 24小时", "D. 48小时"],
+                answer: 2,
+                explanation: "【逐项解析】<br><br>A. 错误！8小时是一般期限！<br><br>B. 错误！12小时是拘传期限！<br><br>C. 正确！最长不超过24小时！<br><br>D. 错误！<br><br>【小白记忆】询问最长24小时！",
+                module: "单选题"
+            },
+            {
+                question: "行政许可层级审查的期限是多少日？",
+                options: ["A. 20日，可延长10日", "B. 20日，不得延长", "C. 45日", "D. 30日"],
+                answer: 1,
+                explanation: "【逐项解析】<br><br>A. 错误！那是般许可的期限！<br><br>B. 正确！层级审查20日，不得延长！<br><br>C. 错误！45日是统一办理的期限！<br><br>D. 错误！<br><br>【小白记忆】层级审查20日，不能延长！",
+                module: "单选题"
+            },
+            {
+                question: "刑事一审简易程序的审理期限是多少日？",
+                options: ["A. 20日", "B. 1个月", "C. 2个月", "D. 3个月"],
+                answer: 0,
+                explanation: "【逐项解析】<br><br>A. 正确！简易程序20日内审结！<br><br>B. 错误！<br><br>C. 错误！2个月是一般一审的期限！<br><br>D. 错误！<br><br>【小白记忆】简易20日！",
+                module: "单选题"
+            },
+            {
+                question: "不服判决上诉的期限是多少日？",
+                options: ["A. 5日", "B. 10日", "C. 15日", "D. 30日"],
+                answer: 1,
+                explanation: "【逐项解析】<br><br>A. 错误！5日是不服裁定的上诉期限！<br><br>B. 正确！不服判决10日内上诉！<br><br>C. 错误！<br><br>D. 错误！<br><br>【小白记忆】判决上诉10日，裁定上诉5日！",
+                module: "单选题"
+            },
+            {
+                question: "下列哪些期限是30日（可延长30日）？",
+                options: ["A. 查封扣押", "B. 冻结存款", "C. A和B都正确", "D. 以上都不对"],
+                answer: 2,
+                explanation: "【逐项解析】<br><br>A. 正确！查封扣押一般30日，可延长30日，最长60日！<br><br>B. 正确！冻结存款也是一般30日，可延长30日，最长60日！<br><br>C. 正确！A和B都正确！<br><br>D. 错误！<br><br>【小白记忆】查封扣押和冻结存款都是30+30=60！",
+                module: "多选题"
+            },
+            {
+                question: "下列哪些属于刑事强制措施？",
+                options: ["A. 拘传", "B. 取保候审", "C. 监视居住", "D. 行政拘留"],
+                answer: [0, 1, 2],
+                explanation: "【逐项解析】<br><br>A. 正确！拘传是刑事强制措施！<br><br>B. 正确！取保候审是刑事强制措施！<br><br>C. 正确！监视居住是刑事强制措施！<br><br>D. 错误！行政拘留是行政处罚，不是刑事强制措施！<br><br>【小白记忆】拘传、取保、监视都是刑事强制措施！行政拘留是行政处罚！",
+                module: "多选题"
+            },
+            {
+                question: "下列哪些属于应当从轻或减轻处罚的情形？",
+                options: ["A. 已满14周岁不满18周岁的人犯罪", "B. 又聋又哑的人犯罪", "C. 盲人犯罪", "D. 醉酒的人犯罪"],
+                answer: [0, 1, 2],
+                explanation: "【逐项解析】<br><br>A. 正确！已满14不满18应当从轻或减轻！<br><br>B. 正确！又聋又哑可以从轻或减轻！<br><br>C. 正确！盲人犯罪可以从轻或减轻！<br><br>D. 错误！醉酒的人犯罪应当负刑事责任，不能从轻！<br><br>【小白记忆】未成年、聋哑、盲人可以从轻或减轻！醉酒不能！",
+                module: "多选题"
+            },
+            {
+                question: "下列哪些属于行政处罚的听证范围？",
+                options: ["A. 吊销许可证件", "B. 责令停产停业", "C. 较大数额罚款", "D. 警告"],
+                answer: [0, 1, 2],
+                explanation: "【逐项解析】<br><br>A. 正确！吊销许可证件可以申请听证！<br><br>B. 正确！责令停产停业可以申请听证！<br><br>C. 正确！较大数额罚款可以申请听证！<br><br>D. 错误！警告是最轻的处罚，不需要听证！<br><br>【小白记忆】吊销、停业、大额罚款要听证！警告不需要！",
+                module: "多选题"
+            },
+            {
+                question: "下列哪些是行政复议与行政诉讼的区别？",
+                options: ["A. 受理机关不同", "B. 审查范围不同", "C. 审理程序不同", "D. 效力相同"],
+                answer: [0, 1, 2],
+                explanation: "【逐项解析】<br><br>A. 正确！复议是行政机关，诉讼是法院！<br><br>B. 正确！复议既查合法又查合理，诉讼只查合法！<br><br>C. 正确！复议书面审查，诉讼开庭审理！<br><br>D. 错误！效力不同：诉讼是终局的！<br><br>【小白记忆】复议到机关告，诉讼到法院；复议双重审查，诉讼单一审查！",
+                module: "多选题"
+            }
+        ];
+        
+        // 单选题数据
+        const singleChoiceData = [
+            {
+                question: "听证申请期限是？",
+                options: ["A. 3日", "B. 5日", "C. 7日", "D. 10日"],
+                answer: 1,
+                explanation: "【逐项解析】<br><br>B. 正确！听证申请期限是5日！<br><br>【小白记忆】我要听证（五日）！",
+                module: "单选题"
+            },
+            {
+                question: "查封扣押最长不超过多少日？",
+                options: ["A. 30日", "B. 45日", "C. 60日", "D. 90日"],
+                answer: 2,
+                explanation: "【逐项解析】<br><br>C. 正确！30+30=60日！<br><br>【小白记忆】查封扣押60天！",
+                module: "单选题"
+            },
+            {
+                question: "复议申请期限是？",
+                options: ["A. 30日", "B. 60日", "C. 3个月", "D. 6个月"],
+                answer: 1,
+                explanation: "【逐项解析】<br><br>B. 正确！复议申请60日！<br><br>【小白记忆】复议60天！",
+                module: "单选题"
+            },
+            {
+                question: "刑事拘留最长多少天？",
+                options: ["A. 30天", "B. 37天", "C. 14天", "D. 7天"],
+                answer: 1,
+                explanation: "【逐项解析】<br><br>B. 正确！37天=3+4+30！<br><br>【小白记忆】拘留37天！",
+                module: "单选题"
+            },
+            {
+                question: "行政拘留合并执行最长多少日？",
+                options: ["A. 10日", "B. 15日", "C. 20日", "D. 30日"],
+                answer: 2,
+                explanation: "【逐项解析】<br><br>C. 正确！合并最长20日！<br><br>【小白记忆】合并20天！",
+                module: "单选题"
+            },
+            {
+                question: "直接起诉行政诉讼的期限是？",
+                options: ["A. 30日", "B. 60日", "C. 3个月", "D. 6个月"],
+                answer: 3,
+                explanation: "【逐项解析】<br><br>D. 正确！直接起诉6个月！<br><br>【小白记忆】诉讼半年！",
+                module: "单选题"
+            },
+            {
+                question: "复议后起诉的期限是？",
+                options: ["A. 7日", "B. 15日", "C. 30日", "D. 60日"],
+                answer: 1,
+                explanation: "【逐项解析】<br><br>B. 正确！复议后起诉15日！<br><br>【小白记忆】复议后半个月！",
+                module: "单选题"
+            },
+            {
+                question: "国家赔偿请求时效是？",
+                options: ["A. 1年", "B. 2年", "C. 3年", "D. 5年"],
+                answer: 1,
+                explanation: "【逐项解析】<br><br>B. 正确！2年！<br><br>【小白记忆】国赔2年！",
+                module: "单选题"
+            },
+            {
+                question: "使用武器后报告的期限是？",
+                options: ["A. 12小时", "B. 24小时", "C. 48小时", "D. 72小时"],
+                answer: 1,
+                explanation: "【逐项解析】<br><br>B. 正确！24小时内报告！<br><br>【小白记忆】一天之内报告！",
+                module: "单选题"
+            },
+            {
+                question: "16周岁以上的人对什么犯罪负刑事责任？",
+                options: ["A. 所有犯罪", "B. 8种严重犯罪", "C. 财产犯罪", "D. 暴力犯罪"],
+                answer: 0,
+                explanation: "【逐项解析】<br><br>A. 正确！16上对所有犯罪负责！<br><br>【小白记忆】16上全责！",
+                module: "单选题"
+            },
+            {
+                question: "治安询问查证的一般时间是？",
+                options: ["A. 4小时", "B. 8小时", "C. 12小时", "D. 24小时"],
+                answer: 1,
+                explanation: "【逐项解析】<br><br>B. 正确！一般8小时！<br><br>【小白记忆】询问8小时！",
+                module: "单选题"
+            },
+            {
+                question: "治安追究时效是？",
+                options: ["A. 3个月", "B. 6个月", "C. 1年", "D. 2年"],
+                answer: 1,
+                explanation: "【逐项解析】<br><br>B. 正确！6个月！<br><br>【小白记忆】治安6个月！",
+                module: "单选题"
+            },
+            {
+                question: "一审公诉审理期限一般是？",
+                options: ["A. 1个月", "B. 2个月", "C. 3个月", "D. 6个月"],
+                answer: 1,
+                explanation: "【逐项解析】<br><br>B. 正确！一般2个月！<br><br>【小白记忆】一审2个月！",
+                module: "单选题"
+            },
+            {
+                question: "不服判决上诉期限是？",
+                options: ["A. 5日", "B. 10日", "C. 15日", "D. 30日"],
+                answer: 1,
+                explanation: "【逐项解析】<br><br>B. 正确！判决10日！<br><br>【小白记忆】判决10天！",
+                module: "单选题"
+            },
+            {
+                question: "简易程序审理期限是？",
+                options: ["A. 10日", "B. 20日", "C. 30日", "D. 1个月"],
+                answer: 1,
+                explanation: "【逐项解析】<br><br>B. 正确！20日！<br><br>【小白记忆】简易20天！",
+                module: "单选题"
+            }
+        ];
+        
+        // 判断题数据
+        const trueFalseData = [
+            {
+                question: "听证申请期限是5日",
+                options: ["A. 正确", "B. 错误"],
+                answer: 0,
+                explanation: "【逐项解析】<br><br>A. 正确！5日！<br><br>【小白记忆】5日申请！",
+                module: "判断题"
+            },
+            {
+                question: "查封扣押最长60日",
+                options: ["A. 正确", "B. 错误"],
+                answer: 0,
+                explanation: "【逐项解析】<br><br>A. 正确！30+30=60！<br><br>【小白记忆】60天！",
+                module: "判断题"
+            },
+            {
+                question: "复议申请期限是60日",
+                options: ["A. 正确", "B. 错误"],
+                answer: 0,
+                explanation: "【逐项解析】<br><br>A. 正确！60日！<br><br>【小白记忆】复议60天！",
+                module: "判断题"
+            },
+            {
+                question: "刑事拘留最长37天",
+                options: ["A. 正确", "B. 错误"],
+                answer: 0,
+                explanation: "【逐项解析】<br><br>A. 正确！37天！<br><br>【小白记忆】37天！",
+                module: "判断题"
+            },
+            {
+                question: "取保候审最长12个月",
+                options: ["A. 正确", "B. 错误"],
+                answer: 0,
+                explanation: "【逐项解析】<br><br>A. 正确！12个月！<br><br>【小白记忆】取12月！",
+                module: "判断题"
+            },
+            {
+                question: "监视居住最长6个月",
+                options: ["A. 正确", "B. 错误"],
+                answer: 0,
+                explanation: "【逐项解析】<br><br>A. 正确！6个月！<br><br>【小白记忆】监6月！",
+                module: "判断题"
+            },
+            {
+                question: "行政拘留合并最长20日",
+                options: ["A. 正确", "B. 错误"],
+                answer: 0,
+                explanation: "【逐项解析】<br><br>A. 正确！20日！<br><br>【小白记忆】20天！",
+                module: "判断题"
+            },
+            {
+                question: "直接起诉诉讼期限6个月",
+                options: ["A. 正确", "B. 错误"],
+                answer: 0,
+                explanation: "【逐项解析】<br><br>A. 正确！6个月！<br><br>【小白记忆】半年！",
+                module: "判断题"
+            },
+            {
+                question: "复议后起诉期限15日",
+                options: ["A. 正确", "B. 错误"],
+                answer: 0,
+                explanation: "【逐项解析】<br><br>A. 正确！15日！<br><br>【小白记忆】半个月！",
+                module: "判断题"
+            },
+            {
+                question: "国家赔偿请求时效2年",
+                options: ["A. 正确", "B. 错误"],
+                answer: 0,
+                explanation: "【逐项解析】<br><br>A. 正确！2年！<br><br>【小白记忆】2年！",
+                module: "判断题"
+            }
+        ];
+        
+        // 多选题数据
+        const multiChoiceData = [
+            {
+                question: "哪些是30日（可延长30日）？",
+                options: ["A. 查封扣押", "B. 冻结存款", "C. 复议决定（普通）", "D. 复议申请"],
+                answer: [0, 1],
+                explanation: "【逐项解析】<br><br>A. 正确！查封扣押30+30=60！<br><br>B. 正确！冻结存款30+30=60！<br><br>C. 错误！复议决定一般60日，可延长30日，最长90日！<br><br>D. 错误！复议申请是60日，不能延长！<br><br>【小白记忆】查封扣押和冻结都是60天！",
+                module: "多选题"
+            },
+            {
+                question: "哪些属于刑事强制措施？",
+                options: ["A. 拘传", "B. 取保候审", "C. 监视居住", "D. 行政拘留"],
+                answer: [0, 1, 2],
+                explanation: "【逐项解析】<br><br>A. 正确！<br><br>B. 正确！<br><br>C. 正确！<br><br>D. 错误！行政拘留是行政处罚！<br><br>【小白记忆】拘传、取保、监视都是刑事强制措施！",
+                module: "多选题"
+            },
+            {
+                question: "哪些可以从轻或减轻处罚？",
+                options: ["A. 已满14不满18周岁", "B. 又聋又哑", "C. 盲人", "D. 醉酒的人"],
+                answer: [0, 1, 2],
+                explanation: "【逐项解析】<br><br>A. 正确！<br><br>B. 正确！<br><br>C. 正确！<br><br>D. 错误！醉酒要负刑责！<br><br>【小白记忆】未成年、聋哑、盲人可以！",
+                module: "多选题"
+            },
+            {
+                question: "哪些属于听证范围？",
+                options: ["A. 吊销许可证件", "B. 责令停产停业", "C. 较大数额罚款", "D. 警告"],
+                answer: [0, 1, 2],
+                explanation: "【逐项解析】<br><br>A. 正确！<br><br>B. 正确！<br><br>C. 正确！<br><br>D. 错误！警告不需要听证！<br><br>【小白记忆】吊销、停业、大额罚款要听证！",
+                module: "多选题"
+            },
+            {
+                question: "复议与诉讼的区别有哪些？",
+                options: ["A. 受理机关不同", "B. 审查范围不同", "C. 审理程序不同", "D. 效力相同"],
+                answer: [0, 1, 2],
+                explanation: "【逐项解析】<br><br>A. 正确！<br><br>B. 正确！<br><br>C. 正确！<br><br>D. 错误！诉讼效力终局！<br><br>【小白记忆】复议到机关，诉讼到法院！",
+                module: "多选题"
+            }
+        ];
+        
+        // 渲染测验题目的函数
+        function renderQuiz(containerId, quizData, isPractice = false, isMulti = false) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            let html = '';
+            quizData.forEach((quiz, index) => {
+                const quizId = containerId + '-' + index;
+                const isMultiQuestion = isMulti || (Array.isArray(quiz.answer) && quiz.answer.length > 1);
+                
+                html += '<div class="quiz-card" id="' + quizId + '">';
+                html += '<p class="question"><span class="question-num">' + (index + 1) + '</span>' + quiz.question + '</p>';
+                
+                if (isMultiQuestion) {
+                    // 多选题
+                    html += '<div class="multi-options" id="options-' + quizId + '">';
+                    quiz.options.forEach((opt, optIndex) => {
+                        html += '<div class="multi-option" onclick="selectMultiOption(this, \'' + quizId + '\', ' + optIndex + ', ' + JSON.stringify(quiz.answer).replace(/\"/g, '&quot;') + ')">';
+                        html += '<input type="checkbox" disabled> <span>' + opt + '</span></div>';
+                    });
+                    html += '</div>';
+                    html += '<button class="submit-btn" onclick="checkMultiAnswer(\'' + quizId + '\', ' + JSON.stringify(quiz.answer).replace(/\"/g, '&quot;') + ', \'' + (quiz.explanation || '').replace(/'/g, "\\'") + '\')">提交答案</button>';
+                } else {
+                    // 单选题或判断题
+                    html += '<div class="options">';
+                    quiz.options.forEach((opt, optIndex) => {
+                        html += '<button class="option-btn" onclick="checkAnswer(this, ' + (quiz.answer === optIndex) + ', \'' + (quiz.explanation || '').replace(/'/g, "\\'") + '\', \'' + quizId + '\')">';
+                        html += '<span class="option-letter">' + opt.charAt(0) + '</span>' + opt + '</button>';
+                    });
+                    html += '</div>';
+                }
+                
+                html += '<div class="explanation" id="exp-' + quizId + '">';
+                html += '<div class="result"></div>';
+                html += '<div>' + (quiz.explanation || '') + '</div>';
+                html += '</div>';
+                html += '</div>';
+            });
+            
+            container.innerHTML = html;
+        }
+        
+        // 检查答案函数（单选/判断）
+        function checkAnswer(button, isCorrect, explanation, quizId) {
+            const card = button.closest('.quiz-card');
+            const options = card.querySelectorAll('.option-btn');
+            
+            // 禁用所有选项
+            options.forEach(opt => {
+                opt.classList.add('disabled');
+                opt.onclick = null;
+            });
+            
+            // 标记正确和错误
+            if (isCorrect) {
+                button.classList.add('correct');
+            } else {
+                button.classList.add('wrong');
+                // 显示正确答案
+                options.forEach(opt => {
+                    if (opt.innerHTML.includes(button.innerHTML.charAt(0))) {
+                        // 找到用户点击的选项对应哪个是正确的
+                    }
+                });
+            }
+            
+            // 找出正确答案并标记
+            const quizData = findQuizData(quizId);
+            if (quizData) {
+                const correctIndex = Array.isArray(quizData.answer) ? quizData.answer[0] : quizData.answer;
+                options[correctIndex].classList.add('correct');
+            }
+            
+            // 显示解析
+            const explanationDiv = card.querySelector('.explanation');
+            explanationDiv.style.display = 'block';
+            const resultDiv = explanationDiv.querySelector('.result');
+            resultDiv.textContent = isCorrect ? '✅ 回答正确！' : '❌ 回答错误';
+            resultDiv.className = 'result ' + (isCorrect ? 'correct' : 'wrong');
+            
+            // 更新总分
+            updateTotalScore();
+            updateProgress();
+        }
+        
+        // 查找测验数据
+        function findQuizData(quizId) {
+            const allData = [
+                ...quiz1Data, ...quiz2Data, ...quiz3Data, ...quiz4Data,
+                ...quiz5Data, ...quiz6Data, ...quiz7Data, ...quiz8Data,
+                ...quiz9Data, ...quiz10Data,
+                ...singleChoiceData, ...trueFalseData, ...multiChoiceData
+            ];
+            
+            const parts = quizId.split('-');
+            const moduleName = parts.slice(0, -1).join('-');
+            
+            if (moduleName.includes('practice')) {
+                const index = parseInt(parts[parts.length - 1]);
+                if (index < singleChoiceData.length) {
+                    return singleChoiceData[index];
+                } else if (index < singleChoiceData.length + trueFalseData.length) {
+                    return trueFalseData[index - singleChoiceData.length];
+                } else {
+                    return multiChoiceData[index - singleChoiceData.length - trueFalseData.length];
+                }
+            }
+            
+            return allData.find(q => q.question === document.querySelector('#' + quizId + ' .question')?.textContent?.substring(1) || '');
+        }
+        
+        // 多选题选择
+        function selectMultiOption(element, quizId, optIndex, correctAnswers) {
+            element.classList.toggle('selected');
+        }
+        
+        // 检查多选题答案
+        function checkMultiAnswer(quizId, correctAnswers, explanation) {
+            const card = document.getElementById(quizId);
+            const options = card.querySelectorAll('.multi-option');
+            const selectedIndices = [];
+            
+            options.forEach((opt, index) => {
+                if (opt.classList.contains('selected')) {
+                    selectedIndices.push(index);
+                }
+            });
+            
+            // 标记选项
+            options.forEach((opt, index) => {
+                opt.querySelector('input').checked = true;
+                if (correctAnswers.includes(index)) {
+                    if (selectedIndices.includes(index)) {
+                        opt.classList.add('correct');
+                    } else {
+                        opt.classList.add('little'); // 漏选
+                    }
+                } else if (selectedIndices.includes(index)) {
+                    opt.classList.add('wrong');
+                }
+            });
+            
+            // 显示解析
+            const explanationDiv = card.querySelector('.explanation');
+            explanationDiv.style.display = 'block';
+            const resultDiv = explanationDiv.querySelector('.result');
+            const isCorrect = selectedIndices.length === correctAnswers.length && 
+                              selectedIndices.every(i => correctAnswers.includes(i));
+            resultDiv.textContent = isCorrect ? '✅ 回答正确！' : '❌ 回答错误';
+            resultDiv.className = 'result ' + (isCorrect ? 'correct' : 'wrong');
+            
+            updateTotalScore();
+            updateProgress();
+        }
+        
+        // 更新总分
+        function updateTotalScore() {
+            const totalQuestions = document.querySelectorAll('.quiz-card').length;
+            const answeredQuestions = document.querySelectorAll('.explanation[style*="display: block"]').length;
+            document.getElementById('totalScore').textContent = '已答: ' + answeredQuestions + '/' + totalQuestions;
+        }
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            renderQuiz('quiz-module1', quiz1Data);
+            renderQuiz('quiz-module2', quiz2Data);
+            renderQuiz('quiz-module3', quiz3Data);
+            renderQuiz('quiz-module4', quiz4Data);
+            renderQuiz('quiz-module5', quiz5Data);
+            renderQuiz('quiz-module6', quiz6Data);
+            renderQuiz('quiz-module7', quiz7Data);
+            renderQuiz('quiz-module8', quiz8Data);
+            renderQuiz('quiz-module9', quiz9Data);
+            renderQuiz('quiz-module10', quiz10Data);
+            
+            // 练习专区：单选题15道 + 判断题10道 + 多选题5道
+            const allPracticeData = [...singleChoiceData, ...trueFalseData, ...multiChoiceData];
+            renderQuiz('quiz-practice', allPracticeData, true);
+            
+            updateTotalScore();
+        });
+    </script>
+</body>
+</html>
