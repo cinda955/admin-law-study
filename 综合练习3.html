@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>综合练习3 - 辅警备考</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%); min-height: 100vh; color: #333; }
+        .progress-bar { position: fixed; top: 0; left: 0; width: 100%; height: 4px; background: rgba(255,255,255,0.1); z-index: 1000; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #34495e, #27ae60); width: 0%; transition: width 0.3s ease; }
+        .top-nav { position: fixed; top: 4px; left: 0; right: 0; background: rgba(52, 73, 94, 0.95); backdrop-filter: blur(10px); padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 999; border-bottom: 1px solid rgba(255,255,255,0.2); }
+        .logo { color: #fff; font-size: 18px; font-weight: bold; display: flex; align-items: center; gap: 8px; }
+        .score-display { background: rgba(255,255,255,0.2); color: #fff; padding: 8px 16px; border-radius: 20px; font-size: 14px; }
+        .sidebar { position: fixed; left: 0; top: 50px; width: 260px; height: calc(100vh - 50px); background: rgba(255,255,255,0.95); overflow-y: auto; padding: 20px 0; box-shadow: 2px 0 10px rgba(0,0,0,0.1); z-index: 998; }
+        .sidebar-title { color: #2c3e50; padding: 0 20px 15px; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid #eee; margin-bottom: 15px; }
+        .nav-item { padding: 12px 20px; color: #666; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 10px; font-size: 14px; border-left: 3px solid transparent; text-decoration: none; }
+        .nav-item:hover { background: rgba(52, 73, 94, 0.1); color: #34495e; }
+        .nav-item.active { background: rgba(52, 73, 94, 0.15); color: #34495e; border-left-color: #34495e; font-weight: bold; }
+        .main-content { margin-left: 260px; padding: 70px 30px 30px; max-width: 900px; }
+        .section-header { text-align: center; margin-bottom: 40px; }
+        .section-header h1 { font-size: 42px; color: #fff; margin-bottom: 10px; text-shadow: 0 0 30px rgba(0,0,0,0.2); }
+        .section-header p { color: rgba(255,255,255,0.8); font-size: 16px; }
+        .highlight-red { color: #e74c3c; font-weight: bold; background: rgba(231, 76, 60, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .highlight-blue { color: #3498db; font-weight: bold; background: rgba(52, 152, 219, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .highlight-green { color: #27ae60; font-weight: bold; background: rgba(39, 174, 96, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .highlight-orange { color: #e67e22; font-weight: bold; background: rgba(230, 126, 34, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .highlight-purple { color: #9b59b6; font-weight: bold; background: rgba(155, 89, 182, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .quiz-container { margin-top: 30px; }
+        .quiz-card { background: #f8f9fa; border-radius: 15px; padding: 20px; margin-bottom: 20px; border: 1px solid #e9ecef; }
+        .question { font-size: 16px; color: #333; margin-bottom: 15px; font-weight: 500; line-height: 1.6; }
+        .question-num { display: inline-block; background: #34495e; color: #fff; width: 28px; height: 28px; border-radius: 50%; text-align: center; line-height: 28px; margin-right: 10px; font-size: 14px; }
+        .module-tag { display: inline-block; background: #e74c3c; color: #fff; padding: 3px 10px; border-radius: 12px; font-size: 12px; margin-bottom: 10px; }
+        .module-tag.multi { background: #9b59b6; }
+        .module-tag.judge { background: #e67e22; }
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .option-btn { padding: 12px 20px; background: #fff; border: 2px solid #e9ecef; border-radius: 10px; cursor: pointer; text-align: left; font-size: 15px; color: #555; transition: all 0.3s ease; }
+        .option-btn:hover { border-color: #34495e; background: rgba(52, 73, 94, 0.05); }
+        .option-letter { display: inline-block; width: 26px; height: 26px; background: #e9ecef; border-radius: 50%; text-align: center; line-height: 26px; margin-right: 10px; font-weight: bold; color: #34495e; }
+        .option-btn.correct { background: #d4edda; border-color: #28a745; }
+        .option-btn.correct .option-letter { background: #28a745; color: #fff; }
+        .option-btn.wrong { background: #f8d7da; border-color: #dc3545; }
+        .option-btn.wrong .option-letter { background: #dc3545; color: #fff; }
+        .option-btn.disabled { cursor: not-allowed; opacity: 0.7; }
+        .explanation { background: linear-gradient(135deg, #fff8e1, #ffecb3); border-radius: 10px; padding: 15px 20px; margin-top: 15px; display: none; line-height: 1.8; border: 1px solid #ffc107; }
+        .explanation .result { font-size: 18px; font-weight: bold; margin-bottom: 10px; }
+        .explanation .result.correct { color: #28a745; }
+        .explanation .result.wrong { color: #dc3545; }
+        .practice-section { background: #fff; border-radius: 20px; padding: 30px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); scroll-margin-top: 100px; }
+        .practice-section h2 { font-size: 28px; color: #333; margin-bottom: 25px; text-align: center; border-bottom: 2px solid #34495e; padding-bottom: 15px; }
+        .practice-section h2 .badge { background: #34495e; color: #fff; padding: 3px 12px; border-radius: 12px; font-size: 14px; margin-left: 10px; }
+        .practice-section h2 .multi-badge { background: #9b59b6; }
+        .practice-section h2 .judge-badge { background: #e67e22; }
+        .intro-card { background: linear-gradient(135deg, #34495e, #2c3e50); color: #fff; padding: 40px; border-radius: 20px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+        .intro-card h2 { font-size: 32px; margin-bottom: 20px; }
+        .intro-card p { font-size: 16px; line-height: 1.8; opacity: 0.9; }
+        .module-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 20px 0; }
+        .module-item { background: rgba(255,255,255,0.15); padding: 15px; border-radius: 10px; font-size: 14px; }
+        @media (max-width: 768px) { .sidebar { width: 100%; height: auto; position: relative; margin-top: 50px; } .main-content { margin-left: 0; padding-top: 80px; } }
+        .close-nav-btn { background: rgba(255,255,255,0.2); border: none; color: #fff; font-size: 18px; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.3s; }
+        .close-nav-btn:hover { background: rgba(255,255,255,0.3); }
+        
+        /* 多选题样式 */
+        .multi-options { display: flex; flex-direction: column; gap: 10px; }
+        .multi-option { padding: 12px 20px; background: #fff; border: 2px solid #e9ecef; border-radius: 10px; cursor: pointer; text-align: left; font-size: 15px; color: #555; transition: all 0.3s ease; display: flex; align-items: flex-start; gap: 12px; }
+        .multi-option:hover { border-color: #9b59b6; background: rgba(155, 89, 182, 0.05); }
+        .multi-option.selected { border-color: #9b59b6; background: rgba(155, 89, 182, 0.1); }
+        .multi-option.selected .option-letter { background: #9b59b6; color: #fff; }
+        .multi-option.correct { background: #d4edda; border-color: #28a745; }
+        .multi-option.correct .option-letter { background: #28a745; color: #fff; }
+        .multi-option.wrong { background: #f8d7da; border-color: #dc3545; }
+        .multi-option.wrong .option-letter { background: #dc3545; color: #fff; }
+        .multi-option.disabled { cursor: not-allowed; opacity: 0.7; }
+        .multi-option.missed { background: #fff3cd; border-color: #ffc107; }
+        .multi-option.missed .option-letter { background: #ffc107; color: #fff; }
+        .checkbox { width: 22px; height: 22px; border: 2px solid #ddd; border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; transition: all 0.2s; }
+        .multi-option.selected .checkbox { background: #9b59b6; border-color: #9b59b6; }
+        .multi-option.selected .checkbox::after { content: "✓"; color: #fff; font-weight: bold; }
+        .submit-btn { display: block; width: 100%; padding: 14px 24px; background: linear-gradient(135deg, #9b59b6, #8e44ad); color: #fff; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; transition: all 0.3s; margin-top: 15px; }
+        .submit-btn:hover { background: linear-gradient(135deg, #8e44ad, #7d3c98); transform: translateY(-2px); }
+        .submit-btn:disabled { background: #ccc; cursor: not-allowed; transform: none; }
+        .multi-hint { font-size: 12px; color: #9b59b6; margin-bottom: 15px; padding: 8px 12px; background: rgba(155, 89, 182, 0.1); border-radius: 6px; }
+        
+        /* 判断题样式 */
+        .judge-options { display: flex; gap: 15px; margin-top: 15px; }
+        .judge-btn { flex: 1; padding: 15px; border: 2px solid #e9ecef; border-radius: 10px; background: #fff; cursor: pointer; font-size: 16px; font-weight: bold; text-align: center; transition: all 0.3s; }
+        .judge-btn:hover { border-color: #e67e22; background: rgba(230, 126, 34, 0.05); }
+        .judge-btn.correct { background: #d4edda; border-color: #28a745; color: #28a745; }
+        .judge-btn.wrong { background: #f8d7da; border-color: #dc3545; color: #dc3545; }
+        .judge-btn.disabled { cursor: not-allowed; opacity: 0.7; }
+    </style>
+</head>
+<body>
+    <div class="progress-bar"><div class="progress-fill" id="mainProgress"></div></div>
+    <nav class="top-nav" id="topNav">
+        <div class="logo">📚 综合练习3</div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <div class="score-display" id="totalScore">已答: 0/0</div>
+            <button class="close-nav-btn" onclick="closeTopNav()">✕</button>
+        </div>
+    </nav>
+    <aside class="sidebar">
+        <div class="sidebar-title">📖 目录导航</div>
+        <a href="#intro" class="nav-item active" onclick="scrollToSection(this, event)">📝 练习说明</a>
+        <a href="#single" class="nav-item" onclick="scrollToSection(this, event)">✅ 单选题 (50题)</a>
+        <a href="#judge" class="nav-item" onclick="scrollToSection(this, event)">❓ 判断题 (20题)</a>
+        <a href="#multi" class="nav-item" onclick="scrollToSection(this, event)">☑️ 多选题 (30题)</a>
+    </aside>
+    <main class="main-content">
+        <div class="section-header">
+            <h1>📚 综合练习3</h1>
+            <p>检验所有模块学习成果 · 100道原创题目</p>
+        </div>
+        
+        <section id="intro" class="intro-card">
+            <h2>🎯 综合练习3说明</h2>
+            <p>本练习是辅警备考的综合性练习，涵盖所有核心法律模块：</p>
+            <div class="module-grid">
+                <div class="module-item">刑法</div>
+                <div class="module-item">刑事诉讼法</div>
+                <div class="module-item">行政处罚法</div>
+                <div class="module-item">行政强制法</div>
+                <div class="module-item">行政复议法</div>
+                <div class="module-item">行政诉讼法</div>
+                <div class="module-item">行政许可法</div>
+                <div class="module-item">治安管理处罚法</div>
+                <div class="module-item">国家赔偿法</div>
+                <div class="module-item">警械武器条例</div>
+                <div class="module-item">公安基础知识</div>
+            </div>
+            <p style="margin-top: 20px;">💡 <strong>答题技巧：</strong>每道题都有详细的逐项解析和小白记忆口诀，仔细阅读能帮助你快速掌握考点！</p>
+        </section>
+        
+        <section id="single" class="practice-section">
+            <h2>✅ 单选题专区 <span class="badge">50题</span></h2>
+            <div id="quiz-single" class="quiz-container"></div>
+        </section>
+
+        <section id="judge" class="practice-section">
+            <h2>❓ 判断题专区 <span class="judge-badge">20题</span></h2>
+            <div id="quiz-judge" class="quiz-container"></div>
+        </section>
+
+        <section id="multi" class="practice-section">
+            <h2>☑️ 多选题专区 <span class="multi-badge">30题</span></h2>
+            <div id="quiz-multi" class="quiz-container"></div>
+        </section>
+    </main>
+
+    <script>
+        let answeredSingleCount = 0;
+        let correctSingleCount = 0;
+        let answeredJudgeCount = 0;
+        let correctJudgeCount = 0;
+        let answeredMultiCount = 0;
+        let correctMultiCount = 0;
+        let selectedOptions = {};
+        
+        function closeTopNav() {
+            document.getElementById('topNav').style.display = 'none';
+        }
+        
+        function scrollToSection(element, event) {
+            event.preventDefault();
+            const href = element.getAttribute('href');
+            const target = document.querySelector(href);
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+                element.classList.add('active');
+            }
+        }
+        
+        function renderQuiz(containerId, quizData, type) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            let html = '';
+            quizData.forEach((item, index) => {
+                html += `<div class="quiz-card" id="${containerId}-q${index}">
+                    <span class="module-tag">${item.module}</span>
+                    <p class="question"><span class="question-num">${index + 1}</span>${item.question}</p>
+                    <div class="options">`;
+                
+                item.options.forEach((opt, optIndex) => {
+                    html += `<button class="option-btn" onclick="checkAnswer('${containerId}', ${index}, ${optIndex}, this)">
+                        <span class="option-letter">${String.fromCharCode(65 + optIndex)}</span>${opt}
+                    </button>`;
+                });
+                
+                html += `</div>
+                    <div class="explanation" id="${containerId}-exp${index}"></div>
+                </div>`;
+            });
+            
+            container.innerHTML = html;
+            updateProgress();
+        }
+        
+        function renderJudgeQuiz(containerId, quizData) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            let html = '';
+            quizData.forEach((item, index) => {
+                html += `<div class="quiz-card" id="${containerId}-q${index}">
+                    <span class="module-tag judge">${item.module}</span>
+                    <p class="question"><span class="question-num">${index + 1}</span>${item.question}</p>
+                    <div class="judge-options">
+                        <button class="judge-btn" onclick="checkJudge('${containerId}', ${index}, true, this)">正确</button>
+                        <button class="judge-btn" onclick="checkJudge('${containerId}', ${index}, false, this)">错误</button>
+                    </div>
+                    <div class="explanation" id="${containerId}-exp${index}"></div>
+                </div>`;
+            });
+            
+            container.innerHTML = html;
+            updateProgress();
+        }
+
+        function renderMultiQuiz(containerId, quizData) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            let html = '';
+            quizData.forEach((item, index) => {
+                selectedOptions[`${containerId}-${index}`] = [];
+                html += `<div class="quiz-card" id="${containerId}-q${index}">
+                    <span class="module-tag multi">多选</span><span class="module-tag" style="margin-left:5px;">${item.module}</span>
+                    <p class="question"><span class="question-num">${index + 1}</span>${item.question}</p>
+                    <p class="multi-hint">提示：本题为多选题，请选择所有正确答案</p>
+                    <div class="multi-options">`;
+                
+                item.options.forEach((opt, optIndex) => {
+                    html += `<div class="multi-option" onclick="toggleMultiOption('${containerId}', ${index}, ${optIndex}, this)">
+                        <div class="checkbox"></div>
+                        <span class="option-letter">${String.fromCharCode(65 + optIndex)}</span>
+                        <span>${opt}</span>
+                    </div>`;
+                });
+                
+                html += `</div>
+                    <button class="submit-btn" onclick="checkMultiAnswer('${containerId}', ${index})">提交答案</button>
+                    <div class="explanation" id="${containerId}-exp${index}"></div>
+                </div>`;
+            });
+            
+            container.innerHTML = html;
+            updateProgress();
+        }
+        
+        function toggleMultiOption(containerId, questionIndex, selectedIndex, element) {
+            const key = `${containerId}-${questionIndex}`;
+            const idx = selectedOptions[key].indexOf(selectedIndex);
+            if (idx > -1) {
+                selectedOptions[key].splice(idx, 1);
+                element.classList.remove('selected');
+            } else {
+                selectedOptions[key].push(selectedIndex);
+                element.classList.add('selected');
+            }
+        }
+        
+        function checkMultiAnswer(containerId, questionIndex) {
+            let quizData;
+            if (containerId === 'quiz-multi') {
+                quizData = multiPracticeData;
+            }
+            
+            const question = quizData[questionIndex];
+            const card = document.getElementById(`${containerId}-q${questionIndex}`);
+            const options = card.querySelectorAll('.multi-option');
+            const submitBtn = card.querySelector('.submit-btn');
+            const explanationDiv = document.getElementById(`${containerId}-exp${questionIndex}`);
+            
+            if (submitBtn.disabled) return;
+            submitBtn.disabled = true;
+            
+            options.forEach(opt => opt.classList.add('disabled'));
+            
+            const correctSet = new Set(question.answer);
+            const selectedSet = new Set(selectedOptions[`${containerId}-${questionIndex}`]);
+            
+            let isCorrect = correctSet.size === selectedSet.size && 
+                           [...correctSet].every(x => selectedSet.has(x));
+            
+            options.forEach((opt, optIndex) => {
+                if (correctSet.has(optIndex)) {
+                    opt.classList.add('correct');
+                } else if (selectedSet.has(optIndex)) {
+                    opt.classList.add('wrong');
+                }
+            });
+            
+            if (!isCorrect) {
+                options.forEach((opt, optIndex) => {
+                    if (correctSet.has(optIndex) && !selectedSet.has(optIndex)) {
+                        opt.classList.add('missed');
+                    }
+                });
+            }
+            
+            answeredMultiCount++;
+            if (isCorrect) correctMultiCount++;
+            updateProgress();
+            
+            const correctLetters = [...correctSet].map(i => String.fromCharCode(65 + i)).sort().join('、');
+            
+            explanationDiv.innerHTML = `
+                <div class="result ${isCorrect ? 'correct' : 'wrong'}">
+                    ${isCorrect ? '<span class="highlight-green">✓ 回答正确！</span>' : `<span class="highlight-red">✗ 回答错误</span> <span style="font-size:14px;color:#666;">正确答案：${correctLetters}</span>`}
+                </div>
+                <p><strong>【逐项解析】</strong></p>
+                ${question.explanation}
+            `;
+            explanationDiv.style.display = 'block';
+        }
+        
+        function checkAnswer(containerId, questionIndex, selectedIndex, btnElement) {
+            let quizData;
+            if (containerId === 'quiz-single') {
+                quizData = singlePracticeData;
+            }
+            
+            const question = quizData[questionIndex];
+            const card = document.getElementById(`${containerId}-q${questionIndex}`);
+            const buttons = card.querySelectorAll('.option-btn');
+            const explanationDiv = document.getElementById(`${containerId}-exp${questionIndex}`);
+            
+            if (buttons[0].classList.contains('disabled')) return;
+            
+            buttons.forEach(btn => btn.classList.add('disabled'));
+            
+            const correctIndex = question.answer;
+            const isCorrect = selectedIndex === correctIndex;
+            
+            const clickedBtn = buttons[selectedIndex];
+            if (isCorrect) {
+                clickedBtn.classList.add('correct');
+                correctSingleCount++;
+            } else {
+                clickedBtn.classList.add('wrong');
+                buttons[correctIndex].classList.add('correct');
+            }
+            
+            answeredSingleCount++;
+            updateProgress();
+            
+            explanationDiv.innerHTML = `
+                <div class="result ${isCorrect ? 'correct' : 'wrong'}">
+                    ${isCorrect ? '<span class="highlight-green">✓ 回答正确！</span>' : '<span class="highlight-red">✗ 回答错误</span>'}
+                </div>
+                <p><strong>【逐项解析】</strong></p>
+                ${question.explanation}
+            `;
+            explanationDiv.style.display = 'block';
+        }
+        
+        function checkJudge(containerId, questionIndex, userAnswer, btnElement) {
+            let quizData;
+            if (containerId === 'quiz-judge') {
+                quizData = judgePracticeData;
+            }
+            
+            const question = quizData[questionIndex];
+            const card = document.getElementById(`${containerId}-q${questionIndex}`);
+            const buttons = card.querySelectorAll('.judge-btn');
+            const explanationDiv = document.getElementById(`${containerId}-exp${questionIndex}`);
+            
+            if (buttons[0].classList.contains('disabled')) return;
+            
+            buttons.forEach(btn => btn.classList.add('disabled'));
+            
+            const correctAnswer = question.answer;
+            const isCorrect = userAnswer === correctAnswer;
+            
+            if (isCorrect) {
+                btnElement.classList.add('correct');
+                correctJudgeCount++;
+            } else {
+                btnElement.classList.add('wrong');
+                buttons[correctAnswer ? 0 : 1].classList.add('correct');
+            }
+            
+            answeredJudgeCount++;
+            updateProgress();
+            
+            explanationDiv.innerHTML = `
+                <div class="result ${isCorrect ? 'correct' : 'wrong'}">
+                    ${isCorrect ? '<span class="highlight-green">✓ 判断正确！</span>' : `<span class="highlight-red">✗ 判断错误</span> <span style="font-size:14px;color:#666;">正确答案：${correctAnswer ? '正确' : '错误'}</span>`}
+                </div>
+                <p><strong>【逐项解析】</strong></p>
+                ${question.explanation}
+            `;
+            explanationDiv.style.display = 'block';
+        }
+        
+        function updateProgress() {
+            const singleTotal = singlePracticeData.length;
+            const judgeTotal = judgePracticeData.length;
+            const multiTotal = multiPracticeData.length;
+            const totalAnswered = answeredSingleCount + answeredJudgeCount + answeredMultiCount;
+            const totalQuestions = singleTotal + judgeTotal + multiTotal;
+            const percentage = totalQuestions > 0 ? (totalAnswered / totalQuestions) * 100 : 0;
+            document.getElementById('mainProgress').style.width = percentage + '%';
+            document.getElementById('totalScore').textContent = `单选:${answeredSingleCount}/${singleTotal}(对:${correctSingleCount}) | 判断:${answeredJudgeCount}/${judgeTotal}(对:${correctJudgeCount}) | 多选:${answeredMultiCount}/${multiTotal}(对:${correctMultiCount})`;
+        }
+        
+        const singlePracticeData = [{"module": "刑法", "question": "甲明知自己患有艾滋病，仍然与多名女性发生性关系，导致其中一名女性感染艾滋病。甲的行为构成？", "options": ["故意伤害罪", "传播性病罪", "过失致人重伤罪", "无罪"], "answer": 0, "explanation": "<p><span class=\"highlight-green\">✓ A正确：</span>甲明知自己患有艾滋病，仍然与多人发生性关系，主观上明知会传播病毒，客观上导致他人感染，构成<span class=\"highlight-blue\">故意伤害罪</span>。艾滋病病毒侵袭人体造成重伤后果。</p><p><span class=\"highlight-red\">✗ B错误：</span>传播性病罪要求行为人明知自己患有梅毒、淋病等严重性病而卖淫、嫖娼，甲的行为不属于卖淫嫖娼。</p><p><span class=\"highlight-red\">✗ C错误：</span>甲是明知，不是过失。</p><p><span class=\"highlight-red\">✗ D错误：</span>甲的行为造成他人感染艾滋病病毒，构成犯罪。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>明知传播病毒伤害人，特殊方法传染也构成故意伤害！</p>"}, {"module": "刑法", "question": "关于刑法分则各类犯罪的分类，下列说法正确的是？", "options": ["危害公共安全罪侵犯的是不特定多数人的安全", "破坏社会主义市场经济秩序罪的主体都是特殊主体", "侵犯财产罪的对象必须是动产", "妨害社会管理秩序罪都是自然人犯罪"], "answer": 0, "explanation": "<p><span class=\"highlight-green\">✓ A正确：</span>危害公共安全罪的核心特征是<span class=\"highlight-blue\">危害不特定多数人的生命健康和重大公私财产安全</span>。</p><p><span class=\"highlight-red\">✗ B错误：</span>破坏市场经济秩序罪有一般主体也有特殊主体。</p><p><span class=\"highlight-red\">✗ C错误：</span>侵犯财产罪的对象包括<span class=\"highlight-blue\">动产和不动产</span>（如盗窃房屋）。</p><p><span class=\"highlight-red\">✗ D错误：</span>妨害社会管理秩序罪中有些可以是<span class=\"highlight-blue\">单位犯罪</span>。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>危害公共安全罪=不特定多数人安全！</p>"}, {"module": "刑法", "question": "甲因盗窃被判处有期徒刑3年，刑满释放后第2年又因故意伤害致人重伤。甲是否构成累犯？", "options": ["构成累犯", "不构成累犯，因为前罪是盗窃", "不构成累犯，因为间隔超过2年", "需要进一步判断"], "answer": 3, "explanation": "<p><span class=\"highlight-green\">✓ D正确：</span>需要进一步判断。累犯的成立条件：<span class=\"highlight-blue\">(1)被判处有期徒刑以上刑罚；(2)刑满释放后5年内</span>再犯应当判处有期徒刑以上刑罚之罪。</p><p><span class=\"highlight-red\">✗ A错误：</span>甲前罪刑满释放后第2年再犯罪，距离5年期限还有时间，但需要判断后罪是否应当判处有期徒刑以上刑罚。</p><p><span class=\"highlight-red\">✗ B错误：</span>累犯与前罪罪名无关，只与<span class=\"highlight-blue\">刑罚种类和5年内再犯</span>有关。</p><p><span class=\"highlight-red\">✗ C错误：</span>5年内再犯才构成累犯，第2年再犯仍在5年内。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>累犯=5年内+有期徒刑以上+故意犯罪！</p>"}, {"module": "刑法", "question": "甲盗窃了乙的笔记本电脑（价值5000元），后发现该电脑是乙捡到的失物，甲的行为应如何认定？", "options": ["无罪", "侵占罪", "盗窃罪", "侵占遗忘物"], "answer": 2, "explanation": "<p><span class=\"highlight-green\">✓ C正确：</span>甲以非法占有为目的，采用秘密窃取的方式取得他人财物，构成<span class=\"highlight-blue\">盗窃罪</span>。电脑虽是乙捡到的，但仍然是他人占有的财物。</p><p><span class=\"highlight-red\">✗ A错误：</span>甲的行为具有社会危害性，构成犯罪。</p><p><span class=\"highlight-red\">✗ B错误：</span>侵占罪是将<span class=\"highlight-blue\">代为保管的他人财物或遗忘物、埋藏物</span>非法占为己有。甲是采用秘密窃取方式，不是侵占。</p><p><span class=\"highlight-red\">✗ D错误：</span>甲采用盗窃方式，不是侵占。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>秘密窃取是盗窃，侵占必须先合法占有！</p>"}, {"module": "刑法", "question": "甲在深山老林中狩猎，误将路过的村民乙当成野兽而射杀。甲的行为属于？", "options": ["意外事件", "疏忽大意的过失致人死亡", "过于自信的过失致人死亡", "故意杀人罪"], "answer": 1, "explanation": "<p><span class=\"highlight-green\">✓ B正确：</span>甲应当预见自己的行为可能造成他人死亡的结果，因<span class=\"highlight-blue\">疏忽大意</span>没有预见，导致误杀。属于<span class=\"highlight-blue\">疏忽大意的过失致人死亡</span>。</p><p><span class=\"highlight-red\">✗ A错误：</span>意外事件是行为人不能预见且无法避免的。甲在深山狩猎应当预见可能有人经过。</p><p><span class=\"highlight-red\">✗ C错误：</span>过于自信的过失是已经预见但轻信能避免，甲是根本没有预见。</p><p><span class=\"highlight-red\">✗ D错误：</span>甲没有杀人故意，误以为是人。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>应当预见而没预见=疏忽大意；已经预见但轻信避免=过于自信！</p>"}, {"module": "刑法", "question": "关于自首与立功的说法，正确的是？", "options": ["自首后又逃跑的不认定为自首", "立功必须是犯罪分子本人实施的行为", "坦白是从轻处罚的情节，自首是减轻或免除处罚的情节", "共同犯罪中一人自首效力不及于其他共犯人"], "answer": 3, "explanation": "<p><span class=\"highlight-green\">✓ D正确：</span><span class=\"highlight-blue\">共同犯罪中</span>，一人自首仅对<span class=\"highlight-blue\">本人</span>发生效力，不及于其他共犯人。</p><p><span class=\"highlight-red\">✗ A错误：</span>自首后又逃跑的，<span class=\"highlight-blue\">自动投案</span>的认定可能受影响，但关键是如实供述。</p><p><span class=\"highlight-red\">✗ B错误：</span>立功包括<span class=\"highlight-blue\">检举揭发、协助抓捕</span>等，不限于本人实施。</p><p><span class=\"highlight-red\">✗ C错误：</span>自首和坦白都是<span class=\"highlight-blue\">可以从轻或减轻</span>处罚的情节。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>自首=自动投案+如实供述；立功=揭发犯罪+协助抓捕！</p>"}, {"module": "刑法", "question": "甲明知乙（15周岁）贩卖毒品，仍向乙提供资金用于购买毒品。甲的行为构成？", "options": ["非法持有毒品罪", "贩卖毒品罪的共犯", "洗钱罪", "无罪"], "answer": 1, "explanation": "<p><span class=\"highlight-green\">✓ B正确：</span>甲明知乙贩卖毒品而提供资金帮助，构成<span class=\"highlight-blue\">贩卖毒品罪的共犯</span>。乙虽然不满16周岁，但贩卖毒品罪没有刑事责任年龄限制。</p><p><span class=\"highlight-red\">✗ A错误：</span>甲的行为是帮助贩卖，不是单纯持有。</p><p><span class=\"highlight-red\">✗ C错误：</span>洗钱罪是针对<span class=\"highlight-blue\">毒品犯罪、黑社会性质组织犯罪</span>等收益的洗白。</p><p><span class=\"highlight-red\">✗ D错误：</span>甲的行为构成犯罪。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>毒品犯罪14岁以下也有责任年龄！</p>"}, {"module": "刑法", "question": "甲入户盗窃，被房主发现后为抗拒抓捕而当场使用暴力，致房主轻伤。甲的行为应如何定性？", "options": ["只构成盗窃罪", "只构成抢劫罪", "转化为抢劫罪", "盗窃罪和故意伤害罪数罪并罚"], "answer": 2, "explanation": "<p><span class=\"highlight-green\">✓ C正确：</span>根据《刑法》，<span class=\"highlight-blue\">犯盗窃罪，为抗拒抓捕而当场使用暴力或者以暴力相威胁的，以抢劫罪定罪处罚</span>。入户盗窃转化为抢劫。</p><p><span class=\"highlight-red\">✗ A错误：</span>已经发生转化，不能定盗窃罪。</p><p><span class=\"highlight-red\">✗ B错误：</span>不是普通抢劫，是转化型抢劫。</p><p><span class=\"highlight-red\">✗ D错误：</span>转化犯按一罪处理，不数罪并罚。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>盗抢转化三条件：盗窃+当场+暴力或威胁！</p>"}, {"module": "刑事诉讼法", "question": "公安机关对涉嫌故意杀人的犯罪嫌疑人甲执行拘留后，发现甲是人大代表。下列说法正确的是？", "options": ["应当立即释放甲", "应当立即报告同级人民代表大会主席团", "执行拘留后应当立即向甲所属机关报告", "应当立即报告上一级公安机关"], "answer": 2, "explanation": "<p><span class=\"highlight-green\">✓ C正确：</span>根据《刑事诉讼法》，公安机关<span class=\"highlight-blue\">拘留人大代表后，应当立即向该级人民代表大会主席团或常务委员会报告</span>。</p><p><span class=\"highlight-red\">✗ A错误：</span>不是立即释放，需要履行报告程序。</p><p><span class=\"highlight-red\">✗ B错误：</span>报告是向所属机关，不是主席团。</p><p><span class=\"highlight-red\">✗ D错误：</span>不是报告上一级公安机关。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>拘留人大代表，立即报告所属机关！</p>"}, {"module": "刑事诉讼法", "question": "在刑事诉讼中，关于证明责任的说法，正确的是？", "options": ["被告人对自己无罪承担证明责任", "公诉案件中检察院承担证明被告人有罪的责任", "自诉案件中自诉人承担证明责任", "法院对案件事实负主要证明责任"], "answer": 1, "explanation": "<p><span class=\"highlight-green\">✓ B正确：</span>公诉案件中，<span class=\"highlight-blue\">人民检察院</span>承担证明被告人有罪的责任，这是<span class=\"highlight-blue\">控诉方举证</span>原则的体现。</p><p><span class=\"highlight-red\">✗ A错误：</span>被告人不承担证明自己无罪的责任。</p><p><span class=\"highlight-red\">✗ C错误：</span>自诉案件中自诉人确有证明责任，但B更准确。</p><p><span class=\"highlight-red\">✗ D错误：</span>法院是审判机关，不承担证明责任。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>控诉方举证是原则，被告人不自证其罪！</p>"}, {"module": "刑事诉讼法", "question": "公安机关在侦查过程中，需要扣押犯罪嫌疑人的邮件。下列说法正确的是？", "options": ["公安机关可以直接决定扣押", "需要经县级以上公安机关负责人批准", "需要经人民检察院批准", "需要经人民法院批准"], "answer": 1, "explanation": "<p><span class=\"highlight-green\">✓ B正确：</span>根据《刑事诉讼法》，侦查过程中需要扣押邮件、电报，应当经<span class=\"highlight-blue\">县级以上公安机关负责人批准</span>。</p><p><span class=\"highlight-red\">✗ A错误：</span>不能直接决定，需要批准程序。</p><p><span class=\"highlight-red\">✗ C错误：</span>不需要检察院批准。</p><p><span class=\"highlight-red\">✗ D错误：</span>不需要法院批准。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>扣押邮件需批准，县级以上负责人！</p>"}, {"module": "刑事诉讼法", "question": "甲因涉嫌盗窃被监视居住，在监视居住期间，甲未经执行机关批准离开了所居住的县。甲的行为属于？", "options": ["违反监视居住规定，应当予以逮捕", "违反监视居住规定，可以予以逮捕", "情节较轻，给予警告", "不违反规定"], "answer": 1, "explanation": "<p><span class=\"highlight-green\">✓ B正确：</span>被监视居住的人未经批准离开所居住的<span class=\"highlight-blue\">县、市</span>，属于违反监视居住规定的情形，<span class=\"highlight-blue\">可以予以逮捕</span>。</p><p><span class=\"highlight-red\">✗ A错误：</span>是\"可以\"逮捕，不是\"应当\"逮捕。</p><p><span class=\"highlight-red\">✗ C错误：</span>情节较轻不是警告就能了结的。</p><p><span class=\"highlight-red\">✗ D错误：</span>这明显违反了监视居住规定。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>监视居住违反规定，可以逮捕！</p>"}, {"module": "刑事诉讼法", "question": "人民检察院审查起诉时，认为需要补充侦查。下列说法正确的是？", "options": ["可以退回公安机关补充侦查，也可以自行侦查", "只能退回公安机关补充侦查", "只能自行补充侦查", "应当要求公安机关补充侦查"], "answer": 0, "explanation": "<p><span class=\"highlight-green\">✓ A正确：</span>根据《刑事诉讼法》，人民检察院审查起诉时，需要补充侦查的，可以<span class=\"highlight-blue\">退回公安机关补充侦查</span>，也可以<span class=\"highlight-blue\">自行侦查</span>。</p><p><span class=\"highlight-red\">✗ B错误：</span>不是只能退回公安。</p><p><span class=\"highlight-red\">✗ C错误：</span>不是只能自行侦查。</p><p><span class=\"highlight-red\">✗ D错误：</span>不是\"应当\"，是\"可以\"。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>退查可以回公安，也可以自己查！</p>"}, {"module": "刑事诉讼法", "question": "在刑事附带民事诉讼中，关于赔偿范围的说法，正确的是？", "options": ["包括精神损害赔偿", "包括死亡赔偿金", "不包括因犯罪行为遭受的直接损失", "不包括误工费"], "answer": 1, "explanation": "<p><span class=\"highlight-green\">✓ B正确：</span>刑事附带民事诉讼的赔偿范围包括<span class=\"highlight-blue\">因犯罪行为遭受的直接经济损失</span>，如医疗费、误工费、死亡赔偿金等。</p><p><span class=\"highlight-red\">✗ A错误：</span>一般<span class=\"highlight-blue\">不包括</span>精神损害赔偿。</p><p><span class=\"highlight-red\">✗ C错误：</span>包括直接损失，不包括间接损失。</p><p><span class=\"highlight-red\">✗ D错误：</span>包括误工费。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>刑附民赔直接损失，不赔精神不赔间接！</p>"}, {"module": "行政处罚法", "question": "某市城管局在执法中发现商贩甲无照经营，决定对其处以罚款。甲申请听证，城管局应当在告知后几日内组织听证？", "options": ["3日内", "5日内", "7日内", "10日内"], "answer": 1, "explanation": "<p><span class=\"highlight-green\">✓ B正确：</span>根据《行政处罚法》，当事人要求听证的，行政机关应当在听证的<span class=\"highlight-blue\">7日前</span>通知当事人举行听证的时间、地点。</p><p><span class=\"highlight-red\">✗ A错误：</span>3日不符合规定。</p><p><span class=\"highlight-red\">✗ C错误：</span>7日前是告知举行听证的时间。</p><p><span class=\"highlight-red\">✗ D错误：</span>10日不符合规定。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>听证通知7日前！</p>"}, {"module": "行政处罚法", "question": "某区市场监管局在检查中发现某超市销售过期食品，决定没收违法所得并罚款。下列说法正确的是？", "options": ["没收违法所得属于行政处罚，罚款属于行政强制", "没收违法所得属于行政强制措施", "两者都属于行政处罚", "罚款属于行政处罚，没收属于行政强制措施"], "answer": 2, "explanation": "<p><span class=\"highlight-green\">✓ C正确：</span><span class=\"highlight-blue\">没收违法所得</span>和<span class=\"highlight-blue\">罚款</span>都属于<span class=\"highlight-blue\">行政处罚</span>的种类。没收违法所得是财产罚的一种。</p><p><span class=\"highlight-red\">✗ A错误：</span>两者都是行政处罚，不是行政强制。</p><p><span class=\"highlight-red\">✗ B错误：</span>没收违法所得是行政处罚，不是强制措施。</p><p><span class=\"highlight-red\">✗ D错误：</span>两者都是行政处罚。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>行政处罚6大类：警告罚款没收，责令停业吊证拘留！</p>"}, {"module": "行政处罚法", "question": "行政机关作出行政处罚决定前，未告知当事人陈述申辩权利，该行政处罚的效力如何？", "options": ["有效", "无效", "效力待定，当事人追认后有效", "可撤销"], "answer": 1, "explanation": "<p><span class=\"highlight-green\">✓ B正确：</span>根据《行政处罚法》，行政机关在作出行政处罚决定之前<span class=\"highlight-blue\">未告知当事人陈述、申辩权利的，行政处罚决定无效</span>。这是程序正当原则的要求。</p><p><span class=\"highlight-red\">✗ A错误：</span>程序违法导致无效。</p><p><span class=\"highlight-red\">✗ C错误：</span>不是效力待定，是确定无效。</p><p><span class=\"highlight-red\">✗ D错误：</span>不是可撤销，是直接无效。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>程序违法可撤销，但未告知陈述申辩权=无效！</p>"}, {"module": "行政处罚法", "question": "某县生态环境局对某企业作出责令停产停业的处罚决定。该企业不服申请行政复议。复议期间，处罚决定是否应当停止执行？", "options": ["应当停止执行", "不停止执行", "企业申请后可以停止执行", "生态环境局决定后可以停止执行"], "answer": 1, "explanation": "<p><span class=\"highlight-green\">✓ B正确：</span>根据《行政处罚法》和《行政复议法》，<span class=\"highlight-blue\">行政复议期间行政处罚不停止执行</span>。这是行政效率原则的体现。</p><p><span class=\"highlight-red\">✗ A错误：</span>不停止执行是原则。</p><p><span class=\"highlight-red\">✗ C错误：</span>复议期间申请不能停止执行。</p><p><span class=\"highlight-red\">✗ D错误：</span>不是生态环境局决定。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>复议不停止执行是原则，例外才停止！</p>"}, {"module": "行政处罚法", "question": "某公安机关对甲作出行政拘留10日的处罚，甲要求听证。听证结束后，公安机关应当如何处理？", "options": ["重新告知当事人权利", "可以直接作出处罚决定", "应当根据听证笔录作出决定", "应当再次听证"], "answer": 2, "explanation": "<p><span class=\"highlight-green\">✓ C正确：</span>根据《行政处罚法》，听证结束后，行政机关应当<span class=\"highlight-blue\">依照听证笔录作出决定</span>。</p><p><span class=\"highlight-red\">✗ A错误：</span>已经举行过听证，不需要重新告知。</p><p><span class=\"highlight-red\">✗ B错误：</span>不是直接作出，要依据听证笔录。</p><p><span class=\"highlight-red\">✗ D错误：</span>不需要再次听证。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>听证笔录是依据！</p>"}, {"module": "行政处罚法", "question": "某市文化局在执法检查中发现一无证经营的游戏厅，依法对其进行处罚。该游戏厅为躲避处罚，将大门紧闭。文化局下列做法正确的是？", "options": ["强行破门进入检查", "可以强制进入检查", "应当申请人民法院强制执行进入权", "应当报告公安机关协助"], "answer": 1, "explanation": "<p><span class=\"highlight-green\">✓ B正确：</span>根据《行政处罚法》，当事人<span class=\"highlight-blue\">拒绝签字或盖章的，执法人员可以强制进入</span>。但应当有两名以上执法人员。</p><p><span class=\"highlight-red\">✗ A错误：</span>不是强行破门，是依法强制进入。</p><p><span class=\"highlight-red\">✗ C错误：</span>不需要申请法院。</p><p><span class=\"highlight-red\">✗ D错误：</span>不需要报告公安。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>拒绝配合检查，执法人员可强制进入！</p>"}, {"module": "行政强制法", "question": "某区城管局对违建房屋进行强制拆除。下列说法正确的是？", "options": ["强制拆除前应当公告并催告", "可以不移送法院审查", "强制拆除时不需要当事人到场", "强制拆除费用由当事人承担"], "answer": 0, "explanation": "<p><span class=\"highlight-green\">✓ A正确：</span>根据《行政强制法》，<span class=\"highlight-blue\">强制拆除前应当公告并催告</span>，当事人有陈述申辩权。</p><p><span class=\"highlight-red\">✗ B错误：</span>违建拆除需要申请法院执行（金钱给付义务外的强制执行）。</p><p><span class=\"highlight-red\">✗ C错误：</span>应当通知当事人到场。</p><p><span class=\"highlight-red\">✗ D错误：</span>强拆费用由行政机关承担。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>强拆必须先公告再催告！</p>"}, {"module": "行政强制法", "question": "某县税务局依法冻结某企业的银行存款。该冻结期限最长为多少日？", "options": ["30日", "60日", "90日", "180日"], "answer": 1, "explanation": "<p><span class=\"highlight-green\">✓ B正确：</span>根据《行政强制法》，冻结存款、汇款的期限不得超过<span class=\"highlight-blue\">30日</span>；情况复杂的，经行政机关负责人批准，可以延长30日。最长<span class=\"highlight-blue\">60日</span>。</p><p><span class=\"highlight-red\">✗ A错误：</span>30日是最长期限，未批准前只能30日。</p><p><span class=\"highlight-red\">✗ C错误：</span>90日不符合规定。</p><p><span class=\"highlight-red\">✗ D错误：</span>180日不符合规定。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>冻结30+30=最长60日！</p>"}, {"module": "行政强制法", "question": "关于行政强制执行协议的说法，正确的是？", "options": ["执行协议可以约定分阶段履行", "执行协议不得约定当事人主动履行期限", "当事人不履行执行协议的，行政机关应当立即强制执行", "执行协议损害第三人利益的无效"], "answer": 0, "explanation": "<p><span class=\"highlight-green\">✓ A正确：</span>根据《行政强制法》，<span class=\"highlight-blue\">执行协议可以约定分阶段履行</span>。</p><p><span class=\"highlight-red\">✗ B错误：</span>可以约定当事人主动履行期限。</p><p><span class=\"highlight-red\">✗ C错误：</span>应当依照规定采取执行措施，不能立即强执。</p><p><span class=\"highlight-red\">✗ D错误：</span>执行协议不涉及第三人利益。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>执行协议可分期！</p>"}, {"module": "行政强制法", "question": "某区市场监管局查封了甲企业的生产设备。查封期间，市场监管局下列做法正确的是？", "options": ["可以使用被查封的设备生产", "可以委托第三人保管被查封的设备", "应当妥善保管被查封的设备", "可以拍卖被查封的设备"], "answer": 2, "explanation": "<p><span class=\"highlight-green\">✓ C正确：</span>根据《行政强制法》，行政机关应当<span class=\"highlight-blue\">妥善保管查封的设施</span>，不得使用或者损毁。</p><p><span class=\"highlight-red\">✗ A错误：</span>不得使用被查封的设备。</p><p><span class=\"highlight-red\">✗ B错误：</span>查封是行政机关保管，不是委托第三人。</p><p><span class=\"highlight-red\">✗ D错误：</span>拍卖是执行阶段的行为，查封期间不能拍卖。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>查封期间不能使用，必须妥善保管！</p>"}, {"module": "行政强制法", "question": "某市公安局依法对甲作出行政拘留15日的处罚，执行完毕后，发现甲刚满15周岁。下列说法正确的是？", "options": ["处罚有效，因为当时无法核实年龄", "处罚无效，应当撤销", "可以退还罚款但不退还拘留", "应当对甲进行国家赔偿"], "answer": 3, "explanation": "<p><span class=\"highlight-green\">✓ D正确：</span><span class=\"highlight-blue\">不满16周岁的人不执行行政拘留</span>。已执行的拘留属于违法执行，应当撤销并<span class=\"highlight-blue\">进行国家赔偿</span>。</p><p><span class=\"highlight-red\">✗ A错误：</span>年龄是可以核实的，执法时应当查明。</p><p><span class=\"highlight-red\">✗ B错误：</span>应当撤销，但还需赔偿。</p><p><span class=\"highlight-red\">✗ C错误：</span>撤销后应当全部赔偿。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>不执行拘留：不满16、70以上、怀孕！</p>"}, {"module": "行政复议法", "question": "某县市场监管局对某公司作出罚款5000元的处罚决定。该公司不服，应当向哪个机关申请行政复议？", "options": ["该县市场监管局", "该县人民政府或上一级市场监管局", "该县人民法院", "该省市场监管局"], "answer": 1, "explanation": "<p><span class=\"highlight-green\">✓ B正确：</span>根据《行政复议法》，对<span class=\"highlight-blue\">县级以上地方各级人民政府工作部门</span>的具体行政行为不服，可以向<span class=\"highlight-blue\">本级人民政府或上一级主管部门</span>申请行政复议。</p><p><span class=\"highlight-red\">✗ A错误：</span>不能向作出机关申请复议。</p><p><span class=\"highlight-red\">✗ C错误：</span>不能向法院申请复议。</p><p><span class=\"highlight-red\">✗ D错误：</span>省市场监管局是上级，但不是唯一选择。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>部门行为告本府或上级！</p>"}, {"module": "行政复议法", "question": "甲对某市公安局的行政处罚决定不服，申请行政复议。在复议期间，甲死亡。下列可以作为复议申请人的是？", "options": ["甲的债权人", "甲的妻子和儿子", "甲的工作单位", "甲的朋友"], "answer": 1, "explanation": "<p><span class=\"highlight-green\">✓ B正确：</span>根据《行政复议法》，<span class=\"highlight-blue\">公民死亡</span>的，其<span class=\"highlight-blue\">近亲属</span>可以承受其申请行政复议的权利。</p><p><span class=\"highlight-red\">✗ A错误：</span>债权人不是近亲属。</p><p><span class=\"highlight-red\">✗ C错误：</span>工作单位不是近亲属。</p><p><span class=\"highlight-red\">✗ D错误：</span>朋友不是近亲属。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>人死亡找近亲属！</p>"}, {"module": "行政复议法", "question": "某市城管局作出责令停产停业的处罚，甲不服申请复议。复议机关审查后，认为该处罚明显不当。复议机关应当如何决定？", "options": ["维持原决定", "撤销或变更", "驳回申请", "确认违法"], "answer": 1, "explanation": "<p><span class=\"highlight-green\">✓ B正确：</span>根据《行政复议法》，行政复议机关审查具体行政行为时，发现明显不当的，可以<span class=\"highlight-blue\">决定撤销、变更或者确认违法</span>。</p><p><span class=\"highlight-red\">✗ A错误：</span>明显不当不能维持。</p><p><span class=\"highlight-red\">✗ C错误：</span>驳回不符合规定。</p><p><span class=\"highlight-red\">✗ D错误：</span>确认违法是其中一种，但不是唯一。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>复议决定：维持、撤销、变更、确认违法、责令重作！</p>"}, {"module": "行政复议法", "question": "某县自然资源局对乙作出行政处罚，乙不服。该处罚同时损害了甲的相邻权。下列说法正确的是？", "options": ["只有乙可以申请复议", "只有甲可以申请复议", "甲和乙都可以申请复议", "甲和乙都无权申请复议"], "answer": 2, "explanation": "<p><span class=\"highlight-green\">✓ C正确：</span>行政行为的<span class=\"highlight-blue\">相对人</span>和<span class=\"highlight-blue\">利害关系人</span>都可以申请行政复议。乙是相对人，甲是利害关系人。</p><p><span class=\"highlight-red\">✗ A错误：</span>利害关系人也有权。</p><p><span class=\"highlight-red\">✗ B错误：</span>相对人也有权。</p><p><span class=\"highlight-red\">✗ D错误：</span>都有权。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>相对人和利害关系人都有复议权！</p>"}, {"module": "行政复议法", "question": "根据《行政复议法》，关于复议答复的说法，正确的是？", "options": ["被申请人可以委托律师代为答复", "被申请人应当在10日内提出书面答复", "被申请人答复时可以补充证据", "被申请人拒绝答复的，复议机关可以直接决定"], "answer": 0, "explanation": "<p><span class=\"highlight-green\">✓ A正确：</span>根据《行政复议法》，被申请人可以<span class=\"highlight-blue\">委托律师</span>代为答复。</p><p><span class=\"highlight-red\">✗ B错误：</span>被申请人应当在<span class=\"highlight-blue\">7日内</span>提出书面答复。</p><p><span class=\"highlight-red\">✗ C错误：</span>答复时<span class=\"highlight-blue\">不得补充证据</span>。</p><p><span class=\"highlight-red\">✗ D错误：</span>拒绝答复的后果不是直接决定。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>复议答复7日，不补充证据！</p>"}, {"module": "行政诉讼法", "question": "某省市场监管局对某公司作出罚款10万元的处罚。该公司不服，应当向哪个法院起诉？", "options": ["基层人民法院", "中级人民法院", "高级人民法院", "最高人民检察院"], "answer": 0, "explanation": "<p><span class=\"highlight-green\">✓ A正确：</span>一般行政案件由<span class=\"highlight-blue\">基层人民法院</span>管辖。</p><p><span class=\"highlight-red\">✗ B错误：</span>中级法院管辖：对国务院部门或省级政府行为、重大共同诉讼等。</p><p><span class=\"highlight-red\">✗ C错误：</span>高级法院管辖全省重大案件。</p><p><span class=\"highlight-red\">✗ D错误：</span>不是向检察院起诉。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>一般案件找基层！</p>"}, {"module": "行政诉讼法", "question": "在行政诉讼中，原告申请财产保全。下列说法正确的是？", "options": ["原告必须提供担保", "是否准许由原告决定", "人民法院可以责令原告提供担保", "不需要提供任何担保"], "answer": 2, "explanation": "<p><span class=\"highlight-green\">✓ C正确：</span>根据《行政诉讼法》，人民法院可以<span class=\"highlight-blue\">责令</span>当事人提供担保。</p><p><span class=\"highlight-red\">✗ A错误：</span>不是\"必须\"，是\"可以\"。</p><p><span class=\"highlight-red\">✗ B错误：</span>由人民法院决定，不是原告。</p><p><span class=\"highlight-red\">✗ D错误：</span>可能需要担保。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>财产保全可以责令担保！</p>"}, {"module": "行政诉讼法", "question": "关于行政诉讼简易程序的适用范围，下列说法正确的是？", "options": ["所有一审案件都可以适用简易程序", "涉及款额2000元以下的案件可以适用", "不服限制人身自由的行政强制可以适用", "二审案件可以适用简易程序"], "answer": 1, "explanation": "<p><span class=\"highlight-green\">✓ B正确：</span>根据《行政诉讼法》，案件涉及款额<span class=\"highlight-blue\">2000元以下</span>的，可以适用简易程序。</p><p><span class=\"highlight-red\">✗ A错误：</span>有条件限制。</p><p><span class=\"highlight-red\">✗ C错误：</span>限制人身自由的案件<span class=\"highlight-blue\">不适用</span>简易程序。</p><p><span class=\"highlight-red\">✗ D错误：</span>二审不适用简易程序。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>简易程序三情形：当场作、两千下、信息公开！</p>"}, {"module": "行政诉讼法", "question": "某县公安局对甲作出行政拘留10日的处罚，甲提起诉讼。在诉讼期间，县公安局又对甲执行了拘留。人民法院应当如何处理？", "options": ["继续审理", "应当裁定停止执行", "可以裁定停止执行", "应当判决确认违法"], "answer": 2, "explanation": "<p><span class=\"highlight-green\">✓ C正确：</span>根据《行政诉讼法》，<span class=\"highlight-blue\">原告或者利害关系人申请停止执行，人民法院认为该行政行为的执行会造成难以弥补的损失或者公共利益遭受重大损害的，可以裁定停止执行</span>。</p><p><span class=\"highlight-red\">✗ A错误：</span>可以裁定停止。</p><p><span class=\"highlight-red\">✗ B错误：</span>是\"可以\"不是\"应当\"。</p><p><span class=\"highlight-red\">✗ D错误：</span>确认违法是判决类型。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>诉讼期间可以裁定停止执行！</p>"}, {"module": "行政诉讼法", "question": "甲对某区城管局的处罚决定不服，提起行政诉讼。一审法院判决维持该处罚决定。甲上诉后，二审法院发现一审认定事实不清。二审法院应当如何处理？", "options": ["维持原判", "驳回上诉", "发回重审或改判", "移送上级法院"], "answer": 2, "explanation": "<p><span class=\"highlight-green\">✓ C正确：</span>根据《行政诉讼法》，<span class=\"highlight-blue\">原判决认定事实不清，二审法院可以查清事实后改判，也可以发回原审法院重审</span>。</p><p><span class=\"highlight-red\">✗ A错误：</span>事实不清不能维持。</p><p><span class=\"highlight-red\">✗ B错误：</span>驳回上诉不符合规定。</p><p><span class=\"highlight-red\">✗ D错误：</span>不是移送。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>二审：事实不清可改判可发回！</p>"}, {"module": "行政许可法", "question": "某企业申请排污许可证，行政机关应当在多少日内作出决定？", "options": ["15日", "20日", "30日", "45日"], "answer": 2, "explanation": "<p><span class=\"highlight-green\">✓ C正确：</span>根据《行政许可法》，除可以当场作出行政许可决定的外，行政机关应当自受理申请之日起<span class=\"highlight-blue\">20日内</span>作出决定。排污许可法规定<span class=\"highlight-blue\">30日</span>内。</p><p><span class=\"highlight-red\">✗ A错误：</span>15日是治安处罚的拘留。</p><p><span class=\"highlight-red\">✗ B错误：</span>20日是行政许可一般期限。</p><p><span class=\"highlight-red\">✗ D错误：</span>45日是特定许可的延长期限。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>行政许可一般20日，法律另规定从其规定！</p>"}, {"module": "行政许可法", "question": "关于行政许可听证与行政处罚听证的区别，下列说法正确的是？", "options": ["许可听证是依职权举行，处罚听证是依申请举行", "两者都是依申请举行", "许可听证是依申请举行，处罚听证是依职权举行", "两者都是依职权举行"], "answer": 1, "explanation": "<p><span class=\"highlight-green\">✓ B正确：</span><span class=\"highlight-blue\">行政许可和行政处罚的听证都是依申请举行</span>。</p><p><span class=\"highlight-red\">✗ A错误：</span>两者都是依申请。</p><p><span class=\"highlight-red\">✗ C错误：</span>两者都是依申请。</p><p><span class=\"highlight-red\">✗ D错误：</span>两者都是依申请。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>许可和处罚的听证都是依申请！</p>"}, {"module": "行政许可法", "question": "某公司取得的排污许可证有效期为5年。有效期届满后，该公司需要继续排污，应当在期满前多长时间提出申请？", "options": ["30日", "60日", "90日", "6个月"], "answer": 0, "explanation": "<p><span class=\"highlight-green\">✓ A正确：</span>根据《行政许可法》，许可有效期届满需要继续取得的，应当在<span class=\"highlight-blue\">届满30日前</span>提出申请。</p><p><span class=\"highlight-red\">✗ B错误：</span>60日是复议申请期限。</p><p><span class=\"highlight-red\">✗ C错误：</span>90日不符合规定。</p><p><span class=\"highlight-red\">✗ D错误：</span>6个月不符合规定。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>许可续期提前30日！</p>"}, {"module": "行政许可法", "question": "某市交通局向某运输公司发放了道路运输经营许可证。后交通局发现该公司提交了虚假材料。交通局应当如何处理？", "options": ["维持原许可", "撤销该许可", "注销该许可", "宣告许可无效"], "answer": 1, "explanation": "<p><span class=\"highlight-green\">✓ B正确：</span>根据《行政许可法》，被许可人以欺骗、贿赂等不正当手段取得行政许可的，应当<span class=\"highlight-blue\">予以撤销</span>。</p><p><span class=\"highlight-red\">✗ A错误：</span>不能维持。</p><p><span class=\"highlight-red\">✗ C错误：</span>注销是许可消灭后的程序。</p><p><span class=\"highlight-red\">✗ D错误：</span>宣告无效针对的是自始无效的情形。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>欺骗取得许可应当撤销！</p>"}, {"module": "治安管理处罚法", "question": "甲在公共场所故意裸露身体，被群众当场抓获。公安机关下列做法正确的是？", "options": ["可以当场处罚", "必须适用一般程序", "可以先行扣押甲", "必须带至公安机关询问"], "answer": 0, "explanation": "<p><span class=\"highlight-green\">✓ A正确：</span>根据《治安管理处罚法》，<span class=\"highlight-blue\">情节较轻的，可以当场处罚</span>。故意裸露身体情节较轻的，可以当场警告或处50元以下罚款。</p><p><span class=\"highlight-red\">✗ B错误：</span>情节较轻的可以当场处罚。</p><p><span class=\"highlight-red\">✗ C错误：</span>不需要扣押。</p><p><span class=\"highlight-red\">✗ D错误：</span>不需要必须带至公安机关。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>情节较轻可当场，50元以下罚款或警告！</p>"}, {"module": "治安管理处罚法", "question": "某派出所办理一起殴打他人案件时，对违法行为人作出行政拘留5日的处罚。该处罚决定应当由哪个机关作出？", "options": ["派出所", "县级公安机关", "市级公安机关", "公安分局"], "answer": 1, "explanation": "<p><span class=\"highlight-green\">✓ B正确：</span>根据《治安管理处罚法》，<span class=\"highlight-blue\">行政拘留处罚由县级以上公安机关决定</span>。派出所只有警告和500元以下罚款的权力。</p><p><span class=\"highlight-red\">✗ A错误：</span>派出所无权决定拘留。</p><p><span class=\"highlight-red\">✗ C错误：</span>不是必须由市级。</p><p><span class=\"highlight-red\">✗ D错误：</span>如果是公安分局也可以。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>拘留必须县以上公安机关决定！</p>"}, {"module": "治安管理处罚法", "question": "甲因盗窃被公安机关行政拘留15日，合并执行。在拘留执行期间，甲又供述了此前自己实施的诈骗行为。公安机关应当如何处理？", "options": ["立即对诈骗行为作出处罚", "对诈骗行为继续调查，待拘留执行完毕后处罚", "应当减轻处罚", "应当从重处罚"], "answer": 1, "explanation": "<p><span class=\"highlight-green\">✓ B正确：</span>对诈骗行为<span class=\"highlight-blue\">继续调查</span>，待拘留执行完毕后根据查证结果决定是否处罚。</p><p><span class=\"highlight-red\">✗ A错误：</span>不能立即处罚，需要调查。</p><p><span class=\"highlight-red\">✗ C错误：</span>不是应当减轻。</p><p><span class=\"highlight-red\">✗ D错误：</span>不是应当从重。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>拘留期间发现其他违法，继续调查后再处理！</p>"}, {"module": "治安管理处罚法", "question": "公安机关在办理案件时，发现行为人醉酒状态下实施的违法行为。下列说法正确的是？", "options": ["醉酒的人违反治安管理不予处罚", "醉酒的人违反治安管理应当处罚", "应当待其清醒后再处理", "可以约束至酒醒但不处罚"], "answer": 1, "explanation": "<p><span class=\"highlight-green\">✓ B正确：</span>根据《治安管理处罚法》，<span class=\"highlight-blue\">醉酒的人违反治安管理的，应当给予处罚</span>。醉酒不是免责事由。</p><p><span class=\"highlight-red\">✗ A错误：</span>醉酒不是免责事由。</p><p><span class=\"highlight-red\">✗ C错误：</span>不需要等清醒。</p><p><span class=\"highlight-red\">✗ D错误：</span>约束至酒醒后仍要处罚。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>醉酒不是免责理由！</p>"}, {"module": "治安管理处罚法", "question": "甲因殴打他人被行政拘留5日，在拘留执行完毕后，甲对拘留决定不服申请行政复议。复议机关审查后认为原拘留决定合法适当。复议机关应当作出什么决定？", "options": ["维持决定", "撤销决定", "变更决定", "确认违法"], "answer": 0, "explanation": "<p><span class=\"highlight-green\">✓ A正确：</span>根据《行政复议法》，<span class=\"highlight-blue\">具体行政行为认定事实清楚、证据确凿、适用依据正确、程序合法的，决定维持</span>。</p><p><span class=\"highlight-red\">✗ B错误：</span>原决定合法适当的，应当维持。</p><p><span class=\"highlight-red\">✗ C错误：</span>不是必须变更。</p><p><span class=\"highlight-red\">✗ D错误：</span>确认违法适用于违法但不适宜撤销的情形。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>复议决定合法应当维持！</p>"}, {"module": "国家赔偿法", "question": "甲被公安机关违法刑事拘留10日。甲每月工资5000元。甲可以主张的赔偿金额为多少？", "options": ["5000元", "约1667元", "10000元", "0元"], "answer": 1, "explanation": "<p><span class=\"highlight-green\">✓ B正确：</span>根据《国家赔偿法》，违法刑事拘留的，每日赔偿金按照<span class=\"highlight-blue\">上年度职工日平均工资</span>计算。10日约5000÷30×10≈1667元。</p><p><span class=\"highlight-red\">✗ A错误：</span>不是整月工资。</p><p><span class=\"highlight-red\">✗ C错误：</span>不是双倍。</p><p><span class=\"highlight-red\">✗ D错误：</span>违法拘留应当赔偿。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>国家赔偿按日计算！</p>"}, {"module": "国家赔偿法", "question": "某县法院错误判决甲承担民事赔偿责任。甲申请国家赔偿。下列说法正确的是？", "options": ["应当向县法院申请赔偿", "应当向县检察院申请赔偿", "应当向市中级法院申请赔偿", "应当向省高级法院申请赔偿"], "answer": 0, "explanation": "<p><span class=\"highlight-green\">✓ A正确：</span>根据《国家赔偿法》，<span class=\"highlight-blue\">再审改判无罪</span>的，<span class=\"highlight-blue\">作出原生效判决的人民法院</span>为赔偿义务机关。</p><p><span class=\"highlight-red\">✗ B错误：</span>不是检察院。</p><p><span class=\"highlight-red\">✗ C错误：</span>不是中级法院。</p><p><span class=\"highlight-red\">✗ D错误：</span>不是高级法院。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>错判赔偿找原审法院！</p>"}, {"module": "国家赔偿法", "question": "某县公安局对甲作出刑事拘留决定，后检察院作出不予批准逮捕决定。甲申请国家赔偿。下列说法正确的是？", "options": ["公安局不承担赔偿责任", "检察院不承担赔偿责任", "公安局应当承担赔偿责任", "应当由公安局和检察院共同赔偿"], "answer": 2, "explanation": "<p><span class=\"highlight-green\">✓ C正确：</span>根据《国家赔偿法》，对<span class=\"highlight-blue\">公民采取逮捕措施后决定撤销案件、不起诉或者判决宣告无罪的</span>，作出逮捕决定的机关为赔偿义务机关。</p><p><span class=\"highlight-red\">✗ A错误：</span>公安局不承担。</p><p><span class=\"highlight-red\">✗ B错误：</span>检察院不承担。</p><p><span class=\"highlight-red\">✗ D错误：</span>不是共同赔偿。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>捕后放人找检察院赔偿！</p>"}, {"module": "国家赔偿法", "question": "关于国家赔偿时效的说法，正确的是？", "options": ["赔偿请求时效是1年", "赔偿请求时效是2年", "时效从国家机关作出行为之日起算", "时效可以延长"], "answer": 1, "explanation": "<p><span class=\"highlight-green\">✓ B正确：</span>根据《国家赔偿法》，赔偿请求人请求国家赔偿的期限是<span class=\"highlight-blue\">2年</span>。</p><p><span class=\"highlight-red\">✗ A错误：</span>是2年不是1年。</p><p><span class=\"highlight-red\">✗ C错误：</span>从<span class=\"highlight-blue\">知道</span>侵害之日起算。</p><p><span class=\"highlight-red\">✗ D错误：</span>时效<span class=\"highlight-blue\">不可以延长</span>。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>国家赔偿2年期限！</p>"}, {"module": "警械武器条例", "question": "某民警在巡逻时发现甲正在持刀抢劫。该民警首先应当采取的措施是？", "options": ["立即开枪", "使用警棍制服", "口头警告并表明身份", "立即抓捕"], "answer": 2, "explanation": "<p><span class=\"highlight-green\">✓ C正确：</span>根据《人民警察使用警械和武器条例》，使用武器前<span class=\"highlight-blue\">一般应当先行警告</span>，口头警告是最基本的方式。</p><p><span class=\"highlight-red\">✗ A错误：</span>抢劫是严重暴力犯罪，但应先警告。</p><p><span class=\"highlight-red\">✗ B错误：</span>抢劫是严重暴力犯罪，可以使用武器。</p><p><span class=\"highlight-red\">✗ D错误：</span>应当先警告。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>使用武器一般先行警告！</p>"}, {"module": "警械武器条例", "question": "警察使用警棍将正在实施违法行为的乙击伤。乙的伤属于？", "options": ["警察个人行为造成", "执行职务造成", "乙自己造成", "意外事件"], "answer": 1, "explanation": "<p><span class=\"highlight-green\">✓ B正确：</span>警察使用警棍制服违法行为人，属于<span class=\"highlight-blue\">执行职务</span>的行为。</p><p><span class=\"highlight-red\">✗ A错误：</span>不是个人行为，是职务行为。</p><p><span class=\"highlight-red\">✗ C错误：</span>是警察造成的。</p><p><span class=\"highlight-red\">✗ D错误：</span>不是意外事件。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>依法使用警械=职务行为！</p>"}];
+        
+        const judgePracticeData = [{"module": "刑法", "question": "单位犯罪中，对单位判处罚金后，不再追究直接责任人的刑事责任。", "answer": false, "explanation": "<p><span class=\"highlight-red\">✗ 错误。</span>单位犯罪中，对单位判处罚金后，<span class=\"highlight-blue\">仍可以追究直接责任人的刑事责任</span>。双罚制既罚单位又罚个人。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>单位犯罪双罚制，单位和责任人都要罚！</p>"}, {"module": "刑法", "question": "已满75周岁的人故意犯罪的，可以从轻或减轻处罚；过失犯罪的，应当从轻或减轻处罚。", "answer": true, "explanation": "<p><span class=\"highlight-green\">✓ 正确。</span>根据《刑法》，<span class=\"highlight-blue\">已满75周岁</span>的人故意犯罪的，可以从轻或减轻处罚；过失犯罪的，<span class=\"highlight-blue\">应当</span>从轻或减轻处罚。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>75岁以上故意可从轻，过失应当从轻！</p>"}, {"module": "刑法", "question": "紧急避险超过必要限度造成不应有的损害的，应当负刑事责任，但应当减轻或免除处罚。", "answer": true, "explanation": "<p><span class=\"highlight-green\">✓ 正确。</span>根据《刑法》，紧急避险超过<span class=\"highlight-blue\">必要限度</span>造成不应有的损害的，应当负刑事责任，但应当<span class=\"highlight-blue\">减轻或免除处罚</span>。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>避险过当应当减轻或免除！</p>"}, {"module": "刑事诉讼法", "question": "证人作证时，必要时可以使用盲文进行表达。", "answer": true, "explanation": "<p><span class=\"highlight-green\">✓ 正确。</span>根据《刑事诉讼法》，<span class=\"highlight-blue\">生理上、精神上有缺陷或者年幼，不能辨别是非、不能正确表达的人</span>，不能作证人。盲人可以用盲文作证。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>盲人可以用盲文作证！</p>"}, {"module": "刑事诉讼法", "question": "公安机关侦查期间，辩护律师要求会见在押的犯罪嫌疑人，看守所应当及时安排，至迟不超过48小时。", "answer": true, "explanation": "<p><span class=\"highlight-green\">✓ 正确。</span>根据《刑事诉讼法》，辩护律师要求会见的，看守所应当及时安排，<span class=\"highlight-blue\">至迟不超过48小时</span>。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>律师会见48小时内安排！</p>"}, {"module": "刑事诉讼法", "question": "刑事拘留后提请批准逮捕的时限是24小时。", "answer": false, "explanation": "<p><span class=\"highlight-red\">✗ 错误。</span>刑事拘留后，应当在<span class=\"highlight-blue\">24小时内</span>进行第一次讯问，<span class=\"highlight-blue\">3日内</span>提请检察院批准逮捕；特殊情况下可以延长1-4日。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>拘留后24小时讯问，3日内提请批捕！</p>"}, {"module": "行政处罚法", "question": "行政处罚的追究时效从违法行为发生之日起计算，违法行为有连续状态的，从行为终了之日起计算。", "answer": true, "explanation": "<p><span class=\"highlight-green\">✓ 正确。</span>根据《行政处罚法》，<span class=\"highlight-blue\">违法行为有连续或者继续状态的</span>，从行为<span class=\"highlight-blue\">终了</span>之日起计算追究时效。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>连续继续从终了！</p>"}, {"module": "行政处罚法", "question": "对当事人的同一个违法行为，不得给予两次以上罚款的行政处罚。", "answer": true, "explanation": "<p><span class=\"highlight-green\">✓ 正确。</span><span class=\"highlight-blue\">一事不再罚</span>原则：对当事人的同一个违法行为，不得给予<span class=\"highlight-blue\">两次以上罚款</span>的行政处罚。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>不再罚=不再罚款，不是不能再处罚！</p>"}, {"module": "行政处罚法", "question": "不满14周岁的未成年人有违法行为的，不予处罚，但应当责令监护人严加管教。", "answer": true, "explanation": "<p><span class=\"highlight-green\">✓ 正确。</span>根据《行政处罚法》，<span class=\"highlight-blue\">不满14周岁</span>的人有违法行为的，<span class=\"highlight-blue\">不予处罚</span>，应当责令其监护人<span class=\"highlight-blue\">严加管教</span>。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>不满14周岁不予处罚，严加管教！</p>"}, {"module": "行政强制法", "question": "行政强制执行过程中，如果当事人确需搬迁的，行政机关应当对当事人进行安置。", "answer": true, "explanation": "<p><span class=\"highlight-green\">✓ 正确。</span>根据《行政强制法》，行政强制执行<span class=\"highlight-blue\">不得在夜间和法定节假日实施</span>；当事人确需搬迁的，应当<span class=\"highlight-blue\">对当事人进行安置</span>。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>强执不扰民，搬迁要安置！</p>"}, {"module": "行政强制法", "question": "查封、扣押的期限与冻结的期限各自独立计算。", "answer": true, "explanation": "<p><span class=\"highlight-green\">✓ 正确。</span>查封、扣押与冻结是<span class=\"highlight-blue\">不同的强制措施</span>，各自的期限分别计算。查封、扣押最长60日，冻结最长60日。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>查封扣押30+30=60日，冻结30+30=60日！</p>"}, {"module": "行政复议法", "question": "行政复议机关在审理行政复议案件时，应当由2名以上行政复议人员参加。", "answer": true, "explanation": "<p><span class=\"highlight-green\">✓ 正确。</span>根据《行政复议法》，行政复议机关应当<span class=\"highlight-blue\">指定2名以上</span>行政复议人员参加行政复议审理。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>复议审理2人以上！</p>"}, {"module": "行政复议法", "question": "申请人对县级以上地方各级人民政府工作部门的具体行政行为不服，只能向该部门的本级人民政府申请行政复议。", "answer": false, "explanation": "<p><span class=\"highlight-red\">✗ 错误。</span>根据《行政复议法》，对<span class=\"highlight-blue\">县级以上地方各级人民政府工作部门</span>的具体行政行为不服，可以向<span class=\"highlight-blue\">本级人民政府或上一级主管部门</span>申请行政复议。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>部门行为可找本府或上级！</p>"}, {"module": "行政诉讼法", "question": "行政诉讼中，被告变更原行政行为的，原告对变更后的行为不服，可以另行起诉。", "answer": true, "explanation": "<p><span class=\"highlight-green\">✓ 正确。</span>根据《行政诉讼法》，被告<span class=\"highlight-blue\">变更</span>原行政行为的，原告对变更后的行为<span class=\"highlight-blue\">不服</span>的，可以<span class=\"highlight-blue\">另行起诉</span>。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>被告变更，原告可另行起诉！</p>"}, {"module": "行政诉讼法", "question": "行政诉讼中，原告申请撤诉的，是否准许，由人民法院决定。", "answer": true, "explanation": "<p><span class=\"highlight-green\">✓ 正确。</span>根据《行政诉讼法》，原告申请撤诉的，是否准许，由<span class=\"highlight-blue\">人民法院裁定</span>。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>撤诉需法院准许！</p>"}, {"module": "行政许可法", "question": "行政许可申请人提交的申请材料存在可以当场更正的错误的，行政机关应当不予受理。", "answer": false, "explanation": "<p><span class=\"highlight-red\">✗ 错误。</span>根据《行政许可法》，申请材料存在<span class=\"highlight-blue\">可以当场更正的错误</span>的，应当<span class=\"highlight-blue\">允许申请人当场更正</span>，不得以不符合条件为由不予受理。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>可当场更正的错误，应当允许更正后受理！</p>"}, {"module": "行政许可法", "question": "行政机关根据检验、检测、检疫结果作出不予行政许可决定的，应当书面说明理由，并告知申请人享有申请行政复议或提起行政诉讼的权利。", "answer": true, "explanation": "<p><span class=\"highlight-green\">✓ 正确。</span>根据《行政许可法》，行政机关根据检验、检测、检疫结果作出不予行政许可决定的，应当<span class=\"highlight-blue\">书面</span>说明理由，并告知申请人<span class=\"highlight-blue\">享有申请行政复议或提起行政诉讼的权利</span>。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>不予许可需书面说明并告知救济权！</p>"}, {"module": "治安管理处罚法", "question": "违反治安管理行为在6个月内没有被公安机关发现的，不再处罚。", "answer": true, "explanation": "<p><span class=\"highlight-green\">✓ 正确。</span>根据《治安管理处罚法》，违反治安管理行为在<span class=\"highlight-blue\">6个月</span>内没有被公安机关发现的，不再处罚。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>治安追究时效6个月！</p>"}, {"module": "治安管理处罚法", "question": "受到罚款处罚的人应当自收到处罚决定书之日起15日内到指定的银行缴纳罚款。", "answer": true, "explanation": "<p><span class=\"highlight-green\">✓ 正确。</span>根据《治安管理处罚法》，受到罚款处罚的人应当自收到处罚决定书之日起<span class=\"highlight-blue\">15日内</span>到指定的银行缴纳罚款。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>罚款15日内缴纳！</p>"}, {"module": "国家赔偿法", "question": "国家赔偿中，对财产权造成损害的，按照直接损失给予赔偿。", "answer": true, "explanation": "<p><span class=\"highlight-green\">✓ 正确。</span>根据《国家赔偿法》，对财产权造成损害的，<span class=\"highlight-blue\">按照直接损失给予赔偿</span>。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>国家赔偿赔直接不赔间接！</p>"}];
+        
+        const multiPracticeData = [{"module": "刑法", "question": "关于故意犯罪与过失犯罪的说法，正确的有？", "options": ["故意犯罪应当负刑事责任", "过失犯罪法律有规定的才负刑事责任", "过于自信的过失与间接故意容易混淆", "疏忽大意的过失与意外事件的主要区别在于是否应当预见"], "answer": [0, 1, 2, 3], "explanation": "<p><span class=\"highlight-green\">✓ A正确：</span>故意犯罪<span class=\"highlight-blue\">应当负刑事责任</span>。</p><p><span class=\"highlight-green\">✓ B正确：</span>过失犯罪<span class=\"highlight-blue\">法律有规定的才负刑事责任</span>。</p><p><span class=\"highlight-green\">✓ C正确：</span>过于自信的过失与间接故意在<span class=\"highlight-blue\">已经预见但放任</span>这点上容易混淆。</p><p><span class=\"highlight-green\">✓ D正确：</span>关键区别在于<span class=\"highlight-blue\">是否应当预见</span>。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>故意必负刑责，过失法定才负！</p>"}, {"module": "刑法", "question": "下列哪些属于刑法规定的刑罚种类？", "options": ["管制", "拘役", "罚款", "剥夺政治权利"], "answer": [0, 1, 3], "explanation": "<p><span class=\"highlight-green\">✓ A正确：</span><span class=\"highlight-blue\">管制</span>是刑罚种类。</p><p><span class=\"highlight-green\">✓ B正确：</span><span class=\"highlight-blue\">拘役</span>是刑罚种类。</p><p><span class=\"highlight-red\">✗ C错误：</span><span class=\"highlight-blue\">罚款</span>是行政处罚，不是刑罚。</p><p><span class=\"highlight-green\">✓ D正确：</span><span class=\"highlight-blue\">剥夺政治权利</span>是刑罚种类。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>刑罚主刑五种：管制拘役有期无期死刑！</p>"}, {"module": "刑法", "question": "甲明知乙（13周岁）盗窃了他人财物，仍帮助乙窝藏赃物。甲的行为构成？", "options": ["窝藏罪", "盗窃罪共犯", "掩饰、隐瞒犯罪所得罪", "无罪"], "answer": [1], "explanation": "<p><span class=\"highlight-green\">✓ B正确：</span>乙13周岁盗窃不负刑事责任，但甲<span class=\"highlight-blue\">明知是盗窃赃物而帮助窝藏</span>，与乙构成<span class=\"highlight-blue\">盗窃罪共犯</span>。</p><p><span class=\"highlight-red\">✗ A错误：</span>窝藏罪是<span class=\"highlight-blue\">针对人</span>的。</p><p><span class=\"highlight-red\">✗ C错误：</span>盗窃罪是财产犯罪的赃物，应定盗窃共犯。</p><p><span class=\"highlight-red\">✗ D错误：</span>甲的行为构成犯罪。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>明知赃物仍帮助，与原犯共犯处理！</p>"}, {"module": "刑法", "question": "关于刑法的时间效力的说法，正确的有？", "options": ["刑法的生效时间通常是公布后一段时间", "刑法的失效时间通常由法律规定", "从旧兼从轻原则只适用于新法施行后的行为", "新法规定为犯罪的，新法施行前实施的不按犯罪处理"], "answer": [0, 1, 3], "explanation": "<p><span class=\"highlight-green\">✓ A正确：</span>刑法生效时间通常是<span class=\"highlight-blue\">公布后一段时间</span>。</p><p><span class=\"highlight-green\">✓ B正确：</span>失效时间<span class=\"highlight-blue\">通常由法律明文规定</span>。</p><p><span class=\"highlight-red\">✗ C错误：</span>从旧兼从轻原则适用于<span class=\"highlight-blue\">所有</span>未决案件。</p><p><span class=\"highlight-green\">✓ D正确：</span>新法规定为犯罪，但行为实施在新法前的，<span class=\"highlight-blue\">不认为是犯罪</span>。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>刑法效力：生效一般公布后，失效通常法律定！</p>"}, {"module": "刑法", "question": "下列哪些属于刑法规定的附加刑？", "options": ["罚金", "没收财产", "剥夺政治权利", "驱逐出境"], "answer": [0, 1, 2, 3], "explanation": "<p><span class=\"highlight-green\">✓ A正确：</span><span class=\"highlight-blue\">罚金</span>是附加刑。</p><p><span class=\"highlight-green\">✓ B正确：</span><span class=\"highlight-blue\">没收财产</span>是附加刑。</p><p><span class=\"highlight-green\">✓ C正确：</span><span class=\"highlight-blue\">剥夺政治权利</span>是附加刑。</p><p><span class=\"highlight-green\">✓ D正确：</span><span class=\"highlight-blue\">驱逐出境</span>是附加刑（适用于外国人）。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>附加刑四种：罚金没收政治权利驱逐出境！</p>"}, {"module": "刑事诉讼法", "question": "下列哪些属于刑事诉讼中的强制措施？", "options": ["拘传", "取保候审", "监视居住", "劳动教养"], "answer": [0, 1, 2], "explanation": "<p><span class=\"highlight-green\">✓ A正确：</span><span class=\"highlight-blue\">拘传</span>是强制措施。</p><p><span class=\"highlight-green\">✓ B正确：</span><span class=\"highlight-blue\">取保候审</span>是强制措施。</p><p><span class=\"highlight-green\">✓ C正确：</span><span class=\"highlight-blue\">监视居住</span>是强制措施。</p><p><span class=\"highlight-red\">✗ D错误：</span><span class=\"highlight-blue\">劳动教养</span>已废除，不是刑事诉讼强制措施。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>刑事强制措施5种：拘传、取保、监视、拘留、逮捕！</p>"}, {"module": "刑事诉讼法", "question": "关于刑事诉讼中证人出庭作证的说法，正确的有？", "options": ["公诉人、当事人可以申请证人出庭", "人民警察就其执行职务时目击的犯罪情况可以作为证人出庭", "证人拒绝出庭的可以强制其出庭", "证人因作证支出的费用应当给予补助"], "answer": [0, 1, 3], "explanation": "<p><span class=\"highlight-green\">✓ A正确：</span>公诉人、当事人、辩护人、诉讼代理人可以<span class=\"highlight-blue\">申请</span>证人出庭。</p><p><span class=\"highlight-green\">✓ B正确：</span>人民警察<span class=\"highlight-blue\">目击</span>的犯罪情况可以作为证人。</p><p><span class=\"highlight-red\">✗ C错误：</span>证人拒绝出庭的，<span class=\"highlight-blue\">情节严重</span>的可以强制，但不能直接强制。</p><p><span class=\"highlight-green\">✓ D正确：</span>证人因作证支出的<span class=\"highlight-blue\">费用应当给予补助</span>。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>证人出庭可申请，费用国家补助！</p>"}, {"module": "刑事诉讼法", "question": "下列哪些案件应当不公开审理？", "options": ["涉及国家秘密的案件", "涉及个人隐私的案件", "审判时被告人不满18周岁的案件", "涉及商业秘密的案件"], "answer": [0, 1, 2], "explanation": "<p><span class=\"highlight-green\">✓ A正确：</span><span class=\"highlight-blue\">国家秘密</span>案件不公开审理。</p><p><span class=\"highlight-green\">✓ B正确：</span><span class=\"highlight-blue\">个人隐私</span>案件不公开审理。</p><p><span class=\"highlight-green\">✓ C正确：</span><span class=\"highlight-blue\">审判时</span>不满18周岁的案件不公开审理。</p><p><span class=\"highlight-red\">✗ D错误：</span><span class=\"highlight-blue\">商业秘密</span>案件是<span class=\"highlight-blue\">可以不公开</span>（不是应当不公开）。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>应当不公开：国密、隐私、未成年！</p>"}, {"module": "行政处罚法", "question": "关于行政处罚听证程序的说法，正确的有？", "options": ["听证应当公开举行", "当事人可以委托律师参加听证", "听证费用由当事人承担", "听证应当制作笔录"], "answer": [1, 3], "explanation": "<p><span class=\"highlight-red\">✗ A错误：</span>涉及<span class=\"highlight-blue\">国家秘密、商业秘密或个人隐私</span>的不公开。</p><p><span class=\"highlight-green\">✓ B正确：</span>当事人<span class=\"highlight-blue\">可以委托</span>律师参加听证。</p><p><span class=\"highlight-red\">✗ C错误：</span>听证费用<span class=\"highlight-blue\">由行政机关</span>承担。</p><p><span class=\"highlight-green\">✓ D正确：</span>听证<span class=\"highlight-blue\">应当制作笔录</span>，作为处罚依据。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>听证公开有限定，律师可请费免费！</p>"}, {"module": "行政处罚法", "question": "下列哪些行政处罚只能由法律设定？", "options": ["限制人身自由的行政处罚", "吊销企业营业执照", "责令停产停业", "行政拘留"], "answer": [0, 3], "explanation": "<p><span class='highlight-green'>✓ A正确：</span><span class='highlight-blue'>限制人身自由</span>的处罚只能由法律设定。</p><p><span class='highlight-red'>✗ B错误：</span><span class='highlight-blue'>吊销企业营业执照</span>可以由<span class='highlight-blue'>法律和行政法规</span>设定。</p><p><span class='highlight-red'>✗ C错误：</span><span class='highlight-blue'>责令停产停业</span>可以由行政法规设定。</p><p><span class='highlight-green'>✓ D正确：</span><span class='highlight-blue'>行政拘留</span>只能由法律设定。</p><p><span class='highlight-purple'>💡 小白记忆口诀：</span>人身自由和拘留只有法律能设定！</p>", {"module": "行政处罚法", "question": "关于行政处罚决定送达的说法，正确的有？", "options": ["行政处罚决定书应当在宣告后当场交付当事人", "当事人不在场的应当在7日内送达", "送达必须有送达回证", "公告送达期限为60日"], "answer": [0, 2, 3], "explanation": "<p><span class=\"highlight-green\">✓ A正确：</span>行政处罚决定书<span class=\"highlight-blue\">应当在宣告后当场交付</span>当事人。</p><p><span class=\"highlight-red\">✗ B错误：</span>当事人不在场的，应当在<span class=\"highlight-blue\">7日</span>内送达。</p><p><span class=\"highlight-green\">✓ C正确：</span>送达<span class=\"highlight-blue\">必须有送达回证</span>。</p><p><span class=\"highlight-green\">✓ D正确：</span>公告送达期限为<span class=\"highlight-blue\">60日</span>。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>当场交付7日送达，公告送达60日！</p>"}, {"module": "行政强制法", "question": "关于代履行的说法，正确的有？", "options": ["代履行适用于金钱给付义务的执行", "代履行可以委托没有利害关系的第三人实施", "代履行费用由当事人承担", "代履行应当提前5日催告"], "answer": [1, 2], "explanation": "<p><span class=\"highlight-red\">✗ A错误：</span>代履行适用于<span class=\"highlight-blue\">作为义务</span>（排除妨碍、恢复原状等），不适用于金钱给付义务。</p><p><span class=\"highlight-green\">✓ B正确：</span>代履行可以委托<span class=\"highlight-blue\">没有利害关系的第三人</span>实施。</p><p><span class=\"highlight-green\">✓ C正确：</span>代履行费用由<span class=\"highlight-blue\">当事人</span>承担。</p><p><span class=\"highlight-red\">✗ D错误：</span>代履行应当提前<span class=\"highlight-blue\">3日</span>催告。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>代履行=他人代做你付钱，催告3日要记清！</p>"}, {"module": "行政强制法", "question": "下列哪些属于行政强制措施的种类？", "options": ["限制公民人身自由", "查封场所、设施或财物", "扣押财物", "强制隔离治疗"], "answer": [0, 1, 2], "explanation": "<p><span class=\"highlight-green\">✓ A正确：</span>限制公民人身自由是<span class=\"highlight-blue\">行政强制措施</span>。</p><p><span class=\"highlight-green\">✓ B正确：</span>查封场所、设施或财物是<span class=\"highlight-blue\">行政强制措施</span>。</p><p><span class=\"highlight-green\">✓ C正确：</span>扣押财物是<span class=\"highlight-blue\">行政强制措施</span>。</p><p><span class=\"highlight-red\">✗ D错误：</span>强制隔离治疗是<span class=\"highlight-blue\">行政强制执行</span>（针对传染病人）。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>行政强制措施四大类：限人查扣冻！</p>"}, {"module": "行政复议法", "question": "下列哪些属于行政复议的审查原则？", "options": ["合法性审查原则", "合理性审查原则", "书面审查原则", "公开审查原则"], "answer": [0, 1, 2], "explanation": "<p><span class=\"highlight-green\">✓ A正确：</span>行政复议应当审查具体行政行为的<span class=\"highlight-blue\">合法性</span>。</p><p><span class=\"highlight-green\">✓ B正确：</span>行政复议同时可以审查<span class=\"highlight-blue\">合理性</span>。</p><p><span class=\"highlight-green\">✓ C正确：</span>行政复议一般采取<span class=\"highlight-blue\">书面审查</span>。</p><p><span class=\"highlight-red\">✗ D错误：</span>复议以书面审查为原则，不要求公开审查。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>行政复议：合法+合理+书面审查！</p>"}, {"module": "行政复议法", "question": "关于行政复议决定的说法，正确的有？", "options": ["具体行政行为认定事实清楚的，决定维持", "主要事实不清的，决定撤销", "适用依据错误的，决定变更", "超越职权的，决定撤销"], "answer": [0, 1, 2, 3], "explanation": "<p><span class=\"highlight-green\">✓ A正确：</span>事实清楚、证据确凿的，<span class=\"highlight-blue\">决定维持</span>。</p><p><span class=\"highlight-green\">✓ B正确：</span>主要事实不清的，<span class=\"highlight-blue\">决定撤销</span>。</p><p><span class=\"highlight-green\">✓ C正确：</span>适用依据错误的，<span class=\"highlight-blue\">决定变更</span>。</p><p><span class=\"highlight-green\">✓ D正确：</span>超越职权的，<span class=\"highlight-blue\">决定撤销</span>。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>复议决定类型：维持、撤销、变更、确认违法、责令重作！</p>"}, {"module": "行政诉讼法", "question": "关于行政诉讼管辖的说法，正确的有？", "options": ["一般案件由基层法院管辖", "对国务院部门行为不服由中级法院管辖", "对省级政府行为不服由高级法院管辖", "海事法院可以管辖海事行政案件"], "answer": [0, 1, 3], "explanation": "<p><span class=\"highlight-green\">✓ A正确：</span><span class=\"highlight-blue\">一般</span>案件由基层法院管辖。</p><p><span class=\"highlight-green\">✓ B正确：</span>对<span class=\"highlight-blue\">国务院部门</span>行为不服由中级法院管辖。</p><p><span class=\"highlight-red\">✗ C错误：</span>对<span class=\"highlight-blue\">省级政府</span>行为不服由中级法院管辖，不是高级法院。</p><p><span class=\"highlight-green\">✓ D正确：</span><span class=\"highlight-blue\">海事法院</span>可以管辖海事行政案件。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>一般案件找基层，中央级和省级归中级！</p>"}, {"module": "行政诉讼法", "question": "下列哪些属于行政诉讼特有的原则？", "options": ["合法性审查原则", "不适用调解原则", "被告负举证责任原则", "处分原则"], "answer": [0, 1, 2], "explanation": "<p><span class=\"highlight-green\">✓ A正确：</span><span class=\"highlight-blue\">合法性审查原则</span>是行政诉讼特有原则。</p><p><span class=\"highlight-green\">✓ B正确：</span><span class=\"highlight-blue\">不适用调解原则</span>是行政诉讼特有原则。</p><p><span class=\"highlight-green\">✓ C正确：</span><span class=\"highlight-blue\">被告负举证责任原则</span>是行政诉讼特有原则。</p><p><span class=\"highlight-red\">✗ D错误：</span>处分原则是民事诉讼原则。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>行政诉讼特有：合法性审查、不适用调解、被告举证！</p>"}, {"module": "行政许可法", "question": "下列哪些事项可以设定行政许可？", "options": ["直接涉及公共安全的活动", "有限自然资源开发利用", "中介机构执业资格", "市场竞争机制能有效调节的"], "answer": [0, 1, 2], "explanation": "<p><span class=\"highlight-green\">✓ A正确：</span><span class=\"highlight-blue\">直接涉及公共安全</span>的活动可以设定许可。</p><p><span class=\"highlight-green\">✓ B正确：</span><span class=\"highlight-blue\">有限自然资源开发利用</span>可以设定许可。</p><p><span class=\"highlight-green\">✓ C正确：</span><span class=\"highlight-blue\">中介机构执业资格</span>可以设定许可。</p><p><span class=\"highlight-red\">✗ D错误：</span><span class=\"highlight-blue\">市场竞争机制能有效调节</span>的不需要设定许可。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>可设定许可：国安公共安全、资源开发利用、资格资质审查！</p>"}, {"module": "行政许可法", "question": "关于行政许可撤销与注销的说法，正确的有？", "options": ["撤销是因违法而使许可失效", "注销是因为许可有效期届满而使许可消灭", "撤销需要收回许可证件", "注销需要收回许可证件"], "answer": [0, 1], "explanation": "<p><span class=\"highlight-green\">✓ A正确：</span><span class=\"highlight-blue\">撤销</span>是因为<span class=\"highlight-blue\">违法</span>而使许可失效。</p><p><span class=\"highlight-green\">✓ B正确：</span><span class=\"highlight-blue\">注销</span>是因为许可<span class=\"highlight-blue\">有效期届满、当事人放弃</span>等而使许可<span class=\"highlight-blue\">消灭</span>。</p><p><span class=\"highlight-red\">✗ C错误：</span>撤销是使许可<span class=\"highlight-blue\">无效或废止</span>，不是必须收回。</p><p><span class=\"highlight-red\">✗ D错误：</span>注销是程序，<span class=\"highlight-blue\">应当收回</span>许可证件。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>撤销因违法，注销因消灭！</p>"}, {"module": "治安管理处罚法", "question": "下列哪些违反治安管理的行为可以从轻或减轻处罚？", "options": ["主动消除或减轻危害后果的", "主动投案向公安机关如实陈述的", "有立功表现的", "初次违反治安管理的"], "answer": [0, 1, 2], "explanation": "<p><span class=\"highlight-green\">✓ A正确：</span>主动消除或减轻危害后果的，可以从轻或减轻。</p><p><span class=\"highlight-green\">✓ B正确：</span>主动投案如实陈述的，可以从轻或减轻。</p><p><span class=\"highlight-green\">✓ C正确：</span>有立功表现的，可以从轻或减轻。</p><p><span class=\"highlight-red\">✗ D错误：</span>初次违反不是从轻或减轻的情节。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>从轻减轻：消除后果、主动投案、立功表现！</p>"}, {"module": "治安管理处罚法", "question": "关于治安管理处罚决定书的送达，下列说法正确的有？", "options": ["应当当场交付被处罚人", "被处罚人不在场的应当在7日内送达", "送达必须有送达回证", "可以采用公告送达"], "answer": [0, 1, 2], "explanation": "<p><span class=\"highlight-green\">✓ A正确：</span>应当<span class=\"highlight-blue\">当场交付</span>被处罚人。</p><p><span class=\"highlight-green\">✓ B正确：</span>被处罚人不在场的，应当在<span class=\"highlight-blue\">7日</span>内送达。</p><p><span class=\"highlight-green\">✓ C正确：</span>送达<span class=\"highlight-blue\">必须有送达回证</span>。</p><p><span class=\"highlight-red\">✗ D错误：</span>治安处罚法没有规定公告送达。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>当场交付7日送达，必须要有送达回证！</p>"}, {"module": "治安管理处罚法", "question": "下列哪些人可以作为证人？", "options": ["精神正常的成年人", "能辨别是非的儿童", "聋哑人", "盲人"], "answer": [0, 2, 3], "explanation": "<p><span class=\"highlight-green\">✓ A正确：</span>精神正常的成年人可以作证人。</p><p><span class=\"highlight-green\">✓ B正确：</span><span class=\"highlight-blue\">年幼但能辨别是非</span>的人可以作证人。</p><p><span class=\"highlight-green\">✓ C正确：</span><span class=\"highlight-blue\">聋哑人</span>可以作证人。</p><p><span class=\"highlight-green\">✓ D正确：</span><span class=\"highlight-blue\">盲人</span>可以作证人，可以用盲文。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>生理缺陷能辨别是非者，可以作证！</p>"}, {"module": "国家赔偿法", "question": "下列哪些情形国家不承担赔偿责任？", "options": ["正当防卫造成损害的", "紧急避险造成损害的", "因公民自己故意作虚伪供述被羁押的", "因公民醉酒自伤自残的"], "answer": [0, 1, 2, 3], "explanation": "<p><span class=\"highlight-green\">✓ A正确：</span><span class=\"highlight-blue\">正当防卫</span>造成损害的不承担赔偿责任。</p><p><span class=\"highlight-green\">✓ B正确：</span><span class=\"highlight-blue\">紧急避险</span>造成损害的不承担赔偿责任。</p><p><span class=\"highlight-green\">✓ C正确：</span>公民<span class=\"highlight-blue\">自己故意</span>作虚伪供述被羁押的不承担赔偿责任。</p><p><span class=\"highlight-green\">✓ D正确：</span>公民<span class=\"highlight-blue\">醉酒自伤自残</span>的不承担赔偿责任。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>国家不赔：正当防卫、紧急避险、自己故意、醉酒自伤！</p>"}, {"module": "国家赔偿法", "question": "关于国家赔偿的计算标准，下列说法正确的有？", "options": ["人身自由损害按上年度职工日平均工资计算", "生命健康权损害按实际情况赔偿", "财产损害按直接损失赔偿", "精神损害可以要求赔偿"], "answer": [0, 2], "explanation": "<p><span class=\"highlight-green\">✓ A正确：</span>人身自由损害按<span class=\"highlight-blue\">上年度职工日平均工资</span>计算。</p><p><span class=\"highlight-red\">✗ B错误：</span>生命健康权损害有<span class=\"highlight-blue\">固定的计算标准</span>。</p><p><span class=\"highlight-green\">✓ C正确：</span>财产损害按<span class=\"highlight-blue\">直接损失</span>赔偿。</p><p><span class=\"highlight-red\">✗ D错误：</span>一般<span class=\"highlight-blue\">不包括</span>精神损害赔偿。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>国家赔偿赔直接，赔日工资，不赔精神！</p>"}, {"module": "警械武器条例", "question": "关于警察使用武器的原则，下列说法正确的有？", "options": ["以制止违法犯罪行为为目的", "尽量减少人员伤亡和财产损失", "使用武器后应当及时报告", "紧急情况下可以先行使用再报告"], "answer": [0, 1, 2], "explanation": "<p><span class=\"highlight-green\">✓ A正确：</span>使用武器的目的是<span class=\"highlight-blue\">制止</span>违法犯罪行为。</p><p><span class=\"highlight-green\">✓ B正确：</span><span class=\"highlight-blue\">尽量减少</span>人员伤亡和财产损失。</p><p><span class=\"highlight-green\">✓ C正确：</span>使用武器后应当<span class=\"highlight-blue\">及时报告</span>。</p><p><span class=\"highlight-red\">✗ D错误：</span>即使是紧急情况，也应当<span class=\"highlight-blue\">尽量先警告</span>。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>武器使用：制止目的、减少伤亡、及时报告！</p>"}, {"module": "警械武器条例", "question": "下列哪些属于约束性警械？", "options": ["手铐", "脚镣", "警绳", "警棍"], "answer": [0, 1, 2], "explanation": "<p><span class=\"highlight-green\">✓ A正确：</span><span class=\"highlight-blue\">手铐</span>是约束性警械。</p><p><span class=\"highlight-green\">✓ B正确：</span><span class=\"highlight-blue\">脚镣</span>是约束性警械。</p><p><span class=\"highlight-green\">✓ C正确：</span><span class=\"highlight-blue\">警绳</span>是约束性警械。</p><p><span class=\"highlight-red\">✗ D错误：</span><span class=\"highlight-blue\">警棍</span>是驱逐性警械。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>约束性警械=手铐脚镣警绳！</p>"}, {"module": "公安基础知识", "question": "关于公安机关职权的说法，正确的有？", "options": ["公安机关可以依法采取刑事强制措施", "公安机关可以依法采取行政处罚", "公安机关可以采取技术侦查措施", "公安机关可以采取行政强制措施"], "answer": [0, 1, 2, 3], "explanation": "<p><span class=\"highlight-green\">✓ A正确：</span>公安机关可以采取<span class=\"highlight-blue\">刑事强制措施</span>。</p><p><span class=\"highlight-green\">✓ B正确：</span>公安机关可以采取<span class=\"highlight-blue\">行政处罚</span>（如治安管理处罚）。</p><p><span class=\"highlight-green\">✓ C正确：</span>公安机关可以采取<span class=\"highlight-blue\">技术侦查措施</span>。</p><p><span class=\"highlight-green\">✓ D正确：</span>公安机关可以采取<span class=\"highlight-blue\">行政强制措施</span>。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>公安机关职权广泛，刑事行政强制都可！</p>"}, {"module": "公安基础知识", "question": "关于公安工作坚持群众路线的说法，正确的有？", "options": ["群众路线是公安工作的根本路线", "公安工作要依靠群众", "公安工作要为了群众", "公安工作要接受群众监督"], "answer": [0, 1, 2, 3], "explanation": "<p><span class=\"highlight-green\">✓ A正确：</span><span class=\"highlight-blue\">群众路线</span>是公安工作的根本路线。</p><p><span class=\"highlight-green\">✓ B正确：</span>公安工作要<span class=\"highlight-blue\">依靠</span>群众。</p><p><span class=\"highlight-green\">✓ C正确：</span>公安工作要<span class=\"highlight-blue\">为了</span>群众。</p><p><span class=\"highlight-green\">✓ D正确：</span>公安工作要<span class=\"highlight-blue\">接受</span>群众监督。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>群众路线：一切为了群众，一切依靠群众！</p>"}, {"module": "行政强制法", "question": "关于行政强制执行的说法，正确的有？", "options": ["行政强制执行只能由法律设定", "行政强制执行不得在夜间和法定节假日实施", "当事人确需搬迁的应当对当事人进行安置", "行政强制执行费用由行政机关承担"], "answer": [0, 1, 2], "explanation": "<p><span class=\"highlight-green\">✓ A正确：</span><span class=\"highlight-blue\">行政强制执行只能由法律设定</span>。</p><p><span class=\"highlight-green\">✓ B正确：</span>行政强制执行<span class=\"highlight-blue\">不得在夜间和法定节假日实施</span>。</p><p><span class=\"highlight-green\">✓ C正确：</span>当事人确需搬迁的<span class=\"highlight-blue\">应当进行安置</span>。</p><p><span class=\"highlight-red\">✗ D错误：</span>执行费用由<span class=\"highlight-blue\">当事人承担</span>（代履行除外）。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>强执法定，不扰民，需安置！</p>"}, {"module": "刑事诉讼法", "question": "下列哪些属于刑事证据的法定种类？", "options": ["物证和书证", "证人证言和被害人陈述", "犯罪嫌疑人供述和辩解", "视听资料和电子数据"], "answer": [0, 1, 2, 3], "explanation": "<p><span class=\"highlight-green\">✓ A正确：</span><span class=\"highlight-blue\">物证和书证</span>是法定证据种类。</p><p><span class=\"highlight-green\">✓ B正确：</span><span class=\"highlight-blue\">证人证言和被害人陈述</span>是法定证据种类。</p><p><span class=\"highlight-green\">✓ C正确：</span><span class=\"highlight-blue\">犯罪嫌疑人、被告人供述和辩解</span>是法定证据种类。</p><p><span class=\"highlight-green\">✓ D正确：</span><span class=\"highlight-blue\">视听资料和电子数据</span>是法定证据种类。</p><p><span class=\"highlight-purple\">💡 小白记忆口诀：</span>刑事证据8种：物证书证人，被害陈述被告人，鉴定意见勘验笔录，视听资料电子数据！</p>"}];
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            renderQuiz('quiz-single', singlePracticeData, 'single');
+            renderJudgeQuiz('quiz-judge', judgePracticeData);
+            renderMultiQuiz('quiz-multi', multiPracticeData);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1477 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>刑法刑诉综合习题 - 辅警备考</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%); min-height: 100vh; color: #333; }
+        .progress-bar { position: fixed; top: 0; left: 0; width: 100%; height: 4px; background: rgba(255,255,255,0.1); z-index: 1000; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #34495e, #27ae60); width: 0%; transition: width 0.3s ease; }
+        .top-nav { position: fixed; top: 4px; left: 0; right: 0; background: rgba(52, 73, 94, 0.95); backdrop-filter: blur(10px); padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 999; border-bottom: 1px solid rgba(255,255,255,0.2); }
+        .logo { color: #fff; font-size: 18px; font-weight: bold; display: flex; align-items: center; gap: 8px; }
+        .score-display { background: rgba(255,255,255,0.2); color: #fff; padding: 8px 16px; border-radius: 20px; font-size: 14px; }
+        .sidebar { position: fixed; left: 0; top: 50px; width: 260px; height: calc(100vh - 50px); background: rgba(255,255,255,0.95); overflow-y: auto; padding: 20px 0; box-shadow: 2px 0 10px rgba(0,0,0,0.1); z-index: 998; }
+        .sidebar-title { color: #2c3e50; padding: 0 20px 15px; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid #eee; margin-bottom: 15px; }
+        .nav-item { padding: 12px 20px; color: #666; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 10px; font-size: 14px; border-left: 3px solid transparent; text-decoration: none; }
+        .nav-item:hover { background: rgba(52, 73, 94, 0.1); color: #34495e; }
+        .nav-item.active { background: rgba(52, 73, 94, 0.15); color: #34495e; border-left-color: #34495e; font-weight: bold; }
+        .main-content { margin-left: 260px; padding: 70px 30px 30px; max-width: 900px; }
+        .section-header { text-align: center; margin-bottom: 40px; }
+        .section-header h1 { font-size: 42px; color: #fff; margin-bottom: 10px; text-shadow: 0 0 30px rgba(0,0,0,0.2); }
+        .section-header p { color: rgba(255,255,255,0.8); font-size: 16px; }
+        .highlight-red { color: #e74c3c; font-weight: bold; background: rgba(231, 76, 60, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .highlight-blue { color: #3498db; font-weight: bold; background: rgba(52, 152, 219, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .highlight-green { color: #27ae60; font-weight: bold; background: rgba(39, 174, 96, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .highlight-orange { color: #e67e22; font-weight: bold; background: rgba(230, 126, 34, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .highlight-purple { color: #9b59b6; font-weight: bold; background: rgba(155, 89, 182, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .quiz-container { margin-top: 30px; }
+        .quiz-card { background: #f8f9fa; border-radius: 15px; padding: 20px; margin-bottom: 20px; border: 1px solid #e9ecef; }
+        .question { font-size: 16px; color: #333; margin-bottom: 15px; font-weight: 500; line-height: 1.6; }
+        .question-num { display: inline-block; background: #34495e; color: #fff; width: 28px; height: 28px; border-radius: 50%; text-align: center; line-height: 28px; margin-right: 10px; font-size: 14px; }
+        .module-tag { display: inline-block; background: #e74c3c; color: #fff; padding: 3px 10px; border-radius: 12px; font-size: 12px; margin-bottom: 10px; }
+        .module-tag.multi { background: #9b59b6; }
+        .module-tag.judge { background: #e67e22; }
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .option-btn { padding: 12px 20px; background: #fff; border: 2px solid #e9ecef; border-radius: 10px; cursor: pointer; text-align: left; font-size: 15px; color: #555; transition: all 0.3s ease; }
+        .option-btn:hover { border-color: #34495e; background: rgba(52, 73, 94, 0.05); }
+        .option-letter { display: inline-block; width: 26px; height: 26px; background: #e9ecef; border-radius: 50%; text-align: center; line-height: 26px; margin-right: 10px; font-weight: bold; color: #34495e; }
+        .option-btn.correct { background: #d4edda; border-color: #28a745; }
+        .option-btn.correct .option-letter { background: #28a745; color: #fff; }
+        .option-btn.wrong { background: #f8d7da; border-color: #dc3545; }
+        .option-btn.wrong .option-letter { background: #dc3545; color: #fff; }
+        .option-btn.disabled { cursor: not-allowed; opacity: 0.7; }
+        .explanation { background: linear-gradient(135deg, #fff8e1, #ffecb3); border-radius: 10px; padding: 15px 20px; margin-top: 15px; display: none; line-height: 1.8; border: 1px solid #ffc107; }
+        .explanation .result { font-size: 18px; font-weight: bold; margin-bottom: 10px; }
+        .explanation .result.correct { color: #28a745; }
+        .explanation .result.wrong { color: #dc3545; }
+        .practice-section { background: #fff; border-radius: 20px; padding: 30px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); scroll-margin-top: 100px; }
+        .practice-section h2 { font-size: 28px; color: #333; margin-bottom: 25px; text-align: center; border-bottom: 2px solid #34495e; padding-bottom: 15px; }
+        .practice-section h2 .badge { background: #34495e; color: #fff; padding: 3px 12px; border-radius: 12px; font-size: 14px; margin-left: 10px; }
+        .practice-section h2 .multi-badge { background: #9b59b6; }
+        .practice-section h2 .judge-badge { background: #e67e22; }
+        .intro-card { background: linear-gradient(135deg, #34495e, #2c3e50); color: #fff; padding: 40px; border-radius: 20px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+        .intro-card h2 { font-size: 32px; margin-bottom: 20px; }
+        .intro-card p { font-size: 16px; line-height: 1.8; opacity: 0.9; }
+        .module-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 20px 0; }
+        .module-item { background: rgba(255,255,255,0.15); padding: 15px; border-radius: 10px; font-size: 14px; }
+        @media (max-width: 768px) { .sidebar { width: 100%; height: auto; position: relative; margin-top: 50px; } .main-content { margin-left: 0; padding-top: 80px; } }
+        .close-nav-btn { background: rgba(255,255,255,0.2); border: none; color: #fff; font-size: 18px; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.3s; }
+        .close-nav-btn:hover { background: rgba(255,255,255,0.3); }
+        
+        /* 多选题样式 */
+        .multi-options { display: flex; flex-direction: column; gap: 10px; }
+        .multi-option { padding: 12px 20px; background: #fff; border: 2px solid #e9ecef; border-radius: 10px; cursor: pointer; text-align: left; font-size: 15px; color: #555; transition: all 0.3s ease; display: flex; align-items: flex-start; gap: 12px; }
+        .multi-option:hover { border-color: #9b59b6; background: rgba(155, 89, 182, 0.05); }
+        .multi-option.selected { border-color: #9b59b6; background: rgba(155, 89, 182, 0.1); }
+        .multi-option.selected .option-letter { background: #9b59b6; color: #fff; }
+        .multi-option.correct { background: #d4edda; border-color: #28a745; }
+        .multi-option.correct .option-letter { background: #28a745; color: #fff; }
+        .multi-option.wrong { background: #f8d7da; border-color: #dc3545; }
+        .multi-option.wrong .option-letter { background: #dc3545; color: #fff; }
+        .multi-option.disabled { cursor: not-allowed; opacity: 0.7; }
+        .multi-option.missed { background: #fff3cd; border-color: #ffc107; }
+        .multi-option.missed .option-letter { background: #ffc107; color: #fff; }
+        .checkbox { width: 22px; height: 22px; border: 2px solid #ddd; border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; transition: all 0.2s; }
+        .multi-option.selected .checkbox { background: #9b59b6; border-color: #9b59b6; }
+        .multi-option.selected .checkbox::after { content: "\2713"; color: #fff; font-weight: bold; }
+        .submit-btn { display: block; width: 100%; padding: 14px 24px; background: linear-gradient(135deg, #9b59b6, #8e44ad); color: #fff; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; transition: all 0.3s; margin-top: 15px; }
+        .submit-btn:hover { background: linear-gradient(135deg, #8e44ad, #7d3c98); transform: translateY(-2px); }
+        .submit-btn:disabled { background: #ccc; cursor: not-allowed; transform: none; }
+        .multi-hint { font-size: 12px; color: #9b59b6; margin-bottom: 15px; padding: 8px 12px; background: rgba(155, 89, 182, 0.1); border-radius: 6px; }
+        
+        /* 判断题样式 */
+        .judge-options { display: flex; gap: 15px; margin-top: 15px; }
+        .judge-btn { flex: 1; padding: 15px; border: 2px solid #e9ecef; border-radius: 10px; background: #fff; cursor: pointer; font-size: 16px; font-weight: bold; text-align: center; transition: all 0.3s; }
+        .judge-btn:hover { border-color: #e67e22; background: rgba(230, 126, 34, 0.05); }
+        .judge-btn.correct { background: #d4edda; border-color: #28a745; color: #28a745; }
+        .judge-btn.wrong { background: #f8d7da; border-color: #dc3545; color: #dc3545; }
+        .judge-btn.disabled { cursor: not-allowed; opacity: 0.7; }
+    </style>
+</head>
+<body>
+    <div class="progress-bar"><div class="progress-fill" id="mainProgress"></div></div>
+    <nav class="top-nav" id="topNav">
+        <div class="logo">📚 刑法刑诉综合习题</div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <div class="score-display" id="totalScore">已答: 0/0</div>
+            <button class="close-nav-btn" onclick="closeTopNav()">✕</button>
+        </div>
+    </nav>
+    <aside class="sidebar">
+        <div class="sidebar-title">📖 目录导航</div>
+        <a href="#intro" class="nav-item active" onclick="scrollToSection(this, event)">📝 练习说明</a>
+        <a href="#single" class="nav-item" onclick="scrollToSection(this, event)">✅ 单选题 (50题)</a>
+        <a href="#judge" class="nav-item" onclick="scrollToSection(this, event)">❓ 判断题 (20题)</a>
+        <a href="#multi" class="nav-item" onclick="scrollToSection(this, event)">☑️ 多选题 (30题)</a>
+    </aside>
+    <main class="main-content">
+        <div class="section-header">
+            <h1>📚 刑法刑诉综合习题</h1>
+            <p>刑法与刑事诉讼法专项练习 · 100道原创题目</p>
+        </div>
+        
+        <section id="intro" class="intro-card">
+            <h2>🎯 刑法刑诉综合习题说明</h2>
+            <p>本练习是刑法与刑事诉讼法的专项综合练习，集中巩固两大核心法律模块：</p>
+            <div class="module-grid">
+                <div class="module-item">刑法（犯罪论）</div>
+                <div class="module-item">刑法（刑罚论）</div>
+                <div class="module-item">刑法（分则常见罪名）</div>
+                <div class="module-item">刑事诉讼法（总则）</div>
+                <div class="module-item">刑事诉讼法（立案与侦查）</div>
+                <div class="module-item">刑事诉讼法（起诉与审判）</div>
+            </div>
+            <p style="margin-top: 20px;">💡 <strong>答题技巧：</strong>刑法注重理解犯罪构成四要件，刑诉法注重程序规定和时间节点！仔细阅读解析能帮助你快速掌握考点！</p>
+        </section>
+        
+        <section id="single" class="practice-section">
+            <h2>✅ 单选题专区 <span class="badge">50题</span></h2>
+            <div id="quiz-single" class="quiz-container"></div>
+        </section>
+
+        <section id="judge" class="practice-section">
+            <h2>❓ 判断题专区 <span class="judge-badge">20题</span></h2>
+            <div id="quiz-judge" class="quiz-container"></div>
+        </section>
+
+        <section id="multi" class="practice-section">
+            <h2>☑️ 多选题专区 <span class="multi-badge">30题</span></h2>
+            <div id="quiz-multi" class="quiz-container"></div>
+        </section>
+    </main>
+
+    <script>
+        let answeredSingleCount = 0;
+        let correctSingleCount = 0;
+        let answeredJudgeCount = 0;
+        let correctJudgeCount = 0;
+        let answeredMultiCount = 0;
+        let correctMultiCount = 0;
+        let selectedOptions = {};
+        
+        function closeTopNav() {
+            document.getElementById('topNav').style.display = 'none';
+        }
+        
+        function scrollToSection(element, event) {
+            event.preventDefault();
+            const href = element.getAttribute('href');
+            const target = document.querySelector(href);
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+                element.classList.add('active');
+            }
+        }
+        
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+        
+        function renderQuiz(containerId, quizData, type) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            let html = '';
+            quizData.forEach((item, index) => {
+                const shuffledOptions = item.options.map((opt, i) => ({ text: opt, originalIndex: i }));
+                const displayOptions = shuffleArray(shuffledOptions);
+                
+                html += `<div class="quiz-card" id="${containerId}-q${index}">
+                    <span class="module-tag">${item.module}</span>
+                    <p class="question"><span class="question-num">${index + 1}</span>${item.question}</p>
+                    <div class="options">`;
+                
+                displayOptions.forEach((opt, optIndex) => {
+                    html += `<button class="option-btn" onclick="checkAnswer('${containerId}', ${index}, ${opt.originalIndex}, this)">
+                        <span class="option-letter">${String.fromCharCode(65 + optIndex)}</span>${opt.text}
+                    </button>`;
+                });
+                
+                html += `</div>
+                    <div class="explanation" id="${containerId}-exp${index}"></div>
+                </div>`;
+            });
+            
+            container.innerHTML = html;
+            updateProgress();
+        }
+        
+        function renderJudgeQuiz(containerId, quizData) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            let html = '';
+            quizData.forEach((item, index) => {
+                html += `<div class="quiz-card" id="${containerId}-q${index}">
+                    <span class="module-tag judge">${item.module}</span>
+                    <p class="question"><span class="question-num">${index + 1}</span>${item.question}</p>
+                    <div class="judge-options">
+                        <button class="judge-btn" onclick="checkJudge('${containerId}', ${index}, true, this)">正确</button>
+                        <button class="judge-btn" onclick="checkJudge('${containerId}', ${index}, false, this)">错误</button>
+                    </div>
+                    <div class="explanation" id="${containerId}-exp${index}"></div>
+                </div>`;
+            });
+            
+            container.innerHTML = html;
+            updateProgress();
+        }
+
+        function renderMultiQuiz(containerId, quizData) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            let html = '';
+            quizData.forEach((item, index) => {
+                selectedOptions[`${containerId}-${index}`] = [];
+                const shuffledOptions = item.options.map((opt, i) => ({ text: opt, originalIndex: i }));
+                const displayOptions = shuffleArray(shuffledOptions);
+                
+                html += `<div class="quiz-card" id="${containerId}-q${index}">
+                    <span class="module-tag multi">多选</span><span class="module-tag" style="margin-left:5px;">${item.module}</span>
+                    <p class="question"><span class="question-num">${index + 1}</span>${item.question}</p>
+                    <p class="multi-hint">提示：本题为多选题，请选择所有正确答案</p>
+                    <div class="multi-options">`;
+                
+                displayOptions.forEach((opt, optIndex) => {
+                    html += `<div class="multi-option" onclick="toggleMultiOption('${containerId}', ${index}, ${opt.originalIndex}, this)">
+                        <div class="checkbox"></div>
+                        <span class="option-letter">${String.fromCharCode(65 + optIndex)}</span>
+                        <span>${opt.text}</span>
+                    </div>`;
+                });
+                
+                html += `</div>
+                    <button class="submit-btn" onclick="checkMultiAnswer('${containerId}', ${index})">提交答案</button>
+                    <div class="explanation" id="${containerId}-exp${index}"></div>
+                </div>`;
+            });
+            
+            container.innerHTML = html;
+            updateProgress();
+        }
+        
+        function toggleMultiOption(containerId, questionIndex, originalIndex, element) {
+            const key = `${containerId}-${questionIndex}`;
+            const idx = selectedOptions[key].indexOf(originalIndex);
+            if (idx > -1) {
+                selectedOptions[key].splice(idx, 1);
+                element.classList.remove('selected');
+            } else {
+                selectedOptions[key].push(originalIndex);
+                element.classList.add('selected');
+            }
+        }
+        
+        function checkMultiAnswer(containerId, questionIndex) {
+            let quizData;
+            if (containerId === 'quiz-multi') {
+                quizData = multiPracticeData;
+            }
+            
+            const question = quizData[questionIndex];
+            const card = document.getElementById(`${containerId}-q${questionIndex}`);
+            const options = card.querySelectorAll('.multi-option');
+            const submitBtn = card.querySelector('.submit-btn');
+            const explanationDiv = document.getElementById(`${containerId}-exp${questionIndex}`);
+            
+            if (submitBtn.disabled) return;
+            submitBtn.disabled = true;
+            
+            options.forEach(opt => opt.classList.add('disabled'));
+            
+            const correctSet = new Set(question.answer);
+            const selectedSet = new Set(selectedOptions[`${containerId}-${questionIndex}`]);
+            
+            let isCorrect = correctSet.size === selectedSet.size && 
+                           [...correctSet].every(x => selectedSet.has(x));
+            
+            options.forEach(opt => {
+                const text = opt.querySelector('span:last-child').textContent;
+                let matchedIndex = -1;
+                const shuffledOptions = question.options.map((opt, i) => ({ text: opt, originalIndex: i }));
+                const displayOptions = shuffleArray(shuffledOptions);
+                for (let i = 0; i < displayOptions.length; i++) {
+                    if (displayOptions[i].text === text) {
+                        matchedIndex = displayOptions[i].originalIndex;
+                        break;
+                    }
+                }
+                
+                if (correctSet.has(matchedIndex)) {
+                    opt.classList.add('correct');
+                } else if (selectedSet.has(matchedIndex)) {
+                    opt.classList.add('wrong');
+                }
+            });
+            
+            if (!isCorrect) {
+                options.forEach(opt => {
+                    const text = opt.querySelector('span:last-child').textContent;
+                    let matchedIndex = -1;
+                    const shuffledOptions = question.options.map((opt, i) => ({ text: opt, originalIndex: i }));
+                    const displayOptions = shuffleArray(shuffledOptions);
+                    for (let i = 0; i < displayOptions.length; i++) {
+                        if (displayOptions[i].text === text) {
+                            matchedIndex = displayOptions[i].originalIndex;
+                            break;
+                        }
+                    }
+                    
+                    if (correctSet.has(matchedIndex) && !selectedSet.has(matchedIndex)) {
+                        opt.classList.add('missed');
+                    }
+                });
+            }
+            
+            answeredMultiCount++;
+            if (isCorrect) correctMultiCount++;
+            updateProgress();
+            
+            const correctLetters = [...correctSet].map(i => String.fromCharCode(65 + i)).sort().join('、');
+            
+            explanationDiv.innerHTML = `
+                <div class="result ${isCorrect ? 'correct' : 'wrong'}">
+                    ${isCorrect ? '<span class="highlight-green">✓ 回答正确！</span>' : `<span class="highlight-red">✗ 回答错误</span> <span style="font-size:14px;color:#666;">正确答案：${correctLetters}</span>`}
+                </div>
+                <p><strong>【逐项解析】</strong></p>
+                ${question.explanation}
+            `;
+            explanationDiv.style.display = 'block';
+        }
+        
+        function checkAnswer(containerId, questionIndex, selectedIndex, btnElement) {
+            let quizData;
+            if (containerId === 'quiz-single') {
+                quizData = singlePracticeData;
+            }
+            
+            const question = quizData[questionIndex];
+            const card = document.getElementById(`${containerId}-q${questionIndex}`);
+            const buttons = card.querySelectorAll('.option-btn');
+            const explanationDiv = document.getElementById(`${containerId}-exp${questionIndex}`);
+            
+            if (buttons[0].classList.contains('disabled')) return;
+            
+            buttons.forEach(btn => btn.classList.add('disabled'));
+            
+            const correctIndex = question.answer;
+            const isCorrect = selectedIndex === correctIndex;
+            
+            const clickedBtn = buttons[selectedIndex];
+            if (isCorrect) {
+                clickedBtn.classList.add('correct');
+                correctSingleCount++;
+            } else {
+                clickedBtn.classList.add('wrong');
+                buttons[correctIndex].classList.add('correct');
+            }
+            
+            answeredSingleCount++;
+            updateProgress();
+            
+            explanationDiv.innerHTML = `
+                <div class="result ${isCorrect ? 'correct' : 'wrong'}">
+                    ${isCorrect ? '<span class="highlight-green">✓ 回答正确！</span>' : '<span class="highlight-red">✗ 回答错误</span>'}
+                </div>
+                <p><strong>【逐项解析】</strong></p>
+                ${question.explanation}
+            `;
+            explanationDiv.style.display = 'block';
+        }
+        
+        function checkJudge(containerId, questionIndex, userAnswer, btnElement) {
+            let quizData;
+            if (containerId === 'quiz-judge') {
+                quizData = judgePracticeData;
+            }
+            
+            const question = quizData[questionIndex];
+            const card = document.getElementById(`${containerId}-q${questionIndex}`);
+            const buttons = card.querySelectorAll('.judge-btn');
+            const explanationDiv = document.getElementById(`${containerId}-exp${questionIndex}`);
+            
+            if (buttons[0].classList.contains('disabled')) return;
+            
+            buttons.forEach(btn => btn.classList.add('disabled'));
+            
+            const correctAnswer = question.answer;
+            const isCorrect = userAnswer === correctAnswer;
+            
+            if (isCorrect) {
+                btnElement.classList.add('correct');
+                correctJudgeCount++;
+            } else {
+                btnElement.classList.add('wrong');
+                buttons[correctAnswer ? 0 : 1].classList.add('correct');
+            }
+            
+            answeredJudgeCount++;
+            updateProgress();
+            
+            explanationDiv.innerHTML = `
+                <div class="result ${isCorrect ? 'correct' : 'wrong'}">
+                    ${isCorrect ? '<span class="highlight-green">✓ 判断正确！</span>' : `<span class="highlight-red">✗ 判断错误</span> <span style="font-size:14px;color:#666;">正确答案：${correctAnswer ? '正确' : '错误'}</span>`}
+                </div>
+                <p><strong>【逐项解析】</strong></p>
+                ${question.explanation}
+            `;
+            explanationDiv.style.display = 'block';
+        }
+        
+        function updateProgress() {
+            const singleTotal = singlePracticeData.length;
+            const judgeTotal = judgePracticeData.length;
+            const multiTotal = multiPracticeData.length;
+            const totalAnswered = answeredSingleCount + answeredJudgeCount + answeredMultiCount;
+            const totalQuestions = singleTotal + judgeTotal + multiTotal;
+            const percentage = totalQuestions > 0 ? (totalAnswered / totalQuestions) * 100 : 0;
+            document.getElementById('mainProgress').style.width = percentage + '%';
+            document.getElementById('totalScore').textContent = `单选:${answeredSingleCount}/${singleTotal}(对:${correctSingleCount}) | 判断:${answeredJudgeCount}/${judgeTotal}(对:${correctJudgeCount}) | 多选:${answeredMultiCount}/${multiTotal}(对:${correctMultiCount})`;
+        }
+        
+        const singlePracticeData = [
+            {
+                module: "刑法",
+                question: "甲意图杀死乙，在乙的茶杯中投放剧毒药物。乙饮用后感到不适，被家人送往医院救治，经抢救脱险。甲的行为属于？",
+                options: ["犯罪既遂", "犯罪未遂", "犯罪中止", "犯罪预备"],
+                answer: 1,
+                explanation: `<p><span class="highlight-red">✗ A错误：</span>犯罪既遂是指犯罪目的已经达到。乙被救活，甲的杀人目的未实现。</p>
+                <p><span class="highlight-green">✓ B正确：</span>甲已着手实施投毒行为，但由于意志以外的原因（被家人发现并抢救）而未得逞，构成<span class="highlight-blue">犯罪未遂</span>。</p>
+                <p><span class="highlight-red">✗ C错误：</span>犯罪中止要求行为人自动放弃犯罪或自动有效防止犯罪结果发生。本案是因外界干预而未得逞，不是自动中止。</p>
+                <p><span class="highlight-red">✗ D错误：</span>犯罪预备是为犯罪准备工具、制造条件的行为。投毒已是着手实施阶段。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>未遂是"欲而不能"，中止是"能而不欲"！</p>`
+            },
+            {
+                module: "刑法",
+                question: "已满14周岁不满16周岁的人，犯下列哪种罪，应当负刑事责任？",
+                options: ["盗窃罪", "诈骗罪", "故意伤害罪（致人重伤）", "走私毒品罪"],
+                answer: 2,
+                explanation: `<p><span class="highlight-red">✗ A错误：</span>14-16周岁对盗窃罪不负刑事责任（盗窃罪不在八种重罪之列）。</p>
+                <p><span class="highlight-red">✗ B错误：</span>诈骗罪同样不在负刑事责任的八种重罪范围内。</p>
+                <p><span class="highlight-green">✓ C正确：</span>14-16周岁的人只对<span class="highlight-blue">故意杀人、故意伤害致人重伤或死亡、强奸、抢劫、贩卖毒品、放火、爆炸、投放危险物质</span>八种犯罪负刑事责任。故意伤害致人重伤符合条件。</p>
+                <p><span class="highlight-red">✗ D错误：</span>走私毒品罪不是这八种罪名之一，应是贩卖毒品罪才负刑事责任。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>14-16周岁负刑责：杀、伤、抢、奸、毒、爆、投放、纵火！</p>`
+            },
+            {
+                module: "刑法",
+                question: "甲趁乙不注意时，将其价值8000元的手机藏入自己包中带离商场。甲的行为构成？",
+                options: ["盗窃罪", "抢夺罪", "侵占罪", "诈骗罪"],
+                answer: 0,
+                explanation: `<p><span class="highlight-green">✓ A正确：</span>甲以非法占有为目的，采用<span class="highlight-blue">秘密窃取</span>的方式将他人财物占为己有，数额较大，构成<span class="highlight-blue">盗窃罪</span>。</p>
+                <p><span class="highlight-red">✗ B错误：</span>抢夺罪是趁人不备公然夺取，甲是在乙不注意时秘密拿走，不是公然夺取。</p>
+                <p><span class="highlight-red">✗ C错误：</span>侵占罪是将代为保管的他人财物或遗忘物、埋藏物非法占为己有。手机是他人占有之物，不属于侵占。</p>
+                <p><span class="highlight-red">✗ D错误：</span>诈骗罪是虚构事实或隐瞒真相使被害人自愿交付财物，甲没有欺骗行为。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>秘密窃取是盗窃，公然夺取是抢夺，骗人交付是诈骗！</p>`
+            },
+            {
+                module: "刑法",
+                question: "甲是某国有公司的总经理，利用职务便利，将公司100万元资金转入个人账户用于赌博。甲的行为构成？",
+                options: ["挪用公款罪", "贪污罪", "职务侵占罪", "挪用资金罪"],
+                answer: 1,
+                explanation: `<p><span class="highlight-red">✗ A错误：</span>挪用公款罪是利用职务便利挪用公款归个人使用，三个月内未还或进行营利活动。甲用于赌博，属于非法活动。</p>
+                <p><span class="highlight-green">✓ B正确：</span>甲作为国有公司总经理，属于国家工作人员。利用职务便利将公款<span class="highlight-blue">非法占为己有</span>用于赌博，构成<span class="highlight-blue">贪污罪</span>。</p>
+                <p><span class="highlight-red">✗ C错误：</span>职务侵占罪的主体是非国家工作人员，甲是国有公司总经理，属于国家工作人员。</p>
+                <p><span class="highlight-red">✗ D错误：</span>挪用资金罪的主体是非国家工作人员，甲不符合。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>挪用是"借"，贪污是"偷"！国家人员贪挪定贪污，非国家人员定侵占挪用！</p>`
+            },
+            {
+                module: "刑法",
+                question: "甲与乙素有矛盾。某日，甲在路上遇到乙，遂上前辱骂乙，乙还骂后甲用拳头击打乙面部，致乙鼻骨骨折。甲的行为构成？",
+                options: ["寻衅滋事罪", "故意伤害罪", "侮辱罪", "殴打他人行政违法行为"],
+                answer: 1,
+                explanation: `<p><span class="highlight-red">✗ A错误：</span>寻衅滋事罪是无事生非、随意殴打他人，破坏社会秩序。甲与乙有矛盾，有特定对象，不属于寻衅滋事。</p>
+                <p><span class="highlight-green">✓ B正确：</span>甲故意伤害乙的身体健康，致乙鼻骨骨折（<span class="highlight-blue">轻伤二级</span>），构成<span class="highlight-blue">故意伤害罪</span>。</p>
+                <p><span class="highlight-red">✗ C错误：</span>侮辱罪是使用暴力或其他方法公然侮辱他人，情节严重。甲的行为侧重于伤害而非侮辱。</p>
+                <p><span class="highlight-red">✗ D错误：</span>鼻骨骨折构成轻伤，已达刑事追诉标准，不只是行政违法行为。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>有仇有怨打伤人，故伤不是寻衅！轻伤以上就是刑事！</p>`
+            },
+            {
+                module: "刑法",
+                question: "甲在闹市区抢夺他人手机后逃跑，被害人追赶。甲为逃跑顺手拿起路边摊贩的菜刀威胁追赶者。甲的行为构成？",
+                options: ["只构成抢夺罪", "只构成抢劫罪", "抢夺罪与抢劫罪数罪并罚", "抢夺罪与寻衅滋事罪"],
+                answer: 1,
+                explanation: `<p><span class="highlight-red">✗ A错误：</span>甲在抢夺后为抗拒抓捕而使用暴力胁迫，根据<span class="highlight-blue">转化型抢劫</span>规定，已转化为抢劫罪。</p>
+                <p><span class="highlight-green">✓ B正确：</span>根据《刑法》，犯抢夺罪后，为抗拒抓捕或毁灭罪证而当场使用暴力或以暴力相威胁的，以<span class="highlight-blue">抢劫罪</span>定罪处罚。</p>
+                <p><span class="highlight-red">✗ C错误：</span>转化型抢劫按抢劫罪一罪处罚，不数罪并罚。</p>
+                <p><span class="highlight-red">✗ D错误：</span>不构成寻衅滋事罪。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>抢夺抗拒变抢劫，暴力胁迫都算！</p>`
+            },
+            {
+                module: "刑法",
+                question: "甲明知乙（13周岁）是幼女，仍与其发生性关系。甲的行为构成？",
+                options: ["猥亵儿童罪", "强奸罪", "嫖宿幼女罪", "不构成犯罪"],
+                answer: 1,
+                explanation: `<p><span class="highlight-red">✗ A错误：</span>猥亵儿童罪是对儿童的抠摸、搂抱等行为，不包括性交。</p>
+                <p><span class="highlight-green">✓ B正确：</span>根据《刑法》，奸淫不满<span class="highlight-blue">14周岁</span>的幼女的，以强奸论，从重处罚。甲明知乙是幼女仍与其发生性关系，构成<span class="highlight-blue">强奸罪</span>。</p>
+                <p><span class="highlight-red">✗ C错误：</span>嫖宿幼女罪已被删除（2015年刑法修正案九），现统一以强奸罪论处。</p>
+                <p><span class="highlight-red">✗ D错误：</span>与幼女发生性关系，无论是否自愿，均构成强奸罪。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>幼女无性同意权，无论自愿都强奸！</p>`
+            },
+            {
+                module: "刑法",
+                question: "甲盗窃了一辆价值5000元的摩托车，次日以3000元低价卖给不知情的乙。甲的行为构成？",
+                options: ["盗窃罪与掩饰、隐瞒犯罪所得罪，数罪并罚", "盗窃罪与掩饰、隐瞒犯罪所得罪，从一重处断", "盗窃罪", "盗窃罪与销赃罪，数罪并罚"],
+                answer: 0,
+                explanation: `<p><span class="highlight-green">✓ A正确：</span>甲盗窃摩托车构成<span class="highlight-blue">盗窃罪</span>；次日销赃行为另构成<span class="highlight-blue">掩饰、隐瞒犯罪所得罪</span>。两罪独立，应数罪并罚。</p>
+                <p><span class="highlight-red">✗ B错误：</span>盗窃后销赃是两独立行为，不是牵连或吸收关系，应数罪并罚。</p>
+                <p><span class="highlight-red">✗ C错误：</span>仅认定盗窃罪不正确，销赃行为另构成独立犯罪。</p>
+                <p><span class="highlight-red">✗ D错误：</span>销赃罪已修改为掩饰、隐瞒犯罪所得罪。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>盗了东西又卖钱，盗窃掩罪两罪全！</p>`
+            },
+            {
+                module: "刑法",
+                question: "甲收买被拐卖的妇女乙后，按照乙的意愿，不阻碍其返回原居住地，对甲应当如何处理？",
+                options: ["应当从轻处罚", "可以从轻或减轻处罚", "应当免除处罚", "可以免除处罚"],
+                answer: 1,
+                explanation: `<p><span class="highlight-red">✗ A错误：</span>不是"应当"从轻，而是"可以"从轻或减轻。</p>
+                <p><span class="highlight-green">✓ B正确：</span>根据《刑法》，收买被拐卖的妇女、儿童，按照被买妇女的意愿，不阻碍其返回原居住地的，<span class="highlight-blue">可以从轻或减轻处罚</span>。</p>
+                <p><span class="highlight-red">✗ C错误：</span>免除处罚要求更严格的条件。</p>
+                <p><span class="highlight-red">✗ D错误：</span>可以免除处罚适用于其他情节更轻的情形。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>买被拐者不阻碍，可从轻或减轻；买被拐者不虐待，可免除！</p>`
+            },
+            {
+                module: "刑法",
+                question: "甲因犯故意杀人罪被判处死刑，缓期二年执行。在缓刑考验期满前，甲又犯故意伤害罪（致人重伤）。对甲应当如何处理？",
+                options: ["执行死刑", "重新计算缓刑考验期", "撤销缓刑，数罪并罚", "加重原判刑罚"],
+                answer: 2,
+                explanation: `<p><span class="highlight-red">✗ A错误：</span>死缓执行死刑的条件是在缓刑考验期内故意犯罪，情节恶劣。本案在考验期满前但尚未期满时犯罪。</p>
+                <p><span class="highlight-red">✗ B错误：</span>不应重新计算考验期。</p>
+                <p><span class="highlight-green">✓ C正确：</span>死缓犯在缓刑考验期内又故意犯罪的，应当<span class="highlight-blue">撤销缓刑</span>，对新的犯罪作出判决，把前罪和后罪所判处的刑罚数罪并罚。</p>
+                <p><span class="highlight-red">✗ D错误：</span>不是简单加重原判。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>死缓期间又犯罪，撤缓数罪来并罚！</p>`
+            },
+            {
+                module: "刑法",
+                question: "甲因盗窃罪被判处有期徒刑3年。刑满释放后第2年，甲又因诈骗罪被判处有期徒刑2年。甲是否构成累犯？",
+                options: ["构成一般累犯", "构成特别累犯", "不构成累犯", "构成毒品再犯"],
+                answer: 2,
+                explanation: `<p><span class="highlight-red">✗ A错误：</span>一般累犯要求<span class="highlight-blue">有期徒刑执行完毕后五年内</span>再犯应当判处有期徒刑以上刑罚之罪。本案超过5年。</p>
+                <p><span class="highlight-red">✗ B错误：</span>特别累犯适用于危害国家安全、恐怖活动、黑社会性质组织犯罪，不适用盗窃、诈骗。</p>
+                <p><span class="highlight-green">✓ C正确：</span>甲前罪执行完毕后<span class="highlight-orange">第2年</span>再犯，距刑满释放已超过<span class="highlight-orange">5年</span>，不符合累犯条件，不构成累犯。</p>
+                <p><span class="highlight-red">✗ D错误：</span>毒品再犯适用于毒品犯罪，甲犯的是诈骗罪。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>累犯要求五年内，五年以外不算！</p>`
+            },
+            {
+                module: "刑法",
+                question: "甲明知他人生产假药仍为其提供资金帮助，甲的行为构成？",
+                options: ["生产假药罪的共犯", "生产假药罪的帮助犯", "生产假药罪（片面帮助犯）", "窝藏、包庇罪"],
+                answer: 2,
+                explanation: `<p><span class="highlight-red">✗ A错误：</span>甲没有直接参与生产行为。</p>
+                <p><span class="highlight-green">✓ B正确：</span>甲明知他人生产假药仍提供资金帮助，构成<span class="highlight-blue">生产假药罪</span>的帮助犯。</p>
+                <p><span class="highlight-red">✗ C错误：</span>片面帮助犯是指单方提供帮助，对方不知情。本题描述的是一般帮助犯。</p>
+                <p><span class="highlight-red">✗ D错误：</span>窝藏、包庇罪是针对犯罪人本身，与生产假药无关。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>帮助他人犯罪事，提供帮助成帮凶！</p>`
+            },
+            {
+                module: "刑法",
+                question: "甲酒后驾驶机动车在道路上行驶，血液酒精含量为120mg/100ml。甲的行为构成？",
+                options: ["饮酒驾驶行政违法", "醉酒驾驶机动车罪", "危险驾驶罪", "交通肇事罪"],
+                answer: 2,
+                explanation: `<p><span class="highlight-red">✗ A错误：</span>血液酒精含量80mg/100ml以上即构成醉酒，120mg远超此标准。</p>
+                <p><span class="highlight-red">✗ B错误：</span>危险驾驶罪是<span class="highlight-blue">醉驾</span>的法定罪名，不是单独的"醉酒驾驶机动车罪"。</p>
+                <p><span class="highlight-green">✓ C正确：</span>血液酒精含量<span class="highlight-orange">≥80mg/100ml</span>即构成<span class="highlight-blue">醉酒驾驶</span>，属于<span class="highlight-blue">危险驾驶罪</span>。</p>
+                <p><span class="highlight-red">✗ D错误：</span>交通肇事罪要求造成重大事故，醉驾本身即构成危险驾驶罪。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>醉驾入刑是危险驾驶罪，80起算不用死人！</p>`
+            },
+            {
+                module: "刑法",
+                question: "甲明知是他人盗窃所得的摩托车，仍以明显低于市场的价格收购。甲的行为构成？",
+                options: ["盗窃罪共犯", "掩饰、隐瞒犯罪所得罪", "窝藏罪", "洗钱罪"],
+                answer: 1,
+                explanation: `<p><span class="highlight-red">✗ A错误：</span>甲没有参与盗窃，只是事后收购。</p>
+                <p><span class="highlight-green">✓ B正确：</span>甲明知是犯罪所得的赃物而以明显低于市场的价格收购，构成<span class="highlight-blue">掩饰、隐瞒犯罪所得罪</span>。</p>
+                <p><span class="highlight-red">✗ C错误：</span>窝藏罪是帮助犯罪人逃匿，收购赃物不构成窝藏罪。</p>
+                <p><span class="highlight-red">✗ D错误：</span>洗钱罪针对毒品犯罪、黑社会性质组织犯罪等七类特定上游犯罪，盗窃不属于。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>收购赃物是掩罪，不算共犯算单独！</p>`
+            },
+            {
+                module: "刑法",
+                question: "甲被判处管制3个月。在甲出差前往外地时，执行机关应当批准吗？",
+                options: ["应当批准", "可以批准", "不应当批准", "由法院决定"],
+                answer: 2,
+                explanation: `<p><span class="highlight-red">✗ A错误：</span>管制执行期间离开居住地需执行机关批准。</p>
+                <p><span class="highlight-red">✗ B错误：</span>管制期间外出应经执行机关批准，不是"可以批准"的问题。</p>
+                <p><span class="highlight-green">✓ C正确：</span>根据《刑法》，被判处管制的犯罪分子在执行期间，应当遵守<span class="highlight-blue">会客的规定和外出报批制度</span>。离开所居住的市、县应当报经执行机关批准。</p>
+                <p><span class="highlight-red">✗ D错误：</span>管制由公安机关执行，不需要法院决定。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>管制虽自由，外出需批准！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "根据《刑事诉讼法》，公安机关对被拘留的人，认为需要逮捕的，应当在拘留后多少小时内，提请人民检察院审查批准？",
+                options: ["12小时", "24小时", "48小时", "3日"],
+                answer: 1,
+                explanation: `<p><span class="highlight-red">✗ A错误：</span>12小时是对被逮捕人通知家属的时间。</p>
+                <p><span class="highlight-green">✓ B正确：</span>根据《刑事诉讼法》，公安机关对被拘留的人，认为需要逮捕的，应当在<span class="highlight-blue">拘留后24小时</span>内提请人民检察院审查批准。</p>
+                <p><span class="highlight-red">✗ C错误：</span>48小时是特殊情况下的时限，如指定居所监视居住的通知时限。</p>
+                <p><span class="highlight-red">✗ D错误：</span>3日不是拘留后提请逮捕的时限。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>拘留后24小时必须报捕，特殊延37天！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "人民检察院审查批准逮捕犯罪嫌疑人，讯问犯罪嫌疑人的时间是？",
+                options: ["12小时以内", "24小时以内", "48小时以内", "没有时间限制"],
+                answer: 1,
+                explanation: `<p><span class="highlight-red">✗ A错误：</span>12小时是通知家属的时间。</p>
+                <p><span class="highlight-green">✓ B正确：</span>人民检察院应当在接到公安机关提请批准逮捕书后的<span class="highlight-blue">48小时以内</span>作出是否批准逮捕的决定。但<span class="highlight-blue">讯问犯罪嫌疑人</span>的时间要求是<span class="highlight-orange">24小时以内</span>。</p>
+                <p><span class="highlight-red">✗ C错误：</span>48小时是作出是否批准逮捕决定的时间，不是讯问时间。</p>
+                <p><span class="highlight-red">✗ D错误：</span>讯问有时间限制。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>批捕决定48小时，讯问嫌犯24小时！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "甲因涉嫌盗窃罪被公安机关立案侦查。在侦查阶段，甲委托了律师乙作为辩护人。下列哪种情况下，律师乙有权查阅、摘抄、复制案卷材料？",
+                options: ["侦查阶段任何时候都可以", "案件移送审查起诉之日起", "审判阶段任何时候都可以", "案件立案后即可"],
+                answer: 1,
+                explanation: `<p><span class="highlight-red">✗ A错误：</span>侦查阶段辩护律师只能享有会见权、了解罪名等有限权利，不能查阅案卷。</p>
+                <p><span class="highlight-green">✓ B正确：</span>根据《刑事诉讼法》，辩护律师自<span class="highlight-blue">案件移送审查起诉之日起</span>，有权查阅、摘抄、复制本案的案卷材料。</p>
+                <p><span class="highlight-red">✗ C错误：</span>审判阶段可以查阅，但前提是从审查起诉阶段就开始。</p>
+                <p><span class="highlight-red">✗ D错误：</span>立案后属于侦查阶段，不能查阅案卷。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>案卷材料审查起诉后才能看，侦查阶段只能会见！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "公安机关对犯罪嫌疑人执行逮捕后，发现应当逮捕但犯罪嫌疑人正在怀孕，对其应当如何处理？",
+                options: ["立即释放，待产后再捕", "继续羁押", "监视居住", "取保候审"],
+                answer: 3,
+                explanation: `<p><span class="highlight-green">✓ A正确：</span>根据《刑事诉讼法》，对应当逮捕的犯罪嫌疑人、被告人，如果<span class="highlight-blue">正在怀孕、哺乳自己婴儿的妇女</span>，可以采用<span class="highlight-blue">取保候审</span>或者监视居住的方法。</p>
+                <p><span class="highlight-red">✗ B错误：</span>怀孕妇女不符合羁押条件。</p>
+                <p><span class="highlight-red">✗ C错误：</span>监视居住是替代羁押的措施，但孕妇通常适用取保候审。</p>
+                <p><span class="highlight-red">✗ D错误：</span>取保候审可以适用，但题目表述不准确，应是变更强制措施。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>孕妇不羁押，取保监视来替代！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "根据《刑事诉讼法》，下列哪种人员可以作为证人？",
+                options: ["未成年人", "与案件有利害关系的人", "精神病患者", "本案的审判人员"],
+                answer: 1,
+                explanation: `<p><span class="highlight-red">✗ A错误：</span>未成年人可以作证，但需考虑其认知能力。</p>
+                <p><span class="highlight-green">✓ B正确：</span>根据《刑事诉讼法》，<span class="highlight-blue">凡是知道案件情况的人</span>，都有作证的义务。生理上、精神上有缺陷或者年幼，不能辨别是非、不能正确表达的人，不能作证人。与案件有利害关系的人并不影响其作证资格。</p>
+                <p><span class="highlight-red">✗ C错误：</span>精神病患者如果不能辨别是非、不能正确表达，不能作证人。</p>
+                <p><span class="highlight-red">✗ D错误：</span>审判人员应当回避，不能同时担任证人。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>知道案情就能作证，瞎子哑巴也能当证人！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "甲涉嫌故意伤害罪被起诉至人民法院。在审判阶段，甲申请法院调取证明自己无罪的证据，法院应当如何处理？",
+                options: ["一律准许", "审查后决定是否调取", "一律不准许", "通知检察院调取"],
+                answer: 1,
+                explanation: `<p><span class="highlight-red">✗ A错误：</span>法院不会一律准许。</p>
+                <p><span class="highlight-green">✓ B正确：</span>根据《刑事诉讼法》，当事人及其辩护人、诉讼代理人有权申请<span class="highlight-blue">调取证明犯罪嫌疑人、被告人无罪、罪轻的证据</span>。法院应当审查，<span class="highlight-blue">认为必要的，应当决定调取</span>。</p>
+                <p><span class="highlight-red">✗ C错误：</span>不会一律不准许。</p>
+                <p><span class="highlight-red">✗ D错误：</span>法院有权自行调取证据。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>申请调证法院审，确有必要必须调！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "某故意伤害案经中级人民法院一审判决被告人甲有期徒刑15年。被害人乙对判决不服，他可以？",
+                options: ["上诉至高级人民法院", "申诉至最高人民法院", "请求人民检察院抗诉", "申请再审"],
+                answer: 2,
+                explanation: `<p><span class="highlight-red">✗ A错误：</span>上诉是被告人或检察院的权利，被害人不直接上诉。</p>
+                <p><span class="highlight-red">✗ B错误：</span>申诉不是二审程序。</p>
+                <p><span class="highlight-green">✓ C正确：</span>被害人及其法定代理人、近亲属<span class="highlight-blue">不服地方各级人民法院一审刑事判决的</span>，有权请求<span class="highlight-blue">人民检察院提出抗诉</span>。</p>
+                <p><span class="highlight-red">✗ D错误：</span>申请再审是判决生效后的救济途径。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>被害人不服一审判决，只能请求检察院抗诉，不能自己上诉！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "公安机关在侦查过程中，需要扣押犯罪嫌疑人的邮件、电子邮件、电报，应当经什么机关批准？",
+                options: ["公安机关负责人", "人民检察院", "人民法院", "国家安全机关"],
+                answer: 1,
+                explanation: `<p><span class="highlight-red">✗ A错误：</span>公安机关负责人无权单独决定扣押邮件。</p>
+                <p><span class="highlight-green">✓ B正确：</span>根据《刑事诉讼法》，公安机关在侦查过程中需要扣押犯罪嫌疑人的邮件、电子邮件、电报，应当经<span class="highlight-blue">人民检察院批准</span>。</p>
+                <p><span class="highlight-red">✗ C错误：</span>法院在审判阶段才有权决定。</p>
+                <p><span class="highlight-red">✗ D错误：</span>国家安全机关针对危害国家安全的案件。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>扣押邮件需检察批准！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "刑事案件中关于证人出庭作证，下列说法正确的是？",
+                options: ["所有证人都必须出庭作证", "公诉人、当事人或辩护人对证人证言有异议的证人应当出庭", "证人出庭费用由败诉方承担", "证人拒绝出庭可被行政拘留"],
+                answer: 1,
+                explanation: `<p><span class="highlight-red">✗ A错误：</span>不是所有证人必须出庭，只有对案件处理有重大影响、经法院通知的证人才必须出庭。</p>
+                <p><span class="highlight-green">✓ B正确：</span>根据《刑事诉讼法》，公诉人、当事人或辩护人、诉讼代理人<span class="highlight-blue">对证人证言有异议</span>，且该证人证言对案件定罪量刑有<span class="highlight-blue">重大影响</span>的，法院认为证人有必要出庭的，该证人应当出庭作证。</p>
+                <p><span class="highlight-red">✗ C错误：</span>证人出庭费用由<span class="highlight-blue">法院</span>承担。</p>
+                <p><span class="highlight-red">✗ D错误：</span>证人无正当理由拒绝出庭的，法院可以予以训诫，情节严重的，经院长批准，可予以<span class="highlight-blue">十日以下拘留</span>。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>异议证人必须出庭，费用法院出，拒出可拘留！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "人民检察院对公安机关的侦查活动是否合法进行监督，发现侦查活动有违法情形时，应当提出纠正意见。该监督属于？",
+                options: ["事前监督", "事后监督", "同步监督", "间接监督"],
+                answer: 1,
+                explanation: `<p><span class="highlight-red">✗ A错误：</span>事前监督是指行为前进行的监督，如批准逮捕。</p>
+                <p><span class="highlight-green">✓ B正确：</span>人民检察院对侦查活动的监督属于<span class="highlight-blue">事后监督</span>，即在侦查行为结束后进行监督并提出纠正意见。</p>
+                <p><span class="highlight-red">✗ C错误：</span>同步监督通常指审判监督。</p>
+                <p><span class="highlight-red">✗ D错误：</span>这是直接监督而非间接监督。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>侦查监督是事后，捕前审查是事前！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "公安机关对甲执行拘留后发现甲是人大代表，对其拘留应当如何处理？",
+                options: ["立即释放", "立即报告所属人大主席团或常委会", "继续拘留并报告", "取保候审"],
+                answer: 2,
+                explanation: `<p><span class="highlight-red">✗ A错误：</span>不是一律立即释放。</p>
+                <p><span class="highlight-green">✓ B正确：</span>根据《刑事诉讼法》，公安机关依法对<span class="highlight-blue">县级以上人大代表</span>采取拘留措施的，应当<span class="highlight-blue">报请该同级人民代表大会主席团或者常务委员会许可</span>。所以应先报告所属人大主席团或常委会。</p>
+                <p><span class="highlight-red">✗ C错误：</span>不是继续拘留并报告，而是先报告批准。</p>
+                <p><span class="highlight-red">✗ D错误：</span>取保候审不是对人大代表的特殊处理方式。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>拘留代表先报告，等批才能继续搞！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "甲因涉嫌盗窃罪被公安机关立案侦查。在侦查过程中，甲突发心脏病死亡。公安机关应当如何处理？",
+                options: ["继续侦查", "撤销案件", "不起诉", "终止审理"],
+                answer: 1,
+                explanation: `<p><span class="highlight-red">✗ A错误：</span>犯罪嫌疑人死亡后，不能继续侦查。</p>
+                <p><span class="highlight-green">✓ B正确：</span>根据《刑事诉讼法》，在侦查过程中，发现<span class="highlight-blue">不应对犯罪嫌疑人追究刑事责任</span>的，应当撤销案件。犯罪嫌疑人死亡的，属于不应对其追究刑事责任的情形，应当<span class="highlight-blue">撤销案件</span>。</p>
+                <p><span class="highlight-red">✗ C错误：</span>不起诉是检察院的权限。</p>
+                <p><span class="highlight-red">✗ D错误：</span>终止审理是法院的权限。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>嫌疑人死亡，公安撤案，检察不起诉，法院终止！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "某刑事案件由中级人民法院一审后，被告人不上诉，人民检察院不抗诉。该判决何时生效？",
+                options: ["判决作出之日", "上诉期满之日", "送达当事人之日", "执行之日"],
+                answer: 1,
+                explanation: `<p><span class="highlight-red">✗ A错误：</span>一审判决不是作出即生效。</p>
+                <p><span class="highlight-green">✓ B正确：</span>根据《刑事诉讼法》，<span class="highlight-blue">中级人民法院</span>一审判决后，被告人<span class="highlight-blue">不上诉</span>、检察院<span class="highlight-blue">不抗诉</span>的，上诉期满后判决生效。</p>
+                <p><span class="highlight-red">✗ C错误：</span>送达不等于生效。</p>
+                <p><span class="highlight-red">✗ D错误：</span>执行是在判决生效后。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>中院一审判决，上诉期满才生效！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "被害人在审查起诉阶段申请检察院调取物证，检察院审查后认为该物证与案件无关。检察院应当如何处理？",
+                options: ["调取该物证", "驳回申请并说明理由", "移交法院决定", "不理会申请"],
+                answer: 1,
+                explanation: `<p><span class="highlight-red">✗ A错误：</span>与案件无关的物证不需要调取。</p>
+                <p><span class="highlight-green">✓ B正确：</span>根据《刑事诉讼法》，人民检察院应当<span class="highlight-blue">审查</span>被害人的申请，认为与案件无关的，应当<span class="highlight-blue">驳回申请并说明理由</span>。</p>
+                <p><span class="highlight-red">✗ C错误：</span>检察院有权自行决定。</p>
+                <p><span class="highlight-red">✗ D错误：</span>检察院应当对申请作出回应。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>申请调证要审查，无关驳回说理由！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "甲因盗窃罪被判处有期徒刑3年。在刑罚执行过程中，甲认真遵守监规，接受教育改造。确有悔改表现。甲申请假释是否会获得批准？",
+                options: ["应当批准", "可以批准", "不批准", "需法院裁定"],
+                answer: 1,
+                explanation: `<p><span class="highlight-red">✗ A错误：</span>假释是"可以"而非"应当"。</p>
+                <p><span class="highlight-green">✓ B正确：</span>根据《刑法》，被判处有期徒刑的犯罪分子，执行原判刑罚<span class="highlight-orange">二分之一以上</span>，认真遵守监规，接受教育改造，确有悔改表现的，<span class="highlight-blue">可以假释</span>。不是"应当"批准。</p>
+                <p><span class="highlight-red">✗ C错误：</span>符合假释条件的，可以假释。</p>
+                <p><span class="highlight-red">✗ D错误：</span>假释由法院裁定，但本题问的是是否会批准。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>假释是"可以"，减刑是"应当"！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "公安机关对乙执行取保候审时，乙应当遵守的规定不包括？",
+                options: ["未经执行机关批准不得离开所居住的市、县", "在传讯的时候及时到案", "不得毁灭、伪造证据", "不得申辩和上诉"],
+                answer: 3,
+                explanation: `<p><span class="highlight-green">✓ A正确：</span>这属于取保候审应当遵守的规定。</p>
+                <p><span class="highlight-green">✓ B正确：</span>这也是取保候审应当遵守的规定。</p>
+                <p><span class="highlight-green">✓ C正确：</span>这也是取保候审应当遵守的规定。</p>
+                <p><span class="highlight-red">✗ D错误：</span>申辩和上诉是<span class="highlight-blue">当事人的法定诉讼权利</span>，任何人不得剥夺。不得申辩和上诉不是取保候审的规定。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>取保候审限制自由，但上诉申辩权不能剥夺！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "某故意杀人案由公安机关侦查终结后移送人民检察院审查起诉。人民检察院审查后认为证据不足，不符合起诉条件。检察院应当？",
+                options: ["提起公诉", "不起诉", "退回公安机关补充侦查", "撤销案件"],
+                answer: 1,
+                explanation: `<p><span class="highlight-red">✗ A错误：</span>证据不足不能提起公诉。</p>
+                <p><span class="highlight-green">✓ B正确：</span>根据《刑事诉讼法》，人民检察院审查案件后，认为<span class="highlight-blue">证据不足，不符合起诉条件的</span>，应当作出<span class="highlight-blue">不起诉决定</span>。</p>
+                <p><span class="highlight-red">✗ C错误：</span>证据不足时检察院可退回补充侦查，但本题已明确说不符合起诉条件，应直接不起诉。</p>
+                <p><span class="highlight-red">✗ D错误：</span>撤销案件是公安机关的权限。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>起诉要求事实清楚、证据充分，证据不足只能不起诉！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "甲涉嫌抢夺罪被公安机关立案侦查。公安机关对甲的通讯记录进行监控，该监控措施需要经过什么程序？",
+                options: ["经公安机关负责人批准即可", "经人民检察院批准", "经人民法院批准", "无需批准"],
+                answer: 1,
+                explanation: `<p><span class="highlight-red">✗ A错误：</span>通讯监控涉及公民隐私权，不能仅由公安机关负责人批准。</p>
+                <p><span class="highlight-green">✓ B正确：</span>根据《刑事诉讼法》，公安机关在侦查过程中，需要采取<span class="highlight-blue">技术侦查措施</span>（如通讯监控）的，应当经过<span class="highlight-blue">严格的批准手续</span>，其中涉及公民通讯自由的，需经<span class="highlight-blue">人民检察院批准</span>。</p>
+                <p><span class="highlight-red">✗ C错误：</span>技术侦查的批准权在检察院。</p>
+                <p><span class="highlight-red">✗ D错误：</span>技术侦查必须经过严格批准。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>技术侦查需批准，隐私权利要保护！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "某案由基层人民法院一审后，被告人上诉至中级人民法院。中级人民法院二审后，发现一审认定事实正确，但适用法律错误，应当如何处理？",
+                options: ["发回重审", "维持原判", "改判", "撤销原判"],
+                answer: 2,
+                explanation: `<p><span class="highlight-red">✗ A错误：</span>发回重审适用于认定事实不清或程序违法。</p>
+                <p><span class="highlight-red">✗ B错误：</span>适用法律错误不能维持原判。</p>
+                <p><span class="highlight-green">✓ C正确：</span>根据《刑事诉讼法》，二审法院对<span class="highlight-blue">认定事实正确，但适用法律错误</span>的案件，应当<span class="highlight-blue">改判</span>。</p>
+                <p><span class="highlight-red">✗ D错误：</span>改判不等于撤销原判，是改变判决内容。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>二审改判适用于：事实清楚但法律错！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "甲因盗窃罪被判处有期徒刑2年。甲上诉后，二审法院认为一审认定事实不清、证据不足。法院应当如何处理？",
+                options: ["维持原判", "改判", "发回重审", "撤销原判"],
+                answer: 2,
+                explanation: `<p><span class="highlight-red">✗ A错误：</span>事实不清、证据不足不能维持原判。</p>
+                <p><span class="highlight-red">✗ B错误：</span>事实不清一般发回重审，二审法院一般不改判。</p>
+                <p><span class="highlight-green">✓ C正确：</span>根据《刑事诉讼法》，二审法院发现<span class="highlight-blue">认定事实不清、证据不足</span>的，应当<span class="highlight-blue">裁定撤销原判，发回原审人民法院重新审判</span>。</p>
+                <p><span class="highlight-red">✗ D错误：</span>撤销原判是结果，发回重审是程序。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>二审发现事实不清，撤销原判发回重审！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "公安机关在侦查过程中，对证人甲进行询问。下列哪种做法是错误的？",
+                options: ["询问证人甲应当个别进行", "询问证人甲时，侦查人员不得少于2人", "询问证人甲时可以采用威胁方法", "询问证人甲应当告知其如实作证的义务"],
+                answer: 2,
+                explanation: `<p><span class="highlight-green">✓ A正确：</span>询问证人应当个别进行，这是正确做法。</p>
+                <p><span class="highlight-green">✓ B正确：</span>询问时侦查人员不得少于2人，是正确的。</p>
+                <p><span class="highlight-red">✗ C错误：</span>询问证人<span class="highlight-blue">不得采用威胁方法</span>，否则收集的证言可能无效。威胁取证是违法侦查行为。</p>
+                <p><span class="highlight-green">✓ D正确：</span>告知如实作证义务是正确的。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>询问证人有规矩：个别进行、两人同在、不能威胁！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "人民检察院对某案提起公诉后，人民法院经审理认为被告人可能被判处无期徒刑。法院应当如何处理？",
+                options: ["继续审理并作出判决", "移送中级人民法院审理", "退回人民检察院处理", "报上级人民法院指定管辖"],
+                answer: 1,
+                explanation: `<p><span class="highlight-red">✗ A错误：</span>可能判处无期徒刑的案件应由中级人民法院管辖。</p>
+                <p><span class="highlight-green">✓ B正确：</span>根据《刑事诉讼法》，可能判处<span class="highlight-blue">无期徒刑、死刑</span>的案件，应当由<span class="highlight-blue">中级人民法院</span>管辖。法院发现案件应由上级法院管辖的，应当<span class="highlight-blue">移送</span>。</p>
+                <p><span class="highlight-red">✗ C错误：</span>不是退回检察院。</p>
+                <p><span class="highlight-red">✗ D错误：</span>无期徒刑属于应当移送的管辖，不需要指定管辖。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>无期死刑归中院，基层不能审！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "甲因涉嫌抢劫罪被公安机关刑事拘留。在拘留期间，甲委托了律师乙。律师乙会见甲时，公安机关派员在场监视。该做法是否正确？",
+                options: ["正确，危害国家安全犯罪需要在场监视", "正确，一般刑事案件都需要在场监视", "不正确，侦查阶段律师会见不被监听", "不正确，律师会见权不受限制"],
+                answer: 2,
+                explanation: `<p><span class="highlight-red">✗ A错误：</span>危害国家安全犯罪、恐怖活动犯罪才会在场监视，普通抢劫罪不属于。</p>
+                <p><span class="highlight-red">✗ B错误：</span>不是所有案件都需要在场监视。</p>
+                <p><span class="highlight-green">✓ C正确：</span>根据《刑事诉讼法》，辩护律师会见在押的犯罪嫌疑人、被告人时，<span class="highlight-blue">不被监听</span>。侦查阶段律师会见，公安机关<span class="highlight-blue">不能派员在场监视</span>。</p>
+                <p><span class="highlight-red">✗ D错误：</span>律师会见权在侦查阶段有一些限制（如涉及国家安全犯罪的需批准）。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>律师会见不被监听，但国安恐怖需批准！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "某未成年人涉嫌盗窃罪，公安机关拟对其讯问。下列做法正确的是？",
+                options: ["必须通知其法定代理人到场", "应当通知其法定代理人到场", "可以不通知法定代理人", "法定代理人不能在场"],
+                answer: 1,
+                explanation: `<p><span class="highlight-red">✗ A错误：</span>"必须"过于绝对。</p>
+                <p><span class="highlight-green">✓ B正确：</span>根据《刑事诉讼法》，<span class="highlight-blue">未成年人</span>犯罪案件，讯问时<span class="highlight-blue">应当通知其法定代理人到场</span>。</p>
+                <p><span class="highlight-red">✗ C错误：</span>应当通知，不能不通知。</p>
+                <p><span class="highlight-red">✗ D错误：</span>法定代理人可以在场。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>未成年人讯问，应当通知法定代理人！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "甲因涉嫌故意伤害罪被检察院批准逮捕。在审查批准逮捕时，检察院下列哪种做法是正确的？",
+                options: ["讯问犯罪嫌疑人甲", "只书面审查即可", "必须询问证人", "无需听取辩护人意见"],
+                answer: 0,
+                explanation: `<p><span class="highlight-green">✓ A正确：</span>根据《刑事诉讼法》，人民检察院审查批准逮捕，可以<span class="highlight-blue">讯问犯罪嫌疑人</span>，听取辩护律师的意见。</p>
+                <p><span class="highlight-red">✗ B错误：</span>不是只书面审查，检察院可以讯问犯罪嫌疑人。</p>
+                <p><span class="highlight-red">✗ C错误：</span>不是必须询问证人。</p>
+                <p><span class="highlight-red">✗ D错误：</span>应当听取辩护人意见。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>批捕可讯问，听辩护人意见！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "某案公安机关侦查终结后移送检察院审查起诉。检察院审查的期限是多久？",
+                options: ["7日", "10日", "15日", "30日"],
+                answer: 2,
+                explanation: `<p><span class="highlight-red">✗ A错误：</span>7日是技术侦查批准时限。</p>
+                <p><span class="highlight-red">✗ B错误：</span>10日是退回补充侦查的期限。</p>
+                <p><span class="highlight-green">✓ C正确：</span>根据《刑事诉讼法》，人民检察院对于公安机关移送起诉的案件，应当在<span class="highlight-blue">一个月以内</span>作出决定，<span class="highlight-blue">重大、复杂的案件，可以延长半个月</span>。所以最长15日。</p>
+                <p><span class="highlight-red">✗ D错误：</span>30日不是法定审查起诉期限。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>审查起诉一个月，重大复杂延半月！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "甲因盗窃罪被判处有期徒刑1年，缓刑2年。在缓刑考验期内，甲严重违反监督管理规定。法院应当如何处理？",
+                options: ["继续执行缓刑", "撤销缓刑，执行原判刑罚", "延长缓刑考验期", "加重刑罚"],
+                answer: 1,
+                explanation: `<p><span class="highlight-red">✗ A错误：</span>严重违反规定不能继续执行缓刑。</p>
+                <p><span class="highlight-green">✓ B正确：</span>根据《刑法》，被宣告缓刑的犯罪分子，在缓刑考验期内，<span class="highlight-blue">违反法律、行政法规或监督管理规定，情节严重的</span>，应当<span class="highlight-blue">撤销缓刑，执行原判刑罚</span>。</p>
+                <p><span class="highlight-red">✗ C错误：</span>不能延长考验期。</p>
+                <p><span class="highlight-red">✗ D错误：</span>是撤销缓刑，不是加重刑罚。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>缓刑违反情节重，撤销缓刑收监执行！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "公安机关在侦查过程中，对犯罪嫌疑人甲进行辨认。辨认由谁主持？",
+                options: ["案件主办侦查员", "办案部门负责人", "不少于2名侦查人员", "人民检察院工作人员"],
+                answer: 2,
+                explanation: `<p><span class="highlight-red">✗ A错误：</span>不是必须由主办侦查员主持。</p>
+                <p><span class="highlight-red">✗ B错误：</span>不是办案部门负责人主持。</p>
+                <p><span class="highlight-green">✓ C正确：</span>根据《公安机关办理刑事案件程序规定》，辨认由<span class="highlight-blue">不少于2名侦查人员</span>主持。在辨认前，应当向辨认人详细询问被辨认对象的具体特征。</p>
+                <p><span class="highlight-red">✗ D错误：</span>辨认由侦查人员主持，不需要检察人员。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>辨认需两人同主持！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "某案由公安机关立案侦查。在侦查过程中，公安机关发现案件已过追诉时效。公安机关应当如何处理？",
+                options: ["移送检察院处理", "撤销案件", "继续侦查", "报上级批准后撤销"],
+                answer: 1,
+                explanation: `<p><span class="highlight-red">✗ A错误：</span>追诉时效是公安应当主动审查的事项。</p>
+                <p><span class="highlight-green">✓ B正确：</span>根据《刑事诉讼法》，在侦查过程中，发现<span class="highlight-blue">不应对犯罪嫌疑人追究刑事责任</span>的，应当撤销案件。案件已过追诉时效属于不应追究刑事责任的情形。</p>
+                <p><span class="highlight-red">✗ C错误：</span>已过追诉时效不应继续侦查。</p>
+                <p><span class="highlight-red">✗ D错误：</span>不需要报上级批准。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>追诉时效已过，公安直接撤案！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "甲因涉嫌故意杀人罪被逮捕。检察院在审查批准逮捕时，发现甲可能被判处10年有期徒刑。检察院应当如何处理？",
+                options: ["批准逮捕", "不批准逮捕", "取保候审", "监视居住"],
+                answer: 0,
+                explanation: `<p><span class="highlight-green">✓ A正确：</span>根据《刑事诉讼法》，对有证据证明有犯罪事实，可能判处<span class="highlight-blue">十年有期徒刑以上刑罚</span>的犯罪嫌疑人，应当批准逮捕。甲可能被判处10年有期徒刑，符合批准逮捕条件。</p>
+                <p><span class="highlight-red">✗ B错误：</span>10年有期徒刑以上刑罚应当逮捕。</p>
+                <p><span class="highlight-red">✗ C错误：</span>不是取保候审。</p>
+                <p><span class="highlight-red">✗ D错误：</span>不是监视居住。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>十年以上必逮捕，社会危险性大的也逮捕！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "在刑事审判中，人民法院决定对被告人取保候审，被告人应当提供保证人或缴纳保证金。下列哪种人不能作为保证人？",
+                options: ["被告人的父亲", "与本案无关的邻居", "被判处剥夺政治权利的人", "有固定工作和收入的成年人"],
+                answer: 2,
+                explanation: `<p><span class="highlight-green">✓ A正确：</span>父亲可以作为保证人。</p>
+                <p><span class="highlight-green">✓ B正确：</span>邻居可以作为保证人，只要符合条件。</p>
+                <p><span class="highlight-red">✗ C错误：</span>根据《刑事诉讼法》，<span class="highlight-blue">被剥夺政治权利的人</span>不能作为保证人。</p>
+                <p><span class="highlight-green">✓ D正确：</span>有固定工作和收入的人可以作为保证人。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>保证人要求：有固定住处和收入，政治权利没被剥！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "甲因涉嫌诈骗罪被立案侦查。公安机关对甲的住宅进行搜查。下列做法正确的是？",
+                options: ["搜查时必须出示搜查证", "搜查可以由1名侦查人员进行", "搜查女性身体可以由男性侦查人员进行", "搜查时甲的妻子可以在场"],
+                answer: 0,
+                explanation: `<p><span class="highlight-green">✓ A正确：</span>根据《刑事诉讼法》，为了收集犯罪证据、查获犯罪人，公安机关可以对<span class="highlight-blue">犯罪嫌疑人以及可能隐藏罪犯或犯罪证据的人的身体、物品、住处和其他有关的地方进行搜查</span>。搜查时必须<span class="highlight-blue">出示搜查证</span>。</p>
+                <p><span class="highlight-red">✗ B错误：</span>搜查应当有<span class="highlight-blue">不少于2名</span>侦查人员进行。</p>
+                <p><span class="highlight-red">✗ C错误：</span>搜查女性身体，应由<span class="highlight-blue">女性工作人员</span>进行。</p>
+                <p><span class="highlight-red">✗ D错误：</span>搜查时在场的应是见证人，被搜查人不一定是见证人。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>搜查需要两侦查，搜查证要出示，女身需女工作人员！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "某案被告人甲不服一审判决，上诉于二审法院。二审法院审理后认为原判决事实不清、证据不足。请问二审法院应当如何处理？",
+                options: ["维持原判", "改判", "发回原审法院重审", "报上级法院指定管辖"],
+                answer: 2,
+                explanation: `<p><span class="highlight-red">✗ A错误：</span>事实不清、证据不足不能维持原判。</p>
+                <p><span class="highlight-red">✗ B错误：</span>事实不清、证据不足，二审法院一般发回重审。</p>
+                <p><span class="highlight-green">✓ C正确：</span>根据《刑事诉讼法》，第二审人民法院对<span class="highlight-blue">事实不清、证据不足</span>的上诉案件，可以<span class="highlight-blue">裁定撤销原判，发回原审人民法院重新审判</span>。</p>
+                <p><span class="highlight-red">✗ D错误：</span>不需要指定管辖。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>二审事实不清，撤销原判发回重审！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "在审判过程中，被告人申请回避。下列关于回避的决定权，说法正确的是？",
+                options: ["审判长的回避由院长决定", "院长的回避由审判长决定", "检察人员的回避由法院院长决定", "书记员的回避由审判长决定"],
+                answer: 0,
+                explanation: `<p><span class="highlight-green">✓ A正确：</span>根据《刑事诉讼法》，审判长、审判员、书记员的回避，由<span class="highlight-blue">院长</span>决定。院长的回避，由<span class="highlight-blue">审判委员会</span>决定。</p>
+                <p><span class="highlight-red">✗ B错误：</span>院长回避由审判委员会决定，不是审判长。</p>
+                <p><span class="highlight-red">✗ C错误：</span>检察人员的回避由<span class="highlight-blue">检察院</span>检察长或检委会决定。</p>
+                <p><span class="highlight-red">✗ D错误：</span>书记员的回避由院长决定。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>审判人员回避院长定，院长回避检委会定！</p>`
+            },
+            {
+                module: "刑法",
+                question: "甲、乙共谋抢劫银行，甲负责望风，乙入室实施抢劫。甲、乙的行为属于？",
+                options: ["甲构成抢劫罪（既遂），乙构成抢劫罪（既遂）", "甲构成抢劫罪（未遂），乙构成抢劫罪（既遂）", "甲构成抢夺罪（既遂），乙构成抢劫罪（既遂）", "甲构成抢劫罪（中止），乙构成抢劫罪（既遂）"],
+                answer: 0,
+                explanation: `<p><span class="highlight-green">✓ A正确：</span>甲、乙共谋抢劫，并按照分工实施犯罪，属于<span class="highlight-blue">共同犯罪</span>。共同犯罪中，只要有一人既遂，整个犯罪即为既遂。甲虽然只是望风，但属于共同犯罪的一部分，犯罪既遂后甲也构成抢劫罪（既遂）。</p>
+                <p><span class="highlight-red">✗ B错误：</span>共同犯罪中一人既遂全部既遂，甲不构成未遂。</p>
+                <p><span class="highlight-red">✗ C错误：</span>不构成抢夺罪，构成抢劫罪。</p>
+                <p><span class="highlight-red">✗ D错误：</span>犯罪已经既遂，甲不构成中止。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>共同犯罪一人既遂全部既遂！</p>`
+            }
+        ];
+        
+        const judgePracticeData = [
+            {
+                module: "刑法",
+                question: "已满14周岁不满16周岁的人对所有犯罪都应当负刑事责任。",
+                answer: false,
+                explanation: `<p><span class="highlight-red">✗ 错误：</span>已满14周岁不满16周岁的人只对<span class="highlight-blue">故意杀人、故意伤害致人重伤或死亡、强奸、抢劫、贩卖毒品、放火、爆炸、投放危险物质</span>八种犯罪负刑事责任。对其他犯罪不负刑事责任。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>14-16周岁只对八种重罪负责！</p>`
+            },
+            {
+                module: "刑法",
+                question: "甲盗窃他人财物后，又将盗窃的财物无偿赠与他人，甲的行为构成盗窃罪和掩饰、隐瞒犯罪所得罪，数罪并罚。",
+                answer: true,
+                explanation: `<p><span class="highlight-green">✓ 正确：</span>甲盗窃财物构成<span class="highlight-blue">盗窃罪</span>；将盗窃财物无偿赠与他人的行为，另构成<span class="highlight-blue">掩饰、隐瞒犯罪所得罪</span>。两罪独立，应数罪并罚。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>盗了又送，盗窃掩罪两罪全！</p>`
+            },
+            {
+                module: "刑法",
+                question: "甲明知是他人犯罪所得的赃物而予以收购，构成窝藏罪。",
+                answer: false,
+                explanation: `<p><span class="highlight-red">✗ 错误：</span>明知是他人犯罪所得的赃物而予以收购，构成<span class="highlight-blue">掩饰、隐瞒犯罪所得罪</span>，不是窝藏罪。窝藏罪是帮助犯罪人逃匿的行为。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>收购赃物是掩罪，帮助逃匿才是窝藏！</p>`
+            },
+            {
+                module: "刑法",
+                question: "醉酒驾驶机动车的，构成危险驾驶罪。",
+                answer: true,
+                explanation: `<p><span class="highlight-green">✓ 正确：</span>根据《刑法》，在道路上醉酒驾驶机动车的，构成<span class="highlight-blue">危险驾驶罪</span>。血液酒精含量达到<span class="highlight-orange">80mg/100ml</span>以上即为醉酒。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>醉驾入刑是危险驾驶罪，不用死人也不用伤人！</p>`
+            },
+            {
+                module: "刑法",
+                question: "甲被判处有期徒刑5年，执行2年后确有悔改表现，可以减刑。",
+                answer: true,
+                explanation: `<p><span class="highlight-green">✓ 正确：</span>根据《刑法》，被判处有期徒刑的犯罪分子，执行原判刑罚<span class="highlight-orange">二分之一以上</span>，如果认真遵守监规，接受教育改造，确有悔改表现的，可以减刑。甲执行了2年，超过原判二分之一，可以减刑。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>减刑要求执行过半，真悔改才能减！</p>`
+            },
+            {
+                module: "刑法",
+                question: "甲故意伤害乙致其轻伤，事后赔偿乙10万元并取得谅解，对甲可以从轻或减轻处罚。",
+                answer: true,
+                explanation: `<p><span class="highlight-green">✓ 正确：</span>根据《刑法》，因民间纠纷引起的轻伤害等案件，<span class="highlight-blue">赔偿并取得谅解</span>的，可以作为酌定从轻处罚情节。<span class="highlight-blue">从轻或减轻</span>处罚需根据具体情节。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>赔偿谅解是从轻情节，但不必然免除刑事处罚！</p>`
+            },
+            {
+                module: "刑法",
+                question: "甲与乙有仇，甲趁乙不备将其打成重伤，甲的行为构成故意伤害罪。",
+                answer: true,
+                explanation: `<p><span class="highlight-green">✓ 正确：</span>甲明知自己的行为会造成乙重伤的结果，仍希望该结果发生，构成<span class="highlight-blue">故意伤害罪</span>。致人重伤是本罪的加重情节，可处<span class="highlight-orange">三年以上十年以下有期徒刑</span>。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>有仇打重伤，故伤不是寻衅！</p>`
+            },
+            {
+                module: "刑法",
+                question: "甲是间歇性精神病人，在精神正常时实施了盗窃行为，应当负刑事责任。",
+                answer: true,
+                explanation: `<p><span class="highlight-green">✓ 正确：</span>根据《刑法》，间歇性精神病人，在<span class="highlight-blue">精神正常的时候</span>犯罪，应当负刑事责任。只有在不能辨认或控制自己行为时犯罪，才不负刑事责任。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>间歇精神正常时犯罪，应当负刑事责任！</p>`
+            },
+            {
+                module: "刑法",
+                question: "甲盗窃他人财物后被失主发现，为抗拒抓捕当场使用暴力威胁失主，甲的行为构成抢劫罪。",
+                answer: true,
+                explanation: `<p><span class="highlight-green">✓ 正确：</span>根据《刑法》，犯盗窃罪后，为<span class="highlight-blue">抗拒抓捕或毁灭罪证而当场使用暴力或以暴力相威胁</span>的，以<span class="highlight-blue">抢劫罪</span>定罪处罚。这是转化型抢劫。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>盗窃抗拒变抢劫，暴力胁迫都算！</p>`
+            },
+            {
+                module: "刑法",
+                question: "甲被判处管制3个月，在执行期间可以行使选举权。",
+                answer: true,
+                explanation: `<p><span class="highlight-green">✓ 正确：</span>根据《刑法》，被判处<span class="highlight-blue">管制</span>的犯罪分子，在执行期间应当遵守法律、行政法规，服从监督；对劳动成果享受同工同酬；对行驶言论、出版、集会、结社、游行、示威自由的权利没有限制。因此，管制执行期间可以行使选举权。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>管制执行期间政治权利基本保留！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "公安机关对被拘留的人，认为需要逮捕的，应当在拘留后24小时内提请人民检察院审查批准。",
+                answer: true,
+                explanation: `<p><span class="highlight-green">✓ 正确：</span>根据《刑事诉讼法》，公安机关对被拘留的人，认为需要逮捕的，应当在<span class="highlight-blue">拘留后24小时</span>内提请人民检察院审查批准。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>拘留后24小时必须报捕！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "辩护律师在审判阶段有权查阅、摘抄、复制本案的全部案卷材料。",
+                answer: true,
+                explanation: `<p><span class="highlight-green">✓ 正确：</span>根据《刑事诉讼法》，辩护律师自<span class="highlight-blue">案件移送审查起诉之日起</span>，有权查阅、摘抄、复制本案的案卷材料。审判阶段当然有权。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>起诉后就能看卷，审判阶段当然也行！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "证人甲拒绝出庭作证，人民法院可以对甲处以10日以下的拘留。",
+                answer: true,
+                explanation: `<p><span class="highlight-green">✓ 正确：</span>根据《刑事诉讼法》，经法院通知，证人<span class="highlight-blue">无正当理由拒绝出庭</span>的，法院可以予以训诫；情节严重的，经院长批准，可予以<span class="highlight-blue">十日以下拘留</span>。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>证人无正当理由拒出庭，可训诫或拘留十日！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "被害人乙不服一审判决，可以直接向上一级人民法院提起上诉。",
+                answer: false,
+                explanation: `<p><span class="highlight-red">✗ 错误：</span>根据《刑事诉讼法》，<span class="highlight-blue">被害人</span>及其法定代理人、近亲属不服一审判决的，<span class="highlight-blue">无权直接上诉</span>，只能请求人民检察院提出抗诉。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>被害人不服只能请抗诉，不能自己上诉！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "人民法院审理公诉案件，应当在受理后一个月内宣判，最迟不得超过一个半月。",
+                answer: true,
+                explanation: `<p><span class="highlight-green">✓ 正确：</span>根据《刑事诉讼法》，人民法院审理公诉案件，应当在受理后<span class="highlight-blue">一个月内宣判</span>，<span class="highlight-blue">至迟不得超过一个半月</span>。重大复杂案件经批准可延长。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>一审公诉一个月，最长一个半月！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "对省级人民代表大会代表采取逮捕措施，应当报请该省级人民代表大会主席团许可。",
+                answer: true,
+                explanation: `<p><span class="highlight-green">✓ 正确：</span>根据《刑事诉讼法》，公安机关依法对<span class="highlight-blue">县级以上人大代表</span>采取逮捕措施时，应当报请该<span class="highlight-blue">同级人民代表大会主席团或常务委员会许可</span>。省级人大代表应当报请省级人大主席团或常委会许可。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>拘留逮捕人大代表，都要报告人大许可！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "犯罪嫌疑人甲在取保候审期间未经执行机关批准离开所居住的市、县，执行机关应当报公安机关负责人批准后，将其没收保证金。",
+                answer: false,
+                explanation: `<p><span class="highlight-red">✗ 错误：</span>根据《刑事诉讼法》，被取保候审人违反规定，已缴纳保证金的，应当<span class="highlight-blue">没收部分或全部保证金</span>，并区别情形，责令犯罪嫌疑人具结悔过，重新缴纳保证金、提出保证人，或者监视居住、予以逮捕。没收保证金不需要报公安机关负责人批准，但变强制措施需要。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>违反取保规定，可没收保证金并可改强制措施！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "在审判过程中，被告人申请回避，回避理由成立的，应当更换审判人员审理。",
+                answer: true,
+                explanation: `<p><span class="highlight-green">✓ 正确：</span>根据《刑事诉讼法》，审判人员、检察人员、侦查人员的回避理由成立的，应当<span class="highlight-blue">更换</span>。由回避后的人员继续办理或由其他人接替。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>回避理由成立，换人继续审！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "二审法院审理后认为一审认定事实正确，但适用法律错误，应当裁定维持原判。",
+                answer: false,
+                explanation: `<p><span class="highlight-red">✗ 错误：</span>根据《刑事诉讼法》，二审法院认为<span class="highlight-blue">认定事实正确，但适用法律错误</span>的，应当<span class="highlight-blue">改判</span>。只有认为事实和法律均正确时，才能裁定维持原判。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>二审法律错则改，事实错则发回！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "公安机关在侦查过程中，需要扣押犯罪嫌疑人的邮件，应当经人民检察院批准。",
+                answer: true,
+                explanation: `<p><span class="highlight-green">✓ 正确：</span>根据《刑事诉讼法》，公安机关在侦查过程中，需要扣押犯罪嫌疑人的邮件、电子邮件、电报，应当经<span class="highlight-blue">人民检察院批准</span>。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>扣押邮件需检察批准！</p>`
+            }
+        ];
+        
+        const multiPracticeData = [
+            {
+                module: "刑法",
+                question: "根据《刑法》，下列哪些情形不构成累犯？",
+                options: ["甲因故意伤害罪被判处有期徒刑2年，刑满释放后第4年又犯盗窃罪", "乙因贩卖毒品罪被判有期徒刑2年，刑满释放后第3年又犯非法持有毒品罪", "丙因诈骗罪被判处有期徒刑1年，缓刑2年，缓刑考验期满后第3年又犯抢夺罪", "丁因抢劫罪被判处有期徒刑5年，执行3年后被假释，假释期满后第2年又犯故意伤害罪"],
+                answer: [0, 2],
+                explanation: `<p><span class="highlight-red">✗ A错误：</span>甲前罪执行完毕后<span class="highlight-orange">第4年</span>再犯，距刑满释放已超过<span class="highlight-orange">5年</span>，不符合累犯条件。</p>
+                <p><span class="highlight-green">✓ B正确：</span>乙因贩卖毒品罪被判刑，属于<span class="highlight-blue">毒品再犯</span>，无论间隔多久都从重处罚。</p>
+                <p><span class="highlight-red">✗ C错误：</span>丙缓刑考验期满后再犯罪，不构成累犯（缓刑不是"执行完毕"）。</p>
+                <p><span class="highlight-green">✓ D正确：</span>丁假释期满后<span class="highlight-orange">第2年</span>又犯罪，距"执行完毕"超过5年，不构成累犯。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>累犯要求五年内，缓刑不算执行完毕，假释期满才算！</p>`
+            },
+            {
+                module: "刑法",
+                question: "根据《刑法》，下列哪些属于正当防卫的构成要件？",
+                options: ["必须是为了使国家、公共利益、本人或他人的人身权利免受正在进行的不法侵害", "必须是针对正在进行的不法侵害", "必须是对实施不法侵害的人", "必须是不超过必要限度的"],
+                answer: [0, 1, 2, 3],
+                explanation: `<p><span class="highlight-green">✓ A正确：</span>正当防卫必须是为了保护合法权益免受侵害。</p>
+                <p><span class="highlight-green">✓ B正确：</span>必须是<span class="highlight-blue">正在进行</span>的不法侵害，事前防卫或事后防卫都不是正当防卫。</p>
+                <p><span class="highlight-green">✓ C正确：</span>正当防卫必须针对<span class="highlight-blue">实施不法侵害的人</span>本人，不能针对无关第三人。</p>
+                <p><span class="highlight-green">✓ D正确：</span>防卫行为<span class="highlight-blue">不能明显超过必要限度</span>造成重大损害，否则是防卫过当。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>正当防卫四要件：目的正当、时机正确、对象正确、限度适当！</p>`
+            },
+            {
+                module: "刑法",
+                question: "根据《刑法》，下列哪些行为构成共同犯罪？",
+                options: ["甲与乙约定，甲负责入室盗窃，乙负责在门外望风", "甲误以为乙要杀人，将刀具递给乙，乙实际上是去抢劫", "甲、乙各自独立盗窃后，共同分赃", "甲教唆乙去盗窃，乙答应了"],
+                answer: [0, 3],
+                explanation: `<p><span class="highlight-green">✓ A正确：</span>甲乙<span class="highlight-blue">事先通谋、分工协作</span>，构成盗窃罪的共同犯罪。</p>
+                <p><span class="highlight-red">✗ B错误：</span>甲主观上没有帮助乙犯罪的故意，属于<span class="highlight-blue">对象错误</span>，不构成共同犯罪。</p>
+                <p><span class="highlight-red">✗ C错误：</span>各自独立盗窃后分赃，没有<span class="highlight-blue">共同犯罪故意</span>，各自独立定罪。</p>
+                <p><span class="highlight-green">✓ D正确：</span>甲教唆乙盗窃，乙接受教唆，构成<span class="highlight-blue">盗窃罪的共同犯罪</span>，甲是教唆犯。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>共同犯罪必须有共同故意+共同行为！</p>`
+            },
+            {
+                module: "刑法",
+                question: "根据《刑法》，下列哪些人员不适用死刑？",
+                options: ["犯罪的时候不满18周岁的人", "审判的时候怀孕的妇女", "醉酒的人", "已满75周岁的人（以特别残忍手段致人死亡除外）"],
+                answer: [0, 1, 3],
+                explanation: `<p><span class="highlight-green">✓ A正确：</span><span class="highlight-blue">犯罪时不满18周岁</span>的人不适用死刑。</p>
+                <p><span class="highlight-green">✓ B正确：</span><span class="highlight-blue">审判时怀孕的妇女</span>不适用死刑（不包括流产后的情况）。</p>
+                <p><span class="highlight-red">✗ C错误：</span>醉酒的人不属于不适用死刑的人员。</p>
+                <p><span class="highlight-green">✓ D正确：</span><span class="highlight-blue">审判时已满75周岁</span>的人不适用死刑，但以特别残忍手段致人死亡的除外。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>死刑不适用：未成年、孕妇、75岁以上老人（除特别残忍）！</p>`
+            },
+            {
+                module: "刑法",
+                question: "根据《刑法》，下列哪些行为构成诈骗罪？",
+                options: ["甲虚构有急事需要用钱，骗取邻居信任后借得5000元后逃匿", "乙以假乱真，将仿制品当作真品高价卖给他人", "丙明知是假币而持有并使用", "丁以非法占有为目的，夸大履约能力骗取对方当事人财物"],
+                answer: [0, 1, 3],
+                explanation: `<p><span class="highlight-green">✓ A正确：</span>甲虚构事实，使邻居"自愿"交出财物，构成<span class="highlight-blue">诈骗罪</span>。</p>
+                <p><span class="highlight-green">✓ B正确：</span>乙以假充真，使他人陷入错误认识并处分财物，构成<span class="highlight-blue">诈骗罪</span>。</p>
+                <p><span class="highlight-red">✗ C错误：</span>持有使用假币构成<span class="highlight-blue">持有、使用假币罪</span>，不是诈骗罪。</p>
+                <p><span class="highlight-green">✓ D正确：</span>丁夸大履约能力属于<span class="highlight-blue">虚构事实</span>，使对方陷入错误认识，构成<span class="highlight-blue">合同诈骗罪</span>或诈骗罪。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>诈骗核心是：虚构事实+使他人处分财物！</p>`
+            },
+            {
+                module: "刑法",
+                question: "根据《刑法》，下列哪些属于刑罚的附加刑？",
+                options: ["罚金", "剥夺政治权利", "没收财产", "驱逐出境"],
+                answer: [0, 1, 2, 3],
+                explanation: `<p><span class="highlight-green">✓ A正确：</span><span class="highlight-blue">罚金</span>是附加刑。</p>
+                <p><span class="highlight-green">✓ B正确：</span><span class="highlight-blue">剥夺政治权利</span>是附加刑。</p>
+                <p><span class="highlight-green">✓ C正确：</span><span class="highlight-blue">没收财产</span>是附加刑。</p>
+                <p><span class="highlight-green">✓ D正确：</span><span class="highlight-blue">驱逐出境</span>是附加刑（仅适用于外国人）。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>附加刑四种：罚金、剥夺政治权利、没收财产、驱逐出境！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "根据《刑事诉讼法》，下列哪些人员可以被委托为辩护人？",
+                options: ["律师", "人民团体或犯罪嫌疑人所在单位推荐的人", "犯罪嫌疑人的监护人、亲友", "正在被执行刑罚的人"],
+                answer: [0, 1, 2],
+                explanation: `<p><span class="highlight-green">✓ A正确：</span><span class="highlight-blue">律师</span>可以担任辩护人。</p>
+                <p><span class="highlight-green">✓ B正确：</span><span class="highlight-blue">人民团体或犯罪嫌疑人所在单位推荐的人</span>可以担任辩护人。</p>
+                <p><span class="highlight-green">✓ C正确：</span><span class="highlight-blue">犯罪嫌疑人、被告人的监护人、亲友</span>可以担任辩护人。</p>
+                <p><span class="highlight-red">✗ D错误：</span><span class="highlight-blue">正在被执行刑罚或依法被剥夺、限制人身自由的人</span>不能担任辩护人。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>辩护人范围：律师、团体推荐的人、监护人亲友；被刑人不能当辩护人！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "根据《刑事诉讼法》，关于监视居住的适用条件，下列哪些说法正确？",
+                options: ["患有严重疾病、生活不能自理的", "怀孕或哺乳自己婴儿的妇女", "系生活不能自理的人的唯一扶养人", "羁押期限届满，案件尚未办结，需要采取监视居住措施的"],
+                answer: [0, 1, 2, 3],
+                explanation: `<p><span class="highlight-green">✓ A正确：</span>患有严重疾病、生活不能自理的，可以监视居住。</p>
+                <p><span class="highlight-green">✓ B正确：</span>怀孕或哺乳自己婴儿的妇女，可以监视居住。</p>
+                <p><span class="highlight-green">✓ C正确：</span>系生活不能自理的人的唯一扶养人的，可以监视居住。</p>
+                <p><span class="highlight-green">✓ D正确：</span>羁押期限届满，案件尚未办结，需要采取监视居住措施的，可以监视居住。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>监视居住适用情形：病、残、孕、婴、唯一扶养人、超期羁押！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "根据《刑事诉讼法》，下列哪些情形下应当指定辩护？",
+                options: ["被告人是盲、聋、哑人", "被告人是尚未完全丧失辨认或控制自己行为能力的精神病人", "被告人是可能被判处死刑的人", "被告人因经济困难未委托辩护人的"],
+                answer: [0, 1, 2],
+                explanation: `<p><span class="highlight-green">✓ A正确：</span>盲、聋、哑<span class="highlight-blue">应当</span>指定辩护。</p>
+                <p><span class="highlight-green">✓ B正确：</span>限制民事行为能力人<span class="highlight-blue">应当</span>指定辩护。</p>
+                <p><span class="highlight-green">✓ C正确：</span>可能被判处<span class="highlight-blue">死刑</span>的人<span class="highlight-blue">应当</span>指定辩护。</p>
+                <p><span class="highlight-red">✗ D错误：</span>经济困难未委托辩护人的，是<span class="highlight-blue">可以</span>指定辩护，不是应当。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>应当指定辩护：盲聋哑+限制行为能力+死刑！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "根据《刑事诉讼法》，关于取保候审的保证方式，下列哪些说法正确？",
+                options: ["可以只提供保证人", "可以只缴纳保证金", "保证金数额由公安机关决定", "保证人需要与案件无利害关系"],
+                answer: [0, 1, 3],
+                explanation: `<p><span class="highlight-green">✓ A正确：</span>取保候审可以只提供<span class="highlight-blue">保证人</span>。</p>
+                <p><span class="highlight-green">✓ B正确：</span>取保候审可以只缴纳<span class="highlight-blue">保证金</span>。</p>
+                <p><span class="highlight-red">✗ C错误：</span>保证金数额由<span class="highlight-blue">公安机关根据案件情况</span>决定，但有最低不少于<span class="highlight-orange">1000元</span>的规定。</p>
+                <p><span class="highlight-green">✓ D正确：</span>保证人需要<span class="highlight-blue">与案件无利害关系</span>，且有固定住处和收入。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>取保候审可人保或财保，保证人需无利害关系！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "根据《刑事诉讼法》，下列哪些强制措施需要由人民检察院批准或决定？",
+                options: ["逮捕", "拘留", "监视居住", "指定居所监视居住"],
+                answer: [0, 3],
+                explanation: `<p><span class="highlight-green">✓ A正确：</span><span class="highlight-blue">逮捕</span>由人民检察院批准或人民法院决定。</p>
+                <p><span class="highlight-red">✗ B错误：</span><span class="highlight-blue">拘留</span>由公安机关自行决定，不需要检察院批准。</p>
+                <p><span class="highlight-red">✗ C错误：</span><span class="highlight-blue">监视居住</span>由公安机关或人民检察院、人民法院决定。</p>
+                <p><span class="highlight-green">✓ D正确：</span><span class="highlight-blue">指定居所监视居住</span>由人民检察院批准。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>批准逮捕、指定居所监视居住需检察院批准！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "根据《刑事诉讼法》，关于证据的种类，下列哪些属于法定证据种类？",
+                options: ["物证", "书证", "辨认笔录", "电子数据"],
+                answer: [0, 1, 3],
+                explanation: `<p><span class="highlight-green">✓ A正确：</span><span class="highlight-blue">物证</span>是法定证据种类。</p>
+                <p><span class="highlight-green">✓ B正确：</span><span class="highlight-blue">书证</span>是法定证据种类。</p>
+                <p><span class="highlight-red">✗ C错误：</span><span class="highlight-blue">辨认笔录</span>属于勘验、检查、辨认、侦查实验等笔录的一种，不是独立的证据种类。</p>
+                <p><span class="highlight-green">✓ D正确：</span><span class="highlight-blue">电子数据</span>是法定证据种类（刑诉法修改后增加）。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>法定证据八种：物书证，人证，被害陈述，嫌疑人供述辩解，鉴定意见，勘验检查笔录，视听资料，电子数据！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "根据《刑事诉讼法》，关于搜查的程序要求，下列哪些说法正确？",
+                options: ["搜查时必须出示搜查证", "搜查时必须由两名以上侦查人员进行", "搜查妇女身体，必须由女性工作人员进行", "搜查时必须有见证人在场"],
+                answer: [0, 1, 2, 3],
+                explanation: `<p><span class="highlight-green">✓ A正确：</span>搜查时必须<span class="highlight-blue">出示搜查证</span>。</p>
+                <p><span class="highlight-green">✓ B正确：</span>搜查时必须由<span class="highlight-blue">两名以上</span>侦查人员进行。</p>
+                <p><span class="highlight-green">✓ C正确：</span>搜查妇女身体，必须由<span class="highlight-blue">女性工作人员</span>进行。</p>
+                <p><span class="highlight-green">✓ D正确：</span>搜查时一般应当有<span class="highlight-blue">见证人</span>在场。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>搜查要求：证、两人、女工作人员、见证人！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "根据《刑事诉讼法》，关于二审程序，下列哪些情形下二审法院应当发回重审？",
+                options: ["一审法院违反公开审判规定的", "一审法院违反回避制度的", "一审法院剥夺或限制当事人法定诉讼权利的", "一审判决认定事实清楚但量刑不当的"],
+                answer: [0, 1, 2],
+                explanation: `<p><span class="highlight-green">✓ A正确：</span>一审法院<span class="highlight-blue">违反公开审判规定</span>的，二审应当发回重审。</p>
+                <p><span class="highlight-green">✓ B正确：</span>一审法院<span class="highlight-blue">违反回避制度</span>的，二审应当发回重审。</p>
+                <p><span class="highlight-green">✓ C正确：</span>一审法院<span class="highlight-blue">剥夺或限制当事人法定诉讼权利</span>的，二审应当发回重审。</p>
+                <p><span class="highlight-red">✗ D错误：</span>认定事实清楚但量刑不当的，应当<span class="highlight-blue">改判</span>，不是发回重审。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>程序违法发回重审，量刑不当直接改判！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "根据《刑事诉讼法》，关于不起诉的决定，下列哪些情形下检察院应当作出不起诉决定？",
+                options: ["情节显著轻微、危害不大，不认为是犯罪的", "犯罪已过追诉时效期限的", "犯罪嫌疑人认罪认罚的", "经特赦令免除刑罚的"],
+                answer: [0, 1, 3],
+                explanation: `<p><span class="highlight-green">✓ A正确：</span><span class="highlight-blue">情节显著轻微、危害不大，不认为是犯罪</span>的，检察院应当不起诉。</p>
+                <p><span class="highlight-green">✓ B正确：</span><span class="highlight-blue">犯罪已过追诉时效期限</span>的，检察院应当不起诉。</p>
+                <p><span class="highlight-red">✗ C错误：</span>认罪认罚不是法定不起诉条件，而是<span class="highlight-blue">酌定不起诉</span>或<span class="highlight-blue">程序简化</span>的条件。</p>
+                <p><span class="highlight-green">✓ D正确：</span><span class="highlight-blue">经特赦令免除刑罚</span>的，检察院应当不起诉。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>法定不起诉：显著轻微、时效、特赦、告诉才处理（已撤回）、死立执（最高检核准）！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "根据《刑事诉讼法》，关于简易程序的适用条件，下列哪些说法正确？",
+                options: ["案件事实清楚、证据充分", "被告人承认自己所犯罪行，对指控的犯罪事实没有异议", "人民陪审员共三人", "可能判处三年有期徒刑以下刑罚"],
+                answer: [0, 1, 3],
+                explanation: `<p><span class="highlight-green">✓ A正确：</span>简易程序要求<span class="highlight-blue">案件事实清楚、证据充分</span>。</p>
+                <p><span class="highlight-green">✓ B正确：</span>被告人<span class="highlight-blue">承认犯罪事实</span>，对指控没有异议。</p>
+                <p><span class="highlight-red">✗ C错误：</span>简易程序可以是<span class="highlight-blue">审判员一人独任审判</span>，不一定需要陪审员。</p>
+                <p><span class="highlight-green">✓ D正确：</span>可能判处<span class="highlight-blue">三年有期徒刑以下刑罚</span>的案件可以适用简易程序。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>简易程序条件：事实清楚、证据充分、被告人认罪、三年以下！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "根据《刑事诉讼法》，关于刑事附带民事诉讼的赔偿范围，下列哪些属于赔偿范围？",
+                options: ["医疗费", "护理费", "残疾赔偿金", "精神损害赔偿"],
+                answer: [0, 1, 2],
+                explanation: `<p><span class="highlight-green">✓ A正确：</span><span class="highlight-blue">医疗费</span>属于赔偿范围。</p>
+                <p><span class="highlight-green">✓ B正确：</span><span class="highlight-blue">护理费</span>属于赔偿范围。</p>
+                <p><span class="highlight-green">✓ C正确：</span><span class="highlight-blue">残疾赔偿金</span>属于赔偿范围。</p>
+                <p><span class="highlight-red">✗ D错误：</span>刑事附带民事诉讼<span class="highlight-blue">不支持精神损害赔偿</span>。这是与民事诉讼的重要区别。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>刑附民只赔物质损失，不赔精神损害！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "根据《刑事诉讼法》，关于立案监督，下列哪些说法正确？",
+                options: ["人民检察院有权监督公安机关的立案活动", "被害人有权向人民检察院提出立案监督", "人民检察院认为公安机关不立案理由不成立的，应当通知公安机关立案", "公安机关接到通知后应当立即立案"],
+                answer: [0, 1, 2, 3],
+                explanation: `<p><span class="highlight-green">✓ A正确：</span><span class="highlight-blue">人民检察院</span>有权监督公安机关的立案活动。</p>
+                <p><span class="highlight-green">✓ B正确：</span><span class="highlight-blue">被害人</span>有权向人民检察院提出立案监督申请。</p>
+                <p><span class="highlight-green">✓ C正确：</span>检察院认为公安机关不立案理由<span class="highlight-blue">不成立</span>的，应当通知公安机关立案。</p>
+                <p><span class="highlight-green">✓ D正确：</span>公安机关接到通知后<span class="highlight-blue">应当立案</span>。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>立案监督三步走：检察院监督+被害人申请+通知立案！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "根据《刑事诉讼法》，关于技术侦查措施，下列哪些说法正确？",
+                options: ["技术侦查措施需要经过严格的批准手续", "技术侦查获取的材料只能用于对犯罪的侦查", "技术侦查获取的材料不可以作为证据使用", "技术侦查的批准有效期为3个月"],
+                answer: [0, 1],
+                explanation: `<p><span class="highlight-green">✓ A正确：</span>技术侦查措施需要经过<span class="highlight-blue">严格的批准手续</span>。</p>
+                <p><span class="highlight-green">✓ B正确：</span>技术侦查获取的材料<span class="highlight-blue">只能用于对犯罪的侦查</span>，不得用于其他用途。</p>
+                <p><span class="highlight-red">✗ C错误：</span>技术侦查获取的材料<span class="highlight-blue">可以作为证据使用</span>。</p>
+                <p><span class="highlight-red">✗ D错误：</span>技术侦查的批准有效期为<span class="highlight-blue">3个月</span>，对于复杂、疑难案件期限届满仍有必要继续采取的，经批准可以延长。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>技术侦查三要点：批准严、材料专用、可作证据！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "根据《刑事诉讼法》，关于侦查终结后的处理，下列哪些说法正确？",
+                options: ["认为应当追究刑事责任的，移送人民检察院审查起诉", "认为不应当追究刑事责任的，撤销案件", "发现犯罪嫌疑人真诚悔罪并赔偿损失的，可以不移送起诉", "发现案件情节轻微的，可以直接定罪"],
+                answer: [0, 1],
+                explanation: `<p><span class="highlight-green">✓ A正确：</span>认为应当追究刑事责任的，移送检察院审查起诉。</p>
+                <p><span class="highlight-green">✓ B正确：</span>认为不应当追究刑事责任的，<span class="highlight-blue">撤销案件</span>。</p>
+                <p><span class="highlight-red">✗ C错误：</span>赔偿损失不是不移送起诉的法定理由。</p>
+                <p><span class="highlight-red">✗ D错误：</span>公安机关<span class="highlight-blue">没有定罪权</span>，只有法院才能定罪。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>侦查终结两结果：起诉或撤案！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "根据《刑事诉讼法》，关于期间的计算，下列哪些说法正确？",
+                options: ["期间开始的时、日不计算在内", "期间不包括路途上的时间", "上诉状在期满前交邮的，不算过期", "证人出庭作证的路途时间应当计算在内"],
+                answer: [0, 1, 2],
+                explanation: `<p><span class="highlight-green">✓ A正确：</span>期间以<span class="highlight-blue">时、日计算</span>，开始的时、日不计算在内。</p>
+                <p><span class="highlight-green">✓ B正确：</span>期间<span class="highlight-blue">不包括路途上的时间</span>。</p>
+                <p><span class="highlight-green">✓ C正确：</span>上诉状在期满前<span class="highlight-blue">交邮</span>的，不算过期。</p>
+                <p><span class="highlight-red">✗ D错误：</span>证人出庭作证的路途时间<span class="highlight-blue">应当计算</span>在期间内。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>期间计算：起时不算、路上不占、交邮未过期！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "根据《刑事诉讼法》，关于证人保护，下列哪些措施是正确的？",
+                options: ["证人因在诉讼中作证，其本人的人身安全面临危险的，公安机关应当采取保护措施", "人民检察院应当保障证人及其近亲属的安全", "人民法院应当保障证人及其近亲属的安全", "对证人及其近亲属进行威胁、侮辱的，可以给予治安管理处罚"],
+                answer: [0, 1, 2, 3],
+                explanation: `<p><span class="highlight-green">✓ A正确：</span>公安机关应当保障证人安全。</p>
+                <p><span class="highlight-green">✓ B正确：</span>人民检察院应当保障证人安全。</p>
+                <p><span class="highlight-green">✓ C正确：</span>人民法院应当保障证人安全。</p>
+                <p><span class="highlight-green">✓ D正确：</span>对证人及其近亲属<span class="highlight-blue">进行威胁、侮辱</span>的，可以给予<span class="highlight-blue">治安管理处罚</span>；构成犯罪的，依法追究刑事责任。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>公检法都有证人保护义务，威胁证人可治安处罚！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "根据《刑事诉讼法》，关于速裁程序，下列哪些说法正确？",
+                options: ["速裁程序适用于基层人民法院管辖的可能判处三年有期徒刑以下刑罚的案件", "速裁程序被告人必须认罪认罚", "速裁程序不受送达期限的限制", "速裁程序由审判员一人独任审判"],
+                answer: [0, 1, 3],
+                explanation: `<p><span class="highlight-green">✓ A正确：</span>速裁程序适用于<span class="highlight-blue">三年有期徒刑以下</span>刑罚的案件。</p>
+                <p><span class="highlight-green">✓ B正确：</span>速裁程序要求被告人<span class="highlight-blue">认罪认罚</span>。</p>
+                <p><span class="highlight-red">✗ C错误：</span>速裁程序<span class="highlight-blue">受送达期限限制</span>。</p>
+                <p><span class="highlight-green">✓ D正确：</span>速裁程序由<span class="highlight-blue">审判员一人独任审判</span>。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>速裁程序：三年以下、认罪认罚、送达不省、一人独审！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "根据《刑事诉讼法》，关于查封、扣押、冻结的程序，下列哪些说法正确？",
+                options: ["查封、扣押、冻结犯罪嫌疑人、被告人的财物，应当经县级以上公安机关负责人批准", "对查封、扣押的财物，经查明确实与案件无关的，应当在三日以内解除", "冻结存款、汇款应当经人民检察院批准", "犯罪嫌疑人的存款已被冻结的，不得重复冻结"],
+                answer: [0, 1, 2, 3],
+                explanation: `<p><span class="highlight-green">✓ A正确：</span>查封、扣押需经<span class="highlight-blue">县级以上公安机关负责人</span>批准。</p>
+                <p><span class="highlight-green">✓ B正确：</span>查明与案件无关的，应当在<span class="highlight-blue">三日以内</span>解除。</p>
+                <p><span class="highlight-green">✓ C正确：</span>冻结存款、汇款需经<span class="highlight-blue">人民检察院</span>批准。</p>
+                <p><span class="highlight-green">✓ D正确：</span>已被冻结的存款、汇款，<span class="highlight-blue">不得重复冻结</span>。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>查封扣押需批准，三日内解无关冻不得重复冻！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "根据《刑事诉讼法》，关于讯问犯罪嫌疑人的程序，下列哪些说法正确？",
+                options: ["讯问的时候，侦查人员不得少于2人", "犯罪嫌疑人被拘留后，应当立即送看守所羁押，至迟不得超过24小时", "犯罪嫌疑人拒绝回答问题的，侦查人员可以威胁、引诱", "讯问女性未成年犯罪嫌疑人，应当有女性工作人员在场"],
+                answer: [0, 1, 3],
+                explanation: `<p><span class="highlight-green">✓ A正确：</span>讯问时侦查人员<span class="highlight-blue">不得少于2人</span>。</p>
+                <p><span class="highlight-green">✓ B正确：</span>拘留后<span class="highlight-blue">立即送看守所</span>，至迟不超过<span class="highlight-orange">24小时</span>。</p>
+                <p><span class="highlight-red">✗ C错误：</span>讯问时<span class="highlight-blue">不得威胁、引诱</span>。</p>
+                <p><span class="highlight-green">✓ D正确：</span>讯问女性未成年犯罪嫌疑人，应当有<span class="highlight-blue">女性工作人员</span>在场。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>讯问要点：两人同在、24时送所、不能威胁诱骗、未成年人有家长！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "根据《刑事诉讼法》，关于犯罪嫌疑人聘请律师的权利，下列哪些说法正确？",
+                options: ["犯罪嫌疑人在侦查阶段可以聘请律师提供法律帮助", "犯罪嫌疑人聘请的律师有权向侦查机关了解犯罪嫌疑人涉嫌的罪名", "律师会见在押的犯罪嫌疑人，侦查机关不能派员在场", "律师会见犯罪嫌疑人需要经侦查机关批准"],
+                answer: [0, 1, 2],
+                explanation: `<p><span class="highlight-green">✓ A正确：</span>侦查阶段可以聘请<span class="highlight-blue">律师</span>提供法律帮助。</p>
+                <p><span class="highlight-green">✓ B正确：</span>律师有权向侦查机关了解<span class="highlight-blue">涉嫌罪名</span>。</p>
+                <p><span class="highlight-green">✓ C正确：</span>律师会见时<span class="highlight-blue">不被监听</span>，侦查机关不能派员在场。</p>
+                <p><span class="highlight-red">✗ D错误：</span>普通刑事案件中，律师会见<span class="highlight-blue">不需要批准</span>（除危害国家安全犯罪、恐怖活动犯罪外）。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>侦查阶段律师可会见（国安恐毒需批准），会见不被监听！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "根据《刑事诉讼法》，关于补充侦查，下列哪些说法正确？",
+                options: ["补充侦查最多两次", "退回补充侦查的期限为一个月", "在审查起诉阶段，检察院可以自行补充侦查", "审判阶段，法院可以建议检察院补充侦查"],
+                answer: [0, 1, 2],
+                explanation: `<p><span class="highlight-green">✓ A正确：</span>补充侦查以<span class="highlight-blue">两次为限</span>。</p>
+                <p><span class="highlight-green">✓ B正确：</span>退回补充侦查期限为<span class="highlight-blue">一个月</span>。</p>
+                <p><span class="highlight-green">✓ C正确：</span>审查起诉阶段，检察院可以<span class="highlight-blue">自行补充侦查</span>，也可以退回公安机关补充侦查。</p>
+                <p><span class="highlight-red">✗ D错误：</span>审判阶段，法院<span class="highlight-blue">不能建议</span>检察院补充侦查，只能建议延期审理。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>补充侦查最多两次，一个月为期，审起阶段可自侦！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "根据《刑事诉讼法》，关于审判组织的组成，下列哪些说法正确？",
+                options: ["基层人民法院审理第一审案件，可以由审判员和人民陪审员组成合议庭", "中级人民法院审理第一审案件，应当由审判员组成合议庭", "高级人民法院审理死刑缓期执行的复核案件，由审判员三人组成合议庭", "最高人民法院审理第一审案件，由审判员和陪审员组成合议庭"],
+                answer: [0, 1, 2],
+                explanation: `<p><span class="highlight-green">✓ A正确：</span>基层法院一审可以由<span class="highlight-blue">审判员和陪审员</span>组成合议庭。</p>
+                <p><span class="highlight-green">✓ B正确：</span>中级人民法院一审<span class="highlight-blue">应当</span>由审判员组成合议庭。</p>
+                <p><span class="highlight-green">✓ C正确：</span>高级人民法院复核死刑缓期执行案件，由<span class="highlight-blue">审判员三人</span>组成合议庭。</p>
+                <p><span class="highlight-red">✗ D错误：</span>最高人民法院一审由<span class="highlight-blue">审判员</span>组成合议庭，没有陪审员。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>审判组织：中院以上无陪审，高院复核死刑三法官！</p>`
+            },
+            {
+                module: "刑法",
+                question: "根据《刑法》，下列哪些行为构成自首？",
+                options: ["甲在犯罪后自动投案，如实供述自己的罪行", "乙被采取强制措施后，如实供述了司法机关尚未掌握的其他罪行", "丙犯罪后逃跑，被通缉后主动向公安机关投案", "丁被抓获后，如实交代了犯罪事实但未自动投案"],
+                answer: [0, 1, 2],
+                explanation: `<p><span class="highlight-green">✓ A正确：</span>犯罪后<span class="highlight-blue">自动投案</span>，并<span class="highlight-blue">如实供述</span>自己的罪行，构成自首。</p>
+                <p><span class="highlight-green">✓ B正确：</span>被采取强制措施后，如实供述<span class="highlight-blue">司法机关尚未掌握</span>的其他罪行，以自首论。</p>
+                <p><span class="highlight-green">✓ C正确：</span>被通缉后<span class="highlight-blue">主动投案</span>，并如实供述的，构成自首。</p>
+                <p><span class="highlight-red">✗ D错误：</span>被抓获后<span class="highlight-blue">未自动投案</span>，只如实交代犯罪事实的，不构成自首（属于坦白）。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>自首两要件：自动投案+如实供述！</p>`
+            },
+            {
+                module: "刑事诉讼法",
+                question: "根据《刑事诉讼法》，关于刑事和解程序，下列哪些说法正确？",
+                options: ["因民间纠纷引起的轻伤害等案件可以适用刑事和解", "刑事和解协议由人民法院确认", "达成和解协议的案件，人民检察院可以作出不起诉决定", "刑事和解协议的赔偿范围包括精神损害赔偿"],
+                answer: [0, 2],
+                explanation: `<p><span class="highlight-green">✓ A正确：</span>因<span class="highlight-blue">民间纠纷</span>引起的轻伤害等案件可以适用刑事和解。</p>
+                <p><span class="highlight-red">✗ B错误：</span>刑事和解协议由<span class="highlight-blue">人民调解委员会</span>主持达成，法院确认而非主持。</p>
+                <p><span class="highlight-green">✓ C正确：</span>达成和解协议的案件，检察院可以作出<span class="highlight-blue">不起诉决定</span>。</p>
+                <p><span class="highlight-red">✗ D错误：</span>刑事和解协议的赔偿范围<span class="highlight-blue">不包括精神损害赔偿</span>。</p>
+                <p><span class="highlight-purple">💡 小白记忆口诀：</span>刑附民不赔精神损害，刑事和解也不赔！</p>`
+            }
+        ];
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            renderQuiz('quiz-single', singlePracticeData, 'single');
+            renderJudgeQuiz('quiz-judge', judgePracticeData);
+            renderMultiQuiz('quiz-multi', multiPracticeData);
+        });
+    </script>
+</body>
+</html>

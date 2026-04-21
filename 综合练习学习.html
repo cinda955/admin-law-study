@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>综合练习 - 辅警备考</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%); min-height: 100vh; color: #333; }
+        .progress-bar { position: fixed; top: 0; left: 0; width: 100%; height: 4px; background: rgba(255,255,255,0.1); z-index: 1000; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #34495e, #27ae60); width: 0%; transition: width 0.3s ease; }
+        .top-nav { position: fixed; top: 4px; left: 0; right: 0; background: rgba(52, 73, 94, 0.95); backdrop-filter: blur(10px); padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 999; border-bottom: 1px solid rgba(255,255,255,0.2); }
+        .logo { color: #fff; font-size: 18px; font-weight: bold; display: flex; align-items: center; gap: 8px; }
+        .score-display { background: rgba(255,255,255,0.2); color: #fff; padding: 8px 16px; border-radius: 20px; font-size: 14px; }
+        .sidebar { position: fixed; left: 0; top: 50px; width: 260px; height: calc(100vh - 50px); background: rgba(255,255,255,0.95); overflow-y: auto; padding: 20px 0; box-shadow: 2px 0 10px rgba(0,0,0,0.1); z-index: 998; }
+        .sidebar-title { color: #2c3e50; padding: 0 20px 15px; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid #eee; margin-bottom: 15px; }
+        .nav-item { padding: 12px 20px; color: #666; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 10px; font-size: 14px; border-left: 3px solid transparent; text-decoration: none; }
+        .nav-item:hover { background: rgba(52, 73, 94, 0.1); color: #34495e; }
+        .nav-item.active { background: rgba(52, 73, 94, 0.15); color: #34495e; border-left-color: #34495e; font-weight: bold; }
+        .main-content { margin-left: 260px; padding: 70px 30px 30px; max-width: 900px; }
+        .section-header { text-align: center; margin-bottom: 40px; }
+        .section-header h1 { font-size: 42px; color: #fff; margin-bottom: 10px; text-shadow: 0 0 30px rgba(0,0,0,0.2); }
+        .section-header p { color: rgba(255,255,255,0.8); font-size: 16px; }
+        .highlight-red { color: #e74c3c; font-weight: bold; background: rgba(231, 76, 60, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .highlight-blue { color: #3498db; font-weight: bold; background: rgba(52, 152, 219, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .highlight-green { color: #27ae60; font-weight: bold; background: rgba(39, 174, 96, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .highlight-orange { color: #e67e22; font-weight: bold; background: rgba(230, 126, 34, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .highlight-purple { color: #9b59b6; font-weight: bold; background: rgba(155, 89, 182, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .quiz-container { margin-top: 30px; }
+        .quiz-card { background: #f8f9fa; border-radius: 15px; padding: 20px; margin-bottom: 20px; border: 1px solid #e9ecef; }
+        .question { font-size: 16px; color: #333; margin-bottom: 15px; font-weight: 500; line-height: 1.6; }
+        .question-num { display: inline-block; background: #34495e; color: #fff; width: 28px; height: 28px; border-radius: 50%; text-align: center; line-height: 28px; margin-right: 10px; font-size: 14px; }
+        .module-tag { display: inline-block; background: #e74c3c; color: #fff; padding: 3px 10px; border-radius: 12px; font-size: 12px; margin-bottom: 10px; }
+        .module-tag.multi { background: #9b59b6; }
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .option-btn { padding: 12px 20px; background: #fff; border: 2px solid #e9ecef; border-radius: 10px; cursor: pointer; text-align: left; font-size: 15px; color: #555; transition: all 0.3s ease; }
+        .option-btn:hover { border-color: #34495e; background: rgba(52, 73, 94, 0.05); }
+        .option-letter { display: inline-block; width: 26px; height: 26px; background: #e9ecef; border-radius: 50%; text-align: center; line-height: 26px; margin-right: 10px; font-weight: bold; color: #34495e; }
+        .option-btn.correct { background: #d4edda; border-color: #28a745; }
+        .option-btn.correct .option-letter { background: #28a745; color: #fff; }
+        .option-btn.wrong { background: #f8d7da; border-color: #dc3545; }
+        .option-btn.wrong .option-letter { background: #dc3545; color: #fff; }
+        .option-btn.disabled { cursor: not-allowed; opacity: 0.7; }
+        .explanation { background: linear-gradient(135deg, #fff8e1, #ffecb3); border-radius: 10px; padding: 15px 20px; margin-top: 15px; display: none; line-height: 1.8; border: 1px solid #ffc107; }
+        .explanation .result { font-size: 18px; font-weight: bold; margin-bottom: 10px; }
+        .explanation .result.correct { color: #28a745; }
+        .explanation .result.wrong { color: #dc3545; }
+        .practice-section { background: #fff; border-radius: 20px; padding: 30px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); scroll-margin-top: 100px; }
+        .practice-section h2 { font-size: 28px; color: #333; margin-bottom: 25px; text-align: center; border-bottom: 2px solid #34495e; padding-bottom: 15px; }
+        .practice-section h2 .multi-badge { background: #9b59b6; color: #fff; padding: 3px 12px; border-radius: 12px; font-size: 14px; margin-left: 10px; }
+        .intro-card { background: linear-gradient(135deg, #34495e, #2c3e50); color: #fff; padding: 40px; border-radius: 20px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+        .intro-card h2 { font-size: 32px; margin-bottom: 20px; }
+        .intro-card p { font-size: 16px; line-height: 1.8; opacity: 0.9; }
+        .module-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 20px 0; }
+        .module-item { background: rgba(255,255,255,0.15); padding: 15px; border-radius: 10px; font-size: 14px; }
+        @media (max-width: 768px) { .sidebar { width: 100%; height: auto; position: relative; margin-top: 50px; } .main-content { margin-left: 0; padding-top: 80px; } }
+        .close-nav-btn { background: rgba(255,255,255,0.2); border: none; color: #fff; font-size: 18px; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.3s; }
+        .close-nav-btn:hover { background: rgba(255,255,255,0.3); }
+        
+        /* 多选题样式 */
+        .multi-options { display: flex; flex-direction: column; gap: 10px; }
+        .multi-option { padding: 12px 20px; background: #fff; border: 2px solid #e9ecef; border-radius: 10px; cursor: pointer; text-align: left; font-size: 15px; color: #555; transition: all 0.3s ease; display: flex; align-items: flex-start; gap: 12px; }
+        .multi-option:hover { border-color: #9b59b6; background: rgba(155, 89, 182, 0.05); }
+        .multi-option.selected { border-color: #9b59b6; background: rgba(155, 89, 182, 0.1); }
+        .multi-option.selected .option-letter { background: #9b59b6; color: #fff; }
+        .multi-option.correct { background: #d4edda; border-color: #28a745; }
+        .multi-option.correct .option-letter { background: #28a745; color: #fff; }
+        .multi-option.wrong { background: #f8d7da; border-color: #dc3545; }
+        .multi-option.wrong .option-letter { background: #dc3545; color: #fff; }
+        .multi-option.disabled { cursor: not-allowed; opacity: 0.7; }
+        .multi-option.missed { background: #fff3cd; border-color: #ffc107; }
+        .multi-option.missed .option-letter { background: #ffc107; color: #fff; }
+        .checkbox { width: 22px; height: 22px; border: 2px solid #ddd; border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; transition: all 0.2s; }
+        .multi-option.selected .checkbox { background: #9b59b6; border-color: #9b59b6; }
+        .multi-option.selected .checkbox::after { content: "✓"; color: #fff; font-weight: bold; }
+        .submit-btn { display: block; width: 100%; padding: 14px 24px; background: linear-gradient(135deg, #9b59b6, #8e44ad); color: #fff; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; transition: all 0.3s; margin-top: 15px; }
+        .submit-btn:hover { background: linear-gradient(135deg, #8e44ad, #7d3c98); transform: translateY(-2px); }
+        .submit-btn:disabled { background: #ccc; cursor: not-allowed; transform: none; }
+        .multi-hint { font-size: 12px; color: #9b59b6; margin-bottom: 15px; padding: 8px 12px; background: rgba(155, 89, 182, 0.1); border-radius: 6px; }
+    </style>
+</head>
+<body>
+    <div class="progress-bar"><div class="progress-fill" id="mainProgress"></div></div>
+    <nav class="top-nav" id="topNav">
+        <div class="logo">📚 综合练习</div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <div class="score-display" id="totalScore">已答: 0/0</div>
+            <button class="close-nav-btn" onclick="closeTopNav()">✕</button>
+        </div>
+    </nav>
+    <aside class="sidebar">
+        <div class="sidebar-title">📖 目录导航</div>
+        <a href="#intro" class="nav-item active" onclick="scrollToSection(this, event)">📝 练习说明</a>
+        <a href="#practice" class="nav-item" onclick="scrollToSection(this, event)">✍️ 单选题专区</a>
+        <a href="#multi-practice" class="nav-item" onclick="scrollToSection(this, event)">☑️ 多选题专区</a>
+    </aside>
+    <main class="main-content">
+        <div class="section-header">
+            <h1>📚 综合练习</h1>
+            <p>检验所有模块学习成果，考前冲刺必备！</p>
+        </div>
+        
+        <section id="intro" class="intro-card">
+            <h2>🎯 综合练习说明</h2>
+            <p>本练习涵盖所有已学模块的核心考点，包括：</p>
+            <div class="module-grid">
+                <div class="module-item">1. 刑法</div>
+                <div class="module-item">2. 刑事诉讼法</div>
+                <div class="module-item">3. 行政处罚法</div>
+                <div class="module-item">4. 行政强制法</div>
+                <div class="module-item">5. 行政复议法</div>
+                <div class="module-item">6. 行政诉讼法</div>
+                <div class="module-item">7. 行政许可法</div>
+                <div class="module-item">8. 治安管理处罚法</div>
+                <div class="module-item">9. 国家赔偿法</div>
+                <div class="module-item">10. 警械武器条例</div>
+                <div class="module-item">11. 公安基础知识</div>
+                <div class="module-item">12. 人民警察法</div>
+            </div>
+            <p style="margin-top: 20px;">💡 <strong>答题技巧：</strong>仔细阅读每道题的解析，标注了考查模块，可以回顾对应模块加深理解！</p>
+        </section>
+        
+        <section id="practice" class="practice-section">
+            <h2>✍️ 单选题专区</h2>
+            <div id="quiz-practice" class="quiz-container"></div>
+        </section>
+
+        <section id="multi-practice" class="practice-section">
+            <h2>☑️ 多选题专区 <span class="multi-badge">30题</span></h2>
+            <div id="quiz-multi" class="quiz-container"></div>
+        </section>
+    </main>
+
+    <script>
+        let answeredCount = 0;
+        let correctCount = 0;
+        let multiAnsweredCount = 0;
+        let multiCorrectCount = 0;
+        let selectedOptions = {};
+        
+        function closeTopNav() {
+            document.getElementById('topNav').style.display = 'none';
+        }
+        
+        function scrollToSection(element, event) {
+            event.preventDefault();
+            const href = element.getAttribute('href');
+            const target = document.querySelector(href);
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+                element.classList.add('active');
+            }
+        }
+        
+        function renderQuiz(containerId, quizData) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            let html = '';
+            quizData.forEach((item, index) => {
+                html += `<div class="quiz-card" id="${containerId}-q${index}">
+                    <span class="module-tag">${item.module}</span>
+                    <p class="question"><span class="question-num">${index + 1}</span>${item.question}</p>
+                    <div class="options">`;
+                
+                item.options.forEach((opt, optIndex) => {
+                    html += `<button class="option-btn" onclick="checkAnswer('${containerId}', ${index}, ${optIndex}, this)">
+                        <span class="option-letter">${String.fromCharCode(65 + optIndex)}</span>${opt}
+                    </button>`;
+                });
+                
+                html += `</div>
+                    <div class="explanation" id="${containerId}-exp${index}"></div>
+                </div>`;
+            });
+            
+            container.innerHTML = html;
+            updateProgress();
+        }
+
+        function renderMultiQuiz(containerId, quizData) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            let html = '';
+            quizData.forEach((item, index) => {
+                selectedOptions[`${containerId}-${index}`] = [];
+                html += `<div class="quiz-card" id="${containerId}-q${index}">
+                    <span class="module-tag multi">多选</span><span class="module-tag" style="margin-left:5px;">${item.module}</span>
+                    <p class="question"><span class="question-num">${index + 1}</span>${item.question}</p>
+                    <p class="multi-hint">提示：本题为多选题，请选择所有正确答案</p>
+                    <div class="multi-options">`;
+                
+                item.options.forEach((opt, optIndex) => {
+                    html += `<div class="multi-option" onclick="toggleMultiOption('${containerId}', ${index}, ${optIndex}, this)">
+                        <div class="checkbox"></div>
+                        <span class="option-letter">${String.fromCharCode(65 + optIndex)}</span>
+                        <span>${opt}</span>
+                    </div>`;
+                });
+                
+                html += `</div>
+                    <button class="submit-btn" onclick="checkMultiAnswer('${containerId}', ${index})">提交答案</button>
+                    <div class="explanation" id="${containerId}-exp${index}"></div>
+                </div>`;
+            });
+            
+            container.innerHTML = html;
+            updateMultiProgress();
+        }
+        
+        function toggleMultiOption(containerId, questionIndex, selectedIndex, element) {
+            const key = `${containerId}-${questionIndex}`;
+            const idx = selectedOptions[key].indexOf(selectedIndex);
+            if (idx > -1) {
+                selectedOptions[key].splice(idx, 1);
+                element.classList.remove('selected');
+            } else {
+                selectedOptions[key].push(selectedIndex);
+                element.classList.add('selected');
+            }
+        }
+        
+        function checkMultiAnswer(containerId, questionIndex) {
+            let quizData;
+            if (containerId === 'quiz-multi') {
+                quizData = multiPracticeData;
+            }
+            
+            const question = quizData[questionIndex];
+            const card = document.getElementById(`${containerId}-q${questionIndex}`);
+            const options = card.querySelectorAll('.multi-option');
+            const submitBtn = card.querySelector('.submit-btn');
+            const explanationDiv = document.getElementById(`${containerId}-exp${questionIndex}`);
+            
+            if (submitBtn.disabled) return;
+            submitBtn.disabled = true;
+            
+            options.forEach(opt => opt.classList.add('disabled'));
+            
+            const correctSet = new Set(question.correct);
+            const selectedSet = new Set(selectedOptions[`${containerId}-${questionIndex}`]);
+            
+            let isCorrect = correctSet.size === selectedSet.size && 
+                           [...correctSet].every(x => selectedSet.has(x));
+            
+            // 标记选对的
+            options.forEach((opt, i) => {
+                const origIdx = parseInt(opt.querySelector('.option-letter').textContent.charCodeAt(0) - 65);
+                // 需要通过遍历找到originalIndex
+                const optionTexts = question.options;
+                let origIndex = -1;
+                for (let j = 0; j < optionTexts.length; j++) {
+                    if (opt.textContent.includes(optionTexts[j].substring(1))) {
+                        origIndex = j;
+                        break;
+                    }
+                }
+            });
+            
+            // 标记选项正确/错误状态
+            options.forEach((opt, optIndex) => {
+                if (correctSet.has(optIndex)) {
+                    opt.classList.add('correct');
+                } else if (selectedSet.has(optIndex)) {
+                    opt.classList.add('wrong');
+                }
+            });
+            
+            // 标记漏选的正确答案
+            if (!isCorrect) {
+                options.forEach((opt, optIndex) => {
+                    if (correctSet.has(optIndex) && !selectedSet.has(optIndex)) {
+                        opt.classList.add('missed');
+                    }
+                });
+            }
+            
+            multiAnsweredCount++;
+            if (isCorrect) multiCorrectCount++;
+            updateMultiProgress();
+            
+            // 构建答案字母
+            const correctLetters = [...correctSet].map(i => String.fromCharCode(65 + i)).sort().join('、');
+            
+            explanationDiv.innerHTML = `
+                <div class="result ${isCorrect ? 'correct' : 'wrong'}">
+                    ${isCorrect ? '<span class="highlight-green">✓ 回答正确！</span>' : `<span class="highlight-red">✗ 回答错误</span> <span style="font-size:14px;color:#666;">正确答案：${correctLetters}</span>`}
+                </div>
+                <p><strong>【逐项解析】</strong></p>
+                ${question.explanation}
+            `;
+            explanationDiv.style.display = 'block';
+        }
+        
+        function checkAnswer(containerId, questionIndex, selectedIndex, btnElement) {
+            let quizData;
+            if (containerId === 'quiz-practice') {
+                quizData = practiceData;
+            }
+            
+            const question = quizData[questionIndex];
+            const card = document.getElementById(`${containerId}-q${questionIndex}`);
+            const buttons = card.querySelectorAll('.option-btn');
+            const explanationDiv = document.getElementById(`${containerId}-exp${questionIndex}`);
+            
+            if (buttons[0].classList.contains('disabled')) return;
+            
+            buttons.forEach(btn => btn.classList.add('disabled'));
+            
+            const correctIndex = question.correct;
+            const isCorrect = selectedIndex === correctIndex;
+            
+            const clickedBtn = buttons[selectedIndex];
+            if (isCorrect) {
+                clickedBtn.classList.add('correct');
+                correctCount++;
+            } else {
+                clickedBtn.classList.add('wrong');
+                buttons[correctIndex].classList.add('correct');
+            }
+            
+            answeredCount++;
+            updateProgress();
+            
+            explanationDiv.innerHTML = `
+                <div class="result ${isCorrect ? 'correct' : 'wrong'}">
+                    ${isCorrect ? '<span class="highlight-green">✓ 回答正确！</span>' : '<span class="highlight-red">✗ 回答错误</span>'}
+                </div>
+                <p><strong>【逐项解析】</strong></p>
+                ${question.explanation}
+            `;
+            explanationDiv.style.display = 'block';
+        }
+        
+        function updateProgress() {
+            const total = practiceData.length;
+            const percentage = total > 0 ? (answeredCount / total) * 100 : 0;
+            document.getElementById('mainProgress').style.width = percentage + '%';
+            const multiTotal = multiPracticeData.length;
+            document.getElementById('totalScore').textContent = `单选: ${answeredCount}/${total}(正确:${correctCount}) | 多选: ${multiAnsweredCount}/${multiTotal}(正确:${multiCorrectCount})`;
+        }
+
+        function updateMultiProgress() {
+            const singleTotal = practiceData.length;
+            const multiTotal = multiPracticeData.length;
+            const totalAnswered = answeredCount + multiAnsweredCount;
+            const totalQuestions = singleTotal + multiTotal;
+            const percentage = totalQuestions > 0 ? (totalAnswered / totalQuestions) * 100 : 0;
+            document.getElementById('mainProgress').style.width = percentage + '%';
+            document.getElementById('totalScore').textContent = `单选: ${answeredCount}/${singleTotal}(正确:${correctCount}) | 多选: ${multiAnsweredCount}/${multiTotal}(正确:${multiCorrectCount})`;
+        }
+
+        const practiceData = [
+            {
+                module: "【本题考察刑法】",
+                question: "甲投保人身保险，故意杀害被保险人乙骗取保险金，甲的行为构成什么罪？",
+                options: ["故意杀人罪", "保险诈骗罪", "只构成故意杀人罪", "故意杀人罪和保险诈骗罪，数罪并罚"],
+                correct: 3,
+                explanation: `<p><span class="highlight-green">正确答案是D：故意杀人罪和保险诈骗罪，数罪并罚。</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A错误❌：虽然甲构成故意杀人罪，但仅说故意杀人罪不完整。</p>
+                <p>B错误❌：保险诈骗罪确实构成，但甲还有杀人行为，不能只定一罪。</p>
+                <p>C错误❌：保险诈骗罪的构成要件包括"故意造成被保险人死亡"，这是一个加重情节，不能只定一罪。</p>
+                <p>D正确✓：根据《刑法》第198条第1款第5项，投保人、受益人故意造成被保险人死亡、伤残或者疾病，骗取保险金的，同时构成其他犯罪的，依照数罪并罚的规定处罚。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>投保人杀被保险人，一个行为触两罪，数罪并罚跑不掉！</p>`
+            },
+            {
+                module: "【本题考察刑法】",
+                question: "甲以知识分享为名组织讲座，向居民推销高价产品，指导发展下线获取提成返利，许多居民投入巨资。甲的行为构成什么罪？",
+                options: ["非法经营罪", "强迫交易罪", "组织、领导传销活动罪", "诈骗罪"],
+                correct: 2,
+                explanation: `<p><span class="highlight-green">正确答案是C：组织、领导传销活动罪。</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A错误❌：甲的行为不符合非法经营罪的构成要件。非法经营罪针对的是专营专卖物品、进出口许可证等，不是组织传销。</p>
+                <p>B错误❌：强迫交易罪需要"暴力、威胁手段"，甲没有使用暴力威胁。</p>
+                <p>C正确✓：根据《刑法》第224条之一，组织、领导以推销商品为名，要求参加者缴纳费用获得加入资格，按照一定顺序组成层级，以发展人员数量作为计酬依据的传销活动，构成组织、领导传销活动罪。</p>
+                <p>D错误❌：传销罪与普通诈骗不同，是特殊罪名。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>拉人头、缴会费、层级返利——这是传销三件套！</p>`
+            },
+            {
+                module: "【本题考察刑事诉讼法】",
+                question: "关于证人资格，下列说法正确的是？",
+                options: ["年幼的人不能作为证人", "精神病人不能作为证人", "生理上有缺陷的人不能作为证人", "知道案件情况的人都有作证义务"],
+                correct: 3,
+                explanation: `<p><span class="highlight-green">正确答案是D：知道案件情况的人都有作证义务。</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A错误❌：年幼的人如果能辨别是非、正确表达，可以作为证人。年龄小不是绝对排除条件。</p>
+                <p>B错误❌：精神病人如果在精神正常期间能辨别是非、正确表达，可以作为证人。需要具体分析。</p>
+                <p>C错误❌：生理上有缺陷（如声哑）的人，如果能辨别是非、正确表达，可以作为证人。</p>
+                <p>D正确✓：根据《刑事诉讼法》第62条，凡是知道案件情况的人，都有作证的义务。生理上、精神上有缺陷或者年幼，不能辨别是非、不能正确表达的人，才不能作为证人。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>证人资格看两点——知道情况+能正确表达！</p>`
+            },
+            {
+                module: "【本题考察刑事诉讼法】",
+                question: "人民检察院审查批准逮捕时，有下列情形之一的，应当讯问犯罪嫌疑人：",
+                options: ["犯罪嫌疑人为女性", "案件涉及国家秘密", "对是否符合逮捕条件有疑问的", "犯罪嫌疑人可能被判处死刑"],
+                correct: 2,
+                explanation: `<p><span class="highlight-green">正确答案是C：对是否符合逮捕条件有疑问的。</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A错误❌：犯罪嫌疑人为女性不是应当讯问的法定情形。</p>
+                <p>B错误❌：案件涉及国家秘密不是应当讯问的法定情形。</p>
+                <p>C正确✓：根据《刑事诉讼法》第88条第1款，对是否符合逮捕条件有疑问的，应当讯问犯罪嫌疑人。</p>
+                <p>D错误❌：犯罪嫌疑人可能被判处死刑不是应当讯问的法定情形。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>检察院捕前讯问——有疑问必须问！</p>`
+            },
+            {
+                module: "【本题考察刑事诉讼法】",
+                question: "人民法院、人民检察院和公安机关进行刑事诉讼，应当遵循什么原则？",
+                options: ["分工负责、互相配合、互相制约", "集中统一、各司其职", "以审判为中心", "以侦查为中心"],
+                correct: 0,
+                explanation: `<p><span class="highlight-green">正确答案是A：分工负责、互相配合、互相制约。</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A正确✓：根据《刑事诉讼法》第7条，公检法三机关应当分工负责、互相配合、互相制约，以保证准确有效地执行法律。</p>
+                <p>B错误❌："集中统一"不是刑事诉讼的基本原则。</p>
+                <p>C错误❌："以审判为中心"是司法改革的要求，但不是《刑事诉讼法》第7条规定的基本原则。</p>
+                <p>D错误❌："以侦查为中心"是旧观念，已被改革否定。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>公安做饭（侦查）、检察端饭（起诉）、法院吃饭（审判），但要分工配合互相管！</p>`
+            },
+            {
+                module: "【本题考察行政许可法】",
+                question: "下列属于行政许可的是？",
+                options: ["婚姻登记", "产权登记", "社团登记", "抵押登记"],
+                correct: 2,
+                explanation: `<p><span class="highlight-green">正确答案是C：社团登记。</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A错误❌：婚姻登记是对既存事实的确认，属于行政确认，不是行政许可。</p>
+                <p>B错误❌：产权登记是确认权利归属，属于行政确认，不是行政许可。</p>
+                <p>C正确✓：社团登记属于"登记类许可"，成立社团需经行政机关审批，准予其取得法人资格并开展社会活动，符合行政许可"准予从事特定活动"的特征。</p>
+                <p>D错误❌：抵押登记是对抵押权设立的确认，属于行政确认，不是行政许可。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>行政许可=允许干新事，行政确认=证明已有事！</p>`
+            },
+            {
+                module: "【本题考察行政许可法】",
+                question: "行政机关依法变更或者撤回已生效的行政许可，给公民造成财产损失的，应当？",
+                options: ["不承担责任", "给予补偿", "加倍赔偿", "恢复原状"],
+                correct: 1,
+                explanation: `<p><span class="highlight-green">正确答案是B：给予补偿。</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A错误❌：行政许可法明确规定应当给予补偿，不能不承担责任。</p>
+                <p>B正确✓：根据《行政许可法》第8条第2款，为了公共利益的需要，行政机关可以依法变更或者撤回已经生效的行政许可，由此给公民、法人或者其他组织造成财产损失的，应当依法给予补偿。</p>
+                <p>C错误❌：是"补偿"不是"赔偿"，补偿是合理弥补损失。</p>
+                <p>D错误❌：恢复原状不适用于行政许可撤回的情形。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>许可撤回为公益，个人损失政府补！</p>`
+            },
+            {
+                module: "【本题考察行政诉讼法】",
+                question: "人民法院审理第一审行政案件，可以适用简易程序的是？",
+                options: ["案件涉及款额5000元以下", "案件涉及款额2000元以下", "案件涉及款额10000元以下", "案件涉及款额无限制"],
+                correct: 1,
+                explanation: `<p><span class="highlight-green">正确答案是B：案件涉及款额2000元以下。</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A错误❌：5000元以下不符合法律规定。</p>
+                <p>B正确✓：根据《行政诉讼法》第82条第1款，案件涉及款额2000元以下的，可以适用简易程序。</p>
+                <p>C错误❌：10000元以下不符合法律规定。</p>
+                <p>D错误❌：简易程序有款额限制，不是无限制。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>简易程序三情形：当场作、两千下、信息公开！</p>`
+            },
+            {
+                module: "【本题考察行政处罚法】",
+                question: "行政机关在作出行政处罚决定之前，应当告知当事人什么内容？",
+                options: ["行政处罚决定书", "拟作出的行政处罚内容及事实、理由、依据", "处罚的法律依据全文", "复议和诉讼的权利期限"],
+                correct: 1,
+                explanation: `<p><span class="highlight-green">正确答案是B：拟作出的行政处罚内容及事实、理由、依据。</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A错误❌：行政处罚决定书是最终文书，不是事先告知的内容。</p>
+                <p>B正确✓：根据《行政处罚法》第44条，行政机关在作出行政处罚决定之前，应当告知当事人拟作出的行政处罚内容及事实、理由、依据，并告知当事人依法享有的陈述、申辩、要求听证等权利。</p>
+                <p>C错误❌：告知的是依据，不是法律全文。</p>
+                <p>D错误❌：陈述、申辩、听证权利应当告知，但选项表述不完整。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>处罚前必告知——内容事实理由据，还有陈述申辩听证权！</p>`
+            },
+            {
+                module: "【本题考察行政强制法】",
+                question: "行政机关申请人民法院强制执行前，应当？",
+                options: ["直接申请执行", "催告当事人履行义务", "调查当事人财产", "冻结当事人账户"],
+                correct: 1,
+                explanation: `<p><span class="highlight-green">正确答案是B：催告当事人履行义务。</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A错误❌：不能直接申请执行，必须先催告。</p>
+                <p>B正确✓：根据《行政强制法》第54条，行政机关申请人民法院强制执行前，应当催告当事人履行义务。催告书送达十日后当事人仍未履行义务的，行政机关可以向人民法院申请强制执行。</p>
+                <p>C错误❌：调查不是强制执行前的必经程序。</p>
+                <p>D错误❌：冻结是行政强制措施，不是申请法院执行前的程序。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>强执申请前，先催十日再申请！</p>`
+            },
+            {
+                module: "【本题考察治安管理处罚法】",
+                question: "行政拘留的处罚决定被撤销，公安机关收取的保证金应当？",
+                options: ["没收上缴国库", "退还交纳人", "作为赔偿费用", "抵缴罚款"],
+                correct: 1,
+                explanation: `<p><span class="highlight-green">正确答案是B：退还交纳人。</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A错误❌：复议撤销说明原处罚错误，保证金应当退还，不能没收。</p>
+                <p>B正确✓：根据《治安管理处罚法》第111条，行政拘留的处罚决定被撤销，或者行政拘留处罚开始执行的，公安机关收取的保证金应当及时退还交纳人。</p>
+                <p>C错误❌：保证金不是赔偿费用，是暂扣的担保。</p>
+                <p>D错误❌：保证金不是罚款，不能抵缴。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>拘留撤销保证金，立即退还不是罚！</p>`
+            },
+            {
+                module: "【本题考察治安管理处罚法】",
+                question: "以暴力、威胁或者其他手段强迫他人劳动的，处多少日以下拘留？",
+                options: ["5日以下", "5日以上10日以下", "10日以上15日以下", "15日以上"],
+                correct: 2,
+                explanation: `<p><span class="highlight-green">正确答案是C：10日以上15日以下。</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A错误❌：5日以下是较轻情节的处罚下限。</p>
+                <p>B错误❌：5日以上10日以下是"情节较轻"的情形。</p>
+                <p>C正确✓：根据《治安管理处罚法》第40条，以暴力、威胁或者其他手段强迫他人劳动的，处10日以上15日以下拘留，并处500元以上1000元以下罚款。情节较轻的，处5日以上10日以下拘留。</p>
+                <p>D错误❌：15日以上是更重处罚，不适用于强迫劳动。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>强迫劳动非小事，十天拘留起算，重者罚金配套！</p>`
+            },
+            {
+                module: "【本题考察行政强制法】",
+                question: "关于行政强制执行，下列说法正确的是？",
+                options: ["行政强制执行只能由法律设定", "地方政府可以设定行政强制执行", "行政强制执行可以委托", "行政强制执行由规章设定"],
+                correct: 0,
+                explanation: `<p><span class="highlight-green">正确答案是A：行政强制执行只能由法律设定。</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A正确✓：根据《行政强制法》第13条，行政强制执行由法律设定。法律没有规定行政机关强制执行的，作出行政决定的行政机关应当申请人民法院强制执行。</p>
+                <p>B错误❌：地方政府无权设定行政强制执行，只有法律能设定。</p>
+                <p>C错误❌：行政强制执行权不得委托。</p>
+                <p>D错误❌：规章无权设定行政强制执行。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>强执只能法律定，地方法规不能设！</p>`
+            },
+            {
+                module: "【本题考察行政强制法】",
+                question: "冻结存款、汇款属于什么类型的行政强制？",
+                options: ["财产罚", "行政强制措施", "申诫罚", "能力罚"],
+                correct: 1,
+                explanation: `<p><span class="highlight-green">正确答案是B：行政强制措施。</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A错误❌：财产罚是行政处罚的学理分类，包括没收、罚款等。</p>
+                <p>B正确✓：根据《行政强制法》第9条，行政强制措施的种类包括：（一）限制公民人身自由；（二）查封场所、设施或者财物；（三）扣押财物；（四）冻结存款、汇款；（五）其他行政强制措施。冻结存款属于第四项。</p>
+                <p>C错误❌：申诫罚是声誉罚，如警告、通报批评。</p>
+                <p>D错误❌：能力罚是行为罚，如责令停产停业、吊销许可证。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>冻结属于强制措施，限制财产的方式之一！</p>`
+            },
+            {
+                module: "【本题考察行政强制法】",
+                question: "关于行政强制措施的实施，下列说法正确的是？",
+                options: ["行政强制措施权可以委托", "只有法律规定的行政机关可以实施", "其他人员可以实施", "法规不能规定行政强制措施"],
+                correct: 1,
+                explanation: `<p><span class="highlight-green">正确答案是B：只有法律规定的行政机关可以实施。</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A错误❌：根据《行政强制法》第17条第1款，行政强制措施权不得委托。</p>
+                <p>B正确✓：根据《行政强制法》第17条第1款，行政强制措施由法律、法规规定的行政机关在法定职权范围内实施。行使相对集中行政处罚权的行政机关，可以实施与行政处罚权有关的行政强制措施。</p>
+                <p>C错误❌：行政强制措施应当由具备资格的行政执法人员实施，其他人员不得实施。</p>
+                <p>D错误❌：法规可以规定行政强制措施，但必须由行政机关实施。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>强措施，有资格的人干，委托不行！</p>`
+            },
+            {
+                module: "【本题考察行政复议法】",
+                question: "下列可以申请行政复议的是？",
+                options: ["中纪委的决定", "国务院发布的决定", "某市工商局不予营业执照的决定", "县人大制定的自治条例"],
+                correct: 2,
+                explanation: `<p><span class="highlight-green">正确答案是C：某市工商局不予营业执照的决定。</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A错误❌：中纪委不是行政机关，其决定不属于具体行政行为。</p>
+                <p>B错误❌：国务院发布的决定属于抽象行政行为，不能单独申请复议。</p>
+                <p>C正确✓：某市工商局不予营业执照的决定是具体行政行为，属于行政处罚，可以申请行政复议。</p>
+                <p>D错误❌：县人大制定的自治条例属于地方立法行为，不是具体行政行为。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>行政复议只告具体行政行为，抽象行为（法规、规章、决定）不能告！</p>`
+            },
+            {
+                module: "【本题考察行政复议法】",
+                question: "行政复议机关受理申请后，发现被申请人没有相应法定职责的，应当？",
+                options: ["撤销原行政行为", "责令重新作出", "驳回申请人的行政复议申请", "确认违法"],
+                correct: 2,
+                explanation: `<p><span class="highlight-green">正确答案是C：驳回申请人的行政复议申请。</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A错误❌：被申请人没有相应职责，不存在原行政行为需要撤销。</p>
+                <p>B错误❌：责令重新作出不适用于没有相应职责的情形。</p>
+                <p>C正确✓：根据《行政复议法》第69条，行政复议机关受理申请人认为被申请人不履行法定职责的行政复议申请后，发现被申请人没有相应法定职责或者在受理前已经履行法定职责的，决定驳回申请人的行政复议申请。</p>
+                <p>D错误❌：确认违法适用于其他情形。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>复议被申请人没职责，驳回申请没商量！</p>`
+            },
+            {
+                module: "【本题考察行政复议法】",
+                question: "对A市监局的具体行政行为不服的，应当向谁申请行政复议？",
+                options: ["A市监局的上一级主管部门", "A市人民政府", "A市监局", "省政府"],
+                correct: 2,
+                explanation: `<p><span class="highlight-green">正确答案是C：A市人民政府。</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A错误❌：上一级主管部门也可以，但不是最优选项。</p>
+                <p>B正确✓：根据《行政复议法》第24条，对县级以上地方各级人民政府工作部门作出的行政行为不服的，可以向本级人民政府申请行政复议，也可以向上一级主管部门申请行政复议。本题选A市人民政府。</p>
+                <p>C错误❌：不能向被申请人自己申请复议。</p>
+                <p>D错误❌：省政府不是A市监局工作部门的复议机关。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>部门行为不服，可告本级政府或上级部门！</p>`
+            },
+            {
+                module: "【本题考察行政诉讼法】",
+                question: "没有诉讼行为能力的公民，如何进行行政诉讼？",
+                options: ["由其法定代理人代为诉讼", "由其近亲属代为诉讼", "由其所在单位代为诉讼", "由其朋友代为诉讼"],
+                correct: 0,
+                explanation: `<p><span class="highlight-green">正确答案是A：由其法定代理人代为诉讼。</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A正确✓：根据《行政诉讼法》第30条第1款，没有诉讼行为能力的公民，由其法定代理人代为诉讼。</p>
+                <p>B错误❌：近亲属不是法定代理人，不能直接代为诉讼。</p>
+                <p>C错误❌：所在单位不是法定代理人。</p>
+                <p>D错误❌：朋友不是法定代理人。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>无诉讼能力，法定代理人代告！</p>`
+            },
+            {
+                module: "【本题考察行政诉讼法】",
+                question: "对县级以上地方人民政府所作的行政行为提起诉讼，由哪个法院管辖？",
+                options: ["基层人民法院", "中级人民法院", "高级人民法院", "最高人民法院"],
+                correct: 1,
+                explanation: `<p><span class="highlight-green">正确答案是B：中级人民法院。</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A错误❌：基层人民法院管辖一般第一审行政案件，但涉及政府的不属于基层管辖。</p>
+                <p>B正确✓：根据《行政诉讼法》第15条，对国务院部门或者县级以上地方人民政府所作的行政行为提起诉讼的案件，由中级人民法院管辖。</p>
+                <p>C错误❌：高级人民法院管辖辖区内重大复杂案件，不直接审理一审案件。</p>
+                <p>D错误❌：最高人民法院管辖全国重大复杂案件。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>告政府，找中级！基层不管政府案！</p>`
+            },
+            {
+                module: "【本题考察国家赔偿法】",
+                question: "赔偿请求人凭生效的法律文书向赔偿义务机关申请支付赔偿金，应当提交什么材料？",
+                options: ["身份证复印件", "生效的判决书、复议决定书、赔偿决定书或者调解书", "赔偿申请书", "财产清单"],
+                correct: 1,
+                explanation: `<p><span class="highlight-green">正确答案是B：生效的判决书、复议决定书、赔偿决定书或者调解书。</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A错误❌：身份证不是申请支付赔偿金的必要材料。</p>
+                <p>B正确✓：根据《国家赔偿法》第37条第2款，赔偿请求人凭生效的判决书、复议决定书、赔偿决定书或者调解书向赔偿义务机关申请支付赔偿金。</p>
+                <p>C错误❌：赔偿申请书是申请赔偿时提交的材料，不是申请支付赔偿金时提交。</p>
+                <p>D错误❌：财产清单不是必要材料。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>申请支付赔金，拿着生效文书去！</p>`
+            },
+            {
+                module: "【本题考察国家赔偿法】",
+                question: "受行政机关委托的组织在行使受委托的行政权力时侵犯他人合法权益，造成损害的，赔偿义务机关是？",
+                options: ["受委托的组织", "委托的行政机关", "双方共同", "受害人自己"],
+                correct: 1,
+                explanation: `<p><span class="highlight-green">正确答案是B：委托的行政机关。</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A错误❌：受委托的组织不是赔偿义务机关，因为它们没有独立的行政主体资格。</p>
+                <p>B正确✓：根据《国家赔偿法》第7条第4款，受行政机关委托的组织或者个人在行使受委托的行政权力时侵犯公民、法人和其他组织的合法权益造成损害的，委托的行政机关为赔偿义务机关。</p>
+                <p>C错误❌：不是双方共同，是委托的行政机关。</p>
+                <p>D错误❌：受害人不是赔偿义务机关。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>委托出去，责任留下——赔偿找委托机关！</p>`
+            },
+            {
+                module: "【本题考察警械武器条例】",
+                question: "人民警察使用驱逐性、制服性警械之前，必须？",
+                options: ["直接使用", "经领导批准", "经警告无效", "鸣枪示警"],
+                correct: 2,
+                explanation: `<p><span class="highlight-green">正确答案是C：经警告无效。</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A错误❌：不能直接使用，必须先警告。</p>
+                <p>B错误❌：警告是法定程序，不需另行批准。</p>
+                <p>C正确✓：根据《人民警察使用警械和武器条例》第7条，人民警察遇有下列情形之一，经警告无效的，可以使用警棍、催泪弹、高压水枪、特种防暴枪等驱逐性、制服性警械。</p>
+                <p>D错误❌：鸣枪示警不是使用警械前的必经程序。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>制服警械使用前，警告无效才动手！</p>`
+            },
+            {
+                module: "【本题考察警械武器条例】",
+                question: "警察发现孕妇正在持刀实施抢劫，可以直接使用武器吗？",
+                options: ["可以", "不可以", "视情况而定", "应当先警告"],
+                correct: 1,
+                explanation: `<p><span class="highlight-green">正确答案是B：不可以。</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A错误❌：虽然孕妇在抢劫，但使用的是刀，不是枪支、爆炸、剧毒等危险物品。</p>
+                <p>B正确✓：根据《人民警察使用警械和武器条例》第10条，发现实施犯罪的人为怀孕妇女、儿童的，不得使用武器，但是使用枪支、爆炸、剧毒等危险物品实施暴力犯罪的除外。孕妇持刀不属于可以使用武器的情形。</p>
+                <p>C错误❌：法律明确规定不得使用，不是视情况。</p>
+                <p>D错误❌：不是警告后可以使用武器的问题。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>孕妇儿童是保护对象，持刀抢劫不能开枪！</p>`
+            },
+            {
+                module: "【本题考察警械武器条例】",
+                question: "处置群体性治安事件时，一线民警可以？",
+                options: ["禁止携带任何警械", "可以携带武器", "应当携带必要的警械装备，但不得携带武器", "可以使用致命性武器"],
+                correct: 2,
+                explanation: `<p><span class="highlight-green">正确答案是C：应当携带必要的警械装备，但不得携带武器。</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A错误❌：不是禁止任何警械，是禁止武器。</p>
+                <p>B错误❌：一线民警不得携带武器。</p>
+                <p>C正确✓：根据《公安机关处置群体性治安事件规定》第8条，处置群体性治安事件现场的民警应当携带必要的警械装备，但不得携带武器。</p>
+                <p>D错误❌：不得使用致命性武器。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>群体事件一线，警械要带武器不带！</p>`
+            },
+            {
+                module: "【本题考察公安基础知识】",
+                question: "关于\"严肃与谨慎相结合\"的刑事政策，下列说法正确的是？",
+                options: ["狠就是依法给犯罪分子以严厉打击", "稳就是及时快速办案", "准就是加重处罚力度", "这一政策不需要与其他政策结合"],
+                correct: 0,
+                explanation: `<p><span class="highlight-green">正确答案是A：狠就是依法给犯罪分子以严厉打击。</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A正确✓："狠"就是要依法给犯罪分子以严厉打击，使之受到应有的惩处，体现"严肃"的要求。</p>
+                <p>B错误❌："稳"是指要注意策略，讲究方法，不打无准备之仗，不是及时快速。</p>
+                <p>C错误❌："准"是指要准确认定犯罪事实和性质，不是加重处罚。</p>
+                <p>D错误❌："严肃与谨慎相结合"本身就是一项政策，体现"不枉不纵"的精神。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>稳准狠——稳是准备、准是定性、狠是打击！</p>`
+            },
+            {
+                module: "【本题考察人民警察法】",
+                question: "下列行为中，给予治安管理处罚的是？",
+                options: ["民警乙个人对工作发泄不满", "房东配合执行但未能抓获嫌疑人", "司机丁因车辆抛锚堵住警车", "甲公然侮辱正在执行职务的民警"],
+                correct: 3,
+                explanation: `<p><span class="highlight-green">正确答案是D：甲公然侮辱正在执行职务的民警。</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A错误❌：民警乙个人对工作发泄不满，不是拒绝或阻碍执行职务。</p>
+                <p>B错误❌：房东已配合执行职务，未能抓获嫌疑人不在其责任范围。</p>
+                <p>C错误❌：车辆抛锚是意外事件，非主观故意，不构成违法。</p>
+                <p>D正确✓：根据《人民警察法》第35条，公然侮辱正在执行职务的人民警察的，给予治安管理处罚。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>侮辱正在执勤的警察——拘留罚款等着你！</p>`
+            },
+            {
+                module: "【本题考察人民警察法】",
+                question: "对严重危害公共安全的精神病人，警察可以采取什么措施？",
+                options: ["当场盘问检查", "先行拘留", "保护性约束措施", "强制医疗"],
+                correct: 2,
+                explanation: `<p><span class="highlight-green">正确答案是C：保护性约束措施。</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A错误❌：盘问检查适用于有违法犯罪嫌疑的人，不适用于正在危害公共安全的精神病人。</p>
+                <p>B错误❌：先行拘留适用于现行犯和重大嫌疑分子，但精神病人不是最优选择。</p>
+                <p>C正确✓：根据《人民警察法》第14条，公安机关的人民警察对严重危害公共安全或者他人人身安全的精神病人，可以采取保护性约束措施。</p>
+                <p>D错误❌：强制医疗需要经法定程序鉴定，法院裁定，不属于首先采取的措施。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>精神病人危害大，保护约束先拿下！</p>`
+            },
+            {
+                module: "【本题考察人民警察法】",
+                question: "警察对超越法律、法规规定的人民警察职责范围的指令，有权？",
+                options: ["必须执行", "拒绝执行并向上级机关报告", "可以变通执行", "向上级机关报告后可执行"],
+                correct: 1,
+                explanation: `<p><span class="highlight-green">正确答案是B：拒绝执行并向上级机关报告。</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A错误❌：超越职责范围的指令，警察有权拒绝。</p>
+                <p>B正确✓：根据《人民警察法》第33条，人民警察对超越法律、法规规定的人民警察职责范围的指令，有权拒绝执行，并同时向上级机关报告。</p>
+                <p>C错误❌：不能变通执行。</p>
+                <p>D错误❌：不是报告后可以执行，而是应当拒绝。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>超越职权的命令，警察有权拒绝并上报！</p>`
+            },
+            {
+                module: "【本题考察人民警察法】",
+                question: "甲公然侮辱正在依法执行职务的交警一小时，甲的行为属于？",
+                options: ["故意伤害", "妨害公务罪", "阻碍执行职务的违法行为", "无罪"],
+                correct: 2,
+                explanation: `<p><span class="highlight-green">正确答案是C：阻碍执行职务的违法行为。</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A错误❌：侮辱不构成故意伤害。</p>
+                <p>B错误❌：以暴力、威胁方法阻碍执行职务才构成妨害公务罪。</p>
+                <p>C正确✓：根据《人民警察法》第35条，公然侮辱正在依法执行职务的人民警察的，给予治安管理处罚。甲的行为属于阻碍执行职务的违法行为。</p>
+                <p>D错误❌：公然侮辱警察是违法行为，应予处罚。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>侮辱警察是违法，治安处罚跑不掉！</p>`
+            },
+            {
+                module: "【本题考察刑法】",
+                question: "对于被判处死刑、无期徒刑的犯罪分子，应当附加剥夺政治权利多长时间？",
+                options: ["1年以上5年以下", "3年以上10年以下", "终身", "10年以上"],
+                correct: 2,
+                explanation: `<p><span class="highlight-green">正确答案是C：终身。</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A错误❌：这是减为有期徒刑时附加剥夺政治权利的期限。</p>
+                <p>B错误❌：这是减为有期徒刑时应当改判的期限。</p>
+                <p>C正确✓：根据《刑法》第57条，对于被判处死刑、无期徒刑的犯罪分子，应当剥夺政治权利终身。</p>
+                <p>D错误❌：10年以上不是法律规定。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>死刑无期，政治权利终身剥夺！</p>`
+            },
+            {
+                module: "【本题考察刑法】",
+                question: "在道路上驾驶机动车追逐竞驶，情节恶劣的，处什么刑罚？",
+                options: ["拘役，并处罚金", "有期徒刑", "无期徒刑", "管制"],
+                correct: 0,
+                explanation: `<p><span class="highlight-green">正确答案是A：拘役，并处罚金。</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A正确✓：根据《刑法》第133条之一，在道路上驾驶机动车追逐竞驶，情节恶劣的，处拘役，并处罚金。</p>
+                <p>B错误❌：追逐竞驶的法定刑是拘役，不是有期徒刑。</p>
+                <p>C错误❌：无期徒刑不适用于追逐竞驶。</p>
+                <p>D错误❌：管制是更轻的刑罚。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>追逐竞驶，拘役加罚金！</p>`
+            },
+            {
+                module: "【本题考察刑事诉讼法】",
+                question: "取保候审由哪个机关执行？",
+                options: ["人民法院", "人民检察院", "公安机关", "司法行政机关"],
+                correct: 2,
+                explanation: `<p><span class="highlight-green">正确答案是C：公安机关。</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A错误❌：人民法院不执行取保候审。</p>
+                <p>B错误❌：人民检察院不执行取保候审。</p>
+                <p>C正确✓：根据《刑事诉讼法》第67条第2款，取保候审由公安机关执行。</p>
+                <p>D错误❌：司法行政机关不执行取保候审。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>取保候审公安执！</p>`
+            },
+            {
+                module: "【本题考察行政许可法】",
+                question: "关于行政许可的设定，下列做法违法的是？",
+                options: ["法规对许可条件作出具体规定", "申请餐饮许可证须办理认证手续", "许可不得收取任何费用", "许可依据应当公布"],
+                correct: 1,
+                explanation: `<p><span class="highlight-green">正确答案是B：申请餐饮许可证须办理认证手续。</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A正确✓：法规可以对上位法设定的行政许可作出具体规定。</p>
+                <p>B错误❌：地方性法规规定申请餐饮服务许可证须到当地餐饮行业协会办理认证手续，属于增设行政许可，违法。</p>
+                <p>C正确✓：行政机关实施行政许可和对行政许可事项进行监督检查，不得收取任何费用。</p>
+                <p>D正确✓：有关行政许可的规定应当公布。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>许可不能乱增设，认证不是必备条件！</p>`
+            },
+            {
+                module: "【本题考察行政许可法】",
+                question: "公安交通部门发给李某驾驶执照，属于什么类型的行政许可？",
+                options: ["登记", "普通许可", "核准", "特许"],
+                correct: 1,
+                explanation: `<p><span class="highlight-green">正确答案是B：普通许可。</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A错误❌：登记是对已经具备主体资格的组织予以确认。</p>
+                <p>B正确✓：根据《行政许可法》第54条，发给驾驶执照属于赋予公民特定资格的行政许可，需要通过考试等程序，属于普通许可。</p>
+                <p>C错误❌：核准是对设备、产品等进行检验、检测、检疫。</p>
+                <p>D错误❌：特许是赋予特定权利，如采矿权。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>驾照属于普通许可，赋予特定资格！</p>`
+            },
+            {
+                module: "【本题考察行政处罚法】",
+                question: "某镇政府要求村民拔掉麦子改种蔬菜，侵犯了村民什么权利？",
+                options: ["不违法", "侵犯了村民的财产权", "侵犯了村民的人身权", "属于行政指导"],
+                correct: 1,
+                explanation: `<p><span class="highlight-green">正确答案是B：侵犯了村民的财产权。</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A错误❌：政府用行政命令干预村民的农业生产自由，是违法行为。</p>
+                <p>B正确✓：行政机关采取行政措施必须有法律授权。村民对麦子的财产权受法律保护，镇政府无权强制要求改种。</p>
+                <p>C错误❌：不是侵犯人身权。</p>
+                <p>D错误❌：这是行政命令，不是行政指导。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>政府命令农民改种菜，侵犯财产是违法！</p>`
+            },
+            {
+                module: "【本题考察治安管理处罚法】",
+                question: "孙某受他人胁迫殴打他人，且情节特别轻微，公安机关应当？",
+                options: ["从轻处罚", "减轻处罚或者不予处罚", "不予处罚", "从重处罚"],
+                correct: 1,
+                explanation: `<p><span class="highlight-green">正确答案是B：减轻处罚或者不予处罚。</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A错误❌：从轻处罚是对法定处罚从轻，减轻或不予是更轻的处理。</p>
+                <p>B正确✓：根据《治安管理处罚法》第19条，情节特别轻微的，或者出于他人胁迫或者诱骗的，减轻处罚或者不予处罚。</p>
+                <p>C错误❌：选项不完整，也可能是减轻处罚。</p>
+                <p>D错误❌：情节特别轻微应当减轻或不予，不是从重。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>被胁迫+情节轻，减轻或不罚！</p>`
+            },
+            {
+                module: "【本题考察行政诉讼法】",
+                question: "诉讼期间，不停止行政行为的执行，但有下列情形之一的，应当停止执行？",
+                options: ["被告认为需要停止执行的", "原告申请停止执行的", "被告上级认为需要停止执行的", "律师认为需要停止执行的"],
+                correct: 0,
+                explanation: `<p><span class="highlight-green">正确答案是A：被告认为需要停止执行的。</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A正确✓：根据《行政诉讼法》第56条，被告认为需要停止执行的，应当停止执行。</p>
+                <p>B错误❌：原告申请停止执行，需要法院认为会造成难以弥补的损失且不损害公共利益。</p>
+                <p>C错误❌：被告上级的认为不能直接停止执行。</p>
+                <p>D错误❌：律师认为不能直接停止执行。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>被告要停就能停，原告要停法院批！</p>`
+            },
+            {
+                module: "【本题考察行政强制法】",
+                question: "关于行政强制的评价，下列说法正确的是？",
+                options: ["设定机关应当定期评价", "实施机关应当定期评价", "公民可以提出意见和建议", "实施机关应当强制评价"],
+                correct: 2,
+                explanation: `<p><span class="highlight-green">正确答案是C：公民可以提出意见和建议。</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A错误❌：设定机关"应当"定期评价，不是"可以"。</p>
+                <p>B错误❌：实施机关"可以"评价，不是"应当"。</p>
+                <p>C正确✓：根据《行政强制法》第15条第3款，公民、法人或者其他组织可以向行政强制的设定机关和实施机关就行政强制的设定和实施提出意见和建议。</p>
+                <p>D错误❌：实施机关不是"应当"强制评价。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>设定机关必须评，实施机关可以评，公民随时提意见！</p>`
+            },
+            {
+                module: "【本题考察行政复议法】",
+                question: "下列不属于行政复议范围的是？",
+                options: ["对行政处罚决定不服", "对行政强制措施不服", "对行政机关工作人员的奖惩、任免决定不服", "申请行政许可被拒绝"],
+                correct: 2,
+                explanation: `<p><span class="highlight-green">正确答案是C：对行政机关工作人员的奖惩、任免决定不服。</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A错误❌：对行政处罚决定不服可以申请行政复议。</p>
+                <p>B错误❌：对行政强制措施决定不服可以申请行政复议。</p>
+                <p>C正确✓：根据《行政复议法》第12条，下列事项不属于行政复议范围：（三）行政机关对行政机关工作人员的奖惩、任免等决定。</p>
+                <p>D错误❌：申请行政许可被拒绝可以申请行政复议。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>内部人事决定不能复议，对外行政行为才能复议！</p>`
+            },
+            {
+                module: "【本题考察国家赔偿法】",
+                question: "赔偿义务机关应当自收到支付赔偿金申请之日起多少日内提出支付申请？",
+                options: ["3日", "5日", "7日", "15日"],
+                correct: 2,
+                explanation: `<p><span class="highlight-green">正确答案是C：7日。</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A错误❌：3日不是法定时限。</p>
+                <p>B错误❌：5日不是法定时限。</p>
+                <p>C正确✓：根据《国家赔偿法》第37条第3款，赔偿义务机关应当自收到支付赔偿金申请之日起7日内，依照预算管理权限向有关的财政部门提出支付申请。</p>
+                <p>D错误❌：15日是财政部门支付赔偿金的时限。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>7天提申请，15天来付款！</p>`
+            },
+            {
+                module: "【本题考察人民警察法】",
+                question: "下列不属于公安机关人民警察的是？",
+                options: ["治安警察", "户籍警察", "监狱民警", "边防警察"],
+                correct: 2,
+                explanation: `<p><span class="highlight-green">正确答案是C：监狱民警。</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A错误❌：治安警察是公安机关警种。</p>
+                <p>B错误❌：户籍警察是公安机关警种。</p>
+                <p>C正确✓：根据《人民警察法》第2条，我国人民警察包括公安机关、国家安全机关、监狱、劳动教养管理机关的人民警察和人民法院、人民检察院的司法警察。监狱民警属于司法警察，不属于公安机关人民警察。</p>
+                <p>D错误❌：边防警察是公安机关警种。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>公安、国家、监狱、司法——四类警察各不同！</p>`
+            },
+            {
+                module: "【本题考察人民警察法】",
+                question: "担任人民警察应当具备什么文化程度？",
+                options: ["初中毕业以上", "高中毕业以上", "大学毕业以上", "研究生毕业以上"],
+                correct: 1,
+                explanation: `<p><span class="highlight-green">正确答案是B：高中毕业以上。</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A错误❌：初中毕业不符合要求。</p>
+                <p>B正确✓：根据《人民警察法》第26条，担任人民警察应当具有高中毕业以上文化程度。</p>
+                <p>C错误❌：大学毕业不是最低要求。</p>
+                <p>D错误❌：研究生毕业不是最低要求。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>警校招录高中起！</p>`
+            },
+            {
+                module: "【本题考察警械武器条例】",
+                question: "处置持械斗殴警情时，下列做法正确的是？",
+                options: ["直接通知特警到场", "应当携带警棍、催泪弹等装备", "可以单独行动", "应当立即使用武器"],
+                correct: 1,
+                explanation: `<p><span class="highlight-green">正确答案是B：应当携带警棍、催泪弹等装备。</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A错误❌：持械斗殴属于应当使用驱逐性、制服性警械的情形，不需要直接通知特警。</p>
+                <p>B正确✓：根据《人民警察使用警械和武器条例》第7条，遇有持械斗殴等情形，经警告无效的，可以使用警棍、催泪弹等驱逐性、制服性警械。</p>
+                <p>C错误❌：应当及时报告，请求增派警力支援。</p>
+                <p>D错误❌：应当先使用警械，制止后立即停止。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>斗殴用警械，制止即停止！</p>`
+            },
+            {
+                module: "【本题考察警械武器条例】",
+                question: "下列属于武器的是？",
+                options: ["高压水枪", "催泪弹", "六四式手枪", "特种防暴枪"],
+                correct: 2,
+                explanation: `<p><span class="highlight-green">正确答案是C：六四式手枪。</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A错误❌：高压水枪属于警用器械，不是武器。</p>
+                <p>B错误❌：催泪弹属于警用器械，不是武器。</p>
+                <p>C正确✓：根据《人民警察使用警械和武器条例》第3条，武器是指人民警察按照规定装备的枪支、弹药等致命性警用武器。六四式手枪是枪支，属于武器。</p>
+                <p>D错误❌：特种防暴枪属于警用器械，不是武器。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>枪支弹药是武器，警棍催泪高压水是警械！</p>`
+            },
+            {
+                module: "【本题考察公安基础知识】",
+                question: "公安机关实行什么管理体制？",
+                options: ["垂直管理", "分级管理", "统一领导、分级管理", "双重领导"],
+                correct: 2,
+                explanation: `<p><span class="highlight-green">正确答案是C：统一领导、分级管理。</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A错误❌：不是完全的垂直管理。</p>
+                <p>B错误❌：不是简单的分级管理。</p>
+                <p>C正确✓：公安机关实行"统一领导、分级管理、条块结合、以块为主"的管理体制。</p>
+                <p>D错误❌：双重领导是具体表现，不是完整的概括。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>公安管理四句话，统一领导是老大！</p>`
+            },
+            {
+                module: "【本题考察刑法·判断题】",
+                question: "判断题：管制的期限为3个月以上2年以下。（）",
+                options: ["正确", "错误"],
+                correct: 0,
+                explanation: `<p><span class="highlight-green">正确答案是：正确。</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>正确✓：根据《刑法》第38条第1款，管制的期限，为3个月以上2年以下。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>管制期限3月至2年！</p>`
+            },
+            {
+                module: "【本题考察刑事诉讼法·判断题】",
+                question: "判断题：公安机关移送起诉的案件，检察院决定不起诉的，公安机关认为有错误的，可以向上一级检察院提请复核。（）",
+                options: ["正确", "错误"],
+                correct: 0,
+                explanation: `<p><span class="highlight-green">正确答案是：正确。</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>正确✓：根据《刑事诉讼法》第179条，公安机关移送起诉的案件，检察院决定不起诉的，应当将不起诉决定书送达公安机关。公安机关认为不起诉的决定有错误的时候，可以要求复议，如果意见不被接受，可以向上一级人民检察院提请复核。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>不起诉有异议，先复议后复核！</p>`
+            },
+            {
+                module: "【本题考察行政处罚法·判断题】",
+                question: "判断题：限制人身自由的行政处罚只能由公安机关和法律规定的其他机关行使。（）",
+                options: ["正确", "错误"],
+                correct: 0,
+                explanation: `<p><span class="highlight-green">正确答案是：正确。</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>正确✓：根据《行政处罚法》第18条，限制人身自由的行政处罚权只能由公安机关和法律规定的其他机关行使。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>人身罚只有公安和法定机关能设！</p>`
+            },
+            {
+                module: "【本题考察人民警察法·判断题】",
+                question: "判断题：社区矫正由公安机关负责执行。（）",
+                options: ["正确", "错误"],
+                correct: 1,
+                explanation: `<p><span class="highlight-green">正确答案是：错误。</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>错误✗：根据《人民警察法》第6条，公安机关负责对被判处拘役的罪犯执行刑罚。但社区矫正由社区矫正机构负责执行，不是公安机关。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>拘役归公安执行，社区矫正归矫正机构！</p>`
+            }
+        ];
+
+        // 多选题数据
+        const multiPracticeData = [
+            {
+                module: "【本题考察刑法】",
+                question: "根据《刑法》规定，下列哪些属于刑罚的种类？",
+                options: ["管制", "拘役", "有期徒刑", "行政拘留"],
+                correct: [0, 1, 2],
+                explanation: `<p><span class="highlight-green">正确答案：A、B、C</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A正确✓：管制是《刑法》规定的刑罚种类之一，属于社区矫正刑。</p>
+                <p>B正确✓：拘役是《刑法》规定的刑罚种类之一，期限为1个月以上6个月以下。</p>
+                <p>C正确✓：有期徒刑是《刑法》规定的刑罚种类之一，期限为6个月以上15年以下。</p>
+                <p>D错误❌：行政拘留是行政处罚措施，不是刑罚种类，由《治安管理处罚法》规定。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>刑罚五种：管制拘役有期徒刑，无期徒刑死刑！行政拘留是处罚不是刑罚！</p>`
+            },
+            {
+                module: "【本题考察刑事诉讼法】",
+                question: "下列关于刑事诉讼回避制度的说法，正确的有哪些？",
+                options: ["审判人员是本案当事人近亲属的，应当回避", "检察人员与本案有利害关系的，应当回避", "侦查人员曾担任过本案的证人，应当回避", "鉴定人有权申请回避"],
+                correct: [0, 1, 2, 3],
+                explanation: `<p><span class="highlight-green">正确答案：A、B、C、D</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A正确✓：根据《刑事诉讼法》第29条，审判人员是本案当事人或者当事人的近亲属的，应当回避。</p>
+                <p>B正确✓：检察人员与本案有利害关系，可能影响公正处理案件的，应当回避。</p>
+                <p>C正确✓：侦查人员曾担任过本案的证人、辩护人、诉讼代理人的，应当回避。</p>
+                <p>D正确✓：根据《刑事诉讼法》第32条，当事人及其法定代理人有权申请回避。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>回避制度保公正，三类人员要记清：当事人近亲属、利害关系人、证人鉴定人都要回避！</p>`
+            },
+            {
+                module: "【本题考察行政处罚法】",
+                question: "根据《行政处罚法》，下列哪些情形应当从轻或减轻行政处罚？",
+                options: ["主动消除或减轻违法行为危害后果的", "受他人胁迫实施违法行为的", "配合行政机关查处违法行为有立功表现的", "精神病人实施违法行为的"],
+                correct: [0, 1, 2],
+                explanation: `<p><span class="highlight-green">正确答案：A、B、C</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A正确✓：根据《行政处罚法》第32条第1项，主动消除或减轻违法行为危害后果的，应当从轻或减轻处罚。</p>
+                <p>B正确✓：根据《行政处罚法》第32条第2项，受他人胁迫实施违法行为的，应当从轻或减轻处罚。</p>
+                <p>C正确✓：根据《行政处罚法》第32条第4项，配合行政机关查处违法行为有立功表现的，应当从轻或减轻处罚。</p>
+                <p>D错误❌：精神病人实施违法行为不予处罚（因为不具有责任能力），不是从轻或减轻。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>从轻减轻情形：主动消害、受胁迫、立功！精神病人不处罚！</p>`
+            },
+            {
+                module: "【本题考察行政强制法】",
+                question: "根据《行政强制法》，下列哪些属于行政强制措施的种类？",
+                options: ["限制公民人身自由", "查封场所、设施或者财物", "扣押财物", "冻结存款、汇款"],
+                correct: [0, 1, 2, 3],
+                explanation: `<p><span class="highlight-green">正确答案：A、B、C、D</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A正确✓：根据《行政强制法》第9条，限制公民人身自由属于行政强制措施。</p>
+                <p>B正确✓：根据《行政强制法》第9条，查封场所、设施或者财物属于行政强制措施。</p>
+                <p>C正确✓：根据《行政强制法》第9条，扣押财物属于行政强制措施。</p>
+                <p>D正确✓：根据《行政强制法》第9条，冻结存款、汇款属于行政强制措施。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>行政强制措施五种：限制人身、查封、扣押、冻结、其他！</p>`
+            },
+            {
+                module: "【本题考察行政复议法】",
+                question: "公民、法人或其他组织对下列哪些行政行为可以申请行政复议？",
+                options: ["行政处罚决定", "行政强制措施", "行政许可决定", "行政机关对民事纠纷作出的调解"],
+                correct: [0, 1, 2],
+                explanation: `<p><span class="highlight-green">正确答案：A、B、C</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A正确✓：对行政处罚决定不服可以申请行政复议。</p>
+                <p>B正确✓：对行政强制措施不服可以申请行政复议。</p>
+                <p>C正确✓：对行政许可决定不服可以申请行政复议。</p>
+                <p>D错误❌：行政机关对民事纠纷作出的调解不可诉，不能申请行政复议，但可以申请仲裁或提起民事诉讼。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>复议范围三件套：处罚、强制、许可！调解不是复议对象！</p>`
+            },
+            {
+                module: "【本题考察行政诉讼法】",
+                question: "下列关于行政诉讼管辖的说法，正确的有哪些？",
+                options: ["一般由最初作出行政行为的行政机关所在地法院管辖", "经复议的案件，可以由复议机关所在地法院管辖", "对限制人身自由的强制措施不服，由被告所在地法院管辖", "原告所在地法院没有管辖权"],
+                correct: [0, 1, 2],
+                explanation: `<p><span class="highlight-green">正确答案：A、B、C</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A正确✓：根据《行政诉讼法》第18条，行政案件由最初作出行政行为的行政机关所在地法院管辖。</p>
+                <p>B正确✓：根据《行政诉讼法》第18条，经复议的案件，也可以由复议机关所在地法院管辖。</p>
+                <p>C正确✓：根据《行政诉讼法》第19条，对限制人身自由的强制措施不服提起的诉讼，由被告所在地或原告所在地法院管辖。</p>
+                <p>D错误❌：原告所在地法院对限制人身自由的案件有管辖权。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>行政诉讼管辖：被告所在地优先，复议案件可选择！限制人身，原告被告都能告！</p>`
+            },
+            {
+                module: "【本题考察行政许可法】",
+                question: "根据《行政许可法》，下列哪些事项可以设定行政许可？",
+                options: ["直接涉及国家安全、公共安全的事项", "有限自然资源开发利用的事项", "市场竞争机制可以有效调节的事项", "提供公众服务且直接关系公共利益的事项"],
+                correct: [0, 1, 3],
+                explanation: `<p><span class="highlight-green">正确答案：A、B、D</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A正确✓：直接涉及国家安全、公共安全的事项可以设定行政许可。</p>
+                <p>B正确✓：有限自然资源开发利用的事项可以设定行政许可。</p>
+                <p>C错误❌：市场竞争机制可以有效调节的事项，不需要设定行政许可。</p>
+                <p>D正确✓：提供公众服务且直接关系公共利益的事项可以设定行政许可。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>可设定许可的情形：国家安全、公共安全、自然资源、公益服务！市场竞争能调节的不用设！</p>`
+            },
+            {
+                module: "【本题考察治安管理处罚法】",
+                question: "根据《治安管理处罚法》，下列哪些行为处十日以上十五日以下拘留？",
+                options: ["非法侵入他人住宅的", "非法限制他人人身自由的", "胁迫他人乞讨的", "组织未成年人违反治安管理的"],
+                correct: [1, 2, 3],
+                explanation: `<p><span class="highlight-green">正确答案：B、C、D</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A错误❌：非法侵入他人住宅的，处10日以上15日以下拘留，并处500元以上1000元以下罚款；情节较轻的，处5日以上10日以下拘留。</p>
+                <p>B正确✓：非法限制他人人身自由的，处10日以上15日以下拘留，并处200元以上500元以下罚款。</p>
+                <p>C正确✓：胁迫他人乞讨的，处10日以上15日以下拘留，并处500元以上1000元以下罚款。</p>
+                <p>D正确✓：组织未成年人违反治安管理的，处10日以上15日以下拘留，并处500元以上1000元以下罚款。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>十至十五日拘留：限制人身、胁迫乞讨、组织未成年人违反治安管理！非法侵入是10-15日但情节较轻是5-10日！</p>`
+            },
+            {
+                module: "【本题考察国家赔偿法】",
+                question: "根据《国家赔偿法》，下列哪些情形国家不承担赔偿责任？",
+                options: ["因公民自己故意作虚伪供述被羁押的", "因公民自伤自残致使损害发生的", "公安机关依法使用警械造成损害的", "因正当防卫造成损害的"],
+                correct: [0, 1, 3],
+                explanation: `<p><span class="highlight-green">正确答案：A、B、D</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A正确✓：因公民自己故意作虚伪供述被羁押的，国家不承担赔偿责任。</p>
+                <p>B正确✓：因公民自伤自残致使损害发生的，国家不承担赔偿责任。</p>
+                <p>C错误❌：公安机关依法使用警械造成损害的，如果合法则不承担责任，但本题选项说"依法使用"，属于免责情形。</p>
+                <p>D正确✓：因正当防卫造成损害的，国家不承担赔偿责任。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>免责情形：自己作伪述、自己自伤残、正当防卫、紧急避险！</p>`
+            },
+            {
+                module: "【本题考察警械武器条例】",
+                question: "根据《人民警察使用警械和武器条例》，下列哪些情形下人民警察不得使用武器？",
+                options: ["发现实施犯罪的人为怀孕妇女", "发现实施犯罪的人为儿童", "犯罪分子处于群众聚集的场所", "犯罪分子属于精神病人"],
+                correct: [0, 1, 2, 3],
+                explanation: `<p><span class="highlight-green">正确答案：A、B、C、D</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A正确✓：根据《条例》第10条，发现实施犯罪的人为怀孕妇女、儿童的，不得使用武器。</p>
+                <p>B正确✓：根据《条例》第10条，发现实施犯罪的人为儿童的，不得使用武器。</p>
+                <p>C正确✓：犯罪分子处于群众聚集的场所，不得使用武器。</p>
+                <p>D正确✓：犯罪分子属于精神病人，不得使用武器。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>不得使用武器的情形：孕妇儿童、群众聚集场所、精神病人！只有使用枪支爆炸剧毒等危险物品实施暴力犯罪的除外！</p>`
+            },
+            {
+                module: "【本题考察公安基础知识】",
+                question: "公安机关的任务包括下列哪些？",
+                options: ["维护国家安全", "维护社会治安秩序", "保护公民的人身安全和人身自由", "保护公共财产"],
+                correct: [0, 1, 2, 3],
+                explanation: `<p><span class="highlight-green">正确答案：A、B、C、D</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A正确✓：维护国家安全是公安机关的首要任务。</p>
+                <p>B正确✓：维护社会治安秩序是公安机关的基本任务之一。</p>
+                <p>C正确✓：保护公民的人身安全和人身自由是公安机关的重要任务。</p>
+                <p>D正确✓：保护公共财产是公安机关的任务之一。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>公安机关任务：维护国家安全、维护社会治安、保护人身财产！</p>`
+            },
+            {
+                module: "【本题考察人民警察法】",
+                question: "根据《人民警察法》，下列哪些属于人民警察的法定职责？",
+                options: ["预防、制止和侦查违法犯罪活动", "维护交通安全和交通秩序", "管理交通信号灯", "对法律、法规规定的特种行业进行管理"],
+                correct: [0, 1, 3],
+                explanation: `<p><span class="highlight-green">正确答案：A、B、D</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A正确✓：根据《人民警察法》第6条第1项，预防、制止和侦查违法犯罪活动是人民警察的职责。</p>
+                <p>B正确✓：根据《人民警察法》第6条第5项，维护交通安全和交通秩序是公安机关交通警察的职责。</p>
+                <p>C错误❌：管理交通信号灯是交通部门的职责，不是公安机关的职责。</p>
+                <p>D正确✓：根据《人民警察法》第6条第12项，对法律、法规规定的特种行业进行管理是人民警察的职责。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>警察职责范围广，预防犯罪是首要！交通秩序归交警，特种行业也要管！</p>`
+            },
+            {
+                module: "【本题考察刑法】",
+                question: "根据《刑法》规定，下列哪些行为构成犯罪预备？",
+                options: ["为实施犯罪准备犯罪工具", "为实施犯罪事先调查被害人行踪", "练习犯罪方法", "在犯罪现场守候被害人"],
+                correct: [0, 1, 2],
+                explanation: `<p><span class="highlight-green">正确答案：A、B、C</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A正确✓：为实施犯罪准备犯罪工具的行为属于犯罪预备。</p>
+                <p>B正确✓：为实施犯罪事先调查被害人行踪的行为属于犯罪预备。</p>
+                <p>C正确✓：练习犯罪方法的行为属于犯罪预备。</p>
+                <p>D错误❌：在犯罪现场守候被害人属于犯罪未遂前的行为，可能是犯罪预备或犯罪未遂，需要具体分析。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>犯罪预备三情形：准备工具、调查被害人、练习方法！守候要分情况！</p>`
+            },
+            {
+                module: "【本题考察刑事诉讼法】",
+                question: "根据《刑事诉讼法》，下列哪些人员可以作为证人？",
+                options: ["目击犯罪现场的成年人", "能辨别是非的精神病人", "年满十周岁的未成年人", "与案件有利害关系的人"],
+                correct: [0, 2, 3],
+                explanation: `<p><span class="highlight-green">正确答案：A、C、D</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A正确✓：目击犯罪现场的成年人可以作为证人。</p>
+                <p>B错误❌：精神病人不能辨别是非的，不能作为证人；只有在精神正常期间能辨别是非的才能作证。</p>
+                <p>C正确✓：年满十周岁的未成年人能辨别是非的，可以作为证人。</p>
+                <p>D正确✓：与案件有利害关系的人可以作为证人，只是证明力可能较弱。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>证人资格：知道情况+能辨别是非！成年人可以，小孩看情况，精神病人要具体分析！</p>`
+            },
+            {
+                module: "【本题考察行政处罚法】",
+                question: "根据《行政处罚法》，下列哪些行政处罚种类可以由地方性法规设定？",
+                options: ["警告", "罚款", "没收违法所得", "限制人身自由的处罚"],
+                correct: [0, 1, 2],
+                explanation: `<p><span class="highlight-green">正确答案：A、B、C</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A正确✓：地方性法规可以设定警告。</p>
+                <p>B正确✓：地方性法规可以设定罚款，但有限额规定。</p>
+                <p>C正确✓：地方性法规可以设定没收违法所得。</p>
+                <p>D错误❌：限制人身自由的处罚只能由法律设定，地方性法规无权设定。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>地方性法规设定权：警告、罚款、没收可以！拘留只有法律能设定！</p>`
+            },
+            {
+                module: "【本题考察行政强制法】",
+                question: "根据《行政强制法》，下列哪些费用不得向当事人收取？",
+                options: ["查封、扣押的保管费用", "冻结存款的划拨费用", "代履行的费用", "案件调查费用"],
+                correct: [0, 1, 3],
+                explanation: `<p><span class="highlight-green">正确答案：A、B、D</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A正确✓：查封、扣押的保管费用由行政机关承担，不得向当事人收取。</p>
+                <p>B正确✓：冻结存款后划拨产生的费用由行政机关承担，不得向当事人收取。</p>
+                <p>C错误❌：代履行的费用由当事人承担。</p>
+                <p>D正确✓：案件调查费用由行政机关承担，不得向当事人收取。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>查封扣押保管免费，冻结划拨也不收费！代履行费用当事人担，调查费用政府出！</p>`
+            },
+            {
+                module: "【本题考察行政复议法】",
+                question: "根据《行政复议法》，下列哪些情形行政复议机关可以决定变更？",
+                options: ["认定事实清楚，证据确凿，程序合法，但是明显不当的", "认定事实不清，证据不足，但是经行政复议机关审理后查明事实的", "违反法定程序的", "超越职权的"],
+                correct: [0, 1],
+                explanation: `<p><span class="highlight-green">正确答案：A、B</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A正确✓：认定事实清楚但明显不当的，行政复议机关可以决定变更。</p>
+                <p>B正确✓：认定事实不清的，经行政复议机关审理后查明事实的，可以决定变更。</p>
+                <p>C错误❌：违反法定程序的，应当决定撤销、变更或者确认违法。</p>
+                <p>D错误❌：超越职权的，应当决定撤销、变更或者确认违法。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>复议决定变更：事实清楚+明显不当可以变，事实不清经审理查明可以变！撤销的情形是程序违法、超越职权！</p>`
+            },
+            {
+                module: "【本题考察行政诉讼法】",
+                question: "根据《行政诉讼法》，下列哪些证据不能作为定案依据？",
+                options: ["严重违反法定程序收集的证据", "以利诱方式取得的证据", "以欺诈方式取得的证据", "原告提供的证据"],
+                correct: [0, 1, 2],
+                explanation: `<p><span class="highlight-green">正确答案：A、B、C</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A正确✓：严重违反法定程序收集的证据不能作为定案依据。</p>
+                <p>B正确✓：以利诱方式取得的证据不能作为定案依据。</p>
+                <p>C正确✓：以欺诈方式取得的证据不能作为定案依据。</p>
+                <p>D错误❌：原告提供的证据可以作为定案依据，需要结合其他证据综合认定。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>非法证据排除：严重程序违法、利诱、欺诈、威胁、非法限制人身自由！</p>`
+            },
+            {
+                module: "【本题考察行政许可法】",
+                question: "根据《行政许可法》，下列哪些情形应当注销行政许可？",
+                options: ["行政许可有效期届满未延续的", "赋予公民特定资格的行政许可，该公民死亡的", "法人或其他组织依法终止的", "因不可抗力导致许可事项无法实施的"],
+                correct: [0, 1, 2, 3],
+                explanation: `<p><span class="highlight-green">正确答案：A、B、C、D</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A正确✓：行政许可有效期届满未延续的应当注销。</p>
+                <p>B正确✓：赋予公民特定资格的行政许可，该公民死亡的应当注销。</p>
+                <p>C正确✓：法人或其他组织依法终止的应当注销。</p>
+                <p>D正确✓：因不可抗力导致许可事项无法实施的应当注销。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>许可注销情形：到期未续、公民死亡、法人终止、不可抗力！</p>`
+            },
+            {
+                module: "【本题考察治安管理处罚法】",
+                question: "根据《治安管理处罚法》，下列哪些行为处五日以下拘留或者五百元以下罚款？",
+                options: ["公然侮辱他人的", "捏造事实诽谤他人的", "反复纠缠、强行讨要的", "写恐吓信威胁他人人身安全的"],
+                correct: [0, 1],
+                explanation: `<p><span class="highlight-green">正确答案：A、B</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A正确✓：公然侮辱他人的，处5日以下拘留或者500元以下罚款。</p>
+                <p>B正确✓：捏造事实诽谤他人的，处5日以下拘留或者500元以下罚款。</p>
+                <p>C错误❌：反复纠缠、强行讨要的，处5日以上10日以下拘留，并处500元以下罚款。</p>
+                <p>D错误❌：写恐吓信威胁他人人身安全的，处5日以下拘留或者500元以下罚款；情节较重的，处5日以上10日以下拘留。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>侮辱诽谤五日以下五百以下！纠缠讨要五日到十日！恐吓信五日到十日！</p>`
+            },
+            {
+                module: "【本题考察国家赔偿法】",
+                question: "根据《国家赔偿法》，下列哪些损害赔偿请求权的时效为五年？",
+                options: ["侵犯公民人身自由的", "侵犯公民财产权的", "冻结存款的", "查封财产的"],
+                correct: [0, 1, 2, 3],
+                explanation: `<p><span class="highlight-green">正确答案：A、B、C、D</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A正确✓：侵犯公民人身自由的赔偿请求时效为五年。</p>
+                <p>B正确✓：侵犯公民财产权的赔偿请求时效为五年。</p>
+                <p>C正确✓：冻结存款属于侵犯财产权，时效为五年。</p>
+                <p>D正确✓：查封财产属于侵犯财产权，时效为五年。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>国家赔偿时效：人身自由五年，财产损害也是五年！自知道或应当知道之日起算！</p>`
+            },
+            {
+                module: "【本题考察警械武器条例】",
+                question: "根据《人民警察使用警械和武器条例》，下列哪些属于警用器械？",
+                options: ["警棍", "催泪弹", "高压水枪", "五四式手枪"],
+                correct: [0, 1, 2],
+                explanation: `<p><span class="highlight-green">正确答案：A、B、C</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A正确✓：警棍属于驱逐性、制服性警械。</p>
+                <p>B正确✓：催泪弹属于驱逐性、制服性警械。</p>
+                <p>C正确✓：高压水枪属于驱逐性、制服性警械。</p>
+                <p>D错误❌：五四式手枪属于武器，不属于警械。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>警械三种：警棍、催泪弹、高压水枪！武器是枪支弹药！</p>`
+            },
+            {
+                module: "【本题考察公安基础知识】",
+                question: "根据《公安机关办理刑事案件程序规定》，下列哪些人员有回避的情形？",
+                options: ["是本案的当事人", "与本案当事人有近亲属关系", "担任过本案的证人", "与本案有利害关系"],
+                correct: [0, 1, 2, 3],
+                explanation: `<p><span class="highlight-green">正确答案：A、B、C、D</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A正确✓：是本案的当事人应当回避。</p>
+                <p>B正确✓：与本案当事人有近亲属关系应当回避。</p>
+                <p>C正确✓：担任过本案的证人应当回避。</p>
+                <p>D正确✓：与本案有利害关系应当回避。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>回避情形：自己是当事人、近亲属、证人、有利害关系！</p>`
+            },
+            {
+                module: "【本题考察人民警察法】",
+                question: "根据《人民警察法》，下列哪些行为构成阻碍人民警察依法执行职务？",
+                options: ["公然侮辱正在执法的人民警察", "阻碍人民警察追查违法犯罪活动", "拒绝人民警察进入公共场所", "强行冲闯公安机关设置的警戒带"],
+                correct: [0, 1, 3],
+                explanation: `<p><span class="highlight-green">正确答案：A、B、D</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A正确✓：公然侮辱正在执法的人民警察构成阻碍执行职务。</p>
+                <p>B正确✓：阻碍人民警察追查违法犯罪活动构成阻碍执行职务。</p>
+                <p>C错误❌：拒绝人民警察进入公共场所不必然构成阻碍执行职务，需要视具体情况。</p>
+                <p>D正确✓：强行冲闯公安机关设置的警戒带构成阻碍执行职务。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>阻碍警察执行职务：公然侮辱、阻碍追查、冲闯警戒带！</p>`
+            },
+            {
+                module: "【本题考察刑法】",
+                question: "根据《刑法》规定，下列哪些属于正当防卫的构成要件？",
+                options: ["必须有危害社会的不法侵害行为发生", "不法侵害必须正在进行", "防卫行为必须是为了保护合法权益", "防卫行为不能超过必要限度"],
+                correct: [0, 1, 2, 3],
+                explanation: `<p><span class="highlight-green">正确答案：A、B、C、D</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A正确✓：必须有危害社会的不法侵害行为发生。</p>
+                <p>B正确✓：不法侵害必须正在进行。</p>
+                <p>C正确✓：防卫行为必须是为了保护合法权益。</p>
+                <p>D正确✓：防卫行为不能超过必要限度（无限正当防卫除外）。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>正当防卫四要件：不法侵害+正在进行+为了保护合法权益+不超过必要限度！</p>`
+            },
+            {
+                module: "【本题考察刑事诉讼法】",
+                question: "根据《刑事诉讼法》，下列哪些强制措施由公安机关执行？",
+                options: ["取保候审", "监视居住", "拘留", "逮捕"],
+                correct: [0, 1, 2],
+                explanation: `<p><span class="highlight-green">正确答案：A、B、C</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A正确✓：取保候审由公安机关执行。</p>
+                <p>B正确✓：监视居住由公安机关执行。</p>
+                <p>C正确✓：拘留由公安机关执行。</p>
+                <p>D错误❌：逮捕由公安机关执行，但需要检察院批准或法院决定。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>强制措施执行：公安执保监居拘留！逮捕公安执行但要检察院批！</p>`
+            },
+            {
+                module: "【本题考察行政处罚法】",
+                question: "根据《行政处罚法》，当事人有哪些权利？",
+                options: ["陈述权和申辩权", "申请听证的权利", "申请行政复议的权利", "提起行政诉讼的权利"],
+                correct: [0, 1, 2, 3],
+                explanation: `<p><span class="highlight-green">正确答案：A、B、C、D</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A正确✓：当事人享有陈述权和申辩权。</p>
+                <p>B正确✓：当事人依法享有申请听证的权利。</p>
+                <p>C正确✓：当事人可以申请行政复议。</p>
+                <p>D正确✓：当事人可以提起行政诉讼。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>当事人权利：陈述申辩权、听证权、复议权、诉讼权！</p>`
+            },
+            {
+                module: "【本题考察行政强制法】",
+                question: "根据《行政强制法》，行政机关实施强制执行前，哪些情形应当催告？",
+                options: ["作出强制执行决定前", "申请人民法院强制执行前", "实施加处罚款前", "划拨存款前"],
+                correct: [1, 2, 3],
+                explanation: `<p><span class="highlight-green">正确答案：B、C、D</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A错误❌：催告是在作出强制执行决定之前进行的，不是之后。</p>
+                <p>B正确✓：申请人民法院强制执行前应当催告。</p>
+                <p>C正确✓：实施加处罚款前应当催告。</p>
+                <p>D正确✓：划拨存款前应当催告。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>强制执行前必催告：申请法院执行、加处罚款、划拨存款都要先催！</p>`
+            },
+            {
+                module: "【本题考察行政复议法】",
+                question: "根据《行政复议法》，下列哪些可以作为行政复议的证据？",
+                options: ["书证", "物证", "视听资料", "证人证言"],
+                correct: [0, 1, 2, 3],
+                explanation: `<p><span class="highlight-green">正确答案：A、B、C、D</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A正确✓：书证可以作为行政复议的证据。</p>
+                <p>B正确✓：物证可以作为行政复议的证据。</p>
+                <p>C正确✓：视听资料可以作为行政复议的证据。</p>
+                <p>D正确✓：证人证言可以作为行政复议的证据。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>行政复议证据种类：书证物证视听资料证人证言当事人陈述鉴定结论勘验笔录！</p>`
+            },
+            {
+                module: "【本题考察国家赔偿法】",
+                question: "根据《国家赔偿法》，赔偿请求人要求赔偿的程序包括哪些？",
+                options: ["向赔偿义务机关提出申请", "赔偿义务机关自收到申请之日起两个月内作出决定", "对决定不服可以向法院提起诉讼", "可以直接向法院申请强制执行"],
+                correct: [0, 1, 2],
+                explanation: `<p><span class="highlight-green">正确答案：A、B、C</span></p>
+                <p><strong>【逐项解析】</strong></p>
+                <p>A正确✓：赔偿请求人应当先向赔偿义务机关提出赔偿申请。</p>
+                <p>B正确✓：根据《国家赔偿法》第13条，赔偿义务机关应当自收到申请之日起两个月内，作出是否赔偿的决定。</p>
+                <p>C正确✓：根据《国家赔偿法》第14条，赔偿义务机关在规定期限内未作出是否赔偿的决定，或者赔偿请求人对赔偿数额有异议的，可以向法院提起诉讼。</p>
+                <p>D错误❌：不能直接向法院申请强制执行，必须先经过赔偿程序。</p>
+                <p><span class="highlight-purple">💡小白记忆口诀：</span>国家赔偿程序：先向义务机关申请，不服再告法院！</p>`
+            }
+        ];
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            renderQuiz('quiz-practice', practiceData);
+            renderMultiQuiz('quiz-multi', multiPracticeData);
+        });
+    </script>
+</body>
+</html>
