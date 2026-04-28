@@ -1,0 +1,1554 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>行政诉讼法 · 从零到做题</title>
+    <style>
+        :root {
+            --bg: #fdf8f3;
+            --card-bg: #ffffff;
+            --text: #2c2416;
+            --text-light: #5c5347;
+            --accent: #b22222;
+            --accent-soft: #d63031;
+            --highlight: #fff3cd;
+            --highlight-border: #f0c040;
+            --key-bg: #fef9e7;
+            --key-border: #f9e79f;
+            --example-bg: #f0faf5;
+            --example-border: #a3e4bc;
+            --tag-bg: #eaf2f8;
+            --tag-text: #1a5276;
+            --danger-bg: #fdedec;
+            --danger-text: #922b21;
+            --success-bg: #eafaf1;
+            --success-text: #145a32;
+            --btn-bg: #b22222;
+            --btn-hover: #8b1a1a;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+            --radius: 14px;
+            --radius-sm: 10px;
+            --font: 'PingFang SC', 'Microsoft YaHei', 'Hiragino Sans GB', 'Noto Sans SC', system-ui, -apple-system, sans-serif;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 20px;
+        }
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.75;
+            padding: 12px;
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+        }
+        a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .toc-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.35);
+            z-index: 98;
+        }
+        .toc-overlay.show {
+            display: block;
+        }
+        .toc {
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            width: 230px;
+            max-height: calc(100vh - 32px);
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+            padding: 18px 14px;
+            overflow-y: auto;
+            z-index: 100;
+            font-size: 0.84rem;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .toc-title {
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--accent);
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            position: sticky;
+            top: 0;
+            background: var(--card-bg);
+            padding-bottom: 8px;
+            border-bottom: 1px solid #f0ebe0;
+        }
+        .toc a {
+            display: block;
+            padding: 7px 10px;
+            border-radius: 6px;
+            margin: 2px 0;
+            color: var(--text-light);
+            transition: all 0.2s;
+            font-size: 0.82rem;
+        }
+        .toc a:hover,
+        .toc a.active {
+            background: #fdedec;
+            color: var(--accent);
+            font-weight: 600;
+        }
+        .toc-toggle {
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            font-size: 1.3rem;
+            cursor: pointer;
+            z-index: 101;
+            display: none;
+            box-shadow: 0 4px 14px rgba(178, 34, 34, 0.3);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .main {
+            max-width: 820px;
+            margin: 0 auto 0 270px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding-bottom: 40px;
+        }
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 22px 26px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid #f0ebe0;
+        }
+        .section-title {
+            font-size: 1.45rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section-title .icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        .icon-red {
+            background: #fdedec;
+            color: #b22222;
+        }
+        .icon-blue {
+            background: #eaf2f8;
+            color: #1a5276;
+        }
+        .icon-green {
+            background: #eafaf1;
+            color: #145a32;
+        }
+        .icon-yellow {
+            background: #fef9e7;
+            color: #b7950b;
+        }
+        .subtitle {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 18px;
+            padding-left: 44px;
+        }
+
+        .ki-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        .ki-item {
+            border: 1px solid #f0ebe0;
+            border-radius: var(--radius-sm);
+            padding: 14px 18px;
+            background: #fefefe;
+        }
+        .ki-title-row {
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .badge {
+            font-size: 0.7rem;
+            padding: 3px 10px;
+            border-radius: 14px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+        }
+        .badge-core {
+            background: #fdedec;
+            color: #b22222;
+        }
+        .badge-num {
+            background: #eaf2f8;
+            color: #1a5276;
+        }
+        .badge-case {
+            background: #eafaf1;
+            color: #145a32;
+        }
+        .ki-content {
+            color: var(--text-light);
+            font-size: 0.92rem;
+        }
+        .kh {
+            display: inline-block;
+            background: #fff3cd;
+            border: 1px solid #f0c040;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            color: #7d6608;
+            margin: 0 2px;
+            font-size: 0.9rem;
+        }
+        .kh-red {
+            background: #fdedec;
+            border-color: #f5b7b1;
+            color: #922b21;
+        }
+        .kh-blue {
+            background: #eaf2f8;
+            border-color: #aed6f1;
+            color: #1a5276;
+        }
+        .kh-green {
+            background: #eafaf1;
+            border-color: #a3e4bc;
+            color: #145a32;
+        }
+
+        .example-block {
+            background: #f0faf5;
+            border-left: 3px solid #a3e4bc;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            padding: 12px 16px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #1e5a3a;
+        }
+        .example-block .ex-label {
+            font-weight: 700;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #1e8449;
+            margin-bottom: 4px;
+        }
+        .example-block .ex-q {
+            font-weight: 600;
+            color: #145a32;
+            margin-bottom: 3px;
+        }
+        .example-block .ex-a {
+            color: #2d6a4f;
+        }
+
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 8px 0;
+            font-size: 0.88rem;
+        }
+        .info-table th {
+            background: #fef9e7;
+            text-align: left;
+            padding: 10px 14px;
+            font-weight: 700;
+            border-bottom: 2px solid #f0c040;
+            color: #7d6608;
+        }
+        .info-table td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #f0ebe0;
+            vertical-align: top;
+        }
+        .info-table tr:hover td {
+            background: #fefdf9;
+        }
+
+        .quiz-wrap {
+            border: 2px solid #f0ebe0;
+            border-radius: var(--radius-sm);
+            padding: 18px 20px;
+            margin-top: 12px;
+            background: #fefefe;
+        }
+        .quiz-wrap .q-type {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 4px;
+            letter-spacing: 0.4px;
+        }
+        .quiz-wrap .q-text {
+            font-weight: 600;
+            margin-bottom: 12px;
+            font-size: 0.98rem;
+        }
+        .opt-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+        .opt-list li {
+            padding: 10px 14px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            border: 2px solid #e9e4db;
+            transition: all 0.2s;
+            background: #fdfdfc;
+            font-size: 0.9rem;
+            user-select: none;
+        }
+        .opt-list li:hover {
+            border-color: #c0b090;
+            background: #fefdf9;
+        }
+        .opt-list li.selected {
+            border-color: #1a5276;
+            background: #eaf2f8;
+            font-weight: 600;
+        }
+        .opt-list li.correct {
+            border-color: #1e8449 !important;
+            background: #eafaf1 !important;
+            color: #145a32 !important;
+        }
+        .opt-list li.wrong {
+            border-color: #b22222 !important;
+            background: #fdedec !important;
+            color: #922b21 !important;
+        }
+        .opt-list li.disabled {
+            pointer-events: none;
+            opacity: 0.85;
+        }
+        .btn-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 22px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            font-size: 0.88rem;
+            transition: all 0.2s;
+            letter-spacing: 0.3px;
+        }
+        .btn-primary {
+            background: var(--btn-bg);
+            color: #fff;
+        }
+        .btn-primary:hover {
+            background: var(--btn-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(178, 34, 34, 0.3);
+        }
+        .btn-outline {
+            background: #fff;
+            color: var(--accent);
+            border: 2px solid var(--accent);
+        }
+        .btn-outline:hover {
+            background: #fdedec;
+        }
+
+        .explain-card {
+            margin-top: 12px;
+            padding: 14px 18px;
+            border-radius: var(--radius-sm);
+            display: none;
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+        .explain-card.show {
+            display: block;
+        }
+        .explain-card.correct-ex {
+            background: #eafaf1;
+            border: 1px solid #a3e4bc;
+            color: #145a32;
+        }
+        .explain-card.wrong-ex {
+            background: #fdedec;
+            border: 1px solid #f5b7b1;
+            color: #922b21;
+        }
+        .explain-card .ex-head {
+            font-weight: 700;
+            margin-bottom: 6px;
+            font-size: 0.95rem;
+        }
+        .explain-card .ex-body {}
+        .explain-card .ex-tip {
+            margin-top: 8px;
+            padding: 8px 12px;
+            background: #fff;
+            border-radius: 6px;
+            font-style: italic;
+            color: #555;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+
+    <button class="toc-toggle" id="tocToggle" aria-label="目录" onclick="toggleToc()">☰</button>
+    <div class="toc-overlay" id="tocOverlay" onclick="closeToc()"></div>
+    <nav class="toc" id="toc">
+        <div class="toc-title">📑 行政诉讼法目录</div>
+        <a href="#mod1">一、基本原则</a>
+        <a href="#mod2">二、复议与诉讼区别</a>
+        <a href="#mod3">三、受案范围</a>
+        <a href="#mod4">四、管辖</a>
+    </nav>
+
+    <div class="main" id="mainContent"></div>
+
+    <script>
+        function toggleToc() {
+            const toc = document.getElementById('toc');
+            const overlay = document.getElementById('tocOverlay');
+            toc.classList.toggle('hidden');
+            overlay.classList.toggle('show');
+        }
+
+        function closeToc() {
+            const toc = document.getElementById('toc');
+            const overlay = document.getElementById('tocOverlay');
+            toc.classList.add('hidden');
+            overlay.classList.remove('show');
+        }
+
+        const knowledgeData = [
+            // ===== 模块1：基本原则 =====
+            {
+                id: 'mod1',
+                iconClass: 'icon-red',
+                iconEmoji: '📌',
+                title: '一、行政诉讼的基本原则',
+                subtitle: '法院审案的基本规矩',
+                items: [{
+                    type: 'ki',
+                    badge: '核心',
+                    badgeClass: 'badge-core',
+                    title: '合法性审查原则（最核心）',
+                    content: '人民法院审理行政案件，<span class="kh kh-red">仅审查行政行为的合法性</span>，不审查合理性（适当性）。<br>行政复议则既审查合法性，也审查合理性。',
+                    example: {
+                        q: '🧑‍⚖️ 张三被罚款2000元，他认为罚款太重了（不合理），法院会审查罚款数额是否适当吗？',
+                        a: '❌ 不会！法院只审查罚款是否合法——有没有法律依据、程序是否正当。至于罚2000还是1000更"合理"，那是行政机关自由裁量权的事，法院不管。但复议机关可以管，因为复议既审合法也审合理。'
+                    }
+                }, {
+                    type: 'ki',
+                    badge: '原则',
+                    badgeClass: 'badge-num',
+                    title: '独立审判原则',
+                    content: '人民法院依法独立行使审判权，不受<span class="kh">行政机关、社会团体和个人</span>的干涉。（但受人大监督，受检察院监督）'
+                }, {
+                    type: 'ki',
+                    badge: '原则',
+                    badgeClass: 'badge-num',
+                    title: '当事人法律地位平等',
+                    content: '在行政诉讼中，原告（老百姓）和被告（行政机关）是<span class="kh kh-green">平等的诉讼主体</span>。这与行政管理中"官管民"的地位完全不同。'
+                }, {
+                    type: 'ki',
+                    badge: '原则',
+                    badgeClass: 'badge-num',
+                    title: '其他原则',
+                    content: '以事实为根据、以法律为准绳；辩论原则；合议、回避、公开审判和两审终审制度；使用民族语言文字诉讼原则。'
+                }],
+                quizzes: [{
+                    type: 'single',
+                    q: '行政诉讼中，人民法院审查的核心是什么？',
+                    opts: ['A. 行政行为的合理性', 'B. 行政行为的合法性', 'C. 行政行为的合情性', 'D. 行政行为的效率性'],
+                    correct: 1,
+                    explain: '正确答案是<b>B</b>。',
+                    tip: '法院只管"合法不合法"，不管"合理不合理"。合理性问题找复议机关，合法性问题找法院。记住口诀："复议管合不合理，法院管合不合法。"'
+                }, {
+                    type: 'single',
+                    q: '关于行政诉讼的基本原则，以下说法正确的是？',
+                    opts: ['A. 人民法院审理行政案件不受任何监督', 'B. 原告和被告在诉讼中地位不平等', 'C. 辩论原则是行政诉讼的基本原则之一', 'D. 行政诉讼一律不公开审理'],
+                    correct: 2,
+                    explain: '正确答案是<b>C</b>。',
+                    tip: 'A错，法院受人大和检察院监督。B错，诉讼中双方地位平等。D错，公开审理是原则，不公开是例外。辩论权是当事人的基本权利。'
+                }]
+            },
+
+            // ===== 模块2：行政复议与行政诉讼的区别 =====
+            {
+                id: 'mod2',
+                iconClass: 'icon-blue',
+                iconEmoji: '🔄',
+                title: '二、行政复议与行政诉讼的区别',
+                subtitle: '两条救济途径，怎么选？',
+                items: [{
+                    type: 'table',
+                    html: `<table class="info-table"><thead><tr><th>对比项</th><th>行政复议</th><th>行政诉讼</th></tr></thead><tbody>
+                <tr><td>受理机关</td><td>行政机关（上级或本级）</td><td>人民法院</td></tr>
+                <tr><td>审查范围</td><td>合法性 + 合理性</td><td>仅合法性</td></tr>
+                <tr><td>受案范围</td><td>更广（含工伤认定、信息公开）</td><td>相对有限</td></tr>
+                <tr><td>程序衔接</td><td>可前置，也可直接诉讼</td><td>复议前置情形需先复议</td></tr>
+                <tr><td>法律效力</td><td>行政行为，可再诉讼</td><td>司法行为，终局性</td></tr></tbody></table>`
+                }, {
+                    type: 'ki',
+                    badge: '重要',
+                    badgeClass: 'badge-core',
+                    title: '程序衔接规则（必考）',
+                    content: '<b>自由选择</b>：大多数情况下，可先复议再诉讼，也可直接诉讼。<br><b>复议前置</b>：特定情形必须先复议才能诉讼（如当场处罚、自然资源权属、不履行法定职责、信息公开被拒等）。<br><b>诉讼后不可再复议</b>：提起行政诉讼后就不能再申请复议了。<br><b>复议终局</b>：国务院的裁决是最终裁决，不能再诉讼。',
+                    example: {
+                        q: '🏛️ 张三对公安局的当场罚款200元不服，他能否直接去法院起诉？',
+                        a: '❌ 不能！当场作出的行政处罚决定属于复议前置情形，必须先申请行政复议，对复议决定不服才能提起行政诉讼。这是为了节约司法资源——小事情先让行政机关内部解决。'
+                    }
+                }],
+                quizzes: [{
+                    type: 'single',
+                    q: '行政复议与行政诉讼在审查范围上的主要区别是？',
+                    opts: ['A. 行政复议只审查合法性', 'B. 行政诉讼既审查合法性也审查合理性', 'C. 行政复议审查合法性和合理性，行政诉讼仅审查合法性', 'D. 两者完全相同'],
+                    correct: 2,
+                    explain: '正确答案是<b>C</b>。',
+                    tip: '复议是"双审"（合法+合理），诉讼是"单审"（仅合法）。复议管得更宽，诉讼只管法律问题。'
+                }, {
+                    type: 'single',
+                    q: '当事人对行政复议决定不服，一般可以？',
+                    opts: ['A. 再次申请行政复议', 'B. 向国务院申请最终裁决', 'C. 在15日内提起行政诉讼', 'D. 只能接受复议决定'],
+                    correct: 2,
+                    explain: '正确答案是<b>C</b>。',
+                    tip: '对复议决定不服，收到决定书后15日内可向法院起诉。如果复议机关逾期不答复，从复议期满之日起15日内起诉。记住：复议后诉讼的期限是15天，直接诉讼的期限是6个月。'
+                }, {
+                    type: 'multi',
+                    q: '以下哪些属于行政复议前置的情形？（多选）',
+                    opts: ['A. 对当场作出的行政处罚决定不服', 'B. 对自然资源所有权或使用权决定不服', 'C. 认为行政机关未履行法定职责', 'D. 政府信息公开申请被拒绝', 'E. 对行政拘留不服'],
+                    correct: [0, 1, 2, 3],
+                    multi: true,
+                    explain: '正确答案是<b>A、B、C、D</b>。',
+                    tip: 'E行政拘留不是复议前置，可以直接诉讼。复议前置的口诀："当场处罚、自然资源、不履责、信息不公开"——这些必须先复议再诉讼。'
+                }]
+            },
+
+            // ===== 模块3：受案范围 =====
+            {
+                id: 'mod3',
+                iconClass: 'icon-yellow',
+                iconEmoji: '📋',
+                title: '三、行政诉讼的受案范围',
+                subtitle: '哪些事能告？哪些事不能告？',
+                items: [{
+                    type: 'ki',
+                    badge: '可以告',
+                    badgeClass: 'badge-case',
+                    title: '可以提起行政诉讼的范围',
+                    content: '行政处罚、行政强制、行政许可、行政确认、征收征用及补偿决定、不作为（不履责）、侵犯经营自主权、行政协议、侵犯人身权财产权等。<br><b>基本与行政复议的受案范围一致。</b>'
+                }, {
+                    type: 'ki',
+                    badge: '不能告',
+                    badgeClass: 'badge-core',
+                    title: '不可提起行政诉讼的范围（重点）',
+                    content: '①国家行为（国防、外交）；<br>②抽象行政行为（行政法规、规章、有普遍约束力的决定命令）——但可附带审查；<br>③内部行政行为（奖惩任免）；<br>④最终裁决行为（国务院裁决）；<br>⑤刑事司法行为（如刑事拘留）；<br>⑥调解行为、行政指导；<br>⑦重复处理行为；<br>⑧不产生外部效力的行为；<br>⑨过程性行为；<br>⑩对权利义务无实际影响的行为。',
+                    example: {
+                        q: '🏢 某公司对市政府发布的"征收补偿标准"文件不服，能直接告吗？',
+                        a: '❌ 不能！这个文件是抽象行政行为（针对不特定对象、可反复适用），不能直接起诉。但如果政府依据这个文件对公司作出了具体的征收决定，公司可以在告征收决定时，<b>附带请求审查</b>这个文件是否合法。'
+                    }
+                }, {
+                    type: 'ki',
+                    badge: '易混',
+                    badgeClass: 'badge-num',
+                    title: '具体行政行为 vs 抽象行政行为',
+                    content: '<b>具体</b>：对象特定、一次适用（如罚张三200元）→ <span class="kh kh-green">可诉</span><br><b>抽象</b>：对象不特定、反复适用（如市政府发布文件）→ <span class="kh kh-red">不可诉</span>（只能附带审查）',
+                    example: {
+                        q: '📄 某市建委印发通告，责令"滨江道5米内50家住户"限期拆迁。这是具体还是抽象？',
+                        a: '✅ 这是<b>具体行政行为</b>！虽然形式是"通告"，但对象是特定的50家住户，不是全城所有人。陈某作为50家之一，可以提起行政诉讼。'
+                    }
+                }],
+                quizzes: [{
+                    type: 'single',
+                    q: '下列哪种行为不属于行政诉讼受案范围？',
+                    opts: ['A. 对行政拘留不服', 'B. 对公安机关刑事拘留不服', 'C. 对吊销营业执照不服', 'D. 对征收补偿决定不服'],
+                    correct: 1,
+                    explain: '正确答案是<b>B</b>。',
+                    tip: '刑事拘留是刑事司法行为，不是行政行为。哪怕都是公安机关做的，也要看依据的是《刑事诉讼法》还是《治安管理处罚法》。依据刑诉法的行为不可诉，依据行政法的行为可诉。'
+                }, {
+                    type: 'single',
+                    q: '某大学拒绝向学生王某发放学位证书，王某可以提起行政诉讼吗？',
+                    opts: ['A. 不可以，大学不是行政机关', 'B. 可以，大学是法律法规授权组织', 'C. 不可以，这属于内部行为', 'D. 可以，但必须先申请行政复议'],
+                    correct: 1,
+                    explain: '正确答案是<b>B</b>。',
+                    tip: '大学虽然不是行政机关，但颁发学位证书是法律法规授予的行政职能。这种"法律法规授权组织"作出的行为，属于行政诉讼受案范围。记住：学校发证=行政行为，可告！'
+                }, {
+                    type: 'multi',
+                    q: '以下哪些不属于行政诉讼受案范围？（多选）',
+                    opts: ['A. 行政机关对公务员的记过处分', 'B. 市政府发布的拆迁补偿标准文件', 'C. 公安机关对吸毒者的行政拘留', 'D. 行政机关在诉讼中的调解行为', 'E. 税务局对企业的罚款决定'],
+                    correct: [0, 1, 3],
+                    multi: true,
+                    explain: '正确答案是<b>A、B、D</b>。',
+                    tip: 'A是内部行为，B是抽象行为，D是调解行为（自愿的，不可诉）。C和E都是具体行政行为，可诉。'
+                }]
+            },
+
+            // ===== 模块4：管辖 =====
+            {
+                id: 'mod4',
+                iconClass: 'icon-green',
+                iconEmoji: '📍',
+                title: '四、行政诉讼的管辖',
+                subtitle: '去哪个法院告？级别+地域',
+                items: [{
+                    type: 'ki',
+                    badge: '级别',
+                    badgeClass: 'badge-core',
+                    title: '级别管辖（中院管辖是重点）',
+                    content: '<b>基层法院</b>：大多数第一审案件<br><b>中级法院</b>：①被告是国务院部门或县级以上政府（但不包括政府部门！）；②海关案件（不论级别）；③本辖区内重大复杂案件（如涉外涉港澳台）<br><b>高级法院</b>：本省重大复杂<br><b>最高法院</b>：全国重大复杂',
+                    extra: '<b>注意：</b>告广东省公安厅→基层法院（部门不是政府）；告广州市政府→中级法院（政府是县级以上政府）；告公安部→中级法院（国务院部门）；国务院不能成为被告。'
+                }, {
+                    type: 'ki',
+                    badge: '地域',
+                    badgeClass: 'badge-num',
+                    title: '地域管辖',
+                    content: '<b>一般：</b>被告所在地法院（原告就被告）<br><b>经复议：</b>原机关所在地或复议机关所在地（二选一）<br><b>限制人身自由：</b>被告所在地或<span class="kh kh-red">原告所在地</span>（户籍地、经常居住地、被限制地）<br><b>不动产：</b><span class="kh kh-red">不动产所在地</span>专属管辖',
+                    example: {
+                        q: '🔒 老刘因嫖娼被公安机关强制传唤，他不服想告。除了公安机关所在地，他还能在哪里的法院告？',
+                        a: '✅ 老刘还可以选择<b>自己户籍地、经常居住地</b>或<b>被强制传唤地</b>的法院。因为限制人身自由的案件，原告所在地法院也有管辖权，这叫"保护弱者原则"——让你在家门口也能告官。'
+                    }
+                }, {
+                    type: 'ki',
+                    badge: '共同管辖',
+                    badgeClass: 'badge-num',
+                    title: '共同管辖规则',
+                    content: '两个以上法院都有管辖权 → 原告选一个；向多个法院起诉 → <span class="kh">最先立案</span>的法院管辖。'
+                }],
+                quizzes: [{
+                    type: 'single',
+                    q: '对合肥市人民政府作出的行政行为不服，应向哪个法院起诉？',
+                    opts: ['A. 合肥市基层法院', 'B. 合肥市中级人民法院', 'C. 安徽省高级人民法院', 'D. 最高人民法院'],
+                    correct: 1,
+                    explain: '正确答案是<b>B</b>。',
+                    tip: '被告是县级以上政府（合肥市政府是地级市政府），由中级法院管辖。如果是告合肥市公安局（政府部门），则去基层法院。区分"政府"和"政府部门"是关键！'
+                }, {
+                    type: 'single',
+                    q: '因不动产提起的行政诉讼，由哪个法院管辖？',
+                    opts: ['A. 原告所在地', 'B. 被告所在地', 'C. 不动产所在地', 'D. 原告或被告所在地均可'],
+                    correct: 2,
+                    explain: '正确答案是<b>C</b>。',
+                    tip: '不动产是专属管辖，只能由不动产所在地法院管。比如房子在A区，责令拆除的决定是B区规划局作出的，也只能去A区法院告。不动产在哪，官司就在哪打。'
+                }, {
+                    type: 'single',
+                    q: '对广东省公安厅作出的行政行为不服，应向哪个法院起诉？',
+                    opts: ['A. 基层法院', 'B. 中级法院', 'C. 高级法院', 'D. 最高法院'],
+                    correct: 0,
+                    explain: '正确答案是<b>A</b>。',
+                    tip: '公安厅是"省级部门"，不是"国务院部门"，只有国务院部门才去中院。省级部门、市级部门、县级部门统统去基层法院。中院只管"国务院部门"和"县级以上政府"本身。'
+                }, {
+                    type: 'multi',
+                    q: '中级人民法院管辖哪些第一审行政案件？（多选）',
+                    opts: ['A. 对国务院部门提起诉讼', 'B. 对县级以上地方政府提起诉讼', 'C. 海关处理的案件', 'D. 对县级政府工作部门提起诉讼', 'E. 本辖区内重大复杂案件'],
+                    correct: [0, 1, 2, 4],
+                    multi: true,
+                    explain: '正确答案是<b>A、B、C、E</b>。',
+                    tip: 'D是去基层法院。中院管辖口诀："国务院部门、县级以上政府、海关、重大复杂"。县政府、市政府、省政府都是中院，但他们的下属部门是基层法院。'
+                }]
+           },
+
+                // ===== 模块5：诉讼参加人 =====
+        {
+            id: 'mod5',
+            iconClass: 'icon-red',
+            iconEmoji: '👥',
+            title: '五、行政诉讼参加人',
+            subtitle: '原告、被告、第三人、代理人 —— 谁告谁？',
+            items: [{
+                type: 'ki',
+                badge: '核心',
+                badgeClass: 'badge-core',
+                title: '原告资格',
+                content: '<b>一般</b>：行政行为的<span class="kh">相对人</span>及与行政行为有<span class="kh">利害关系</span>的公民、法人或其他组织。<br><b>特殊</b>：合伙企业有字号的以字号为原告；个体工商户有字号的以字号为原告（注明经营者）；股份制企业股东大会/董事会可以企业名义起诉；投资人可以自己名义起诉；业主委员会可代表业主起诉。',
+                extra: '<b>原告资格转移</b>：自然人死亡→近亲属；法人终止→权利承受人。'
+            }, {
+                type: 'ki',
+                badge: '难点',
+                badgeClass: 'badge-core',
+                title: '被告确定规则（高频考点）',
+                content: '<b>一般</b>：作出行政行为的机关是被告。<br><b>复议维持</b>：原机关+复议机关为<span class="kh kh-red">共同被告</span>。<br><b>复议改变</b>：仅<span class="kh kh-red">复议机关</span>为被告。<br><b>复议不作为</b>：原告<span class="kh kh-red">选择</span>原机关或复议机关。<br><b>委托</b>：委托机关为被告。<br><b>授权</b>：被授权组织为被告（法定授权告机构，机关授权告机关）。<br><b>撤销/职权变更</b>：继续行使职权的机关为被告。',
+                example: {
+                    q: '🏛️ 深圳市公安局对张某罚款2000元，张某申请复议，市政府维持原处罚。张某不服起诉，被告是谁？',
+                    a: '✅ 深圳市公安局 + 深圳市人民政府（<b>共同被告</b>）。复议维持 → 共同告。如果是市政府改为罚款1000元，则只告市政府（复议改变 → 单独告）。'
+                }
+            }, {
+                type: 'ki',
+                badge: '必考',
+                badgeClass: 'badge-core',
+                title: '派出所作为被告的特殊规则',
+                content: '行政诉讼中，派出所只要<span class="kh kh-red">以自己名义</span>作出行为，<span class="kh kh-red">不管种类越权还是幅度越权</span>，都以派出所为被告。<br><b>对比行政复议</b>：幅度越权告派出所，种类越权告公安局（"罚款告所，拘留告局"）。两者不一样！',
+                example: {
+                    q: '🚔 派出所对李某作出拘留10日的决定（种类越权），李某提起行政诉讼，被告是谁？',
+                    a: '✅ 在<b>行政诉讼</b>中是<b>派出所</b>（以自己名义就告自己）。但在<b>行政复议</b>中是公安局（拘留告局）。这是行政复议和行政诉讼在被告确定上的重要区别！'
+                }
+            }, {
+                type: 'ki',
+                badge: '注意',
+                badgeClass: 'badge-num',
+                title: '告漏被告的处理（对比）',
+                content: '<b>诉讼中（复议维持共同被告）</b>：法院通知追加，原告不同意追加的，直接<span class="kh kh-red">列为共同被告</span>。<br><b>诉讼中（一般共同被告）</b>：法院通知追加，原告不同意追加的，列为<span class="kh kh-blue">第三人</span>。<br><b>复议中（共同被申请人）</b>：复议机关通知追加，申请人不同意的，列为<span class="kh kh-blue">第三人</span>。',
+                extra: '三者处理不同！复议维持共同被告最特殊——原告不追加也强行列为共同被告。'
+            }, {
+                type: 'ki',
+                badge: '角色',
+                badgeClass: 'badge-num',
+                title: '第三人与诉讼代理人',
+                content: '<b>第三人</b>：与被诉行政行为有利害关系，在诉讼开始后加入，有独立诉讼地位，可上诉。<br><b>诉讼代表人</b>：一方人数众多（≥10人），推选2~5名代表人。<br><b>委托代理人</b>：可委托1~2人（律师、近亲属、社区/单位推荐人等）。'
+            }],
+            quizzes: [{
+                type: 'single',
+                q: '经复议的案件，复议机关改变原行政行为的，被告是？',
+                opts: ['A. 原行政机关', 'B. 复议机关', 'C. 原行政机关和复议机关为共同被告', 'D. 原告可选择'],
+                correct: 1,
+                explain: '正确答案是<b>B</b>。',
+                tip: '复议改变 → 单独告复议机关。口诀："维持共同告，改变单独告，不作为选择告。"改变了原行为就相当于复议机关做了新决定，原行为已经不存在了，当然告复议机关。'
+            }, {
+                type: 'single',
+                q: '派出所对张某作出罚款300元的决定（在权限内），张某不服提起行政诉讼，被告是？',
+                opts: ['A. 派出所', 'B. 所属公安局', 'C. 派出所和公安局为共同被告', 'D. 由张某选择'],
+                correct: 0,
+                explain: '正确答案是<b>A</b>。',
+                tip: '行政诉讼中，派出所只要以自己名义作出行为，不管是幅度内还是幅度外，都告派出所。300元在权限内，当然告派出所。记住：行政诉讼中派出所的被告规则和行政复议不同！'
+            }, {
+                type: 'single',
+                q: '有权提起诉讼的法人终止后，谁可以提起诉讼？',
+                opts: ['A. 原法人代表', 'B. 承受其权利的法人或组织', 'C. 经法院指定的组织', 'D. 原法人的上级主管机关'],
+                correct: 1,
+                explain: '正确答案是<b>B</b>。',
+                tip: '法人终止了，它的权利由谁继承，谁就能接着打官司。比如公司被合并了，合并后的新公司可以继续告。'
+            }, {
+                type: 'multi',
+                q: '以下哪些主体可以作为行政诉讼的委托代理人？（多选）',
+                opts: ['A. 律师', 'B. 基层法律服务工作者', 'C. 当事人所在社区的普通公民', 'D. 当事人所在单位推荐的公民', 'E. 当事人的近亲属'],
+                correct: [0, 1, 3, 4],
+                multi: true,
+                explain: '正确答案是<b>A、B、D、E</b>。',
+                tip: 'C错——社区普通公民不能直接当代理人，必须是社区"推荐"的公民才行。所有人都需要"有来头"：律师有证、单位推荐、社区推荐、或者是近亲属。'
+            }]
+        },
+
+        // ===== 模块6：证据规则 =====
+        {
+            id: 'mod6',
+            iconClass: 'icon-blue',
+            iconEmoji: '🔍',
+            title: '六、行政诉讼的证据规则',
+            subtitle: '谁举证？什么证据有效？',
+            items: [{
+                type: 'table',
+                html: `<table class="info-table"><thead><tr><th>证据种类</th><th>说明</th></tr></thead><tbody>
+            <tr><td>书证</td><td>行政决定书、许可证、合同等</td></tr>
+            <tr><td>物证</td><td>违章车辆、作案工具等</td></tr>
+            <tr><td>视听资料</td><td>监控录像、录音等</td></tr>
+            <tr><td>电子数据</td><td>电子邮件、聊天记录等</td></tr>
+            <tr><td>证人证言</td><td>证人陈述</td></tr>
+            <tr><td>当事人陈述</td><td>原告/被告的陈述</td></tr>
+            <tr><td>鉴定意见</td><td>伤残鉴定、笔迹鉴定等</td></tr>
+            <tr><td>勘验笔录</td><td>现场勘验记录</td></tr></tbody></table>`
+            }, {
+                type: 'ki',
+                badge: '核心',
+                badgeClass: 'badge-core',
+                title: '举证责任分配',
+                content: '<b>被告承担主要举证责任</b>：须提供作出行政行为的<span class="kh kh-red">证据</span>和所依据的<span class="kh kh-red">规范性文件</span>。逾期不提供或无正当理由逾期提供，视为没有证据。<br><b>原告的举证义务</b>：提供符合起诉条件的材料；起诉不履责时证明曾申请；行政赔偿中证明损害与行为的因果关系。<br><b>被告禁止行为</b>：诉讼期间被告及其代理人<span class="kh kh-red">不得自行</span>向原告、第三人和证人收集证据。',
+                example: {
+                    q: '🚫 张三告公安局罚款5000元没依据。公安局在诉讼期间又去找新证人补证据，可以吗？',
+                    a: '❌ 绝对不行！这叫"事后取证"，属于非法证据。行政机关作出处罚时就应该证据齐全，事后补证说明你当时就没查清楚。这种行为是心虚的表现，法律禁止。'
+                }
+            }, {
+                type: 'ki',
+                badge: '期限',
+                badgeClass: 'badge-num',
+                title: '举证期限',
+                content: '<b>被告</b>：收到起诉状副本后<span class="kh kh-red">15日内</span>提交证据。<br><b>原告</b>：开庭审理前或法院指定的交换证据日期前提交。<br><b>逾期后果</b>：被告逾期视为无证据；原告逾期法院可不予采纳。'
+            }, {
+                type: 'ki',
+                badge: '注意',
+                badgeClass: 'badge-num',
+                title: '原告可申请法院调取证据的情形',
+                content: '①由国家机关保存须法院调取的；<br>②涉及国家秘密、商业秘密、个人隐私的；<br>③确因客观原因不能自行收集的其他证据。'
+            }],
+            quizzes: [{
+                type: 'single',
+                q: '行政诉讼中，举证责任主要由谁承担？',
+                opts: ['A. 原告', 'B. 被告', 'C. 法院', 'D. 第三方'],
+                correct: 1,
+                explain: '正确答案是<b>B</b>。',
+                tip: '行政诉讼是"被告举证为主"——行政机关得证明自己的行为合法。老百姓告你，你得拿出处罚的依据和证据。如果拿不出来，就视为没证据，等着败诉吧。'
+            }, {
+                type: 'single',
+                q: '被告应当在收到起诉状副本后多少日内提交证据？',
+                opts: ['A. 5日', 'B. 10日', 'C. 15日', 'D. 30日'],
+                correct: 2,
+                explain: '正确答案是<b>C</b>。',
+                tip: '15天是被告的举证期限，过期不交=没证据。跟交换诉状的时间一样（收到起诉状后15天内交答辩+证据）。'
+            }, {
+                type: 'single',
+                q: '以下关于行政诉讼证据的说法，不正确的是？',
+                opts: ['A. 证据须经法庭审查属实才能作为定案依据', 'B. 被告对行政行为的合法性负举证责任', 'C. 诉讼期间被告可向原告补充收集证据', 'D. 被告逾期不提供证据视为没有证据'],
+                correct: 2,
+                explain: '正确答案是<b>C</b>。',
+                tip: 'C大错特错！诉讼期间被告禁止自行收集证据。你处罚人家时就应该证据齐全，事后补就是非法证据。A、B、D都是正确说法。'
+            }]
+        },
+
+        // ===== 模块7：起诉与受理 =====
+        {
+            id: 'mod7',
+            iconClass: 'icon-yellow',
+            iconEmoji: '📝',
+            title: '七、起诉条件、期限与立案',
+            subtitle: '怎么起诉？多久内能告？',
+            items: [{
+                type: 'ki',
+                badge: '条件',
+                badgeClass: 'badge-core',
+                title: '起诉的四个条件',
+                content: '①原告是符合规定的公民、法人或其他组织；<br>②有明确的被告；<br>③有具体的诉讼请求和事实依据；<br>④属于法院受案范围和受诉法院管辖。'
+            }, {
+                type: 'ki',
+                badge: '期限',
+                badgeClass: 'badge-core',
+                title: '起诉期限（必考数字）',
+                content: '<b>直接起诉</b>：知道或应当知道行政行为之日起<span class="kh kh-red">6个月</span>内。<br><b>先复议再诉讼</b>：收到复议决定书之日起<span class="kh kh-red">15日内</span>；复议期满未决定的，期满之日起15日内。<br><b>不动产</b>：自行政行为作出之日起最长<span class="kh kh-red">20年</span>。<br><b>其他案件</b>：最长<span class="kh kh-red">5年</span>。<br><b>期限耽误</b>：不可抗力耽误的时间不计入；非不可抗力耽误的，障碍消除后10日内可申请延长。',
+                example: {
+                    q: '🏠 张三2010年在国外时，国内房子被查封了，他2025年回国才知道。还能告吗？',
+                    a: '❌ 不能！不动产最长起诉期限是<b>20年</b>，从2010年查封之日起算，2025年已经15年了，还在20年内，理论上可以。但如果是2000年查封的，2025年才回来，就超过20年了，不能告了。'
+                }
+            }, {
+                type: 'ki',
+                badge: '方式',
+                badgeClass: 'badge-num',
+                title: '起诉方式与立案登记',
+                content: '<b>书面为原则</b>（递交起诉状），<b>口头为例外</b>（书写困难可口头，由法院记录）。<br><b>立案登记制</b>：符合条件→登记立案；不符合→裁定不予立案（可上诉）；当场不能判断→先登记，7日内决定；7日内仍不能判断→先立案。<br><b>"三步"投诉</b>：不接收起诉状、不出具凭证、不一次性告知补正的，可向上级法院投诉。'
+            }, {
+                type: 'ki',
+                badge: '救济',
+                badgeClass: 'badge-num',
+                title: '不予立案的救济',
+                content: '①不服不予立案裁定的，可在10日内向上一级法院上诉；<br>②不立案又不出裁定的，可直接向上一级法院起诉。'
+            }],
+            quizzes: [{
+                type: 'single',
+                q: '直接向人民法院提起行政诉讼的一般期限是？',
+                opts: ['A. 3个月', 'B. 6个月', 'C. 1年', 'D. 2年'],
+                correct: 1,
+                explain: '正确答案是<b>B</b>。',
+                tip: '直接诉讼=6个月，复议后诉讼=15天。两个数字经常一起考，别搞混。6个月很长了，给足你时间准备材料。'
+            }, {
+                type: 'single',
+                q: '人民法院在接到起诉状时，对符合起诉条件的应当？',
+                opts: ['A. 先审查后立案', 'B. 登记立案', 'C. 报上级审批', 'D. 通知被告后再立案'],
+                correct: 1,
+                explain: '正确答案是<b>B</b>。',
+                tip: '现在实行立案登记制，符合条件就登记立案，不用再审批了。这是为了保护老百姓的诉权，防止法院拖着不立案。'
+            }, {
+                type: 'single',
+                q: '关于行政诉讼的起诉方式，以下说法正确的是？',
+                opts: ['A. 必须书面提交起诉状', 'B. 书写困难的可口头起诉', 'C. 口头起诉须经法院批准', 'D. 所有案件一律书面起诉'],
+                correct: 1,
+                explain: '正确答案是<b>B</b>。',
+                tip: '老百姓有困难，法律给方便。不会写字的可以口头说，法院帮你记下来。体现了"便民原则"。但原则还是书面。'
+            }, {
+                type: 'single',
+                q: '以下说法错误的是？',
+                opts: ['A. 起诉期限因不可抗力耽误的不计入', 'B. 非因不可抗力耽误的可申请延期', 'C. 非因不可抗力耽误的应在障碍消除后15日内申请', 'D. 不动产最长起诉期限为20年'],
+                correct: 2,
+                explain: '正确答案是<b>C</b>。',
+                tip: 'C错！非不可抗力耽误的申请延期期限是<b>10日</b>，不是15日！15日是复议后起诉的期限。10日和15日经常被混在一起考，要分清楚。'
+            }]
+        },
+
+        // ===== 模块8：一审程序 =====
+        {
+            id: 'mod8',
+            iconClass: 'icon-green',
+            iconEmoji: '⚖️',
+            title: '八、行政诉讼第一审程序',
+            subtitle: '立案后怎么审？合议庭、审限、庭前准备',
+            items: [{
+                type: 'ki',
+                badge: '合议庭',
+                badgeClass: 'badge-core',
+                title: '合议庭组成',
+                content: '普通程序必须组成合议庭，人数为<span class="kh kh-red">3人以上的单数</span>。<br>由审判员组成，或审判员+人民陪审员组成（不能全部是陪审员）。<br>简易程序可由<span class="kh">一名审判员独任审理</span>。',
+                extra: '<b>注意：</b>"3人以上"和"单数"两个条件缺一不可。4人不行（不是单数），1人只适用简易程序。'
+            }, {
+                type: 'ki',
+                badge: '流程',
+                badgeClass: 'badge-num',
+                title: '庭前准备与交换诉状',
+                content: '<b>法院</b>：立案后<span class="kh">5日内</span>将起诉状副本发送被告。<br><b>被告</b>：收到后<span class="kh">15日内</span>提交证据+答辩状（不交答辩不影响审理）。<br><b>法院</b>：收到答辩状后<span class="kh">5日内</span>发送原告。<br><b>传唤</b>：开庭前3日传票传唤当事人（原告、被告、第三人），通知书通知证人等。',
+                extra: '关键数字：法院发送→5天；被告提交→15天；开庭通知→提前3天。'
+            }, {
+                type: 'ki',
+                badge: '审理',
+                badgeClass: 'badge-num',
+                title: '审理方式与审理期限',
+                content: '<b>公开审理为原则</b>（涉密涉私不公开，商业秘密申请可不公开）。<br><b>宣判</b>：一律公开宣判。<br><b>审限</b>：立案之日起<span class="kh kh-red">6个月</span>内作出一审判决。<br><b>延长</b>：需高级法院批准（基层和中级法院无权批准延长），高级法院审理的需最高法院批准。',
+                example: {
+                    q: '⏰ 某基层法院审理的行政案件案情复杂，6个月审不完，谁有权批准延长？',
+                    a: '✅ 必须报<b>高级法院</b>批准，不能找中级法院。中级法院只能备案，没有批准权。四级法院中只有高级和最高级有延长批准权。'
+                }
+            }, {
+                type: 'ki',
+                badge: '特殊',
+                badgeClass: 'badge-num',
+                title: '行政负责人出庭制度',
+                content: '被诉行政机关<span class="kh">负责人应当出庭应诉</span>（正职或副职）。不能出庭的应说明理由，并委托工作人员出庭。可另行委托1~2名诉讼代理人。<br>俗称"<span class="kh kh-red">告官要见官</span>"。'
+            }, {
+                type: 'ki',
+                badge: '原则',
+                badgeClass: 'badge-core',
+                title: '调解与停止执行',
+                content: '<b>调解</b>：原则上不适用调解，但<span class="kh kh-red">行政赔偿、补偿、自由裁量权</span>案件可调解（自愿、合法原则）。<br><b>停止执行</b>：诉讼期间不停止行政行为执行。例外：被告认为需停止、原告申请且法院认为会造成难以弥补损失、法院认为会损害重大公共利益、法律法规规定停止。',
+                extra: '<b>对比复议</b>：行政复议法2023年修订后，调解已成为复议的基本原则（可调解），而诉讼中仍以"不调解"为原则。'
+            }],
+            quizzes: [{
+                type: 'single',
+                q: '一审普通程序的审理期限是？',
+                opts: ['A. 3个月', 'B. 45日', 'C. 6个月', 'D. 1年'],
+                correct: 2,
+                explain: '正确答案是<b>C</b>。',
+                tip: '一审普通=6个月，简易=45天，二审=3个月。三个数字经常放在一起考，要记清楚。'
+            }, {
+                type: 'single',
+                q: '合议庭的成员人数应当是？',
+                opts: ['A. 2人', 'B. 3人以上的单数', 'C. 3人以上的双数', 'D. 没有限制'],
+                correct: 1,
+                explain: '正确答案是<b>B</b>。',
+                tip: '两个要点：①3人以上；②单数。单数是为了投票时不出现平局。4个人虽然3人以上但双数不行，必须单数。'
+            }, {
+                type: 'single',
+                q: '人民法院应当在立案之日起几日内将起诉状副本发送被告？',
+                opts: ['A. 3日', 'B. 5日', 'C. 7日', 'D. 10日'],
+                correct: 1,
+                explain: '正确答案是<b>B</b>。',
+                tip: '法院发送诉状的时间是5天。不管是发给被告起诉状，还是发给原告答辩状，都是5天。记住："法院手脚快，5天就送达。"'
+            }, {
+                type: 'single',
+                q: '关于行政诉讼调解，以下说法正确的是？',
+                opts: ['A. 行政诉讼一律不适用调解', 'B. 行政赔偿案件可以调解', 'C. 所有行政案件经当事人同意都可调解', 'D. 行政诉讼调解是基本原则'],
+                correct: 1,
+                explain: '正确答案是<b>B</b>。',
+                tip: 'A太绝对了——赔偿、补偿、自由裁量权案件可以调解。C错，涉及合法性的案件不能调解。D是行政复议的原则（复议法2023修订后），不是行政诉讼的原则。'
+            }]
+       },
+        // ===== 模块9：简易程序 =====
+        {
+            id: 'mod9',
+            iconClass: 'icon-yellow',
+            iconEmoji: '⚡',
+            title: '九、行政诉讼简易程序',
+            subtitle: '简单案件快速审理',
+            items: [{
+                type: 'ki',
+                badge: '条件',
+                badgeClass: 'badge-core',
+                title: '适用简易程序的条件（须同时满足）',
+                content: '前提：<span class="kh">事实清楚、权利义务关系明确、争议不大</span>。<br>①行政行为是依法当场作出的；<br>②案件涉及款额<span class="kh kh-red">2000元以下</span>（注意：复议简易是3000元以下）；<br>③属于政府信息公开案件；<br>④当事人各方同意适用简易程序。',
+                extra: '<b>注意：</b>简易程序仅适用于<b>第一审</b>案件。二审、再审、发回重审一律不适用。'
+            }, {
+                type: 'ki',
+                badge: '方式',
+                badgeClass: 'badge-num',
+                title: '审理方式与审限',
+                content: '<b>独任审理</b>：一名审判员独任（不组成合议庭）。<br><b>通知方式</b>：可用口头、电话、短信等简便方式。<br><b>举证期限</b>：当事人协商并经法院准许，但不得超过<span class="kh">15日</span>。<br><b>审限</b>：<span class="kh kh-red">45日内</span>审结，<span class="kh kh-red">无延长机制</span>。<br><b>转换</b>：发现不宜适用的，可转为普通程序，审限从立案次日起重新计算。',
+                example: {
+                    q: '📱 法院用短信通知当事人开庭时间，合法吗？',
+                    a: '✅ 在简易程序中<b>合法</b>！简易程序可以用电话、短信、传真等简便方式通知。但前提是确保当事人已收到，否则不能缺席判决。普通程序则必须用传票和通知书。'
+                }
+            }, {
+                type: 'ki',
+                badge: '对比',
+                badgeClass: 'badge-num',
+                title: '简易程序适用条件对比（复议 vs 诉讼）',
+                content: '<b>行政复议简易</b>：3000元以下 + 当场作出/警告/通报批评/信息公开。<br><b>行政诉讼简易</b>：2000元以下 + 当场作出/信息公开。<br><b>复议简易审限</b>：30日。<br><b>诉讼简易审限</b>：45日。'
+            }],
+            quizzes: [{
+                type: 'single',
+                q: '行政诉讼简易程序的审理期限是？',
+                opts: ['A. 30日', 'B. 45日', 'C. 60日', 'D. 3个月'],
+                correct: 1,
+                explain: '正确答案是<b>B</b>。',
+                tip: '诉讼简易=45天，复议简易=30天。复议更快一些。简易程序效率优先，45天内必须搞定，不能延长。'
+            }, {
+                type: 'single',
+                q: '以下哪种案件可以适用行政诉讼简易程序？',
+                opts: ['A. 二审案件', 'B. 发回重审案件', 'C. 涉案金额1500元的第一审案件', 'D. 再审案件'],
+                correct: 2,
+                explain: '正确答案是<b>C</b>。',
+                tip: 'A二审、B发回重审、D再审都不能用简易程序。简易只适用于第一审。1500元在2000元以下，加上事实清楚等前提，可以适用简易。'
+            }, {
+                type: 'single',
+                q: '简易程序转为普通程序后，审理期限如何计算？',
+                opts: ['A. 从原立案之日起计算', 'B. 从转为普通程序之日起重新计算', 'C. 从立案次日起重新计算', 'D. 延续计算，不重新开始'],
+                correct: 2,
+                explain: '正确答案是<b>C</b>。',
+                tip: '转为普通程序后，审限从<b>立案次日</b>重新算6个月。也就是说，简易程序花掉的时间"不作数"，重新给足6个月。体现了对复杂案件的审慎态度。'
+            }]
+        },
+
+        // ===== 模块10：二审程序 =====
+        {
+            id: 'mod10',
+            iconClass: 'icon-red',
+            iconEmoji: '🔺',
+            title: '十、行政诉讼第二审程序',
+            subtitle: '不服一审怎么办？上诉！',
+            items: [{
+                type: 'ki',
+                badge: '上诉',
+                badgeClass: 'badge-core',
+                title: '上诉主体与期限',
+                content: '<b>上诉主体</b>：一审原告、被告、第三人、法定代理人、经授权的委托代理人均有权上诉。<br><b>上诉期限</b>：对<span class="kh kh-red">判决</span>不服的，<span class="kh kh-red">15日内</span>上诉；对<span class="kh kh-red">裁定</span>不服的，<span class="kh kh-red">10日内</span>上诉。<br><b>原因</b>：判决影响实体权利（如行政处罚是否合法），给更长考虑时间；裁定影响程序权利（如管辖异议），相对简单。',
+                example: {
+                    q: '📅 法院1月10日宣判，张三1月25日才收到判决书。上诉期限从哪天算起？',
+                    a: '✅ 从<b>收到判决书之日</b>（1月25日）起算15天，不是从宣判日。所以上诉期限到2月9日。记住：期限从"收到"开始算，给你充分时间准备。'
+                }
+            }, {
+                type: 'ki',
+                badge: '流程',
+                badgeClass: 'badge-num',
+                title: '上诉受理流程',
+                content: '原审法院收到上诉状→5日内将副本发送其他当事人→其他当事人15日内提交答辩状（不交不影响审理）→原审法院将全部材料报送二审法院。<br><b>撤回上诉</b>：上诉人可申请撤回，是否准许由二审法院裁定（原审法院无权决定）。'
+            }, {
+                type: 'ki',
+                badge: '审理',
+                badgeClass: 'badge-num',
+                title: '二审审理方式与审限',
+                content: '<b>方式</b>：开庭审理为原则，书面审理为例外（合议庭认为事实清楚可不开庭，通过阅卷、调查、询问审理）。<br><b>审限</b>：收到上诉状之日起<span class="kh kh-red">3个月</span>内作出终审判决。<br><b>延长</b>：需高级法院批准（与一审规则相同）。<br><b>效力</b>：二审判决为<span class="kh kh-red">终审判决</span>，不得再上诉。',
+                extra: '<b>注意：</b>二审必须组成合议庭，不能独任审理。'
+            }, {
+                type: 'ki',
+                badge: '结果',
+                badgeClass: 'badge-num',
+                title: '二审判决类型',
+                content: '①<b>驳回上诉，维持原判</b>：原判事实清楚、适用法律正确。<br>②<b>依法改判、撤销或变更</b>：原判认定事实错误或适用法律错误。<br>③<b>发回重审或查清事实后改判</b>：原判基本事实不清、证据不足。<br>④<b>撤销原判，发回重审</b>：遗漏当事人或违法缺席判决等严重违反法定程序。',
+                example: {
+                    q: '🔁 一审遗漏了必须参加诉讼的第三人，二审法院怎么处理？',
+                    a: '✅ <b>撤销原判，发回重审</b>。遗漏当事人属于严重违反法定程序，二审法院不能直接加个人进来继续审，必须撤销一审判决，让一审法院重新组成合议庭审理。'
+                }
+            }, {
+                type: 'ki',
+                badge: '注意',
+                badgeClass: 'badge-core',
+                title: '二审中行政赔偿请求的处理',
+                content: '一审遗漏行政赔偿请求的：<br>①二审认为不应赔偿→判决驳回赔偿请求；<br>②二审认为应当赔偿→确认违法，可调解；调解不成→将赔偿部分<span class="kh kh-red">发回重审</span>。'
+            }],
+            quizzes: [{
+                type: 'single',
+                q: '当事人不服一审判决提起上诉的期限是？',
+                opts: ['A. 10日', 'B. 15日', 'C. 30日', 'D. 6个月'],
+                correct: 1,
+                explain: '正确答案是<b>B</b>。',
+                tip: '判决15天，裁定10天。为什么差5天？判决影响实体权利（大事情），多给点时间；裁定影响程序（小事情），时间短点。'
+            }, {
+                type: 'single',
+                q: '二审法院应当在收到上诉状之日起多长时间内作出终审判决？',
+                opts: ['A. 45日', 'B. 2个月', 'C. 3个月', 'D. 6个月'],
+                correct: 2,
+                explain: '正确答案是<b>C</b>。',
+                tip: '一审6个月，二审3个月，简易45天。二审比一审快一半，但还是给了充足时间审查。'
+            }, {
+                type: 'single',
+                q: '二审法院经审理认为原判决认定基本事实不清，应当如何处理？',
+                opts: ['A. 驳回上诉，维持原判', 'B. 直接改判', 'C. 发回重审或者查清事实后改判', 'D. 只能发回重审'],
+                correct: 2,
+                explain: '正确答案是<b>C</b>。',
+                tip: '事实不清有两个选择：要么二审自己查清楚直接改判，要么发回一审重审。但如果程序严重违法（如遗漏当事人），只能发回重审，不能自己改。'
+            }, {
+                type: 'single',
+                q: '关于行政诉讼第二审程序，以下说法正确的是？',
+                opts: ['A. 二审可以适用简易程序', 'B. 二审判决可以再次上诉', 'C. 二审可以由一名审判员独任审理', 'D. 二审判决为终审判决'],
+                correct: 3,
+                explain: '正确答案是<b>D</b>。',
+                tip: 'A错，简易只用于一审。B错，我国实行两审终审制，二审就是终审。C错，二审必须组成合议庭。D正确。'
+            }]
+        },
+
+        // ===== 模块11：特殊规则 =====
+        {
+            id: 'mod11',
+            iconClass: 'icon-blue',
+            iconEmoji: '🔰',
+            title: '十一、行政诉讼中的特殊规则',
+            subtitle: '停止执行、调解、负责人出庭、附带审查',
+            items: [{
+                type: 'ki',
+                badge: '规则1',
+                badgeClass: 'badge-core',
+                title: '行政行为停止执行',
+                content: '<b>原则</b>：诉讼期间<span class="kh kh-red">不停止</span>行政行为的执行。<br><b>例外</b>（裁定停止执行）：①被告认为需要停止；②原告或利害关系人申请+法院认为会造成难以弥补损失+停止不损害公共利益；③法院认为执行会损害重大公共利益；④法律法规规定停止。<br><b>救济</b>：对停止执行/不停止执行的裁定不服，可申请复议一次。',
+                example: {
+                    q: '🏚️ 规划局责令张三拆除违建房屋，张三起诉。诉讼期间规划局能继续拆吗？',
+                    a: '✅ <b>原则上可以继续拆</b>。但张三可以申请法院裁定停止执行——如果房子一旦拆了就不可恢复（难以弥补的损失），且停止执行不影响公共利益，法院可能裁定暂停拆除，等官司打完再说。'
+                }
+            }, {
+                type: 'ki',
+                badge: '规则2',
+                badgeClass: 'badge-num',
+                title: '调解规则（对比复议）',
+                content: '<b>行政诉讼</b>：不适用调解为原则，但<span class="kh">行政赔偿、补偿、自由裁量权</span>案件可调解（自愿、合法、不损害公共利益）。<br><b>行政复议</b>（2023修订后）：调解已成为<span class="kh kh-red">基本原则</span>，原则上所有复议案件均可调解。<br><b>区别</b>：复议调解范围更广，诉讼调解仅限于特定案件。'
+            }, {
+                type: 'ki',
+                badge: '规则3',
+                badgeClass: 'badge-num',
+                title: '行政负责人出庭应诉',
+                content: '<b>原则</b>：被诉行政机关<span class="kh kh-red">负责人应当出庭</span>（正职或副职）。<br><b>例外</b>：不能出庭应说明理由，并委托工作人员出庭。<br><b>委托</b>：负责人出庭的，可另行委托1~2名诉讼代理人。<br>俗称"<span class="kh">告官要见官</span>"。',
+                example: {
+                    q: '🏢 某公司告市环保局，开庭时环保局只派了一个律师来，局长和副局长都没来，合法吗？',
+                    a: '❌ 不合法！负责人应当出庭，不能只派律师。如果确实有正当理由不能出庭（比如生病、出差），必须向法院说明理由，并至少派工作人员出庭。律师不能替代负责人。'
+                }
+            }, {
+                type: 'ki',
+                badge: '规则4',
+                badgeClass: 'badge-num',
+                title: '规范性文件附带审查',
+                content: '在对行政行为提起诉讼时，可<span class="kh kh-red">一并请求</span>对行政行为所依据的<span class="kh">规范性文件</span>进行审查。<br><b>范围</b>：国务院部门、地方政府及其部门制定的规范性文件。<br><b>不可附带</b>：规章（不可附带审查）。<br><b>注意</b>：行政复议的附带审查范围更广（还包括授权组织制定的规范性文件）。'
+            }, {
+                type: 'ki',
+                badge: '规则5',
+                badgeClass: 'badge-num',
+                title: '与民事诉讼的衔接',
+                content: '行政诉讼中关于期间、送达、财产保全、开庭审理、执行等程序事项，本法没有规定的，<span class="kh">适用《民事诉讼法》</span>的相关规定。'
+            }],
+            quizzes: [{
+                type: 'single',
+                q: '行政诉讼期间，行政行为原则上是否停止执行？',
+                opts: ['A. 停止执行', 'B. 不停止执行', 'C. 由法院裁定', 'D. 由当事人协商'],
+                correct: 1,
+                explain: '正确答案是<b>B</b>。',
+                tip: '原则是不停止——不能因为告了官就暂停执法。否则大家都去告，行政机关就别干活了。但满足特定条件可以申请法院裁定停止。'
+            }, {
+                type: 'single',
+                q: '被诉行政机关负责人出庭应诉，这里的"负责人"是指？',
+                opts: ['A. 只指正职负责人', 'B. 正职和副职负责人', 'C. 任何工作人员', 'D. 委托的律师'],
+                correct: 1,
+                explain: '正确答案是<b>B</b>。',
+                tip: '正职（局长）和副职（副局长）都算负责人。不能只派普通工作人员或律师来"顶替"。如果确实来不了，必须说明理由。'
+            }, {
+                type: 'single',
+                q: '关于行政诉讼调解，以下说法正确的是？',
+                opts: ['A. 行政诉讼一律不适用调解', 'B. 行政诉讼适用调解是基本原则', 'C. 行政赔偿案件可以调解', 'D. 经法院同意所有案件均可调解'],
+                correct: 2,
+                explain: '正确答案是<b>C</b>。',
+                tip: 'A太绝对（赔偿、补偿、自由裁量可调），B是复议的原则（诉讼中调解不是原则），D错（涉及合法性的不能调）。只有赔偿、补偿、自由裁量权三类案件可以调解。'
+            }]
+        },
+
+        // ===== 模块12：判决类型 =====
+        {
+            id: 'mod12',
+            iconClass: 'icon-green',
+            iconEmoji: '📜',
+            title: '十二、行政诉讼判决类型',
+            subtitle: '法院怎么判？6种一审判决+4种二审判决',
+            items: [{
+                type: 'table',
+                html: `<table class="info-table"><thead><tr><th>判决类型</th><th>适用情形</th></tr></thead><tbody>
+            <tr><td><b>驳回诉讼请求</b></td><td>行政行为合法（证据确凿、适用法律正确、程序合法）；原告申请不成立</td></tr>
+            <tr><td><b>撤销判决</b></td><td>主要证据不足；适用法律错误；违反法定程序；超越职权；滥用职权；明显不当</td></tr>
+            <tr><td><b>确认违法</b></td><td>应撤销但撤销会给公共利益造成重大损害；程序轻微违法但对原告无实际影响</td></tr>
+            <tr><td><b>确认无效</b></td><td>实施主体无行政主体资格；没有依据；重大且明显违法</td></tr>
+            <tr><td><b>变更判决</b></td><td>行政处罚明显不当；其他行政行为涉及款额认定确有错误</td></tr>
+            <tr><td><b>履行判决</b></td><td>被告不履行或拖延履行法定职责，判决限期履行</td></tr></tbody></table>`
+            }, {
+                type: 'ki',
+                badge: '易错',
+                badgeClass: 'badge-core',
+                title: '判决类型辨析（高频考点）',
+                content: '<b>撤销 vs 确认违法</b>：能撤销就撤销；撤销会造成重大损害时，才"确认违法但不撤销"。<br><b>撤销 vs 变更</b>：法院一般不直接改变行政行为内容；仅在<span class="kh">行政处罚明显不当</span>或<span class="kh">款额认定确有错误</span>时可变更。<br><b>确认无效 vs 撤销</b>：确认无效针对"重大且明显违法"（如无主体资格、无依据）；一般违法用撤销。<br><b>变更判决的限制</b>：变更<span class="kh kh-red">不得加重原告义务或减损原告权益</span>（除非利害关系人同为原告且诉讼请求相反）。',
+                example: {
+                    q: '⚖️ 张三和李四互殴，责任和伤情相当。公安对张三拘留15天，对李四警告。张三起诉。法院怎么判？',
+                    a: '✅ 法院可以<b>变更</b>处罚——因为两人责任相当但处罚差距悬殊，属于"明显不当"。法院可改为双方各拘留10天。但如果李四也作为利害关系人起诉要求加重张三处罚，法院则可加重。'
+                }
+            }, {
+                type: 'ki',
+                badge: '二审',
+                badgeClass: 'badge-num',
+                title: '二审判决类型回顾',
+                content: '①<b>驳回上诉，维持原判</b><br>②<b>依法改判、撤销或变更</b><br>③<b>发回重审或查清事实后改判</b><br>④<b>撤销原判，发回重审</b>（严重违反法定程序）'
+            }, {
+                type: 'ki',
+                badge: '执行',
+                badgeClass: 'badge-core',
+                title: '行政机关拒绝履行裁判的执行措施',
+                content: '①通知银行从账户<span class="kh kh-red">划拨</span>（不是冻结！）应归还的罚款或应给付的款额；<br>②对负责人按日处<span class="kh kh-red">50~100元</span>罚款；<br>③公告拒绝履行情况；<br>④向监察机关或上一级机关提出司法建议；<br>⑤情节恶劣可对主管人员和直接责任人予以<span class="kh kh-red">司法拘留</span>；<br>⑥构成犯罪的追究刑事责任。',
+                example: {
+                    q: '💰 行政机关拒不执行法院判决，法院能冻结该机关的银行账户吗？',
+                    a: '❌ 不能<b>冻结</b>，但可以<b>划拨</b>！冻结是行政强制措施，划拨是执行措施。法院直接通知银行把钱划走就行，不用先冻着。冻结是"不准动"，划拨是"直接拿"。'
+                }
+            }],
+            quizzes: [{
+                type: 'single',
+                q: '行政行为有实施主体不具有行政主体资格等重大且明显违法情形的，法院应判决？',
+                opts: ['A. 撤销', 'B. 确认违法', 'C. 确认无效', 'D. 变更'],
+                correct: 2,
+                explain: '正确答案是<b>C</b>。',
+                tip: '无主体资格或无依据="从根上就错了"，这种属于最严重的违法，直接确认无效。一般违法（证据不足、程序违法）用撤销。无效▶撤销▶确认违法，严重程度递减。'
+            }, {
+                type: 'single',
+                q: '行政处罚明显不当的，法院可以判决？',
+                opts: ['A. 只能撤销', 'B. 只能确认违法', 'C. 变更', 'D. 驳回诉讼请求'],
+                correct: 2,
+                explain: '正确答案是<b>C</b>。',
+                tip: '"明显不当"可撤销也可变更，这是法院少有的可以直接"改"行政机关决定的权力。但仅限于处罚明显不当和款额认定错误两种情况。'
+            }, {
+                type: 'single',
+                q: '法院判决变更时，一般不得？',
+                opts: ['A. 维持原行政行为', 'B. 加重原告义务', 'C. 减轻原告义务', 'D. 确认行政行为违法'],
+                correct: 1,
+                explain: '正确答案是<b>B</b>。',
+                tip: '变更判决"禁止不利变更"——不能加重原告的义务。类似"上诉不加刑"原则。除非利害关系人也是原告且提出相反请求，才能加重。'
+            }, {
+                type: 'single',
+                q: '行政机关拒绝履行判决的，法院可对该机关负责人按日处多少罚款？',
+                opts: ['A. 10~50元', 'B. 50~100元', 'C. 100~500元', 'D. 50元以下'],
+                correct: 1,
+                explain: '正确答案是<b>B</b>。',
+                tip: '每天50到100元，不是很多但天天扣。这是司法罚款（不是行政处罚），目的是督促负责人尽快履行判决。'
+            }, {
+                type: 'multi',
+                q: '以下哪些属于行政诉讼一审判决类型？（多选）',
+                opts: ['A. 驳回诉讼请求', 'B. 撤销行政行为', 'C. 确认违法', 'D. 发回重审', 'E. 变更判决'],
+                correct: [0, 1, 2, 4],
+                multi: true,
+                explain: '正确答案是<b>A、B、C、E</b>。',
+                tip: 'D"发回重审"是二审判决类型，不是一审。一审判决：驳回、撤销、确认违法、确认无效、变更、履行。二审判决：维持、改判、发回重审。'
+            }]
+        },        // ===== 模块13：综合练习 =====
+        {
+            id: 'mod13',
+            iconClass: 'icon-red',
+            iconEmoji: '📝',
+              title: '十三、综合练习',
+            subtitle: '全部做完，行政诉讼法就通关了！',
+            items: [],
+            quizzes: (function() {
+                // ==================== 判断题30道 ====================
+                const tfQuizzes = [
+                    { type: 'tf', q: '人民法院审理行政案件，既审查行政行为的合法性，也审查其合理性。', correct: false, explain: '❌ 错误。', detail: '<b>A选项"正确"</b>：错误。根据《行政诉讼法》第六条，人民法院审理行政案件，对行政行为是否合法进行审查。法院<b>不审查合理性</b>（适当性）。<br><b>B选项"错误"</b>：正确。合理性审查是行政复议的职责（《行政复议法》第三条），行政诉讼仅审查合法性。', tip: '把法院想象成"数学老师"——只判断对错（合法不合法），不管你的解题步骤是不是最优（合理不合理）。复议机关才是"班主任"，既管对错也管方法好不好。' },
+                    { type: 'tf', q: '人民法院依法独立行使审判权，不受任何机关的监督。', correct: false, explain: '❌ 错误。', detail: '<b>A选项"正确"</b>：错误。法院独立行使审判权，不受<b>行政机关、社会团体和个人</b>的干涉，但并非不受任何监督。<br><b>B选项"错误"</b>：正确。法院受<b>人大监督</b>（向其报告工作）和<b>检察院监督</b>（抗诉权），"任何机关"的说法太绝对了。', tip: '法院像"裁判"——场上吹哨不受球员（行政机关）干扰，但裁判也要受裁判委员会（人大）和视频回放（检察院抗诉）的监督。独立≠无法无天。' },
+                    { type: 'tf', q: '行政复议的受案范围比行政诉讼更广。', correct: true, explain: '✅ 正确。', detail: '<b>A选项"正确"</b>：正确。行政复议受案范围确实更广，比如工伤认定、政府信息公开等案件在复议中明确列举，而行政诉讼法中未单独列出。<br><b>B选项"错误"</b>：错误。两者受案范围大部分重合，但复议范围更宽（《行政复议法》第十一条列举了15种情形）。', tip: '复议是"大网"，诉讼是"细网"。大网什么鱼都捞（合法+合理都审），细网只捞特定的鱼（只审合法性）。大多数案件两条路都能走，但有些只能用复议。' },
+                    { type: 'tf', q: '提起行政诉讼后，当事人还可以再申请行政复议。', correct: false, explain: '❌ 错误。', detail: '<b>A选项"正确"</b>：错误。根据程序衔接规则，提起行政诉讼后<b>不得再申请行政复议</b>。<br><b>B选项"错误"</b>：正确。司法判决具有终局性，如果允许诉讼后再复议，复议机关改变法院判决就相当于"行政权干涉司法权"，违反独立审判原则。', tip: '诉讼和复议是"单行道"——复议完还可以诉讼（15天内），但诉讼完不能回头复议。就像考试：可以先找老师复核（复议），不服再找校长（法院）；但校长判了就不能再回去找老师改。' },
+                    { type: 'tf', q: '对当场作出的行政处罚决定不服，必须先申请行政复议才能提起行政诉讼。', correct: true, explain: '✅ 正确。', detail: '<b>A选项"正确"</b>：正确。根据《行政复议法》第二十三条，对当场作出的行政处罚决定不服属于<b>复议前置</b>情形，必须先复议再诉讼。<br><b>B选项"错误"</b>：错误。当场处罚（如交警现场开罚单）事实清楚、金额小，先让上级机关内部解决，节约司法资源。', tip: '当场处罚就是"小案子"——金额小、事实清楚，不用直接闹到法院。先找处罚机关的上级"评评理"（复议），不服再告。就像班里的小纠纷先找班主任，别直接找校长。' },
+                    { type: 'tf', q: '抽象行政行为不能直接提起行政诉讼，但可以在告具体行政行为时附带请求审查。', correct: true, explain: '✅ 正确。', detail: '<b>A选项"正确"</b>：正确。根据《行政诉讼法》第五十三条，对行政行为提起诉讼时，可一并请求对规范性文件进行附带审查。<br><b>B选项"错误"</b>：错误。抽象行政行为（如政府文件）单独不可诉，但附带审查是合法的救济途径。', tip: '政府发布的文件像"菜谱"——你不能单独告菜谱，但厨师按菜谱做了一道难吃的菜（具体行为），你可以告这道菜，同时说"菜谱本身就有问题"。' },
+                    { type: 'tf', q: '行政机关对公务员的任免决定属于行政诉讼受案范围。', correct: false, explain: '❌ 错误。', detail: '<b>A选项"正确"</b>：错误。对公务员的奖惩任免属于<b>内部行政行为</b>，根据《行政诉讼法》第十三条，不在受案范围内。<br><b>B选项"错误"</b>：正确。公务员不服任免决定应向人事部门申诉或申请复核，不能走行政诉讼。', tip: '机关内部的事就像"家事"——局长提拔谁、处分谁，是单位内部管理，法院不管。你在公司被老板降职了，能去法院告老板吗？不能，这是公司内部的事。' },
+                    { type: 'tf', q: '国务院可以作为行政诉讼的被告。', correct: false, explain: '❌ 错误。', detail: '<b>A选项"正确"</b>：错误。国务院<b>不能成为行政诉讼被告</b>，对国务院部门或省级政府的复议决定不服，可向国务院申请最终裁决。<br><b>B选项"错误"</b>：正确。国务院是最高行政机关，其裁决为最终裁决，不能再诉讼。', tip: '国务院是行政体系的"天花板"——告到国务院就到头了，国务院的裁决就是"最终判决"。就像游戏里的终极BOSS，打完就通关了，没有下一关。' },
+                    { type: 'tf', q: '对海关处理的案件不服，应由中级人民法院管辖。', correct: true, explain: '✅ 正确。', detail: '<b>A选项"正确"</b>：正确。根据《行政诉讼法》第十五条，海关处理的案件<b>不论级别</b>均由中级法院一审管辖。<br><b>B选项"错误"</b>：错误。海关案件涉及进出口、关税等专业领域，中级法院审理更合适。', tip: '海关案件是"特殊VIP"——不管是大海关还是小海关，统统去中院，基层法院没资格审。因为海关案件涉及国际贸易，比较复杂。' },
+                    { type: 'tf', q: '因不动产提起的行政诉讼，由被告所在地人民法院管辖。', correct: false, explain: '❌ 错误。', detail: '<b>A选项"正确"</b>：错误。根据《行政诉讼法》第二十条，因不动产提起的诉讼，由<b>不动产所在地</b>法院专属管辖。<br><b>B选项"错误"</b>：正确。不动产案件不适用被告所在地管辖，这是专属管辖规则。', tip: '房子在哪儿，官司就在哪儿打。就像房产证登记——房子在深圳，不可能去北京办过户。不动产是"跑不掉的证据"，就地解决最方便。' },
+                    { type: 'tf', q: '限制人身自由的行政案件，原告所在地法院也有管辖权。', correct: true, explain: '✅ 正确。', detail: '<b>A选项"正确"</b>：正确。根据《行政诉讼法》第十九条，对限制人身自由的行政强制措施不服，<b>被告所在地和原告所在地</b>法院都有管辖权。<br><b>B选项"错误"</b>：错误。原告所在地包括户籍地、经常居住地、被限制人身自由地，这是保护弱者的特殊规定。', tip: '被关起来的人最可怜——让他跑到被告所在地打官司不现实。所以法律允许他在"家门口"告（户籍地、常住地、被关地），这是他作为弱者的"特权"。' },
+                    { type: 'tf', q: '经复议的案件，复议机关改变原行政行为的，原行政机关和复议机关为共同被告。', correct: false, explain: '❌ 错误。', detail: '<b>A选项"正确"</b>：错误。复议改变后，<b>仅复议机关为被告</b>（《行政诉讼法》第二十六条第二款）。<br><b>B选项"错误"</b>：正确。复议改变了原行为，原行为已被新决定替代，所以告复议机关即可。', tip: '口诀："维持共同告，改变单独告"。复议机关改变了原处罚，相当于"你做的决定你负责"，原机关就解脱了。就像二审改判了，责任在二审法院。' },
+                    { type: 'tf', q: '行政诉讼中，派出所只要以自己名义作出行政行为，就以派出所为被告。', correct: true, explain: '✅ 正确。', detail: '<b>A选项"正确"</b>：正确。在行政诉讼中，派出所只要以自己名义作出行为，<b>不管幅度越权还是种类越权</b>，都以派出所为被告。<br><b>B选项"错误"</b>：错误。这与行政复议不同——复议中种类越权告公安局，幅度越权告派出所。', tip: '行政诉讼和行政复议的派出所被告规则<b>不一样</b>！诉讼：以自己名义→告派出所。复议：罚款告派出所，拘留告公安局。这个点经常考，记死它！' },
+                    { type: 'tf', q: '行政诉讼的举证责任全部由被告承担。', correct: false, explain: '❌ 错误。', detail: '<b>A选项"正确"</b>：错误。被告承担<b>主要</b>举证责任，但不是全部。<br><b>B选项"错误"</b>：正确。原告也需提供符合起诉条件的材料，行政赔偿中还需证明损害与行为的因果关系。', tip: '"全部"二字是陷阱！被告扛大头（证明自己合法），但原告也得干点活——至少证明"我是谁、我告谁、我要告什么"。就像打官司，被告得自证清白，但原告得先证明自己有理有据。' },
+                    { type: 'tf', q: '被告在诉讼期间可以自行向原告和证人收集证据。', correct: false, explain: '❌ 错误。', detail: '<b>A选项"正确"</b>：错误。根据《行政诉讼法》第三十五条，诉讼期间被告及其代理人<b>不得自行</b>向原告、第三人和证人收集证据。<br><b>B选项"错误"</b>：正确。处罚时就应该证据齐全，事后补证属于非法证据。', tip: '你罚人家的时候证据呢？罚完了被告了才去找证据=心虚+程序违法。就像老师先给分再找扣分理由——这不是胡闹吗？处罚时必须证据确凿，事后补的一律不算。' },
+                    { type: 'tf', q: '直接提起行政诉讼的期限是自知道行政行为之日起3个月内。', correct: false, explain: '❌ 错误。', detail: '<b>A选项"正确"</b>：错误。直接起诉期限是<b>6个月</b>（《行政诉讼法》第四十六条），不是3个月。<br><b>B选项"错误"</b>：正确。复议后诉讼才是15天，直接诉讼有6个月。', tip: '直接告=6个月（半年），复议后再告=15天（半个月）。6个月是主路，15天是辅路。别把时间记短了，否则过了期法院就不理你了。' },
+                    { type: 'tf', q: '书写起诉状确有困难的，可以口头起诉。', correct: true, explain: '✅ 正确。', detail: '<b>A选项"正确"</b>：正确。根据《行政诉讼法》第五十条，书写困难的可口头起诉，由法院记录笔录。<br><b>B选项"错误"</b>：错误。口头起诉是便民原则的体现，保障不会写字的人也能打官司。', tip: '法律不能因为你不识字就把你挡在门外。不会写？法院帮你记！这就是便民——老百姓打官司的门槛不能太高。' },
+                    { type: 'tf', q: '人民法院对符合起诉条件的案件应当登记立案。', correct: true, explain: '✅ 正确。', detail: '<b>A选项"正确"</b>：正确。现在实行<b>立案登记制</b>，符合条件就登记，不用等审批。<br><b>B选项"错误"</b>：错误。以前是立案审查制，法院可以拖着不立；现在是登记制，保障了当事人的诉权。', tip: '以前法院可以"挑案子"——觉得麻烦就不立。改革后变成"登记制"：符合条件必须立，像去银行取号一样，拿到号就必须办。这是保护老百姓的诉权。' },
+                    { type: 'tf', q: '合议庭的成员人数应当为3人以上的双数。', correct: false, explain: '❌ 错误。', detail: '<b>A选项"正确"</b>：错误。合议庭人数须为<b>3人以上的单数</b>（《行政诉讼法》第六十八条）。<br><b>B选项"错误"</b>：正确。双数可能导致投票平局，单数才能确保有明确结论。', tip: '单数是为了投票不出现平局。3个人审，2:1能出结果；4个人审，2:2就僵住了。所以必须单数，不能双数。' },
+                    { type: 'tf', q: '一审普通程序的审理期限是立案之日起6个月内。', correct: true, explain: '✅ 正确。', detail: '<b>A选项"正确"</b>：正确。根据《行政诉讼法》第八十一条，一审普通程序应在立案后<b>6个月</b>内审结。<br><b>B选项"错误"</b>：错误。需要延长的须报高级法院批准。', tip: '一审6个月=半年。相比简易程序45天、二审3个月，一审时间最长——因为所有事实要从头查清楚。' },
+                    { type: 'tf', q: '简易程序可以由一名审判员独任审理。', correct: true, explain: '✅ 正确。', detail: '<b>A选项"正确"</b>：正确。简易程序可独任审理（《行政诉讼法》第八十三条），不组成合议庭。<br><b>B选项"错误"</b>：错误。普通程序必须合议庭，简易追求效率，一人即可。', tip: '简易程序=一人审，普通程序=三人以上组团审。简易就像"快餐"，一人在窗口搞定；普通就像"大餐"，需要多个厨师。' },
+                    { type: 'tf', q: '简易程序的审理期限为30日，不得延长。', correct: false, explain: '❌ 错误。', detail: '<b>A选项"正确"</b>：错误。行政诉讼简易程序审限是<b>45日</b>（《行政诉讼法》第八十三条），30日是行政复议简易的审限。<br><b>B选项"错误"</b>：正确。诉讼简易45天、复议简易30天，两个数字容易混。', tip: '诉讼45天，复议30天。复议更快，因为复议机关的效率本就应更高。简易程序没有延长机制，审不完就转普通程序。' },
+                    { type: 'tf', q: '当事人不服一审判决的上诉期限为10日。', correct: false, explain: '❌ 错误。', detail: '<b>A选项"正确"</b>：错误。不服判决的上诉期是<b>15日</b>，不服裁定的上诉期才是<b>10日</b>（《行政诉讼法》第八十五条）。<br><b>B选项"错误"</b>：正确。判决影响实体权利，给更长考虑时间。', tip: '判决=15天，裁定=10天。判决是"大事情"（判你输了），多给5天考虑；裁定是"小事情"（程序问题），10天够了。' },
+                    { type: 'tf', q: '二审判决为终审判决，当事人不得再上诉。', correct: true, explain: '✅ 正确。', detail: '<b>A选项"正确"</b>：正确。我国实行<b>两审终审制</b>，二审判决即终审，不得上诉。<br><b>B选项"错误"</b>：错误。不服只能通过再审（审判监督程序）寻求救济，但再审不是必然启动的。', tip: '一审打完不服→二审，二审打完就结束。两审终审，没有三审。不服只能"申诉"启动再审，但那不是常规程序。' },
+                    { type: 'tf', q: '行政诉讼一律不适用调解。', correct: false, explain: '❌ 错误。', detail: '<b>A选项"正确"</b>：错误。并非一律不适用调解，<b>行政赔偿、补偿、自由裁量权</b>案件可调解（《行政诉讼法》第六十条）。<br><b>B选项"错误"</b>：正确。涉及行政行为合法性的案件不能调解——合法就是合法，违法就是违法。', tip: '合法性不能商量——你违法了就是违法了，不能"调解一下少罚点"。但赔多少钱可以商量（赔偿案件），给多少补偿可以谈（补偿案件）。就像交通肇事了，事故责任不能商量，但赔偿金额可以谈。' },
+                    { type: 'tf', q: '被诉行政机关负责人应当出庭应诉。', correct: true, explain: '✅ 正确。', detail: '<b>A选项"正确"</b>：正确。根据《行政诉讼法》第三条，被诉行政机关<b>负责人应当出庭</b>（正职或副职）。<br><b>B选项"错误"</b>：错误。不能出庭需说明理由并委托工作人员。', tip: '"告官要见官"——以前告政府只能见到律师，现在局长副局长必须亲自来。这是为了让他们"当面听听老百姓的苦"。来不了得请假说明理由。' },
+                    { type: 'tf', q: '人民法院判决变更时，可以加重原告的义务。', correct: false, explain: '❌ 错误。', detail: '<b>A选项"正确"</b>：错误。变更判决<b>一般不得加重原告义务</b>（禁止不利变更原则）。<br><b>B选项"错误"</b>：正确。除非利害关系人同为原告且诉讼请求相反（如受害人也起诉要求加重）。', tip: '类似"上诉不加刑"——你去告官，法院不能让你"越告越惨"。否则谁还敢告？但有一个例外：如果被害人也告了要求加重处罚，法院可以加重。' },
+                    { type: 'tf', q: '行政行为有实施主体不具有行政主体资格等重大且明显违法情形的，应判决撤销。', correct: false, explain: '❌ 错误。', detail: '<b>A选项"正确"</b>：错误。这种最严重违法应判决<b>确认无效</b>（《行政诉讼法》第七十五条），不是撤销。<br><b>B选项"错误"</b>：正确。无效=从根上就错了，自始无效；撤销=处理有问题，纠正即可。', tip: '无效▶撤销▶确认违法，严重程度递减。无资格=假警察罚你，这个处罚从根上就是废纸（无效）。一般违法=真警察但程序错了，纠正就行（撤销）。别搞混！' },
+                    { type: 'tf', q: '人民法院公开审理行政案件，但一律不公开宣判。', correct: false, explain: '❌ 错误。', detail: '<b>A选项"正确"</b>：错误。宣判<b>一律公开</b>，审理才可能有例外（涉密涉私不公开）。<br><b>B选项"错误"</b>：正确。不管审理是否公开，宣判必须公开。', tip: '审理可以不公开（涉密案件关起门审），但判决结果必须公开宣布。就像高考阅卷可以秘密进行，但成绩必须公布。' },
+                    { type: 'tf', q: '行政机关拒绝履行判决的，法院可对该机关负责人按日处50至100元罚款。', correct: true, explain: '✅ 正确。', detail: '<b>A选项"正确"</b>：正确。根据《行政诉讼法》第九十六条，对拒绝履行判决的行政机关负责人按日处50~100元罚款。<br><b>B选项"错误"</b>：错误。这是司法罚款，不是行政处罚，目的是督促尽快履行。', tip: '每天50~100元，不算多，但架不住天天扣。一个月就是1500~3000元，两个月就是3000~6000元。这是"温柔的压力"，逼着负责人赶紧执行判决。' }
+                ];
+
+                // ==================== 单选题20道 ====================
+                const singleQuizzes = [
+                    { type: 'single', q: '行政复议机关在法定期限内未作出复议决定，当事人起诉原行政行为的，被告是？', opts: ['A. 复议机关', 'B. 原行政机关', 'C. 原行政机关和复议机关为共同被告', 'D. 原告可选择原行政机关或复议机关'], correct: 1, explain: '正确答案是<b>B</b>。', detail: '<b>A选项</b>：错误。告原行为时复议机关不是被告，复议机关只有在告"不作为"时才可能成为被告。<br><b>B选项</b>：正确。复议不作为时，告原行为→原机关为被告（《行政诉讼法》第二十六条）。<br><b>C选项</b>：错误。共同被告仅适用于复议维持，不适用于复议不作为。<br><b>D选项</b>：错误。这是对规则的误解——选择是针对"告什么行为"，不是随意选被告。告原行为则被告为原机关，告不作为则被告为复议机关。', tip: '复议机关"装死"不答复？你有两个选择：①告原来的处罚→被告是原机关；②告复议机关"不作为"→被告是复议机关。告哪个行为，对应的机关就是被告。选好了就不能改。' },
+                    { type: 'single', q: '市建设委员会印发通告，责令特定50家住户限期拆迁。该通告属于？', opts: ['A. 抽象行政行为', 'B. 具体行政行为', 'C. 内部行政行为', 'D. 行政指导'], correct: 1, explain: '正确答案是<b>B</b>。', detail: '<b>A选项</b>：错误。虽然形式是"通告"（通常针对不特定对象），但本案对象是<b>特定的50家住户</b>，不是全市人民。<br><b>B选项</b>：正确。对象特定+直接影响权利义务=具体行政行为，可诉。<br><b>C选项</b>：错误。该通告对外发布，非机关内部事务。<br><b>D选项</b>：错误。行政指导是建议性的，不具强制力；该通告责令拆迁具有强制性。', tip: '别被"通告"这个名字骗了！看实质不要看形式——针对特定50家、不拆就强拆，这就是具体行政行为。就像老师点名让第一排5个同学站起来，虽然用喊的（通告形式），但对象是特定的。' },
+                    { type: 'single', q: '因不动产提起的行政诉讼，最长起诉期限是？', opts: ['A. 2年', 'B. 5年', 'C. 10年', 'D. 20年'], correct: 3, explain: '正确答案是<b>D</b>。', detail: '<b>A选项</b>：错误。2年是一般行政处罚的追究时效，不是起诉期限。<br><b>B选项</b>：错误。5年是其他案件（非不动产）的最长起诉期限（从行政行为作出之日起算）。<br><b>C选项</b>：错误。没有这个期限规定。<br><b>D选项</b>：正确。不动产最长20年（《行政诉讼法》第四十六条），从行政行为作出之日起算，不论当事人是否知道。', tip: '不动产20年，其他5年。为什么不动产特别长？因为房子是"一辈子的事"，可能当事人出国20年回来发现房子被拆了，总得给个告的机会。20年=一代人，足够你发现了。' },
+                    { type: 'single', q: '被告应当在收到起诉状副本后多少日内提交证据？', opts: ['A. 5日', 'B. 10日', 'C. 15日', 'D. 30日'], correct: 2, explain: '正确答案是<b>C</b>。', detail: '<b>A选项</b>：错误。5日是法院发送起诉状副本的期限，不是被告提交证据的期限。<br><b>B选项</b>：错误。没有这个期限规定。<br><b>C选项</b>：正确。被告收到起诉状副本后15日内提交证据和答辩状（《行政诉讼法》第六十七条）。<br><b>D选项</b>：错误。30日是其他程序中的期限（如复议申请期限）。', tip: '被告有15天准备证据，过期不交=没证据=等着输。这15天是硬杠杠，行政机关必须重视。法院发诉状5天，被告交证据15天，别记反了。' },
+                    { type: 'single', q: '关于行政诉讼证据，以下说法正确的是？', opts: ['A. 原告承担全部举证责任', 'B. 被告承担主要举证责任', 'C. 法院承担举证责任', 'D. 谁主张谁举证'], correct: 1, explain: '正确答案是<b>B</b>。', detail: '<b>A选项</b>：错误。被告承担主要举证责任，原告也需提供起诉条件材料。<br><b>B选项</b>：正确。行政诉讼举证责任"主要由被告承担"（《行政诉讼法》第三十四条）。<br><b>C选项</b>：错误。法院不承担举证责任，法院是裁判者。<br><b>D选项</b>：错误。"谁主张谁举证"是民事诉讼原则，行政诉讼适用"被告举证为主"。', tip: '行政诉讼和民事诉讼不一样！民事诉讼是"谁告谁举证"，行政诉讼是"官举证"。因为官有权有势，老百姓举不出那么多证据，所以法律把举证责任甩给官。' },
+                    { type: 'single', q: '14岁的刘某因违法经营被罚款，不服欲起诉。应由谁代为提起？', opts: ['A. 刘某本人', 'B. 刘某的父母', 'C. 刘某可任意委托成年人', 'D. 法院指定的人'], correct: 1, explain: '正确答案是<b>B</b>。', detail: '<b>A选项</b>：错误。14岁是限制行为能力人，不能独立进行诉讼。<br><b>B选项</b>：正确。父母是法定代理人，代为诉讼（与复议规则一致）。<br><b>C选项</b>：错误。不是任意委托，必须由法定代理人代理。<br><b>D选项</b>：错误。父母互相推诿时法院才指定，正常情况下由父母代理。', tip: '14岁=未成年人，打官司需要家长（父母）代理。就像小孩看病需要家长签字一样，法律上小孩不能独立"签字画押"。如果爸妈互相推，法院指定一个。' },
+                    { type: 'single', q: '人民法院在开庭前几日应用传票传唤当事人？', opts: ['A. 3日', 'B. 5日', 'C. 7日', 'D. 10日'], correct: 0, explain: '正确答案是<b>A</b>。', detail: '<b>A选项</b>：正确。开庭前3日用传票传唤当事人（原告、被告、第三人）。<br><b>B选项</b>：错误。5日是法院发送诉状副本的期限。<br><b>C选项</b>：错误。7日是交换证据等其他事项的期限。<br><b>D选项</b>：错误。没有这个开庭通知期限。', tip: '提前3天通知，给足准备时间。当事人用传票（正式），证人等非当事人用通知书（相对随意）。传票比通知书正式。' },
+                    { type: 'single', q: '二审法院经审理认为原判决遗漏当事人的，应如何处理？', opts: ['A. 驳回上诉', 'B. 直接追加当事人后改判', 'C. 撤销原判，发回重审', 'D. 裁定补正'], correct: 2, explain: '正确答案是<b>C</b>。', detail: '<b>A选项</b>：错误。遗漏当事人是严重程序违法，不能简单驳回。<br><b>B选项</b>：错误。二审不能自己追加当事人继续审，这会剥夺被追加人的上诉权。<br><b>C选项</b>：正确。严重违反法定程序（遗漏当事人）→撤销原判、发回重审（《行政诉讼法》第八十九条）。<br><b>D选项</b>：错误。遗漏当事人不是小瑕疵，不能用裁定补正。', tip: '一审漏了人=程序出错。二审不能说"我帮你加上去继续审"——这样被加进来的人就少了一级审理（没经历一审直接二审），不公平。所以退回一审重来。' },
+                    { type: 'single', q: '行政赔偿诉讼与其他行政诉讼的最大区别在于？', opts: ['A. 复议前置', 'B. 可以调解', 'C. 合议制', 'D. 审限不同'], correct: 1, explain: '正确答案是<b>B</b>。', detail: '<b>A选项</b>：错误。行政赔偿不是复议前置案件，可直接诉讼。<br><b>B选项</b>：正确。一般行政诉讼不适用调解，但行政赔偿案件可以调解（《行政诉讼法》第六十条）。<br><b>C选项</b>：错误。合议制是审判组织形式，赔偿诉讼和其他行政诉讼都用。<br><b>D选项</b>：错误。审限与其他行政诉讼相同。', tip: '赔多少钱可以商量（调解），但行政行为合不合法不能商量。就像撞车了：责任认定不能商量（红灯就是你全责），但赔多少钱可以谈（协商赔偿金额）。' },
+                    { type: 'single', q: '当事人不服不予立案裁定的，可在几日内向上一级法院上诉？', opts: ['A. 5日', 'B. 10日', 'C. 15日', 'D. 30日'], correct: 1, explain: '正确答案是<b>B</b>。', detail: '<b>A选项</b>：错误。5日是法院发送诉状副本的期限。<br><b>B选项</b>：正确。对程序性裁定（不予立案）的上诉期是10日（《行政诉讼法》第八十五条）。<br><b>C选项</b>：错误。15日是对实体判决的上诉期。<br><b>D选项</b>：错误。没有这个期限。', tip: '裁定=程序问题，上诉10天；判决=实体问题，上诉15天。程序简单时间短，实体复杂时间长。' },
+                    { type: 'single', q: '以下哪项不属于行政诉讼受案范围？', opts: ['A. 对吊销营业执照不服', 'B. 对行政拘留不服', 'C. 对刑事拘留不服', 'D. 对征收补偿决定不服'], correct: 2, explain: '正确答案是<b>C</b>。', detail: '<b>A选项</b>：属于。吊销执照是行政处罚，可诉。<br><b>B选项</b>：属于。行政拘留是行政处罚，可诉。<br><b>C选项</b>：不属于。刑事拘留是依据刑事诉讼法的刑事司法行为，不可诉（《行政诉讼法解释》第一条）。<br><b>D选项</b>：属于。征收补偿决定是具体行政行为，可诉。', tip: '同样都是公安机关干的，看依据什么法！依据行政法（如治安处罚法）→可诉；依据刑事诉讼法（如刑拘）→不可诉。区分标准是"戴什么帽子"——行政的帽子可告，刑事的帽子不可告。' },
+                    { type: 'single', q: '中级人民法院管辖的第一审行政案件不包括？', opts: ['A. 海关处理的案件', 'B. 被告为国务院部门的案件', 'C. 被告为县级政府工作部门的案件', 'D. 本辖区内重大复杂案件'], correct: 2, explain: '正确答案是<b>C</b>。', detail: '<b>A选项</b>：属于。海关案件由中院管辖（《行政诉讼法》第十五条）。<br><b>B选项</b>：属于。被告是国务院部门→中院管辖。<br><b>C选项</b>：不属于。县级政府工作部门（如县公安局）→基层法院管辖。只有县级以上政府本身才去中院。<br><b>D选项</b>：属于。本辖区重大复杂案件归中院。', tip: '"政府"和"政府部门"不一样！告县政府→中院，告县公安局→基层法院。政府部门级别再高（如公安厅）也去基层，除非是国务院部门（公安部）才去中院。' },
+                    { type: 'single', q: '根据《行政诉讼法》，人民法院判决变更不得？', opts: ['A. 确认行政行为违法', 'B. 加重原告的义务或减损原告的权益', 'C. 维持原行政行为', 'D. 责令被告履行'], correct: 1, explain: '正确答案是<b>B</b>。', detail: '<b>A选项</b>：可以。确认违法是独立的判决类型。<br><b>B选项</b>：正确。变更判决一般不得加重原告义务（禁止不利变更），除非利害关系人同为原告且请求相反。<br><b>C选项</b>：可以。驳回诉讼请求相当于"维持"效果。<br><b>D选项</b>：可以。责令履行是另一种判决类型。', tip: '"上诉不加刑"的行政版——法院改判不能让你更惨。否则谁还敢告？但如果受害人也告了要求加重处罚，法院可以加重。这是唯一的例外。' },
+                    { type: 'single', q: '关于行政诉讼简易程序，以下说法错误的是？', opts: ['A. 仅适用于第一审案件', 'B. 审理期限为45日', 'C. 可延长15天', 'D. 可由一名审判员独任审理'], correct: 2, explain: '正确答案是<b>C</b>。', detail: '<b>A选项</b>：正确。简易程序仅适用于一审（二审、再审、发回重审不适用）。<br><b>B选项</b>：正确。简易审限45天。<br><b>C选项</b>：错误。简易程序<b>无延长机制</b>，审不完转普通程序。<br><b>D选项</b>：正确。简易程序独任审理。', tip: '简易程序45天必须搞定，搞不定就转普通程序（6个月重新算）。没有"延期"一说，因为简易就是追求快，延期就违背本意了。' },
+                    { type: 'single', q: '行政机关拒绝履行判决，法院可采取的措施不包括？', opts: ['A. 通知银行划拨款项', 'B. 对负责人按日处罚款', 'C. 冻结行政机关账户', 'D. 公告拒绝履行情况'], correct: 2, explain: '正确答案是<b>C</b>。', detail: '<b>A选项</b>：包括。法院可通知银行划拨款项（《行政诉讼法》第九十六条）。<br><b>B选项</b>：包括。对负责人按日处50~100元罚款。<br><b>C选项</b>：不包括。执行措施是<b>划拨</b>而非<b>冻结</b>。冻结是强制措施，划拨是执行措施，直接划走即可。<br><b>D选项</b>：包括。可将拒绝履行情况予以公告。', tip: '划拨=直接拿钱走，冻结=暂时不准动。执行阶段直接划拨，不需要先冻着。就像讨债：法院直接扣工资，不需要先冻结你的卡再扣。一步到位。' },
+                    { type: 'single', q: '行政复议与行政诉讼在审查范围上的核心区别是？', opts: ['A. 复议审查合法性，诉讼审查合理性', 'B. 复议审查合法性和合理性，诉讼仅审查合法性', 'C. 两者审查范围完全相同', 'D. 复议仅审查合理性，诉讼仅审查合法性'], correct: 1, explain: '正确答案是<b>B</b>。', detail: '<b>A选项</b>：错误。说反了——复议才管合理性。<br><b>B选项</b>：正确。复议=合法+合理（双审），诉讼=仅合法（单审）。<br><b>C选项</b>：错误。两者审查范围不同。<br><b>D选项</b>：错误。复议也审查合法性，不是仅审查合理性。', tip: '复议是"全科医生"（合法+合理都看），法院是"专科医生"（只看合法）。复议管得更宽，因为复议机关是上级，更懂行政事务。' },
+                    { type: 'single', q: '第一审普通程序的审理期限，需延长时应由谁批准？', opts: ['A. 本院院长', 'B. 上一级法院', 'C. 高级人民法院', 'D. 最高人民法院'], correct: 2, explain: '正确答案是<b>C</b>。', detail: '<b>A选项</b>：错误。本院院长无权批准延长审限。<br><b>B选项</b>：错误。上一级法院（中级）只能备案，无权批准。<br><b>C选项</b>：正确。基层和中级法院审理的案件延长审限须报高级法院批准（《行政诉讼法》第八十一条）。<br><b>D选项</b>：错误。高级法院自己审理的案件延长才需最高法院批准。', tip: '基层和中级法院没资格自己延长——必须找"省里"（高级法院）批。中级法院只有"知情权"（备案），没有"决定权"。四级法院只有高级和最高级有权批延长。' },
+                    { type: 'single', q: '原告向两个以上有管辖权的法院起诉的，由哪个法院管辖？', opts: ['A. 原告选择', 'B. 被告选择', 'C. 最先立案的法院', 'D. 最先收到起诉状的法院'], correct: 2, explain: '正确答案是<b>C</b>。', detail: '<b>A选项</b>：错误。原告可以选择一个法院起诉，但如果向多个法院起诉，由最先立案的管辖。<br><b>B选项</b>：错误。被告无权选择管辖法院。<br><b>C选项</b>：正确。最先立案的法院管辖（《行政诉讼法》第二十一条）。<br><b>D选项</b>：错误。"立案"不等于"收到起诉状"，立案才是正式受理。', tip: '谁先立案谁管辖，不是谁先收到起诉状。立案=正式受理，收到起诉状只是初步接触。就像排队：谁先取号（立案）谁先办，不是谁先进门（递状子）谁先办。' },
+                    { type: 'single', q: '诉讼期间，行政行为的执行原则是？', opts: ['A. 停止执行', 'B. 不停止执行', 'C. 由法院决定', 'D. 由当事人协商'], correct: 1, explain: '正确答案是<b>B</b>。', detail: '<b>A选项</b>：错误。停止执行是例外，不是原则。<br><b>B选项</b>：正确。诉讼期间不停止行政行为的执行（《行政诉讼法》第五十六条）。<br><b>C选项</b>：错误。法院裁定停止执行需要满足特定条件。<br><b>D选项</b>：错误。当事人不能协商决定是否停止执行。', tip: '原则上不停止——不能因为告了官就暂停执法。否则人人都去告，行政机关还怎么干活？但有例外：被告自己觉得该停、法院裁定该停、法律规定该停。' },
+                    { type: 'single', q: '行政复议决定的类型与行政诉讼判决类型相比？', opts: ['A. 完全不同', 'B. 两者基本相似', 'C. 复议类型更多', 'D. 诉讼类型更多'], correct: 1, explain: '正确答案是<b>B</b>。', detail: '<b>A选项</b>：错误。两者高度相似，并非完全不同。<br><b>B选项</b>：正确。复议决定和诉讼判决基本相似——都有维持/驳回、撤销、变更、确认违法等。<br><b>C选项</b>：错误。类型数量大致相当。<br><b>D选项</b>：错误。类型数量大致相当。', tip: '复议和诉讼的判决类型"长得像双胞胎"——都有维持（诉讼叫"驳回诉讼请求"）、撤销、变更、确认违法。最大的区别：复议可以直接"变更"的范围更广，诉讼变更仅限于"明显不当"和"款额认定错误"。' }
+                ];
+
+                // ==================== 多选题10道 ====================
+                const multiQuizzes = [
+                    { type: 'multi', q: '以下哪些属于行政诉讼的基本原则？（多选）', opts: ['A. 合法性审查原则', 'B. 合理性审查原则', 'C. 独立审判原则', 'D. 辩论原则', 'E. 当事人法律地位平等原则'], correct: [0, 2, 3, 4], multi: true, explain: '正确答案是<b>A、C、D、E</b>。', detail: '<b>A选项</b>：正确。合法性审查是行政诉讼最核心的原则（《行政诉讼法》第六条）。<br><b>B选项</b>：错误。合理性审查是行政复议的原则，行政诉讼仅审查合法性。<br><b>C选项</b>：正确。法院独立行使审判权（《行政诉讼法》第四条）。<br><b>D选项</b>：正确。当事人有辩论权（《行政诉讼法》第十条）。<br><b>E选项</b>：正确。诉讼中双方地位平等（《行政诉讼法》第八条）。', tip: '记住B是"卧底"——合理性审查是复议的事，不是诉讼的。法院只管"合不合法"，合不合理找复议。其他四个都是诉讼的基本原则。' },
+                    { type: 'multi', q: '以下哪些属于不可提起行政诉讼的范围？（多选）', opts: ['A. 国防外交等国家行为', 'B. 行政法规、规章', 'C. 行政机关对工作人员的奖惩决定', 'D. 公安机关的刑事拘留', 'E. 行政机关不履行法定职责'], correct: [0, 1, 2, 3], multi: true, explain: '正确答案是<b>A、B、C、D</b>。', detail: '<b>A选项</b>：不可诉。国家行为（国防、外交）不可诉（《行政诉讼法》第十三条）。<br><b>B选项</b>：不可诉。抽象行政行为不可直接诉，只能附带审查。<br><b>C选项</b>：不可诉。内部行政行为不可诉。<br><b>D选项</b>：不可诉。刑事司法行为不可诉。<br><b>E选项</b>：可诉。不履行法定职责属于行政不作为，是可诉的。', tip: 'E是"卧底"——不作为是可诉的！如果你申请保护但公安不出警，这属于不履责，可以告。其他四个都是不可诉的"禁区"。' },
+                    { type: 'multi', q: '中级人民法院管辖的第一审行政案件包括？（多选）', opts: ['A. 对国务院部门提起诉讼', 'B. 对县级以上地方政府提起诉讼', 'C. 海关处理的案件', 'D. 本辖区内重大复杂案件', 'E. 对公安厅提起诉讼'], correct: [0, 1, 2, 3], multi: true, explain: '正确答案是<b>A、B、C、D</b>。', detail: '<b>A选项</b>：正确。被告为国务院部门→中院（《行政诉讼法》第十五条）。<br><b>B选项</b>：正确。被告为县级以上政府→中院。<br><b>C选项</b>：正确。海关案件不论级别→中院。<br><b>D选项</b>：正确。本辖区重大复杂案件→中院。<br><b>E选项</b>：错误。公安厅是"省级部门"而非"国务院部门"，去基层法院。', tip: 'E公安厅是陷阱！省级部门≠国务院部门。只有"公安部"这种国务院的部门才去中院，省里的部门（公安厅）去基层。' },
+                    { type: 'multi', q: '关于行政诉讼被告的确定，以下说法正确的有？（多选）', opts: ['A. 复议维持的，原机关和复议机关为共同被告', 'B. 复议改变的，复议机关为被告', 'C. 复议不作为的，原告可选择原机关或复议机关', 'D. 行政机关委托的组织作出行为的，受委托组织为被告', 'E. 行政机关被撤销的，继续行使其职权的机关为被告'], correct: [0, 1, 2, 4], multi: true, explain: '正确答案是<b>A、B、C、E</b>。', detail: '<b>A选项</b>：正确。复议维持→共同被告（《行政诉讼法》第二十六条）。<br><b>B选项</b>：正确。复议改变→复议机关单独为被告。<br><b>C选项</b>：正确。复议不作为→选择告（看告什么行为）。<br><b>D选项</b>：错误。委托的被告是<b>委托机关</b>，受托组织不具备行政主体资格。<br><b>E选项</b>：正确。机关被撤销→继续行使职权的机关为被告。', tip: 'D是陷阱！受委托组织不能当被告，因为委托=借名办事，责任由委托机关担。就像你帮朋友跑腿买东西，东西有问题，商家找的是你朋友（委托方）不是你（受托方）。' },
+                    { type: 'multi', q: '行政诉讼中，被告及其诉讼代理人不得自行向哪些人收集证据？（多选）', opts: ['A. 原告', 'B. 第三人', 'C. 证人', 'D. 下级机关', 'E. 人民法院'], correct: [0, 1, 2], multi: true, explain: '正确答案是<b>A、B、C</b>。', detail: '<b>A选项</b>：正确。禁止向原告收集证据（《行政诉讼法》第三十五条）。<br><b>B选项</b>：正确。禁止向第三人收集证据。<br><b>C选项</b>：正确。禁止向证人收集证据。<br><b>D选项</b>：错误。下级机关不在禁止范围内。<br><b>E选项</b>：错误。法院不在禁止范围内。', tip: '禁止向"诉讼参与人"收集——原告、第三人、证人都是诉讼当事人或参与人，事后找他们补证据=程序违法。但找自己下级机关或法院是可以的，因为不是针对案件当事人。' },
+                    { type: 'multi', q: '以下哪些情形下，行政行为应判决确认无效？（多选）', opts: ['A. 实施主体不具有行政主体资格', 'B. 行政行为没有依据', 'C. 行政行为程序轻微违法', 'D. 行政行为重大且明显违法', 'E. 行政处罚明显不当'], correct: [0, 1, 3], multi: true, explain: '正确答案是<b>A、B、D</b>。', detail: '<b>A选项</b>：正确。无主体资格→确认无效（《行政诉讼法》第七十五条）。<br><b>B选项</b>：正确。无依据→确认无效。<br><b>C选项</b>：错误。程序轻微违法→确认违法但不撤销。<br><b>D选项</b>：正确。重大且明显违法→确认无效。<br><b>E选项</b>：错误。明显不当→可撤销或变更，不是确认无效。', tip: '无效是最严重的——"假警察"罚你、"没有法条依据"就罚你，这些都是"从根上烂了"的处罚，直接无效。一般违法（程序错了、证据不足）用撤销，不够无效的级别。' },
+                    { type: 'multi', q: '关于行政诉讼简易程序，以下说法正确的有？（多选）', opts: ['A. 仅适用于第一审案件', 'B. 可由一名审判员独任审理', 'C. 审理期限为45日', 'D. 可适用于发回重审案件', 'E. 当事人各方同意可适用'], correct: [0, 1, 2, 4], multi: true, explain: '正确答案是<b>A、B、C、E</b>。', detail: '<b>A选项</b>：正确。简易程序仅适用于一审。<br><b>B选项</b>：正确。简易独任审理（《行政诉讼法》第八十三条）。<br><b>C选项</b>：正确。审限45天。<br><b>D选项</b>：错误。发回重审一律不适用简易。<br><b>E选项</b>：正确。当事人各方同意可适用简易（意定简易）。', tip: 'D发回重审是"翻案重审"，本来就复杂，不能用简易。其他都是简易程序的正确特征。记住：简易=一审专用、一人审、45天、可协商适用。' },
+                    { type: 'multi', q: '二审法院在哪些情形下可以撤销原判、发回重审？（多选）', opts: ['A. 原判决遗漏当事人', 'B. 违法缺席判决', 'C. 原判决认定事实错误', 'D. 严重违反法定程序', 'E. 原判决适用法律错误'], correct: [0, 1, 3], multi: true, explain: '正确答案是<b>A、B、D</b>。', detail: '<b>A选项</b>：正确。遗漏当事人是严重程序违法→发回重审（《行政诉讼法》第八十九条）。<br><b>B选项</b>：正确。违法缺席判决→发回重审。<br><b>C选项</b>：错误。事实错误→二审可查清后改判，不一定发回。<br><b>D选项</b>：正确。严重违反法定程序→发回重审。<br><b>E选项</b>：错误。法律适用错误→二审直接改判即可，不需要发回。', tip: '发回重审只针对"程序问题"（漏人、违法缺席等），"事实和法律问题"二审自己改就行。逻辑：程序错了必须重来，事实法律错了二审纠正即可。' },
+                    { type: 'multi', q: '行政机关拒绝履行裁判时，法院可采取的措施有？（多选）', opts: ['A. 通知银行划拨款项', 'B. 对负责人按日处罚款', 'C. 公告拒绝履行情况', 'D. 向监察机关提出司法建议', 'E. 冻结行政机关账户'], correct: [0, 1, 2, 3], multi: true, explain: '正确答案是<b>A、B、C、D</b>。', detail: '<b>A选项</b>：正确。划拨款项是执行措施（《行政诉讼法》第九十六条）。<br><b>B选项</b>：正确。对负责人按日处罚款50~100元。<br><b>C选项</b>：正确。公告是舆论压力。<br><b>D选项</b>：正确。司法建议是正式监督。<br><b>E选项</b>：错误。执行措施是<b>划拨</b>不是冻结，冻结是强制措施不是执行措施。', tip: 'E是"冻"不是"拨"——一个字之差天壤之别。冻结只是"先冻住"，划拨才是"直接拿走"。执行阶段直接划拨干净利落，不需要先冻着。' },
+                    { type: 'multi', q: '以下属于复议前置（必须先复议才能诉讼）的情形有？（多选）', opts: ['A. 对当场作出的行政处罚决定不服', 'B. 对自然资源所有权或使用权决定不服', 'C. 认为行政机关未履行法定职责', 'D. 政府信息公开申请被拒绝', 'E. 对行政拘留不服'], correct: [0, 1, 2, 3], multi: true, explain: '正确答案是<b>A、B、C、D</b>。', detail: '<b>A选项</b>：属于。当场处罚→复议前置（《行政复议法》第二十三条）。<br><b>B选项</b>：属于。自然资源权属→复议前置。<br><b>C选项</b>：属于。认为未履责→复议前置。<br><b>D选项</b>：属于。信息公开被拒→复议前置。<br><b>E选项</b>：不属于。行政拘留不是复议前置，可直接诉讼。', tip: 'E行政拘留虽然严重，但不是复议前置，可以直接告。为什么？因为拘留涉及人身自由，需要最快获得司法救济。口诀："当场处罚、自然资源、不履责、信息不公开"这四个必须先复议。' }
+                ];
+
+                // 转换判断题为统一格式
+                const tfConverted = tfQuizzes.map((q, i) => ({
+                    ...q,
+                    type: 'single',
+                    opts: ['✅ 正确', '❌ 错误'],
+                    correct: q.correct ? 0 : 1,
+                    isTF: true,
+                    tfId: 'tf' + (i + 1)
+                }));
+
+                return [...tfConverted, ...singleQuizzes, ...multiQuizzes];
+            })()
+        }];
+
+
+
+
+
+
+
+        // ==================== 渲染引擎 ====================
+        function renderAll() {
+            const main = document.getElementById('mainContent');
+            let html = '';
+            knowledgeData.forEach(mod => {
+                html +=
+                    `<div class="card" id="${mod.id}"><div class="section-title"><div class="icon ${mod.iconClass}">${mod.iconEmoji}</div>${mod.title}</div>`;
+                if (mod.subtitle) html += `<div class="subtitle">${mod.subtitle}</div>`;
+                if (mod.items && mod.items.length > 0) {
+                    html += '<div class="ki-grid">';
+                    mod.items.forEach(item => {
+                        if (item.type === 'table') html += item.html;
+                        else if (item.type === 'ki') html += renderKI(item);
+                    });
+                    html += '</div>';
+                }
+                if (mod.quizzes && mod.quizzes.length > 0) {
+                    mod.quizzes.forEach((q, qi) => {
+                        html += renderQuiz(q, mod.id + '-q' + qi);
+                    });
+                }
+                html += '</div>';
+            });
+            main.innerHTML = html;
+            generateTOC();
+        }
+
+        function generateTOC() {
+            var toc = document.getElementById('toc');
+            if (!toc) return;
+            // 保留标题栏
+            var titleHtml = '<div class="toc-title">📑 行政诉讼法目录</div>';
+            var links = '';
+            knowledgeData.forEach(function(mod) {
+                links += '<a href="#' + mod.id + '">' + mod.title + '</a>';
+            });
+            toc.innerHTML = titleHtml + links;
+            // 重新绑定点击事件（移动端点击目录项后自动关闭侧栏）
+            var tocLinks = document.querySelectorAll('.toc a');
+            for (var i = 0; i < tocLinks.length; i++) {
+                tocLinks[i].addEventListener('click', function() {
+                    if (window.innerWidth <= 768) closeToc();
+                });
+            }
+        }
+
+        function renderKI(item) {
+            let h = '<div class="ki-item">';
+            h +=
+                `<div class="ki-title-row">${item.badge ? `<span class="badge ${item.badgeClass}">${item.badge}</span>` : ''}${item.title}</div>`;
+            h += `<div class="ki-content">${item.content}</div>`;
+            if (item.extra) h +=
+                `<div style="margin-top:6px;color:#5c5347;font-size:0.88rem;">${item.extra}</div>`;
+            if (item.example) {
+                h +=
+                    `<div class="example-block"><div class="ex-label">📖 生动案例</div><div class="ex-q">${item.example.q}</div><div class="ex-a">${item.example.a}</div></div>`;
+            }
+            h += '</div>';
+            return h;
+        }
+
+                  function renderQuiz(q, qid) {
+            const qTypeLabel = q.isTF ? '【判断题】' : (q.multi ? '【多选题】' : '【单选题】');
+            let h = '<div class="quiz-wrap" data-qid="' + qid + '">';
+            h += '<div class="q-type">📝 ' + qTypeLabel + '</div>';
+            if (q.isTF) {
+                h += '<div style="font-size:0.78rem;color:#b7950b;margin-bottom:2px;">第' + q.tfId + '题</div>';
+            }
+            h += '<div class="q-text">' + q.q + '</div>';
+            h += '<ul class="opt-list">';
+            for (var i = 0; i < q.opts.length; i++) {
+                h += '<li data-idx="' + i + '" onclick="selectOpt(this,\'' + qid + '\',' + i + ',' + (q.multi || false) + ')">' + q.opts[i] + '</li>';
+            }
+            h += '</ul>';
+            h += '<div class="btn-row">';
+            h += '<button class="btn btn-primary" onclick="submitQuiz(\'' + qid + '\',' + JSON.stringify(q.correct) + ',' + (q.multi || false) + ')">✅ 提交答案</button>';
+            h += '<button class="btn btn-outline" onclick="resetQuiz(\'' + qid + '\')">🔄 重做</button>';
+            h += '</div>';
+            h += '<div class="explain-card" id="ex-' + qid + '">';
+            h += '<div class="ex-head"></div>';
+            h += '<div class="ex-body"></div>';
+            if (q.detail) {
+                var detailHtml = q.detail
+    .replace(/([A-E])选项<\/b>：(正确|属于|可诉)/g, '<span style="color:#145a32;">✅ $1选项</b>：$2</span>')
+    .replace(/([A-E])选项<\/b>：(错误|不属于|不可诉)/g, '<span style="color:#b22222;">❌ $1选项</b>：$2</span>');
+h += '<div class="ex-detail" style="margin-top:10px;padding:10px 14px;background:#fff;border-radius:6px;font-size:0.88rem;line-height:1.8;display:none;">📋 <b>逐项解析：</b><br>' + detailHtml + '</div>';
+            }
+            h += '<div class="ex-tip">💡 <b>大白话理解：</b>' + q.tip + '</div>';
+            h += '</div>';
+            h += '</div>';
+            return h;
+        }
+
+        // ==================== 答题交互 ====================
+        function selectOpt(el, qid, idx, multi) {
+            const wrap = el.closest('.quiz-wrap');
+            if (wrap.classList.contains('submitted')) return;
+            const allOpts = wrap.querySelectorAll('.opt-list li');
+            if (multi) {
+                el.classList.toggle('selected');
+            } else {
+                allOpts.forEach(o => o.classList.remove('selected'));
+                el.classList.add('selected');
+            }
+        }
+
+                      function submitQuiz(qid, correct, multi) {
+            var wrap = document.querySelector('[data-qid="' + qid + '"]');
+            if (wrap.classList.contains('submitted')) return;
+            wrap.classList.add('submitted');
+            var allOpts = wrap.querySelectorAll('.opt-list li');
+            var correctArr = Array.isArray(correct) ? correct : [correct];
+            var selectedIdxs = [];
+            for (var i = 0; i < allOpts.length; i++) {
+                if (allOpts[i].classList.contains('selected')) {
+                    selectedIdxs.push(i);
+                }
+            }
+            var isCorrect;
+            if (multi) {
+                isCorrect = selectedIdxs.length === correctArr.length;
+                for (var j = 0; j < selectedIdxs.length; j++) {
+                    if (correctArr.indexOf(selectedIdxs[j]) === -1) {
+                        isCorrect = false;
+                        break;
+                    }
+                }
+            } else {
+                isCorrect = selectedIdxs.length === 1 && selectedIdxs[0] === correctArr[0];
+            }
+
+            for (var k = 0; k < allOpts.length; k++) {
+                allOpts[k].classList.add('disabled');
+                if (correctArr.indexOf(k) !== -1) {
+                    allOpts[k].classList.add('correct');
+                }
+            }
+            if (!isCorrect) {
+                for (var m = 0; m < selectedIdxs.length; m++) {
+                    if (correctArr.indexOf(selectedIdxs[m]) === -1) {
+                        allOpts[selectedIdxs[m]].classList.add('wrong');
+                    }
+                }
+            }
+
+            var exEl = document.getElementById('ex-' + qid);
+            exEl.classList.add('show');
+            if (isCorrect) {
+                exEl.classList.add('correct-ex');
+                exEl.classList.remove('wrong-ex');
+                exEl.querySelector('.ex-head').textContent = '🎉 回答正确！';
+                exEl.querySelector('.ex-body').textContent = '';
+                var exDetail = exEl.querySelector('.ex-detail');
+                if (exDetail) {
+                    exDetail.style.display = 'block';
+                }
+            } else {
+                exEl.classList.add('wrong-ex');
+                exEl.classList.remove('correct-ex');
+                exEl.querySelector('.ex-head').textContent = '😞 回答错误';
+                var letters = ['A', 'B', 'C', 'D', 'E'];
+                var correctLetters = correctArr.map(function(c) { return letters[c]; }).join('、');
+                exEl.querySelector('.ex-body').innerHTML = '正确答案是：<b>' + correctLetters + '</b>';
+                var exDetail2 = exEl.querySelector('.ex-detail');
+                if (exDetail2) {
+                    exDetail2.style.display = 'block';
+                }
+            }
+            updateProgress();
+        }
+
+
+
+        function resetQuiz(qid) {
+            const wrap = document.querySelector(`[data-qid="${qid}"]`);
+            wrap.classList.remove('submitted');
+            wrap.querySelectorAll('.opt-list li').forEach(o => {
+                o.classList.remove('selected', 'correct', 'wrong', 'disabled');
+            });
+            const exEl = document.getElementById('ex-' + qid);
+            exEl.classList.remove('show', 'correct-ex', 'wrong-ex');
+        }
+
+        document.addEventListener('DOMContentLoaded', renderAll);
+    </script>
+</body>
+</html>

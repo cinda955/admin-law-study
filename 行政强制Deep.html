@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>行政强制法 · 从零到做题</title>
+    <style>
+        :root {
+            --bg: #fdf8f3;
+            --card-bg: #ffffff;
+            --text: #2c2416;
+            --text-light: #5c5347;
+            --accent: #b22222;
+            --highlight: #fff3cd;
+            --highlight-border: #f0c040;
+            --example-bg: #f0faf5;
+            --example-border: #a3e4bc;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+            --radius: 14px;
+            --radius-sm: 10px;
+            --font: 'PingFang SC','Microsoft YaHei','Hiragino Sans GB','Noto Sans SC',system-ui,-apple-system,sans-serif;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior: smooth; scroll-padding-top: 20px; }
+        body { font-family: var(--font); background: var(--bg); color: var(--text); line-height: 1.75; padding: 12px; font-size: 16px; -webkit-font-smoothing: antialiased; }
+        a { color: var(--accent); text-decoration: none; }
+
+        .toc-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.35); z-index:98; }
+        .toc-overlay.show { display:block; }
+        .toc { position:fixed; top:16px; left:16px; width:230px; max-height:calc(100vh - 32px); background:var(--card-bg); border-radius:var(--radius); box-shadow:0 8px 30px rgba(0,0,0,0.12); padding:18px 14px; overflow-y:auto; z-index:100; font-size:0.84rem; transition:transform 0.3s; }
+        .toc.hidden { transform:translateX(-260px); }
+        .toc-title { font-weight:700; margin-bottom:10px; color:var(--accent); font-size:1rem; display:flex; align-items:center; gap:6px; position:sticky; top:0; background:var(--card-bg); padding-bottom:8px; border-bottom:1px solid #f0ebe0; }
+        .toc a { display:block; padding:7px 10px; border-radius:6px; margin:2px 0; color:var(--text-light); transition:all 0.2s; font-size:0.82rem; }
+        .toc a:hover,.toc a.active { background:#fdedec; color:var(--accent); font-weight:600; }
+        .toc-toggle { position:fixed; top:16px; left:16px; width:42px; height:42px; border-radius:50%; background:var(--accent); color:#fff; border:none; font-size:1.3rem; cursor:pointer; z-index:101; display:none; box-shadow:0 4px 14px rgba(178,34,34,0.3); align-items:center; justify-content:center; }
+
+        .main { max-width:820px; margin:0 auto 0 270px; display:flex; flex-direction:column; gap:20px; padding-bottom:40px; }
+        .card { background:var(--card-bg); border-radius:var(--radius); padding:22px 26px; box-shadow:var(--shadow-md); border:1px solid #f0ebe0; }
+        .section-title { font-size:1.45rem; font-weight:700; margin-bottom:4px; display:flex; align-items:center; gap:10px; }
+        .section-title .icon { width:34px; height:34px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; flex-shrink:0; }
+        .icon-red { background:#fdedec; color:#b22222; }
+        .icon-blue { background:#eaf2f8; color:#1a5276; }
+        .icon-green { background:#eafaf1; color:#145a32; }
+        .icon-yellow { background:#fef9e7; color:#b7950b; }
+        .subtitle { color:var(--text-light); font-size:0.9rem; margin-bottom:18px; padding-left:44px; }
+
+        .ki-grid { display:flex; flex-direction:column; gap:14px; }
+        .ki-item { border:1px solid #f0ebe0; border-radius:var(--radius-sm); padding:14px 18px; background:#fefefe; }
+        .ki-title-row { font-weight:700; font-size:1rem; margin-bottom:6px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+        .badge { font-size:0.7rem; padding:3px 10px; border-radius:14px; font-weight:600; letter-spacing:0.3px; white-space:nowrap; }
+        .badge-core { background:#fdedec; color:#b22222; }
+        .badge-num { background:#eaf2f8; color:#1a5276; }
+        .badge-case { background:#eafaf1; color:#145a32; }
+        .ki-content { color:var(--text-light); font-size:0.92rem; }
+        .kh { display:inline-block; background:var(--highlight); border:1px solid var(--highlight-border); padding:2px 8px; border-radius:4px; font-weight:600; color:#7d6608; margin:0 2px; font-size:0.9rem; }
+        .kh-red { background:#fdedec; border-color:#f5b7b1; color:#922b21; }
+        .kh-blue { background:#eaf2f8; border-color:#aed6f1; color:#1a5276; }
+        .kh-green { background:#eafaf1; border-color:#a3e4bc; color:#145a32; }
+
+        .example-block { background:var(--example-bg); border-left:3px solid var(--example-border); border-radius:0 var(--radius-sm) var(--radius-sm) 0; padding:12px 16px; margin-top:10px; font-size:0.9rem; color:#1e5a3a; }
+        .example-block .ex-label { font-weight:700; font-size:0.75rem; text-transform:uppercase; letter-spacing:0.5px; color:#1e8449; margin-bottom:4px; }
+        .example-block .ex-q { font-weight:600; color:#145a32; margin-bottom:3px; }
+        .example-block .ex-a { color:#2d6a4f; }
+
+        .info-table { width:100%; border-collapse:collapse; margin:8px 0; font-size:0.88rem; }
+        .info-table th { background:#fef9e7; text-align:left; padding:10px 14px; font-weight:700; border-bottom:2px solid #f0c040; color:#7d6608; }
+        .info-table td { padding:10px 14px; border-bottom:1px solid #f0ebe0; vertical-align:top; }
+        .info-table tr:hover td { background:#fefdf9; }
+
+        .quiz-wrap { border:2px solid #f0ebe0; border-radius:var(--radius-sm); padding:18px 20px; margin-top:12px; background:#fefefe; }
+        .quiz-wrap .q-type { font-size:0.78rem; font-weight:700; color:var(--accent); margin-bottom:4px; letter-spacing:0.4px; }
+        .quiz-wrap .q-text { font-weight:600; margin-bottom:12px; font-size:0.98rem; }
+        .opt-list { list-style:none; display:flex; flex-direction:column; gap:7px; }
+        .opt-list li { padding:10px 14px; border-radius:var(--radius-sm); cursor:pointer; border:2px solid #e9e4db; transition:all 0.2s; background:#fdfdfc; font-size:0.9rem; user-select:none; }
+        .opt-list li:hover { border-color:#c0b090; background:#fefdf9; }
+        .opt-list li.selected { border-color:#1a5276; background:#eaf2f8; font-weight:600; }
+        .opt-list li.correct { border-color:#1e8449 !important; background:#eafaf1 !important; color:#145a32 !important; }
+        .opt-list li.wrong { border-color:#b22222 !important; background:#fdedec !important; color:#922b21 !important; }
+        .opt-list li.disabled { pointer-events:none; opacity:0.85; }
+        .btn-row { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
+        .btn { display:inline-block; padding:10px 22px; border-radius:25px; font-weight:600; cursor:pointer; border:none; font-size:0.88rem; transition:all 0.2s; letter-spacing:0.3px; }
+        .btn-primary { background:var(--accent); color:#fff; }
+        .btn-primary:hover { background:#8b1a1a; transform:translateY(-1px); box-shadow:0 4px 12px rgba(178,34,34,0.3); }
+        .btn-outline { background:#fff; color:var(--accent); border:2px solid var(--accent); }
+        .btn-outline:hover { background:#fdedec; }
+
+        .explain-card { margin-top:12px; padding:14px 18px; border-radius:var(--radius-sm); display:none; font-size:0.9rem; line-height:1.7; }
+        .explain-card.show { display:block; }
+        .explain-card.correct-ex { background:#eafaf1; border:1px solid #a3e4bc; color:#145a32; }
+        .explain-card.wrong-ex { background:#fdedec; border:1px solid #f5b7b1; color:#922b21; }
+        .explain-card .ex-head { font-weight:700; margin-bottom:6px; font-size:0.95rem; }
+
+        @media (max-width:768px) {
+            .toc { transform:translateX(-260px); }
+            .toc.show { transform:translateX(0); }
+            .toc-toggle { display:flex; }
+            .main { max-width:100%; margin:0 auto; }
+            .card { padding:18px 14px; }
+        }
+    </style>
+</head>
+<body>
+
+<button class="toc-toggle" id="tocToggle" aria-label="目录" onclick="toggleToc()">☰</button>
+<div class="toc-overlay" id="tocOverlay" onclick="closeToc()"></div>
+<nav class="toc" id="toc">
+    <div class="toc-title">📑 行政强制法目录</div>
+    <a href="#mod1">一、概念与分类</a>
+    <a href="#mod2">二、种类与设定</a>
+    <a href="#mod3">三、强制措施程序</a>
+    <a href="#mod4">四、强制执行程序</a>
+</nav>
+
+<div class="main" id="mainContent"></div>
+
+<script>
+// ==================== 知识数据 ====================
+const knowledgeData = [
+    // ===== 模块1：概念与分类 =====
+    {
+        id: 'mod1',
+        iconClass: 'icon-red',
+        iconEmoji: '📌',
+        title: '一、行政强制的概念与分类',
+        subtitle: '强制措施 vs 强制执行 —— 临时控制 vs 终局处置',
+        items: [
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core', title: '行政强制包括两大类',
+              content: '行政强制分为<span class="kh kh-red">行政强制措施</span>和<span class="kh kh-red">行政强制执行</span>。我国《行政强制法》将两者统一立法，考试不考宏观概念，而是考两者的<b>区分</b>。' },
+            { type: 'ki', badge: '措施', badgeClass: 'badge-num', title: '行政强制措施（预防/控制）',
+              content: '行政机关在行政管理过程中，为<b>制止违法行为、防止证据损毁、避免危害发生、控制危险扩大</b>等，依法对公民人身自由实施<span class="kh">暂时性限制</span>，或对财物实施<span class="kh">暂时性控制</span>的行为。<br><b>关键词：</b>预防性、临时性、控制性 —— 还没确定违法，先控制住！',
+              example: { q: '🍺 张三醉酒后在马路上摇摇晃晃，民警将其带回派出所约束至酒醒。这是什么行为？', a: '✅ 这是<b>行政强制措施</b>（约束至酒醒）。目的是预防危险——张三可能掉河里或打人，但醉酒本身不是违法行为。等酒醒了就放人，具有<b>临时性</b>。' } },
+            { type: 'ki', badge: '执行', badgeClass: 'badge-num', title: '行政强制执行（强制履行）',
+              content: '行政机关或申请人民法院，对<b>不履行行政决定</b>的公民、法人或其他组织，依法<span class="kh kh-red">强制履行义务</span>的行为。<br><b>关键词：</b>终局性、义务履行性 —— 已经确定违法，你不履行我就强制执行！',
+              example: { q: '💰 老刘被罚款50元，拒不缴纳。行政机关直接从他银行账户划走50元。这是什么行为？', a: '✅ 这是<b>行政强制执行</b>（划拨存款）。前面有罚款决定（产生义务），老刘不履行，行政机关强制划走，<b>所有权转移</b>了，具有<b>终局性</b>。' } },
+            { type: 'table', html: '<table class="info-table"><thead><tr><th>对比项</th><th>行政强制措施</th><th>行政强制执行</th></tr></thead><tbody><tr><td>目的</td><td>预防、控制</td><td>强制履行义务</td></tr><tr><td>前提</td><td>不一定有违法行为</td><td>必须有先行行政行为（如处罚、征收）</td></tr><tr><td>性质</td><td>临时性</td><td>终局性</td></tr><tr><td>对财物影响</td><td>限制使用权（所有权不变）</td><td>可能导致所有权转移（拍卖、划拨）</td></tr><tr><td>典型行为</td><td>查封、扣押、冻结、约束醒酒</td><td>拍卖、划拨、强制拆除</td></tr></tbody></table>' },
+            { type: 'ki', badge: '顺序', badgeClass: 'badge-num', title: '行政行为的逻辑顺序（一般情况）',
+              content: '<b>行政许可（1）→ 行政强制措施（2）→ 行政处罚（3）→ 行政强制执行（4）</b><br>例：开饭店申请执照（许可）→ 涉嫌违法被查封扣押（措施）→ 确认违法被罚款（处罚）→ 拒不缴纳被划拨（执行）。<br><b>注意：</b>这不是绝对顺序！执行前面必须有先行行为（处罚或征收），但措施不一定导致处罚，许可后面也不一定有处罚。' }
+        ],
+        quizzes: [
+            { type: 'single', q: '行政机关对醉酒人员采取约束至酒醒的措施，属于？', opts: ['A. 行政处罚', 'B. 行政强制措施', 'C. 行政强制执行', 'D. 刑事强制措施'], correct: 1,
+              detail: '<b>A选项</b>：错误。行政处罚是对违法行为的惩戒，约束醒酒没有惩戒性。<br><b>B选项</b>：正确。约束醒酒是暂时性限制人身自由，预防危险，属于行政强制措施。<br><b>C选项</b>：错误。行政强制执行需要有先行行政行为，约束醒酒前面没有处罚决定。<br><b>D选项</b>：错误。刑事强制措施依据刑事诉讼法，约束醒酒依据行政法。',
+              tip: '约束醒酒是为了预防危险（临时性、预防性），不是惩罚。醉酒不是违法行为，所以不属于处罚。等酒醒就解除，属于典型的行政强制措施。记住口诀："还没违法先控制，临时措施防危险。"' },
+            { type: 'single', q: '行政强制执行的前提是什么？', opts: ['A. 行政机关认为有必要', 'B. 当事人申请', 'C. 存在先行行政行为且当事人不履行', 'D. 法院批准'], correct: 2,
+              detail: '<b>A选项</b>：错误。有必要不等于可以执行，必须有先行行政行为产生义务。<br><b>B选项</b>：错误。强制执行不是依申请启动的。<br><b>C选项</b>：正确。执行的前提是已有处罚或征收等行政行为且当事人不履行。<br><b>D选项</b>：错误。有执行权的行政机关不需要法院批准。',
+              tip: '执行必须有"前因"——先有处罚或征收决定让人产生义务，然后他不履行，才能强制执行。没有前面的行政处罚或征收，就没有后面的执行。就像先有借条（义务），不还钱才能找法院强制执行。' },
+            { type: 'single', q: '查封、扣押对财物所有权的影响是？', opts: ['A. 导致所有权转移', 'B. 仅限制使用权，所有权不变', 'C. 永久剥夺所有权', 'D. 由行政机关决定所有权归属'], correct: 1,
+              detail: '<b>A选项</b>：错误。查封扣押不改变所有权，拍卖才改变。<br><b>B选项</b>：正确。查封扣押只限制使用权，东西还是你的。<br><b>C选项</b>：错误。不是永久剥夺。<br><b>D选项</b>：错误。所有权归属不由行政机关决定。',
+              tip: '查封扣押只是暂时不让你用，东西还是你的。等到拍卖变卖时（行政强制执行），所有权才会转移。措施=暂时保管，执行=永久拿走。' },
+            { type: 'single', q: '老刘被罚款后，行政机关先冻结其账户50元，之后又划拨50元。这两个行为分别属于？', opts: ['A. 都是行政强制措施', 'B. 都是行政强制执行', 'C. 冻结是措施，划拨是执行', 'D. 冻结是执行，划拨是措施'], correct: 2,
+              detail: '<b>A选项</b>：错误。两者不是同一性质。<br><b>B选项</b>：错误。冻结是措施，划拨是执行。<br><b>C选项</b>：正确。冻结是第一次行为（强制措施/暂时控制），划拨是第二次行为（强制执行/终局处置）。<br><b>D选项</b>：错误。顺序反了。',
+              tip: '冻结是"先冻住防止转移"（措施/第一次行为），划拨是"直接拿走"（执行/第二次行为）。冻结依附于后面的划拨，措施是为执行服务的。"冻住=暂时，划走=终局"。' }
+        ]
+    },
+
+    // ===== 模块2：种类与设定 =====
+    {
+        id: 'mod2',
+        iconClass: 'icon-blue',
+        iconEmoji: '📋',
+        title: '二、行政强制的种类与设定权',
+        subtitle: '措施"查扣冻"，执行"划拨拍卖代履行"',
+        items: [
+            { type: 'ki', badge: '措施种类', badgeClass: 'badge-core', title: '行政强制措施的种类（口诀：限查扣冻）',
+              content: '①<span class="kh kh-red">限制人身自由</span>：约束醒酒、强制隔离、盘问、强制带离等<br>②<span class="kh">查封</span>：就地封存（针对不动产/不便移动物）<br>③<span class="kh">扣押</span>：异地保管（针对动产，转移占有）<br>④<span class="kh">冻结</span>：资金类财产（存款、汇款、有价证券），进不去也出不来<br>⑤其他行政强制措施',
+              extra: '<b>秒杀口诀：</b>"限制自由查扣冻"——除<b>行政拘留</b>外，所有限制人身自由的行为都属于行政强制措施！' },
+            { type: 'ki', badge: '执行种类', badgeClass: 'badge-core', title: '行政强制执行的种类',
+              content: '<b>直接执行：</b>①<span class="kh kh-red">划拨</span>存款汇款 ②<span class="kh kh-red">拍卖/变卖</span>查封扣押财物<br><b>间接执行：</b>③<span class="kh">加处罚款/滞纳金</span>（执行罚）④<span class="kh">代履行</span>（他人代为履行，费用义务人承担）⑤排除妨碍、恢复原状' },
+            { type: 'table', html: '<table class="info-table"><thead><tr><th>文件类型</th><th>行政强制措施</th><th>行政强制执行</th></tr></thead><tbody><tr><td>法律</td><td>✓ 全部（含限制人身自由、冻结）</td><td>✓ 全部</td></tr><tr><td>行政法规</td><td>✓ 不含限制人身自由和冻结</td><td>✗ 不可设定</td></tr><tr><td>地方性法规</td><td>✓ 仅查封、扣押两种</td><td>✗ 不可设定</td></tr><tr><td>规章</td><td>✗ 不可设定</td><td>✗ 不可设定</td></tr></tbody></table>' },
+            { type: 'ki', badge: '必考', badgeClass: 'badge-core', title: '设定权限核心规则',
+              content: '<span class="kh kh-red">限制人身自由</span>和<span class="kh kh-red">冻结存款汇款</span>只能由<b>法律</b>设定（法律保留事项）。<br><span class="kh kh-red">行政强制执行</span>只能由<b>法律</b>设定——连行政法规都不能设定！<br><b>地方性法规</b>只能设定<b>查封和扣押</b>两种强制措施。<br><b>规章（部门/地方）一律不得</b>设定任何行政强制。',
+              example: { q: '🏛️ 山东省人大制定的地方性法规可以设定冻结存款的强制措施吗？', a: '❌ 不能！地方性法规只能设定<b>查封和扣押</b>两种。冻结存款只能由法律规定。如果地方性法规设定了冻结，就是违法的，下位法不得扩大上位法规定。' } }
+        ],
+        quizzes: [
+            { type: 'single', q: '下列哪项不属于行政强制措施的种类？', opts: ['A. 查封场所', 'B. 扣押财物', 'C. 吊销营业执照', 'D. 冻结存款'], correct: 2,
+              detail: '<b>A选项</b>：属于。查封是强制措施。<br><b>B选项</b>：属于。扣押是强制措施。<br><b>C选项</b>：不属于。吊销营业执照是行政处罚（资格罚）。<br><b>D选项</b>：属于。冻结是强制措施。',
+              tip: '吊销营业执照是行政处罚（资格罚），不是强制措施。强制措施的"四大天王"：限制自由、查封、扣押、冻结。看到吊销、罚款、拘留就知道是处罚，不是强制。' },
+            { type: 'single', q: '行政强制执行只能由什么设定？', opts: ['A. 法律', 'B. 行政法规', 'C. 地方性法规', 'D. 规章'], correct: 0,
+              detail: '<b>A选项</b>：正确。行政强制执行只能由法律设定。<br><b>B选项</b>：错误。行政法规不能设定强制执行。<br><b>C选项</b>：错误。地方性法规不能设定强制执行。<br><b>D选项</b>：错误。规章不能设定任何行政强制。',
+              tip: '执行只能法律设定！行政法规、地方性法规、规章统统不行。执行是"最霸道"的权力，所以要最高级别的法律来约束。记住："执行唯法律"。' },
+            { type: 'multi', q: '行政法规可以设定哪些行政强制措施？', opts: ['A. 限制人身自由', 'B. 冻结存款汇款', 'C. 查封场所', 'D. 扣押财物', 'E. 行政强制执行'], correct: [2,3], multi: true,
+              detail: '<b>A选项</b>：错误。限制人身自由只能由法律设定。<br><b>B选项</b>：错误。冻结存款只能由法律设定。<br><b>C选项</b>：正确。行政法规可以设定查封。<br><b>D选项</b>：正确。行政法规可以设定扣押。<br><b>E选项</b>：错误。行政法规不能设定行政强制执行。',
+              tip: '行政法规=减1原则（去掉限制人身自由和冻结），只能设查封扣押。执行连行政法规都不能设！A和B只能法律设，E谁都不能设（只有法律能设）。' }
+        ]
+    },
+
+    // ===== 模块3：强制措施程序 =====
+    {
+        id: 'mod3',
+        iconClass: 'icon-green',
+        iconEmoji: '🔒',
+        title: '三、行政强制措施的实施程序',
+        subtitle: '查封、扣押、冻结怎么操作？',
+        items: [
+            { type: 'ki', badge: '流程', badgeClass: 'badge-core', title: '一般程序（内部→外部）',
+              content: '<b>内部：</b>向负责人报告并经批准 → 确定实施人员<br><b>外部：</b>①<span class="kh">2名以上</span>执法人员，出示证件 ②通知当事人到场（不到则邀请见证人）③告知理由、依据、权利 ④听取陈述申辩 ⑤制作<span class="kh">现场笔录</span>（当事人和执法人员签名或盖章，拒绝则注明）',
+              extra: '<b>注意：</b>行政强制措施<b>不得委托</b>实施！行政处罚可以委托，但强制措施不行。' },
+            { type: 'ki', badge: '紧急', badgeClass: 'badge-num', title: '紧急情况特殊程序',
+              content: '情况紧急需当场实施的，可当场实施，但<span class="kh kh-red">24小时内</span>向负责人报告并补办批准手续。负责人认为不应实施的应立即解除。<br><b>限制人身自由：</b>当场实施后立即通知家属（机关、地点、期限），返回机关后立即报告并补办手续。',
+              example: { q: '🎆 张三非法经营烟花爆竹，执法人员当场扣押了全部烟花爆竹。需要先报告批准吗？', a: '✅ 不需要！情况紧急（烟花可能被转移或引爆），可以当场扣押。但必须在<b>24小时内</b>补办批准手续。如果负责人说不行，立即解除扣押，把烟花还给张三。' } },
+            { type: 'ki', badge: '查封扣押', badgeClass: 'badge-core', title: '查封扣押特别规定',
+              content: '<b>对象限制：</b>限于涉案场所/设施/财物；<b>不得</b>查封扣押与违法无关的、生活必需品、已重复查封的。<br><b>期限：</b>一般<span class="kh">30日</span>，最长<span class="kh kh-red">60日</span>（30+30）。技术鉴定期间不计入。<br><b>文书：</b>必须制作并当场交付决定书和清单（一式两份）。<br><b>保管：</b>行政机关或委托第三人保管，<b>费用行政机关承担</b>（不是当事人！）。<br><b>解除：</b>无违法、无关、已处理完、期限届满→立即解除。',
+              example: { q: '🏪 张三的饭店合法部分和违法扩建部分混在一起，能全部查封吗？', a: '❌ 不能！只能查封违法扩建部分，有许可证的合法区域不能动。这是"广东省十大行政案件"之一的教训——执法人员不能图省事一锅端。' } },
+            { type: 'ki', badge: '冻结', badgeClass: 'badge-core', title: '冻结特别规定',
+              content: '<b>主体：</b>只能由法律规定的行政机关实施（公安、国安、海关、税务、监狱），<b>不得委托</b>。<br><b>程序：</b>先向金融机构交付<span class="kh kh-red">冻结通知书</span>（立即冻结）→冻结后<span class="kh kh-red">3日内</span>向当事人交付<span class="kh">冻结决定书</span>。<br><b>先通知金融机构再给当事人</b>——防止当事人转移资金！<br><b>期限：</b>30日+30日=最长60日。<br><b>解除：</b>期满自动解除（金融机构自冻结期满之日起解除）。',
+              example: { q: '🏦 税务局冻结某公司账户，先给公司送达决定书，再通知银行冻结，对吗？', a: '❌ 顺序反了！必须先通知银行冻结（防止公司收到决定书立刻把钱转走），冻结<b>完成后3日内</b>再给公司决定书。先冻再通知，防止"跑路"。' } }
+        ],
+        quizzes: [
+            { type: 'single', q: '查封、扣押的期限一般不得超过多少日？', opts: ['A. 15日', 'B. 30日', 'C. 45日', 'D. 60日'], correct: 1,
+              detail: '<b>A选项</b>：错误。15日是其他期限。<br><b>B选项</b>：正确。一般期限30日。<br><b>C选项</b>：错误。45日是简易程序审限。<br><b>D选项</b>：错误。60日是最长期限（30+30）。',
+              tip: '一般30天，情况复杂可延30天，最长60天。30+30=60。冻结也是一样。记住"30起，60封顶"。' },
+            { type: 'single', q: '因查封、扣押产生的保管费用由谁承担？', opts: ['A. 当事人', 'B. 行政机关', 'C. 当事人和行政机关各半', 'D. 由第三人承担'], correct: 1,
+              detail: '<b>A选项</b>：错误。强制措施期间费用不由当事人承担。<br><b>B选项</b>：正确。保管费由行政机关承担（用财政经费）。<br><b>C选项</b>：错误。不是各半。<br><b>D选项</b>：错误。第三人保管的费用也是行政机关承担。',
+              tip: '强制措施期间的所有费用（保管、鉴定、检测）都是行政机关承担。因为还没确定你违法，凭什么让你掏钱？但强制执行阶段（代履行）的费用由当事人承担，因为已经确定违法了。' },
+            { type: 'single', q: '冻结决定书应在冻结后几日内交付当事人？', opts: ['A. 立即', 'B. 1日', 'C. 3日', 'D. 7日'], correct: 2,
+              detail: '<b>A选项</b>：错误。不是立即，是在冻结后3日内。<br><b>B选项</b>：错误。没有1日的规定。<br><b>C选项</b>：正确。冻结后3日内交付决定书。<br><b>D选项</b>：错误。7日是其他期限。',
+              tip: '3天内送达决定书。冻结通知书先发给银行（立即冻），决定书后发给当事人。这样当事人收到时钱已经冻住了，想转也转不走。' },
+            { type: 'multi', q: '以下关于行政强制措施的说法正确的有？', opts: ['A. 实施前须向负责人报告并经批准', 'B. 可由一名执法人员单独实施', 'C. 当事人不到场的应邀请见证人', 'D. 可委托其他组织代为实施', 'E. 应制作现场笔录'], correct: [0,2,4], multi: true,
+              detail: '<b>A选项</b>：正确。实施前须报告批准。<br><b>B选项</b>：错误。必须2名以上执法人员。<br><b>C选项</b>：正确。当事人不到场应邀请见证人。<br><b>D选项</b>：错误。强制措施不得委托！<br><b>E选项</b>：正确。必须制作现场笔录。',
+              tip: 'B错——必须2名以上。D错——强制措施不得委托！行政处罚可以委托，但强制措施不行。A是内部必经程序，C保障程序公正，E是证据要求。' }
+        ]
+    },
+
+    // ===== 模块4：强制执行程序 =====
+    {
+        id: 'mod4',
+        iconClass: 'icon-yellow',
+        iconEmoji: '⚡',
+        title: '四、行政强制执行的实施程序',
+        subtitle: '催告→决定→执行 / 申请法院执行',
+        items: [
+            { type: 'ki', badge: '主体', badgeClass: 'badge-core', title: '执行主体：谁有强制执行权？',
+              content: '<b>有执行权的机关（口诀：国公税关县）：</b>公安机关、国家安全机关、税务机关、海关、<span class="kh">县级以上人民政府</span>→<b>自己执行</b>。<br><b>无执行权的机关：</b>市场监管局、环保局等→<b>必须申请法院强制执行</b>。<br><b>例外：</b>无执行权但有权查封扣押的机关，当事人不复议不诉讼经催告仍不履行，可将查封扣押财产拍卖抵罚款。',
+              example: { q: '🏛️ 市场监管局对某企业罚款后，企业拒不缴纳。市场监管局能直接划拨企业存款吗？', a: '❌ 不能！市场监管局没有强制执行权，只能申请法院强制执行。但有执行权的机关（如税务局）可以自己划拨。' } },
+            { type: 'ki', badge: '催告', badgeClass: 'badge-num', title: '催告程序（必经前置）',
+              content: '行政机关作出强制执行决定<b>前</b>，必须<span class="kh kh-red">书面催告</span>当事人履行义务。<br><b>无需催告的例外：</b>①执行罚（加处罚款/滞纳金）②立即实施的代履行。<br><b>催告书内容：</b>履行期限、方式、金额、陈述申辩权。<br><b>催告期间</b>有转移隐匿财物迹象的，可立即执行。' },
+            { type: 'ki', badge: '执行', badgeClass: 'badge-core', title: '中止执行 vs 终结执行',
+              content: '<b>中止执行（暂停，可恢复）：</b>①确有困难/暂无履行能力 ②第三人主张权利确有理由 ③执行可能造成难以弥补损失且不损害公共利益。<br>中止满<b>3年</b>未恢复+无社会危害+无履行能力→不再执行。<br><b>终结执行（结束，不可恢复）：</b>①公民死亡无遗产无承受人 ②法人终止无财产无承受人 ③执行标的灭失 ④行政决定被撤销。',
+              example: { q: '🏚️ 张三的违建被责令拆除，张三主张房子是历史文物。行政机关怎么办？', a: '✅ 应<b>中止执行</b>！等专家鉴定。如果拆了才发现是文物，损失无法弥补。鉴定结果出来后再决定恢复执行还是终结。如果真是文物，可能终结执行。' } },
+            { type: 'ki', badge: '温情', badgeClass: 'badge-num', title: '温情执法（禁止事项）',
+              content: '①<b>不得</b>在<span class="kh kh-red">夜间或法定节假日</span>实施强制执行（紧急情况除外）<br>②<b>不得</b>对<span class="kh kh-red">居民生活</span>采取停止供水、供电、供热、供燃气等方式迫使履行（对企业可以！）' },
+            { type: 'ki', badge: '协议', badgeClass: 'badge-num', title: '执行协议（执行和解）',
+              content: '在不损害公共利益和他人合法权益前提下，行政机关可与当事人达成<span class="kh">执行协议</span>，约定分阶段履行或补救措施（可减免加处罚款/滞纳金）。<br>当事人不履行协议→<b>恢复强制执行</b>。' }
+        ],
+        quizzes: [
+            { type: 'single', q: '行政机关实施行政强制执行前，必须履行的程序是？', opts: ['A. 听证', 'B. 催告', 'C. 公告', 'D. 调解'], correct: 1,
+              detail: '<b>A选项</b>：错误。听证是许可和处罚的程序，强制措施没有听证。<br><b>B选项</b>：正确。催告是强制执行的前置程序。<br><b>C选项</b>：错误。公告不是必经程序。<br><b>D选项</b>：错误。调解不是必经程序。',
+              tip: '催告是强制执行的必经程序——先好好说"你赶紧履行吧"，不听再动粗。听证不是强制措施/执行的程序（那是许可和处罚的）。执行罚和立即代履行可跳过催告。' },
+            { type: 'single', q: '公民死亡无遗产可供执行又无义务承受人的，应如何？', opts: ['A. 中止执行', 'B. 终结执行', 'C. 继续执行', 'D. 恢复执行'], correct: 1,
+              detail: '<b>A选项</b>：错误。中止是可恢复的暂停。<br><b>B选项</b>：正确。死亡无遗产=彻底终结。<br><b>C选项</b>：错误。不应继续执行。<br><b>D选项</b>：错误。终结不可恢复。',
+              tip: '人死了、钱没了、没人继承→彻底结束（终结）。中止是"暂停"（如确有困难），终结是"Game Over"。终结的条件都是"彻底没戏了"。' },
+            { type: 'single', q: '关于行政强制执行中的温情执法原则，以下说法正确的是？', opts: ['A. 夜间执行一律禁止', 'B. 对企业可采取停水停电措施', 'C. 不得对居民生活停水停电', 'D. 节假日执行须经上级批准'], correct: 2,
+              detail: '<b>A选项</b>：错误。紧急情况可夜间执行。<br><b>B选项</b>：错误。法条仅保护居民生活。<br><b>C选项</b>：正确。不得对居民生活断水断电。<br><b>D选项</b>：错误。法条没有这个规定。',
+              tip: 'A错——紧急情况可夜间执行。B错——法条只保护"居民生活"，不保护企业。D错——紧急情况不需要批准。核心：对老百姓居住的房子不能断水断电，对企业可以。' },
+            { type: 'multi', q: '以下属于中止执行情形的有？', opts: ['A. 当事人确有困难暂无履行能力', 'B. 第三人主张权利确有理由', 'C. 公民死亡无遗产', 'D. 执行标的灭失', 'E. 执行可能造成难以弥补损失'], correct: [0,1,4], multi: true,
+              detail: '<b>A选项</b>：正确。确有困难可中止。<br><b>B选项</b>：正确。第三人主张权利可中止。<br><b>C选项</b>：错误。死亡无遗产是终结。<br><b>D选项</b>：错误。标的灭失是终结。<br><b>E选项</b>：正确。可能造成难弥补损失可中止。',
+              tip: 'C和D是终结执行（彻底结束）。中止执行=暂时停一下，条件消失后恢复。口诀："困难、第三人、难弥补"→中止；"死亡无遗产、灭失、决定撤销"→终结。' }
+        ]
+    },
+
+    // ===== 模块5：代履行 =====
+    {
+        id: 'mod5',
+        iconClass: 'icon-blue',
+        iconEmoji: '🤝',
+        title: '五、代履行（间接强制执行）',
+        subtitle: '你不做？我找人帮你做，费用你出！',
+        items: [
+            { type: 'ki', badge: '定义', badgeClass: 'badge-core', title: '代履行的概念',
+              content: '义务人逾期不履行行政法义务，由他人代为履行可以达到相同目的的，行政机关可以<span class="kh">自己代为履行</span>或<span class="kh">委托第三人代为履行</span>，向义务人征收<span class="kh kh-red">代履行费用</span>。<br>属于<b>间接行政强制执行</b>——不是直接强制，而是通过替代履行的方式间接达到履行状态。',
+              example: { q: '🏭 张三在河边建化肥厂污染环境，被责令拆除并恢复原状。张三拒不履行，行政机关找来施工队拆除，费用由谁出？', a: '✅ 费用由<b>张三承担</b>！这属于代履行。前面已经确定张三违法（有行政处罚），他有拆除义务却不履行，行政机关找人来拆，产生的费用当然由张三买单。如果是强制措施阶段（还没确定违法），费用才是行政机关承担。' } },
+            { type: 'ki', badge: '适用范围', badgeClass: 'badge-num', title: '代履行的适用范围与禁区',
+              content: '<b>可适用：</b>可替代履行的作为义务（如强制拆除、恢复原状、清除污染物）。<br><b>不可适用：</b><span class="kh kh-red">人身性义务</span>（如服兵役、拘留）——不能找人替你坐牢！<br><span class="kh kh-red">金钱给付义务</span>（罚款、纳税）——代履行等于没履行！<br><span class="kh kh-red">不作为义务</span>（如不得经营）——不能找人替你"不营业"。' },
+            { type: 'ki', badge: '程序', badgeClass: 'badge-num', title: '代履行的程序要点',
+              content: '<b>一般程序：</b>送达代履行决定书→<span class="kh">代履行3日前催告</span>→当事人仍不履行→实施代履行（派员到场监督）→履行完毕由到场人员、代履行人、当事人或见证人签名盖章。<br><b>立即代履行：</b>紧急情况下（如道路遗洒物影响交通），可<span class="kh kh-red">立即实施，无催告</span>，事后通知当事人。费用仍由当事人承担。<br><b>禁止事项：</b>不得采用暴力、胁迫等非法方式。' },
+            { type: 'ki', badge: '费用', badgeClass: 'badge-core', title: '费用承担对比（核心考点）',
+              content: '<b>强制措施期间费用（保管、鉴定、检测）：</b><span class="kh kh-red">行政机关承担</span>——还没确定违法，不能让你掏钱！<br><b>代履行费用：</b><span class="kh kh-red">当事人承担</span>——已经确定违法，你的义务你不履行，产生的费用你负责！<br><b>申请法院强制执行费用：</b>被执行人承担。' }
+        ],
+        quizzes: [
+            { type: 'single', q: '代履行适用于下列哪种义务？', opts: ['A. 强制服兵役', 'B. 强制拆除违法建筑', 'C. 缴纳罚款', 'D. 停止非法经营'], correct: 1,
+              detail: '<b>A选项</b>：不可代履行。服兵役是人身性义务，不能找人替代。<br><b>B选项</b>：可代履行。拆除违建是可替代的作为义务。<br><b>C选项</b>：不可代履行。金钱给付找人代缴等于没缴。<br><b>D选项</b>：不可代履行。停止经营是不作为义务，不能找人替你"不营业"。',
+              tip: '能找人代干的活才适用代履行——拆房子可以找施工队，但坐牢、交钱、"不营业"都不行。记住口诀："人不能代，钱不能代，不作为不能代"。' },
+            { type: 'single', q: '关于代履行的费用，以下说法正确的是？', opts: ['A. 由行政机关承担', 'B. 由当事人承担', 'C. 由行政机关和当事人各半承担', 'D. 免费'], correct: 1,
+              detail: '<b>A选项</b>：错误。强制措施期间费用是行政机关承担，代履行是执行阶段，费用由当事人承担。<br><b>B选项</b>：正确。代履行费用由义务人承担。<br><b>C选项</b>：错误。不是各半。<br><b>D选项</b>：错误。代履行收费，不是免费的。',
+              tip: '代履行=你的义务你不做，我找人帮你做，钱你出！强制措施=还没确定你违法，钱我出。记住了：措施免费，执行收费。' },
+            { type: 'multi', q: '关于代履行的说法，以下哪些是错误的？', opts: ['A. 只能委托第三人代履行', 'B. 费用均由当事人承担', 'C. 不得采用暴力等方式', 'D. 代履行3日前应送达决定书', 'E. 一般情形下代履行3日前催告当事人'], correct: [0,1,3], multi: true,
+              detail: '<b>A选项</b>：错误。行政机关可自己代履行，也可委托第三人，不是"只能委托"。<br><b>B选项</b>：错误。"均"字太绝对——法律另有规定的除外。<br><b>C选项</b>：正确。不得暴力胁迫。<br><b>D选项</b>：错误。3日前是催告，送达决定书没有这个时间限制。<br><b>E选项</b>：正确。一般情形代履行3日前催告。',
+              tip: 'A错——可以自己干也能找人干。B错——"均"字是陷阱。D错——3天前是催告不是送决定书。E正确——3天前催告是法定程序。' }
+        ]
+    },
+
+    // ===== 模块6：申请法院强制执行 =====
+    {
+        id: 'mod6',
+        iconClass: 'icon-green',
+        iconEmoji: '🏛️',
+        title: '六、申请人民法院强制执行',
+        subtitle: '无执行权的机关怎么执行？找法院！',
+        items: [
+            { type: 'ki', badge: '主体', badgeClass: 'badge-core', title: '谁需要申请法院执行？',
+              content: '没有行政强制执行权的行政机关（如市场监管局、环保局）→<span class="kh kh-red">必须申请法院强制执行</span>。<br><b>例外：</b>无执行权但有权查封扣押的机关，当事人在法定期限内不复议不诉讼经催告仍不履行，可将查封扣押财产拍卖抵罚款——等于"间接拥有了执行权"。',
+              extra: '<b>有执行权的机关（国公税关县）自己执行，不需要申请法院。</b>' },
+            { type: 'ki', badge: '程序', badgeClass: 'badge-num', title: '申请法院执行的流程与期限',
+              content: '<b>前提：</b>催告书送达<span class="kh">10日后</span>仍未履行→申请法院强制执行。<br><b>申请时限：</b>当事人法定起诉期限届满之日起<span class="kh kh-red">3个月</span>内提出（不是90天！）。<br><b>管辖法院：</b>一般由<span class="kh">行政机关所在地</span>法院管辖；涉及不动产的由<span class="kh kh-red">不动产所在地</span>法院管辖。<br><b>法院受理：</b>法院收到申请后<span class="kh">5日内</span>决定是否受理。不受理的可在<span class="kh">15日内</span>向上一级法院申请复议，上一级法院<span class="kh">15日内</span>裁定。',
+              example: { q: '⏰ 行政机关催告后，当事人10天后仍不履行，行政机关什么时候申请法院执行？', a: '✅ 催告书送达<b>10日后</b>即可申请。申请期限是当事人起诉期限届满后<b>3个月内</b>（不是90天！）。比如当事人6个月起诉期满了还不履行，行政机关有3个月时间申请法院执行。' } },
+            { type: 'ki', badge: '审查', badgeClass: 'badge-num', title: '法院审查与裁定',
+              content: '<b>书面审查（无问题）：</b><span class="kh">7日内</span>作出执行裁定。<br><b>发现明显问题：</b>听取当事人意见→<span class="kh">30日内</span>作出是否执行的裁定。<br><b>不予执行救济：</b>行政机关可在<span class="kh">15日内</span>向上一级法院申请复议，上一级法院<span class="kh kh-red">30日内</span>裁定。' }
+        ],
+        quizzes: [
+            { type: 'single', q: '没有行政强制执行权的行政机关应当如何处理？', opts: ['A. 自行强制执行', 'B. 申请法院强制执行', 'C. 放弃执行', 'D. 委托其他机关执行'], correct: 1,
+              detail: '<b>A选项</b>：错误。没有执行权不能自行执行。<br><b>B选项</b>：正确。无执行权应申请法院执行。<br><b>C选项</b>：错误。不能放弃。<br><b>D选项</b>：错误。执行权不能委托。',
+              tip: '没有牙的机关只能找法院帮忙。市场监管局、环保局这些"没有枪的部门"，执行得靠法院。记住口诀："无牙找法院"。' },
+            { type: 'single', q: '行政机关申请法院强制执行，法院决定受理的期限是？', opts: ['A. 3日', 'B. 5日', 'C. 7日', 'D. 10日'], correct: 1,
+              detail: '<b>A选项</b>：错误。没有3日的规定。<br><b>B选项</b>：正确。法院应在5日内决定是否受理。<br><b>C选项</b>：错误。7日是作出执行裁定的期限。<br><b>D选项</b>：错误。催告后10日是申请前提。',
+              tip: '法院收申请后5天内决定收不收。5天=受理决定，7天=执行裁定，10天=催告后等待期。三个数字别搞混。' },
+            { type: 'single', q: '涉及不动产的强制执行申请，应由哪个法院管辖？', opts: ['A. 行政机关所在地法院', 'B. 当事人户籍地法院', 'C. 不动产所在地法院', 'D. 中级法院'], correct: 2,
+              detail: '<b>A选项</b>：错误。一般由行政机关所在地，不动产除外。<br><b>B选项</b>：错误。不是户籍地。<br><b>C选项</b>：正确。不动产专属管辖。<br><b>D选项</b>：错误。不是级别问题，是地域问题。',
+              tip: '不动产专属管辖——房子在哪儿，就去哪儿的法院。和行政诉讼一样，不动产案件都是"属地原则"。' }
+        ]
+    },
+
+    // ===== 模块7：费用与责任 =====
+    {
+        id: 'mod7',
+        iconClass: 'icon-yellow',
+        iconEmoji: '💰',
+        title: '七、费用承担与法律责任',
+        subtitle: '谁出钱？强制措施免费，执行阶段当事人掏',
+        items: [
+            { type: 'table', html: '<table class="info-table"><thead><tr><th>费用类型</th><th>承担主体</th><th>法律依据</th></tr></thead><tbody><tr><td>查封扣押保管费</td><td><b>行政机关</b></td><td>强制措施阶段，未确定违法</td></tr><tr><td>检测/检验/检疫/技术鉴定费</td><td><b>行政机关</b></td><td>调查取证需要，行政经费支出</td></tr><tr><td>代履行费用</td><td><b>当事人</b>（义务人）</td><td>已确定违法，替代履行义务</td></tr><tr><td>申请法院强制执行费</td><td><b>被执行人</b></td><td>司法程序费用</td></tr></tbody></table>' },
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core', title: '费用区分口诀',
+              content: '<b>措施阶段：</b>全部免费！保管、鉴定、检测都是<span class="kh kh-red">行政机关出</span>（财政经费）。<br><b>执行阶段：</b>当事人买单！代履行、申请法院执行都是<span class="kh kh-red">当事人/被执行人出</span>。<br><b>逻辑：</b>没确定违法前（措施）→公家出钱；确定违法后不履行（执行）→自己出钱。' },
+            { type: 'ki', badge: '赔偿', badgeClass: 'badge-num', title: '赔偿责任',
+              content: '<b>行政机关保管不善造成损失：</b><span class="kh kh-red">赔偿</span>（违法行为对应赔偿，不是补偿）。<br><b>委托第三人保管造成损失：</b>行政机关<span class="kh kh-red">先行赔付</span>，再向第三人追偿。<br><b>执行错误（决定被撤销/变更）：</b>恢复原状或退还财物；不能恢复的<span class="kh kh-red">依法赔偿</span>。<br><b>变卖价格明显低于市场价造成损失：</b>补偿（变卖无《拍卖法》约束，可能暗箱操作）。' },
+            { type: 'ki', badge: '罚款', badgeClass: 'badge-num', title: '加处罚款/滞纳金上限',
+              content: '加处罚款按每日<span class="kh kh-red">3%</span>计算，但<span class="kh kh-red">不得超过原罚款数额</span>（封顶=本数）。<br>加处罚款或滞纳金超过<span class="kh">30日</span>经催告仍不履行→有执行权的机关可强制执行。<br>滞纳金比例无统一规定（《税收征收管理法》规定每日5‱等，各法不同）。',
+              example: { q: '📊 某明星被罚8亿，逾期不缴每天加罚多少？有上限吗？', a: '✅ 每天加罚8亿×3%=2400万！但加处罚款<b>最多不超过8亿</b>（本数封顶）。加上滞纳金，总额可能远超8亿。这就是为什么偷税被罚的人最终要交的钱比原罚款多得多。' } },
+            { type: 'ki', badge: '追缴', badgeClass: 'badge-num', title: '截留私分的追缴',
+              content: '行政机关截留、私分或变相私分罚款、没收财物、查封扣押财物、划拨款项、拍卖所得→由<span class="kh kh-red">财政部门或有关部门</span>追缴。<br>对直接负责的主管人员和直接责任人员依法给予处分。' }
+        ],
+        quizzes: [
+            { type: 'single', q: '因查封、扣押产生的保管费用由谁承担？', opts: ['A. 当事人', 'B. 行政机关', 'C. 各承担一半', 'D. 由第三人承担'], correct: 1,
+              detail: '<b>A选项</b>：错误。强制措施期间费用不由当事人承担。<br><b>B选项</b>：正确。保管费由行政机关承担。<br><b>C选项</b>：错误。不是各半。<br><b>D选项</b>：错误。第三人保管的费用也是行政机关出。',
+              tip: '措施阶段全免费！行政机关用自己的经费支付。因为还没确定你违法，凭什么让你掏钱？记住："措施全免单"。' },
+            { type: 'single', q: '加处罚款的最高上限是？', opts: ['A. 无上限', 'B. 不超过原罚款数额', 'C. 不超过原罚款的2倍', 'D. 不超过10万元'], correct: 1,
+              detail: '<b>A选项</b>：错误。有上限。<br><b>B选项</b>：正确。加处罚款不得超过原罚款本数。<br><b>C选项</b>：错误。不是2倍。<br><b>D选项</b>：错误。没有固定金额上限。',
+              tip: '加罚最多翻一倍（本数封顶）。罚款8亿，加罚最多也是8亿，总共16亿。但滞纳金没有封顶，所以实际会更多。' },
+            { type: 'multi', q: '以下费用中应由行政机关承担的有？', opts: ['A. 查封扣押的保管费', 'B. 检测、检验费用', 'C. 代履行费用', 'D. 技术鉴定费用', 'E. 申请法院强制执行的费用'], correct: [0,1,3], multi: true,
+              detail: '<b>A选项</b>：正确。强制措施期间保管费由行政机关承担。<br><b>B选项</b>：正确。检测费由行政机关承担。<br><b>C选项</b>：错误。代履行费用由当事人承担。<br><b>D选项</b>：正确。技术鉴定费由行政机关承担。<br><b>E选项</b>：错误。申请法院执行费由被执行人承担。',
+              tip: '规律：措施阶段（查扣冻、检测、鉴定）=行政机关出；执行阶段（代履行、法院执行）=当事人出。A、B、D都是措施阶段，C和E是执行阶段。' }
+        ]
+    },
+
+    // ===== 模块8：查封扣押冻结期限与解除 =====
+    {
+        id: 'mod8',
+        iconClass: 'icon-red',
+        iconEmoji: '⏱️',
+        title: '八、查封、扣押、冻结的期限与解除',
+        subtitle: '不能无限期扣着不放！',
+        items: [
+            { type: 'ki', badge: '期限', badgeClass: 'badge-core', title: '查封、扣押、冻结的期限（统一规则）',
+              content: '<b>一般期限：</b><span class="kh kh-red">30日</span>。<br><b>延长期限：</b>情况复杂经负责人批准可延长<span class="kh kh-red">30日</span>。<br><b>最长：</b>60日（30+30），不得再延长。<br><b>例外：</b>法律、行政法规另有规定的从其规定。<br><b>技术鉴定期间：</b>不计入查封扣押期限（鉴定期间应书面告知当事人，费用行政机关承担）。<br><b>冻结期满自动解除：</b>金融机构自冻结期满之日起自动解除，无需行政机关通知。' },
+            { type: 'ki', badge: '解除', badgeClass: 'badge-core', title: '应当解除查封、扣押、冻结的情形',
+              content: '①当事人<b>没有违法行为</b>；<br>②查封扣押冻结的财物<b>与违法行为无关</b>；<br>③行政机关<b>已作出处理决定</b>，不再需要；<br>④查封扣押冻结<b>期限已届满</b>；<br>⑤其他不再需要的情形。<br><b>解除后：</b>应立即退还财物；鲜活物品已拍卖变卖的退还所得款项（变卖价明显低于市场价造成损失的→补偿）。',
+              extra: '<b>注意：</b>当事人申请解除不是法定解除条件！必须符合上述情形之一才应解除。申请复议或诉讼也不停止执行。' },
+            { type: 'ki', badge: '禁止', badgeClass: 'badge-num', title: '禁止重复查封/冻结',
+              content: '已被其他国家机关依法查封的，<span class="kh kh-red">不得重复查封</span>。<br>已被其他国家机关依法冻结的，<span class="kh kh-red">不得重复冻结</span>。<br>冻结金额应当与违法行为涉及的金额<span class="kh">相当</span>（不能超额冻结）。',
+              example: { q: '💰 某企业账户有200万，被税务局冻结120万。市场监管局还能冻结剩下的80万吗？', a: '✅ 可以！税务局冻了120万，还剩80万没冻，市场监管局可以对这80万进行冻结。如果市场监管局也想冻120万，就超出剩余额度了，只能冻80万。不能重复冻已经冻住的120万。' } },
+            { type: 'ki', badge: '后续', badgeClass: 'badge-num', title: '查封扣押后的处理',
+              content: '①违法事实清楚→没收非法财物<br>②法律行政法规规定应销毁→依法销毁<br>③应解除的→作出解除决定<br>④超过法定期限未处理→立即解除' }
+        ],
+        quizzes: [
+            { type: 'single', q: '查封、扣押的最长期限是？', opts: ['A. 30日', 'B. 45日', 'C. 60日', 'D. 90日'], correct: 2,
+              detail: '<b>A选项</b>：错误。30日是一般期限。<br><b>B选项</b>：错误。45日是简易程序审限。<br><b>C选项</b>：正确。30+30=60日，最长60日。<br><b>D选项</b>：错误。没有90日的规定。',
+              tip: '30天起步，延长30天，封顶60天。冻结也是一样的规则。技术鉴定期间不算在内，所以实际可能超过60天。' },
+            { type: 'single', q: '以下哪种情形应当解除查封扣押？', opts: ['A. 当事人申请解除', 'B. 当事人提起行政复议', 'C. 没有违法行为', 'D. 当事人确有困难'], correct: 2,
+              detail: '<b>A选项</b>：错误。当事人申请不是法定解除条件。<br><b>B选项</b>：错误。复议诉讼不停止执行。<br><b>C选项</b>：正确。没有违法行为应立即解除。<br><b>D选项</b>：错误。确有困难是中止执行的条件。',
+              tip: '解除条件："无罪、无关、办完、到期"。当事人申请解除没用，得看事实是不是满足这四个条件之一。复议和诉讼不停止执行，不会导致解除。' },
+            { type: 'multi', q: '以下哪些属于应当解除查封扣押的情形？', opts: ['A. 期限届满', 'B. 与违法行为无关', 'C. 当事人申请', 'D. 已作出处理决定', 'E. 没有违法行为'], correct: [0,1,3,4], multi: true,
+              detail: '<b>A选项</b>：正确。期限届满应解除。<br><b>B选项</b>：正确。无关应解除。<br><b>C选项</b>：错误。当事人申请不是法定条件。<br><b>D选项</b>：正确。处理完应解除。<br><b>E选项</b>：正确。无违法应解除。',
+              tip: 'C是陷阱！当事人申请解除不是法定条件，必须符合"A、B、D、E"四个客观条件之一才行。口诀："无违法、已处理、不相干、时间到"。' }
+        ]
+    },
+    // ===== 模块9：综合练习 =====
+    {
+        id: 'mod9',
+        iconClass: 'icon-red',
+        iconEmoji: '📝',
+        title: '九、综合练习 ',
+        subtitle: '全部做完，行政强制法就通关了！',
+        items: [],
+        quizzes: (function() {
+            // ==================== 判断题30道 ====================
+            const tfQuizzes = [
+                { type: 'tf', q: '行政强制包括行政强制措施和行政强制执行两类。', correct: true,
+                  detail: '<b>A选项"正确"</b>：正确。我国《行政强制法》将两者统一立法。<br><b>B选项"错误"</b>：错误。这是正确的说法。',
+                  tip: '《行政强制法》就是管这俩的。措施=预防控制，执行=强制履行。一张法管两件事。' },
+                { type: 'tf', q: '行政强制措施具有终局性，行政强制执行具有临时性。', correct: false,
+                  detail: '<b>A选项"正确"</b>：错误。说反了！措施是临时性，执行是终局性。<br><b>B选项"错误"</b>：正确。措施=临时控制（如查封30天），执行=最终处置（如拍卖后钱就没了）。',
+                  tip: '措施和执行的特性正好相反。措施是"暂时保管"，执行是"永久拿走"。这题故意说反了，一眼就能看出来。' },
+                { type: 'tf', q: '行政强制执行必须以先行行政行为为前提。', correct: true,
+                  detail: '<b>A选项"正确"</b>：正确。执行前面必须有处罚或征收等行为让人产生义务。<br><b>B选项"错误"</b>：错误。没有先行行为就没有执行依据。',
+                  tip: '执行就是"你不听话我才动手"。先有处罚/征收（听话的要求），你不履行（不听话），然后才执行（动手）。没有前面的要求就没有后面的执行。' },
+                { type: 'tf', q: '查封、扣押仅限制使用权，不改变所有权。', correct: true,
+                  detail: '<b>A选项"正确"</b>：正确。措施阶段只控制不没收，东西还是你的。<br><b>B选项"错误"</b>：错误。到拍卖阶段（执行）才转移所有权。',
+                  tip: '查封=封条一贴，你用不了但还是你的。拍卖=东西卖给别人了，所有权就跟你说拜拜了。措施不转移所有权，执行才转移。' },
+                { type: 'tf', q: '除行政拘留外，所有限制人身自由的行为都属于行政强制措施。', correct: true,
+                  detail: '<b>A选项"正确"</b>：正确。约束醒酒、强制隔离、盘问等都是措施，只有拘留是处罚。<br><b>B选项"错误"</b>：错误。这是正确的总结。',
+                  tip: '限制人身自由的行为一大堆，但只有"行政拘留"是处罚（惩罚你），其他都是措施（预防/控制）。记住这个万能判断法！' },
+                { type: 'tf', q: '地方性法规可以设定冻结存款的行政强制措施。', correct: false,
+                  detail: '<b>A选项"正确"</b>：错误。冻结只能由法律设定，地方性法规只能设查封和扣押。<br><b>B选项"错误"</b>：正确。地方性法规权限很小，只能"查扣"两种。',
+                  tip: '地方性法规=只能查封+扣押。冻结和限制人身自由都是法律保留的"高级权限"，地方没资格碰。' },
+                { type: 'tf', q: '部门规章可以设定一定数额罚款的行政处罚，但不能设定行政强制措施。', correct: true,
+                  detail: '<b>A选项"正确"</b>：正确。规章可设警告和罚款（处罚），但不能设任何强制措施。<br><b>B选项"错误"</b>：错误。这说的是对的。',
+                  tip: '规章=能罚钱（处罚），不能强制（措施）。行政处罚和行政强制的设定权限不一样，别搞混。' },
+                { type: 'tf', q: '行政强制执行只能由法律设定。', correct: true,
+                  detail: '<b>A选项"正确"</b>：正确。连行政法规都不能设定执行，只有法律有这个权力。<br><b>B选项"错误"</b>：错误。执行是"最霸道"的权力，门槛最高。',
+                  tip: '"执行唯法律"——行政法规、地方性法规、规章统统靠边站。因为执行可以强制拿走你的东西，所以必须最高级别的法来管。' },
+                { type: 'tf', q: '情况紧急需要当场实施行政强制措施的，行政执法人员应当在48小时内向负责人报告。', correct: false,
+                  detail: '<b>A选项"正确"</b>：错误。是24小时内，不是48小时。<br><b>B选项"错误"</b>：正确。24小时=一天内补办手续，48小时就太慢了。',
+                  tip: '紧急情况=24小时补报告。24小时是一天，48小时是两天——紧急情况等两天黄花菜都凉了。数字记准：24！' },
+                { type: 'tf', q: '行政强制措施不得委托实施。', correct: true,
+                  detail: '<b>A选项"正确"</b>：正确。强制措施必须由法定机关自己实施。<br><b>B选项"错误"</b>：错误。行政处罚可以委托，但强制措施不行。',
+                  tip: '强制措施不能委托！和行政处罚不一样——处罚可以委托给管理公共事务的组织，但强制措施必须自己上。因为强制措施直接控制人身财产，太敏感了。' },
+                { type: 'tf', q: '查封、扣押的期限一般不得超过60日。', correct: false,
+                  detail: '<b>A选项"正确"</b>：错误。一般期限是30日，60日是最长（含延期）。<br><b>B选项"错误"</b>：正确。"一般"是30天，不是60天。',
+                  tip: '一般30天=起步价；最长60天=封顶价。题目说"一般60天"是把最长当一般了，错！' },
+                { type: 'tf', q: '因查封扣押产生的保管费用由当事人承担。', correct: false,
+                  detail: '<b>A选项"正确"</b>：错误。措施阶段费用由行政机关承担。<br><b>B选项"错误"</b>：正确。还没确定违法，不能让你掏钱。',
+                  tip: '措施全免费！保管、检测、鉴定都是公家出。只有执行阶段（代履行）的费用当事人才掏腰包。' },
+                { type: 'tf', q: '冻结存款汇款的期限与查封扣押的期限规则一致。', correct: true,
+                  detail: '<b>A选项"正确"</b>：正确。都是30日+30日=最长60日。<br><b>B选项"错误"</b>：错误。两者在期限上规则相同。',
+                  tip: '冻结和查封扣押的期限是"双胞胎"——都是30+30=60。法律在这方面统一了规则，好记！' },
+                { type: 'tf', q: '冻结决定书应在冻结后3日内交付当事人。', correct: true,
+                  detail: '<b>A选项"正确"</b>：正确。先通知银行冻结，3天内给当事人决定书。<br><b>B选项"错误"</b>：错误。这是对的，防止当事人转移资金。',
+                  tip: '先冻再通知=防止跑路。银行那边冻住了，3天内给当事人发决定书。这时候他想转也转不走了。' },
+                { type: 'tf', q: '代履行费用由行政机关承担。', correct: false,
+                  detail: '<b>A选项"正确"</b>：错误。代履行费用由当事人（义务人）承担。<br><b>B选项"错误"</b>：正确。你的义务你不做，找人替你做的钱当然你出。',
+                  tip: '代履行=你的活你不干，我找人干，钱你掏。和强制措施相反——措施是公家出钱，执行是当事人出钱。' },
+                { type: 'tf', q: '代履行可适用于强制服兵役等与人身有关的义务。', correct: false,
+                  detail: '<b>A选项"正确"</b>：错误。人身性义务不可代履行——不能找人替你当兵。<br><b>B选项"错误"</b>：正确。人身义务、金钱义务、不作为义务都不能代履行。',
+                  tip: '能找人代的活才能用代履行。坐牢、当兵、交钱、"不准营业"——这些都不能找人替。拆房子、清垃圾就可以找施工队代劳。' },
+                { type: 'tf', q: '行政机关不得在夜间或法定节假日实施行政强制执行，但情况紧急的除外。', correct: true,
+                  detail: '<b>A选项"正确"</b>：正确。温情执法原则，但紧急情况例外。<br><b>B选项"错误"</b>：错误。这正是法条的规定。',
+                  tip: '白天干活，晚上休息，过年过节不打扰——这是温情执法。但火烧眉毛了（紧急）就得马上干。' },
+                { type: 'tf', q: '行政机关可以对居民生活采取停止供水供电的方式迫使履行义务。', correct: false,
+                  detail: '<b>A选项"正确"</b>：错误。绝对禁止对居民生活断水断电。<br><b>B选项"错误"</b>：正确。居民生活受保护，企业不受此保护。',
+                  tip: '对老百姓的家不能断水断电——这是基本人权。但对企业可以（如责令关闭就可以停水停电）。居民≠企业。' },
+                { type: 'tf', q: '催告是行政强制执行的必经程序。', correct: true,
+                  detail: '<b>A选项"正确"</b>：正确。原则上必须先催告再执行。<br><b>B选项"错误"</b>：错误。执行罚和立即代履行可跳过催告。但总体原则是必须催告。',
+                  tip: '先礼后兵——先催告"你赶紧履行吧"，不听再动手。这是基本程序，不催告就执行是违法的。' },
+                { type: 'tf', q: '没有强制执行权的行政机关应当申请法院强制执行。', correct: true,
+                  detail: '<b>A选项"正确"</b>：正确。无执行权→找法院帮忙。<br><b>B选项"错误"</b>：错误。不能自己硬来。',
+                  tip: '"无牙找法院"——市场监管局、环保局这些没有强制执行权的，只能走法院通道。有执行权的（公安税务海关）自己就能干。' },
+                { type: 'tf', q: '加处罚款的数额不得超过原罚款数额。', correct: true,
+                  detail: '<b>A选项"正确"</b>：正确。加罚最高翻一倍（本数封顶）。<br><b>B选项"错误"</b>：错误。每天3%，加满为止，但不能超过原罚款本数。',
+                  tip: '罚款8亿加罚最多也是8亿，总共16亿封顶。但滞纳金没有这个封顶，所以实际会更多。' },
+                { type: 'tf', q: '中止执行的情形消失后，行政机关应当恢复执行。', correct: true,
+                  detail: '<b>A选项"正确"</b>：正确。中止=暂停，条件满足后继续。<br><b>B选项"错误"</b>：错误。中止不是终结，是要恢复的。',
+                  tip: '中止=按暂停键，恢复=按播放键。终结=Game Over彻底结束。中止只是暂时停一下，好了继续。' },
+                { type: 'tf', q: '公民死亡无遗产可供执行又无义务承受人的，应中止执行。', correct: false,
+                  detail: '<b>A选项"正确"</b>：错误。这种情况是终结执行，不是中止。<br><b>B选项"错误"</b>：正确。人没了、钱没了、没人继承=彻底结束。',
+                  tip: '人死债消——没人没钱的，只能终结（Game Over）。中止是"暂时困难"，终结是"彻底没戏"。' },
+                { type: 'tf', q: '执行协议本质为执行和解，当事人不履行的应恢复强制执行。', correct: true,
+                  detail: '<b>A选项"正确"</b>：正确。协议是给你机会，不珍惜就恢复执行。<br><b>B选项"错误"</b>：错误。协议不是"免死金牌"，不履行照样执行。',
+                  tip: '执行协议=给你个台阶下（分期付款），你要是骗我签了协议又耍赖，那就恢复执行，直接来硬的。' },
+                { type: 'tf', q: '金融机构在冻结前可以向当事人泄露信息。', correct: false,
+                  detail: '<b>A选项"正确"</b>：错误。绝对禁止泄露！泄露=当事人马上转移资金。<br><b>B选项"错误"</b>：正确。金融机构接到冻结通知书后必须立即冻结，不得拖延或泄密。',
+                  tip: '银行要是先告诉了当事人"我们要冻你的钱了"，当事人30秒就能把钱转走。所以法律严禁泄露，必须先冻再通知当事人。' },
+                { type: 'tf', q: '当事人申请解除查封扣押的，行政机关应当及时解除。', correct: false,
+                  detail: '<b>A选项"正确"</b>：错误。当事人申请不是法定解除条件。<br><b>B选项"错误"</b>：正确。必须符合"无违法、无关、已处理、到期"四个客观条件才解除。',
+                  tip: '不是你说"放了我吧"就放你。得看事实——确实没违法、或确实无关、或办完了、或到期了，才能解。当事人申请不是解锁密码。' },
+                { type: 'tf', q: '地方性法规可以设定行政强制执行。', correct: false,
+                  detail: '<b>A选项"正确"</b>：错误。执行只能由法律设定，连行政法规都不行。<br><b>B选项"错误"</b>：正确。地方性法规只能设查封和扣押两种措施。',
+                  tip: '执行唯法律！地方性法规连行政强制措施都只能设两种（查封扣押），更别说执行了。' },
+                { type: 'tf', q: '冻结的存款与违法行为无关的，应当及时解除冻结。', correct: true,
+                  detail: '<b>A选项"正确"</b>：正确。无关就解冻，不能冻着不相关的东西。<br><b>B选项"错误"</b>：错误。冻结只能冻有关的部分。',
+                  tip: '冻错了就得马上解。比如人家账户200万，只有20万跟违法有关，最多冻20万，不能把200万全冻了。与违法无关的部分不能动。' },
+                { type: 'tf', q: '拍卖所得款项必须上缴国库，任何行政机关不得截留私分。', correct: true,
+                  detail: '<b>A选项"正确"</b>：正确。所有罚款、没收、拍卖款都得上缴国库。<br><b>B选项"错误"</b>：错误。截留私分是违法的，要被追缴。',
+                  tip: '所有钱进国库！不能变成机关的"小金库"或个人的"外快"。这是硬杠杠，碰了就犯法。' },
+                { type: 'tf', q: '变卖财物价格明显低于市场价给当事人造成损失的，应给予赔偿。', correct: false,
+                  detail: '<b>A选项"正确"</b>：错误。变卖低于市场价是补偿，不是赔偿。<br><b>B选项"错误"</b>：正确。变卖无《拍卖法》约束，低价变卖是合法程序瑕疵，用补偿；违法才用赔偿。',
+                  tip: '变卖低价=补偿（程序瑕疵），违法造成损失=赔偿（行为违法）。拍卖有《拍卖法》管着，低价也合法，不赔不补。' }
+            ];
+
+            // ==================== 单选题15道 ====================
+            const singleQuizzes = [
+                { type: 'single', q: '行政强制措施与行政强制执行的核心区别是？', opts: ['A. 措施是终局性的，执行是临时性的', 'B. 措施是临时性的，执行是终局性的', 'C. 措施针对人身，执行针对财产', 'D. 两者没有区别'], correct: 1,
+                  detail: '<b>A选项</b>：错误。说反了。<br><b>B选项</b>：正确。措施=临时控制，执行=终局处置。<br><b>C选项</b>：错误。措施也针对财产（查封扣押），执行也涉及人身（拘留执行）。<br><b>D选项</b>：错误。两者有明显区别。',
+                  tip: '核心区别：措施=暂时保管，执行=永久拿走。记住"措施临时，执行终局"。' },
+                { type: 'single', q: '下列哪项属于行政强制执行？', opts: ['A. 查封场所', 'B. 约束至酒醒', 'C. 划拨存款', 'D. 冻结汇款'], correct: 2,
+                  detail: '<b>A选项</b>：错误。查封是措施。<br><b>B选项</b>：错误。约束醒酒是措施。<br><b>C选项</b>：正确。划拨是执行（直接强制履行金钱义务）。<br><b>D选项</b>：错误。冻结是措施。',
+                  tip: '看到"A查封B约束D冻结"就知道是措施（限查扣冻）。C划拨=直接拿钱走，是执行。' },
+                { type: 'single', q: '行政法规可以设定哪类行政强制？', opts: ['A. 行政强制执行', 'B. 限制人身自由的强制措施', 'C. 查封场所的强制措施', 'D. 冻结存款的强制措施'], correct: 2,
+                  detail: '<b>A选项</b>：错误。执行只能法律设。<br><b>B选项</b>：错误。限制人身自由只能法律设。<br><b>C选项</b>：正确。行政法规可设查封扣押。<br><b>D选项</b>：错误。冻结只能法律设。',
+                  tip: '行政法规=减1（去掉限制自由和冻结），只能设查封扣押。A谁都不能设（只法律），B和D也只能法律。' },
+                { type: 'single', q: '紧急情况下当场实施强制措施后，应在几小时内补办批准手续？', opts: ['A. 12小时', 'B. 24小时', 'C. 48小时', 'D. 72小时'], correct: 1,
+                  detail: '<b>A选项</b>：错误。不是12小时。<br><b>B选项</b>：正确。24小时内补办手续。<br><b>C选项</b>：错误。48小时太长了。<br><b>D选项</b>：错误。没有72小时的规定。',
+                  tip: '24小时=一天内搞定。紧急情况先斩后奏，但一天内必须补报告。数字记准：24！' },
+                { type: 'single', q: '冻结决定书应在冻结后几日内交付当事人？', opts: ['A. 当日', 'B. 1日', 'C. 3日', 'D. 7日'], correct: 2,
+                  detail: '<b>A选项</b>：错误。不是当日。<br><b>B选项</b>：错误。没有1日的规定。<br><b>C选项</b>：正确。3日内交付。<br><b>D选项</b>：错误。7日是其他程序期限。',
+                  tip: '3天=先冻住钱，3天内通知你。防止你收到通知立刻转账跑路。' },
+                { type: 'single', q: '代履行不适用于下列哪种义务？', opts: ['A. 强制拆除违建', 'B. 清除道路遗洒物', 'C. 缴纳罚款', 'D. 恢复原状'], correct: 2,
+                  detail: '<b>A选项</b>：可适用。拆除是可替代的作为义务。<br><b>B选项</b>：可适用。清除是可替代的。<br><b>C选项</b>：不可适用。金钱给付不能代履行。<br><b>D选项</b>：可适用。恢复原状可找人代做。',
+                  tip: '交罚款不能找人代交——代履行=帮你干活，不是帮你还钱。人身义务、金钱义务、不作为义务都不行。' },
+                { type: 'single', q: '执行协议达成后，当事人不履行的应如何处理？', opts: ['A. 提起民事诉讼', 'B. 提起行政诉讼', 'C. 恢复强制执行', 'D. 重新达成协议'], correct: 2,
+                  detail: '<b>A选项</b>：错误。不是民事诉讼。<br><b>B选项</b>：错误。不是行政诉讼。<br><b>C选项</b>：正确。协议不履行就恢复执行。<br><b>D选项</b>：错误。不是重新协商。',
+                  tip: '协议是给你机会，你耍赖就恢复执行，直接来硬的。协议不是"免死金牌"。' },
+                { type: 'single', q: '行政机关申请法院强制执行，法院受理后书面审查无问题的，应在几日内作出执行裁定？', opts: ['A. 3日', 'B. 5日', 'C. 7日', 'D. 15日'], correct: 2,
+                  detail: '<b>A选项</b>：错误。没有3日的规定。<br><b>B选项</b>：错误。5日是受理决定期。<br><b>C选项</b>：正确。7日内作出执行裁定。<br><b>D选项</b>：错误。15日是其他期限。',
+                  tip: '三步走：5天受理→7天裁定（无问题）→执行。有问题则30天裁定。三个数字要分清。' },
+                { type: 'single', q: '涉及不动产的强制执行申请，应向哪个法院提出？', opts: ['A. 行政机关所在地法院', 'B. 当事人住所地法院', 'C. 不动产所在地法院', 'D. 中级法院'], correct: 2,
+                  detail: '<b>A选项</b>：错误。不动产例外。<br><b>B选项</b>：错误。不是当事人住所地。<br><b>C选项</b>：正确。不动产专属管辖。<br><b>D选项</b>：错误。不是级别问题。',
+                  tip: '房子在哪就去哪的法院。不动产专属管辖贯穿行政法始终——执行申请、行政诉讼都是这个规矩。' },
+                { type: 'single', q: '加处罚款按每日多少计算？', opts: ['A. 1%', 'B. 3%', 'C. 5%', 'D. 10%'], correct: 1,
+                  detail: '<b>A选项</b>：错误。不是1%。<br><b>B选项</b>：正确。每日按罚款数额的3%加罚。<br><b>C选项</b>：错误。5‱是税收滞纳金比例（不同法）。<br><b>D选项</b>：错误。不是10%。',
+                  tip: '每天3%看着不多，但利滚利很快！罚款8亿每天2400万，一个月就是7.2亿，封顶再罚8亿。' },
+                { type: 'single', q: '中止执行满几年未恢复且无社会危害无履行能力的，不再执行？', opts: ['A. 1年', 'B. 2年', 'C. 3年', 'D. 5年'], correct: 2,
+                  detail: '<b>A选项</b>：错误。不是1年。<br><b>B选项</b>：错误。不是2年。<br><b>C选项</b>：正确。中止满3年+无危害+无能力=不再执行。<br><b>D选项</b>：错误。5年是其他时效。',
+                  tip: '中止3年没动静就算了——别一直挂着。条件：没危害+没能力+满3年。三个条件缺一不可。' },
+                { type: 'single', q: '下列行政机关中具有行政强制执行权的是？', opts: ['A. 市场监督管理局', 'B. 税务局', 'C. 生态环境局', 'D. 文化和旅游局'], correct: 1,
+                  detail: '<b>A选项</b>：错误。市场监管局无执行权，须申请法院。<br><b>B选项</b>：正确。税务是"国公税关县"之一。<br><b>C选项</b>：错误。环保局无执行权。<br><b>D选项</b>：错误。文旅局无执行权。',
+                  tip: '有执行权的：公安、国安、税务、海关、县级以上政府。口诀"国公税关县"。其他统统没有，得找法院。' },
+                { type: 'single', q: '金融机构将款项划入国库以外账户的，应处以违法划拨款项几倍罚款？', opts: ['A. 1倍', 'B. 2倍', 'C. 3倍', 'D. 5倍'], correct: 1,
+                  detail: '<b>A选项</b>：错误。不是1倍。<br><b>B选项</b>：正确。2倍罚款。<br><b>C选项</b>：错误。不是3倍。<br><b>D选项</b>：错误。没有5倍的规定。',
+                  tip: '陕西某银行因拖延划拨被罚了100万+负责人50万。划错地方=2倍罚款，由金融监管机构处罚。' },
+                { type: 'single', q: '行政机关截留拍卖所得款项的，由哪个部门追缴？', opts: ['A. 只能由财政部门', 'B. 只能由上级机关', 'C. 由财政部门或有关部门', 'D. 由法院'], correct: 2,
+                  detail: '<b>A选项</b>：错误。"只能"太绝对。<br><b>B选项</b>：错误。"只能"太绝对。<br><b>C选项</b>：正确。财政部门或有关部门都可以追缴。<br><b>D选项</b>：错误。法院不负责追缴。',
+                  tip: '追缴主体是"财政部门或有关部门"——不是只有一家能管，多部门都有权。注意"只能"是陷阱。' },
+                { type: 'single', q: '以下哪种情况不属于终结执行的情形？', opts: ['A. 公民死亡无遗产', 'B. 执行标的灭失', 'C. 当事人确有困难', 'D. 行政决定被撤销'], correct: 2,
+                  detail: '<b>A选项</b>：属于终结。<br><b>B选项</b>：属于终结。<br><b>C选项</b>：属于中止（暂停），不是终结。<br><b>D选项</b>：属于终结。',
+                  tip: '"确有困难"=中止（暂停），不是终结。"死亡无遗产、灭失、决定撤销"=终结（彻底结束）。困难可以克服，死人和消灭没法克服。' }
+            ];
+
+            // ==================== 多选题10道 ====================
+            const multiQuizzes = [
+                { type: 'multi', q: '以下属于行政强制措施的有？', opts: ['A. 约束至酒醒', 'B. 查封场所', 'C. 扣押财物', 'D. 划拨存款', 'E. 冻结存款'], correct: [0,1,2,4], multi: true,
+                  detail: '<b>A选项</b>：属于。限制人身自由的措施。<br><b>B选项</b>：属于。查封是措施。<br><b>C选项</b>：属于。扣押是措施。<br><b>D选项</b>：不属于。划拨是执行。<br><b>E选项</b>：属于。冻结是措施。',
+                  tip: 'D是卧底！划拨=直接拿钱=执行。ABCE都是措施。"限查扣冻"四大天王全齐了。' },
+                { type: 'multi', q: '地方性法规可以设定的行政强制措施有？', opts: ['A. 限制人身自由', 'B. 查封场所', 'C. 扣押财物', 'D. 冻结存款', 'E. 行政强制执行'], correct: [1,2], multi: true,
+                  detail: '<b>A选项</b>：不可。限制自由只能法律设。<br><b>B选项</b>：可。查封可设。<br><b>C选项</b>：可。扣押可设。<br><b>D选项</b>：不可。冻结只能法律设。<br><b>E选项</b>：不可。执行只能法律设。',
+                  tip: '地方性法规=只能查封+扣押。其他三个都是法律保留的"高级权限"。记住：地方只有"查扣"两板斧。' },
+                { type: 'multi', q: '以下属于应当解除查封扣押的情形有？', opts: ['A. 没有违法行为', 'B. 与违法行为无关', 'C. 当事人申请', 'D. 查封扣押期限届满', 'E. 已作出处理决定不再需要'], correct: [0,1,3,4], multi: true,
+                  detail: '<b>A选项</b>：正确。无违法应解除。<br><b>B选项</b>：正确。无关应解除。<br><b>C选项</b>：错误。申请不是法定条件。<br><b>D选项</b>：正确。到期应解除。<br><b>E选项</b>：正确。处理完应解除。',
+                  tip: 'C是陷阱！必须满足客观条件才解除，不是当事人说"放了我"就放。四条件："无罪、无关、到期、办完"。' },
+                { type: 'multi', q: '代履行不可适用于下列哪些义务？', opts: ['A. 强制服兵役', 'B. 缴纳罚款', 'C. 强制拆除违建', 'D. 停止非法经营', 'E. 清除道路障碍物'], correct: [0,1,3], multi: true,
+                  detail: '<b>A选项</b>：不可。人身性义务。<br><b>B选项</b>：不可。金钱给付义务。<br><b>C选项</b>：可。拆除是可替代的作为义务。<br><b>D选项</b>：不可。不作为义务。<br><b>E选项</b>：可。清除是可替代的。',
+                  tip: '不能代的：人身（当兵坐牢）、金钱（罚款纳税）、不作为（不准营业）。能代的：可替代的体力活（拆除、清除）。' },
+                { type: 'multi', q: '以下费用中应由行政机关承担的有？', opts: ['A. 查封扣押保管费', 'B. 技术鉴定费', 'C. 代履行费用', 'D. 检测检验费', 'E. 申请法院执行费'], correct: [0,1,3], multi: true,
+                  detail: '<b>A选项</b>：正确。措施阶段保管费行政机关出。<br><b>B选项</b>：正确。鉴定费行政机关出。<br><b>C选项</b>：错误。代履行费当事人出。<br><b>D选项</b>：正确。检测费行政机关出。<br><b>E选项</b>：错误。法院执行费被执行人出。',
+                  tip: '规律：措施阶段=公家买单，执行阶段=当事人买单。A、B、D是措施阶段，C和E是执行阶段。' },
+                { type: 'multi', q: '以下关于冻结的说法正确的有？', opts: ['A. 冻结须经负责人批准', 'B. 冻结期限最长60日', 'C. 冻结决定书应在冻结前交付', 'D. 冻结金额应与违法金额相当', 'E. 不得重复冻结'], correct: [0,1,3,4], multi: true,
+                  detail: '<b>A选项</b>：正确。须经批准。<br><b>B选项</b>：正确。30+30=60日。<br><b>C选项</b>：错误。决定书在冻结后3日内交付，不在冻结前。<br><b>D选项</b>：正确。金额应相当。<br><b>E选项</b>：正确。不得重复冻结。',
+                  tip: 'C说反了！先冻再通知，防止转移资金。其他四个都是正确的冻结规则。' },
+                { type: 'multi', q: '行政强制执行的法定方式包括？', opts: ['A. 加处罚款', 'B. 划拨存款', 'C. 拍卖财物', 'D. 代履行', 'E. 排除妨碍恢复原状'], correct: [0,1,2,3,4], multi: true,
+                  detail: '<b>A选项</b>：正确。执行罚（间接执行）。<br><b>B选项</b>：正确。直接执行。<br><b>C选项</b>：正确。直接执行。<br><b>D选项</b>：正确。间接执行。<br><b>E选项</b>：正确。直接执行。',
+                  tip: '五个全选！执行方式=加罚/划拨/拍卖/代履行/排除妨碍。记住这"五件套"，都是合法的执行方式。' },
+                { type: 'multi', q: '关于中止执行和终结执行，以下说法正确的有？', opts: ['A. 中止执行可恢复', 'B. 终结执行不可恢复', 'C. 确有困难属中止', 'D. 执行标的灭失属终结', 'E. 中止满2年不再执行'], correct: [0,1,2,3], multi: true,
+                  detail: '<b>A选项</b>：正确。中止=暂停。<br><b>B选项</b>：正确。终结=结束。<br><b>C选项</b>：正确。困难→中止。<br><b>D选项</b>：正确。灭失→终结。<br><b>E选项</b>：错误。是满3年不是2年。',
+                  tip: 'E错——不是2年是3年。其他全对。中止=暂停可恢复，终结=Game Over不可逆。困难中止，灭失终结。' },
+                { type: 'multi', q: '以下哪些属于行政强制措施实施程序的要求？', opts: ['A. 2名以上执法人员', 'B. 出示执法证件', 'C. 制作现场笔录', 'D. 可委托实施', 'E. 告知当事人权利'], correct: [0,1,2,4], multi: true,
+                  detail: '<b>A选项</b>：正确。必须2人以上。<br><b>B选项</b>：正确。须出示证件。<br><b>C选项</b>：正确。须制作笔录。<br><b>D选项</b>：错误。强制措施不得委托！<br><b>E选项</b>：正确。须告知权利。',
+                  tip: 'D是陷阱！强制措施不能委托，行政处罚才能委托。其他四个都是正确的程序要求。' },
+                { type: 'multi', q: '行政强制措施中关于查封扣押的正确说法有？', opts: ['A. 限于涉案场所财物', 'B. 不得查封生活必需品', 'C. 保管费由当事人承担', 'D. 不得重复查封', 'E. 决定书应载明期限'], correct: [0,1,3,4], multi: true,
+                  detail: '<b>A选项</b>：正确。限于涉案。<br><b>B选项</b>：正确。生活必需品不查封。<br><b>C选项</b>：错误。保管费由行政机关承担。<br><b>D选项</b>：正确。不重复查封。<br><b>E选项</b>：正确。决定书应载明期限。',
+                  tip: 'C是陷阱！保管费=行政机关出，不是当事人。其他四个都是正确的查封扣押规则。' }
+            ];
+
+            // 转换判断题为统一格式
+            const tfConverted = tfQuizzes.map((q, i) => ({
+                ...q,
+                type: 'single',
+                opts: ['✅ 正确', '❌ 错误'],
+                correct: q.correct ? 0 : 1,
+                isTF: true,
+                tfId: 'tf' + (i + 1)
+            }));
+
+            return [...tfConverted, ...singleQuizzes, ...multiQuizzes];
+        })()
+    }
+];
+
+
+// ==================== 渲染引擎 ====================
+function renderAll() {
+    var main = document.getElementById('mainContent');
+    var html = '';
+    knowledgeData.forEach(function(mod) {
+        html += '<div class="card" id="' + mod.id + '"><div class="section-title"><div class="icon ' + mod.iconClass + '">' + mod.iconEmoji + '</div>' + mod.title + '</div>';
+        if (mod.subtitle) html += '<div class="subtitle">' + mod.subtitle + '</div>';
+        if (mod.items && mod.items.length > 0) {
+            html += '<div class="ki-grid">';
+            mod.items.forEach(function(item) {
+                if (item.type === 'table') html += item.html;
+                else if (item.type === 'ki') html += renderKI(item);
+            });
+            html += '</div>';
+        }
+
+
+                        if (mod.quizzes && mod.quizzes.length > 0) {
+                    mod.quizzes.forEach(function(q, qi) {
+                        // 综合练习模块添加序号
+                        var quizWithIndex = q;
+                        if (mod.id === 'mod9') {
+                            quizWithIndex = Object.assign({}, q);
+                            quizWithIndex.quizIndex = qi + 1;
+                        }
+                        html += renderQuiz(quizWithIndex, mod.id + '-q' + qi);
+                    });
+                }
+
+
+        html += '</div>';
+    });
+    main.innerHTML = html;
+    generateTOC();
+}
+
+function renderKI(item) {
+    var h = '<div class="ki-item">';
+    h += '<div class="ki-title-row">' + (item.badge ? '<span class="badge ' + (item.badgeClass || 'badge-num') + '">' + item.badge + '</span>' : '') + item.title + '</div>';
+    h += '<div class="ki-content">' + item.content + '</div>';
+    if (item.extra) h += '<div style="margin-top:6px;color:#5c5347;font-size:0.88rem;">' + item.extra + '</div>';
+    if (item.example) {
+        h += '<div class="example-block"><div class="ex-label">📖 生动案例</div><div class="ex-q">' + item.example.q + '</div><div class="ex-a">' + item.example.a + '</div></div>';
+    }
+    h += '</div>';
+    return h;
+}
+
+function renderQuiz(q, qid) {
+        var qTypeLabel = q.isTF ? '【判断题】' : (q.multi ? '【多选题】' : '【单选题】');
+    var h = '<div class="quiz-wrap" data-qid="' + qid + '">';
+    // 显示题型 + 序号
+    if (q.quizIndex) {
+        h += '<div class="q-type">📝 ' + qTypeLabel + ' · 第' + q.quizIndex + '题</div>';
+    } else if (q.tfId) {
+        h += '<div class="q-type">📝 ' + qTypeLabel + ' · ' + q.tfId + '</div>';
+    } else {
+        h += '<div class="q-type">📝 ' + qTypeLabel + '</div>';
+    }
+
+    h += '<div class="q-text">' + q.q + '</div>';
+    h += '<ul class="opt-list">';
+    for (var i = 0; i < q.opts.length; i++) {
+        h += '<li data-idx="' + i + '" onclick="selectOpt(this,\'' + qid + '\',' + i + ',' + (q.multi || false) + ')">' + q.opts[i] + '</li>';
+    }
+    h += '</ul>';
+    h += '<div class="btn-row"><button class="btn btn-primary" onclick="submitQuiz(\'' + qid + '\',' + JSON.stringify(q.correct) + ',' + (q.multi || false) + ')">✅ 提交答案</button><button class="btn btn-outline" onclick="resetQuiz(\'' + qid + '\')">🔄 重做</button></div>';
+    h += '<div class="explain-card" id="ex-' + qid + '">';
+    h += '<div class="ex-head"></div>';
+    h += '<div class="ex-body"></div>';
+
+
+    if (q.detail) {
+        var detailHtml = q.detail
+            // 单选题/多选题：A选项：正确/错误
+            .replace(/([A-E])选项<\/b>：正确/g, '<span style="color:#145a32;">✅ $1选项</b>：正确</span>')
+            .replace(/([A-E])选项<\/b>：错误/g, '<span style="color:#b22222;">❌ $1选项</b>：错误</span>')
+            .replace(/([A-E])选项<\/b>：属于/g, '<span style="color:#145a32;">✅ $1选项</b>：属于</span>')
+            .replace(/([A-E])选项<\/b>：不属于/g, '<span style="color:#b22222;">❌ $1选项</b>：不属于</span>')
+                        // 判断题：去掉选项中的“正确/错误”字样，直接显示结论
+            .replace(/([A-B])选项"正确"<\/b>：错误/g, '$1选项</b>：<span style="color:#b22222;">❌ 错误</span>')
+            .replace(/([A-B])选项"错误"<\/b>：正确/g, '$1选项</b>：<span style="color:#145a32;">✅ 正确</span>')
+            .replace(/([A-B])选项"正确"<\/b>：正确/g, '$1选项</b>：<span style="color:#145a32;">✅ 正确</span>')
+            .replace(/([A-B])选项"错误"<\/b>：错误/g, '$1选项</b>：<span style="color:#b22222;">❌ 错误</span>');
+        h += '<div class="ex-detail" style="margin-top:10px;padding:10px 14px;background:#fff;border-radius:6px;font-size:0.88rem;line-height:1.8;display:none;">📋 <b>逐项解析：</b><br>' + detailHtml + '</div>';
+    }
+
+
+
+    h += '<div class="ex-tip">💡 <b>大白话理解：</b>' + q.tip + '</div>';
+    h += '</div></div>';
+    return h;
+}
+
+// ==================== 答题交互 ====================
+function selectOpt(el, qid, idx, multi) {
+    var wrap = el.closest('.quiz-wrap');
+    if (wrap.classList.contains('submitted')) return;
+    var allOpts = wrap.querySelectorAll('.opt-list li');
+    if (multi) { el.classList.toggle('selected'); }
+    else { allOpts.forEach(function(o) { o.classList.remove('selected'); }); el.classList.add('selected'); }
+}
+
+function submitQuiz(qid, correct, multi) {
+    var wrap = document.querySelector('[data-qid="' + qid + '"]');
+    if (wrap.classList.contains('submitted')) return;
+    wrap.classList.add('submitted');
+    var allOpts = wrap.querySelectorAll('.opt-list li');
+    var correctArr = Array.isArray(correct) ? correct : [correct];
+    var selectedIdxs = [];
+    for (var i = 0; i < allOpts.length; i++) { if (allOpts[i].classList.contains('selected')) selectedIdxs.push(i); }
+    var isCorrect;
+    if (multi) {
+        isCorrect = selectedIdxs.length === correctArr.length;
+        for (var j = 0; j < selectedIdxs.length; j++) { if (correctArr.indexOf(selectedIdxs[j]) === -1) { isCorrect = false; break; } }
+    } else { isCorrect = selectedIdxs.length === 1 && selectedIdxs[0] === correctArr[0]; }
+
+    for (var k = 0; k < allOpts.length; k++) {
+        allOpts[k].classList.add('disabled');
+        if (correctArr.indexOf(k) !== -1) allOpts[k].classList.add('correct');
+    }
+    if (!isCorrect) {
+        for (var m = 0; m < selectedIdxs.length; m++) { if (correctArr.indexOf(selectedIdxs[m]) === -1) allOpts[selectedIdxs[m]].classList.add('wrong'); }
+    }
+
+    var exEl = document.getElementById('ex-' + qid);
+    exEl.classList.add('show');
+    if (isCorrect) {
+        exEl.classList.add('correct-ex'); exEl.classList.remove('wrong-ex');
+        exEl.querySelector('.ex-head').textContent = '🎉 回答正确！';
+        exEl.querySelector('.ex-body').textContent = '';
+        var exDetail = exEl.querySelector('.ex-detail');
+        if (exDetail) exDetail.style.display = 'block';
+    } else {
+        exEl.classList.add('wrong-ex'); exEl.classList.remove('correct-ex');
+        exEl.querySelector('.ex-head').textContent = '😞 回答错误';
+        var letters = ['A','B','C','D','E'];
+        var correctLetters = correctArr.map(function(c) { return letters[c]; }).join('、');
+        exEl.querySelector('.ex-body').innerHTML = '正确答案是：<b>' + correctLetters + '</b>';
+        var exDetail2 = exEl.querySelector('.ex-detail');
+        if (exDetail2) exDetail2.style.display = 'block';
+    }
+}
+
+function resetQuiz(qid) {
+    var wrap = document.querySelector('[data-qid="' + qid + '"]');
+    wrap.classList.remove('submitted');
+    wrap.querySelectorAll('.opt-list li').forEach(function(o) { o.classList.remove('selected','correct','wrong','disabled'); });
+    var exEl = document.getElementById('ex-' + qid);
+    exEl.classList.remove('show','correct-ex','wrong-ex');
+}
+
+function generateTOC() {
+    var toc = document.getElementById('toc');
+    if (!toc) return;
+    var titleHtml = '<div class="toc-title">📑 行政强制法目录</div>';
+    var links = '';
+    knowledgeData.forEach(function(mod) { links += '<a href="#' + mod.id + '">' + mod.title + '</a>'; });
+    toc.innerHTML = titleHtml + links;
+    document.querySelectorAll('.toc a').forEach(function(link) {
+        link.addEventListener('click', function() { if (window.innerWidth <= 768) closeToc(); });
+    });
+}
+
+function toggleToc() { document.getElementById('toc').classList.toggle('show'); document.getElementById('tocOverlay').classList.toggle('show'); }
+function closeToc() { document.getElementById('toc').classList.remove('show'); document.getElementById('tocOverlay').classList.remove('show'); }
+
+document.addEventListener('DOMContentLoaded', renderAll);
+</script>
+</body>
+</html>
