@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>行政许可法 · 从零到做题</title>
+    <style>
+        :root {
+            --bg: #fdf8f3;
+            --card-bg: #ffffff;
+            --text: #2c2416;
+            --text-light: #5c5347;
+            --accent: #b22222;
+            --highlight: #fff3cd;
+            --highlight-border: #f0c040;
+            --example-bg: #f0faf5;
+            --example-border: #a3e4bc;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+            --radius: 14px;
+            --radius-sm: 10px;
+            --font: 'PingFang SC','Microsoft YaHei','Hiragino Sans GB','Noto Sans SC',system-ui,-apple-system,sans-serif;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior: smooth; scroll-padding-top: 20px; }
+        body { font-family: var(--font); background: var(--bg); color: var(--text); line-height: 1.75; padding: 12px; font-size: 16px; -webkit-font-smoothing: antialiased; }
+        a { color: var(--accent); text-decoration: none; }
+
+        .toc-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.35); z-index:98; }
+        .toc-overlay.show { display:block; }
+        .toc { position:fixed; top:16px; left:16px; width:230px; max-height:calc(100vh - 32px); background:var(--card-bg); border-radius:var(--radius); box-shadow:0 8px 30px rgba(0,0,0,0.12); padding:18px 14px; overflow-y:auto; z-index:100; font-size:0.84rem; transition:transform 0.3s; }
+        .toc.hidden { transform:translateX(-260px); }
+        .toc-title { font-weight:700; margin-bottom:10px; color:var(--accent); font-size:1rem; display:flex; align-items:center; gap:6px; position:sticky; top:0; background:var(--card-bg); padding-bottom:8px; border-bottom:1px solid #f0ebe0; }
+        .toc a { display:block; padding:7px 10px; border-radius:6px; margin:2px 0; color:var(--text-light); transition:all 0.2s; font-size:0.82rem; }
+        .toc a:hover,.toc a.active { background:#fdedec; color:var(--accent); font-weight:600; }
+        .toc-toggle { position:fixed; top:16px; left:16px; width:42px; height:42px; border-radius:50%; background:var(--accent); color:#fff; border:none; font-size:1.3rem; cursor:pointer; z-index:101; display:none; box-shadow:0 4px 14px rgba(178,34,34,0.3); align-items:center; justify-content:center; }
+
+        .main { max-width:820px; margin:0 auto 0 270px; display:flex; flex-direction:column; gap:20px; padding-bottom:40px; }
+        .card { background:var(--card-bg); border-radius:var(--radius); padding:22px 26px; box-shadow:var(--shadow-md); border:1px solid #f0ebe0; }
+        .section-title { font-size:1.45rem; font-weight:700; margin-bottom:4px; display:flex; align-items:center; gap:10px; }
+        .section-title .icon { width:34px; height:34px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; flex-shrink:0; }
+        .icon-red { background:#fdedec; color:#b22222; }
+        .icon-blue { background:#eaf2f8; color:#1a5276; }
+        .icon-green { background:#eafaf1; color:#145a32; }
+        .icon-yellow { background:#fef9e7; color:#b7950b; }
+        .subtitle { color:var(--text-light); font-size:0.9rem; margin-bottom:18px; padding-left:44px; }
+
+        .ki-grid { display:flex; flex-direction:column; gap:14px; }
+        .ki-item { border:1px solid #f0ebe0; border-radius:var(--radius-sm); padding:14px 18px; background:#fefefe; }
+        .ki-title-row { font-weight:700; font-size:1rem; margin-bottom:6px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+        .badge { font-size:0.7rem; padding:3px 10px; border-radius:14px; font-weight:600; letter-spacing:0.3px; white-space:nowrap; }
+        .badge-core { background:#fdedec; color:#b22222; }
+        .badge-num { background:#eaf2f8; color:#1a5276; }
+        .badge-case { background:#eafaf1; color:#145a32; }
+        .ki-content { color:var(--text-light); font-size:0.92rem; }
+        .kh { display:inline-block; background:var(--highlight); border:1px solid var(--highlight-border); padding:2px 8px; border-radius:4px; font-weight:600; color:#7d6608; margin:0 2px; font-size:0.9rem; }
+        .kh-red { background:#fdedec; border-color:#f5b7b1; color:#922b21; }
+        .kh-blue { background:#eaf2f8; border-color:#aed6f1; color:#1a5276; }
+        .kh-green { background:#eafaf1; border-color:#a3e4bc; color:#145a32; }
+
+        .example-block { background:var(--example-bg); border-left:3px solid var(--example-border); border-radius:0 var(--radius-sm) var(--radius-sm) 0; padding:12px 16px; margin-top:10px; font-size:0.9rem; color:#1e5a3a; }
+        .example-block .ex-label { font-weight:700; font-size:0.75rem; text-transform:uppercase; letter-spacing:0.5px; color:#1e8449; margin-bottom:4px; }
+        .example-block .ex-q { font-weight:600; color:#145a32; margin-bottom:3px; }
+        .example-block .ex-a { color:#2d6a4f; }
+
+        .info-table { width:100%; border-collapse:collapse; margin:8px 0; font-size:0.88rem; }
+        .info-table th { background:#fef9e7; text-align:left; padding:10px 14px; font-weight:700; border-bottom:2px solid #f0c040; color:#7d6608; }
+        .info-table td { padding:10px 14px; border-bottom:1px solid #f0ebe0; vertical-align:top; }
+        .info-table tr:hover td { background:#fefdf9; }
+
+        .quiz-wrap { border:2px solid #f0ebe0; border-radius:var(--radius-sm); padding:18px 20px; margin-top:12px; background:#fefefe; }
+        .quiz-wrap .q-type { font-size:0.78rem; font-weight:700; color:var(--accent); margin-bottom:4px; letter-spacing:0.4px; }
+        .quiz-wrap .q-text { font-weight:600; margin-bottom:12px; font-size:0.98rem; }
+        .opt-list { list-style:none; display:flex; flex-direction:column; gap:7px; }
+        .opt-list li { padding:10px 14px; border-radius:var(--radius-sm); cursor:pointer; border:2px solid #e9e4db; transition:all 0.2s; background:#fdfdfc; font-size:0.9rem; user-select:none; }
+        .opt-list li:hover { border-color:#c0b090; background:#fefdf9; }
+        .opt-list li.selected { border-color:#1a5276; background:#eaf2f8; font-weight:600; }
+        .opt-list li.correct { border-color:#1e8449 !important; background:#eafaf1 !important; color:#145a32 !important; }
+        .opt-list li.wrong { border-color:#b22222 !important; background:#fdedec !important; color:#922b21 !important; }
+        .opt-list li.disabled { pointer-events:none; opacity:0.85; }
+        .btn-row { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
+        .btn { display:inline-block; padding:10px 22px; border-radius:25px; font-weight:600; cursor:pointer; border:none; font-size:0.88rem; transition:all 0.2s; letter-spacing:0.3px; }
+        .btn-primary { background:var(--accent); color:#fff; }
+        .btn-primary:hover { background:#8b1a1a; transform:translateY(-1px); box-shadow:0 4px 12px rgba(178,34,34,0.3); }
+        .btn-outline { background:#fff; color:var(--accent); border:2px solid var(--accent); }
+        .btn-outline:hover { background:#fdedec; }
+
+        .explain-card { margin-top:12px; padding:14px 18px; border-radius:var(--radius-sm); display:none; font-size:0.9rem; line-height:1.7; }
+        .explain-card.show { display:block; }
+        .explain-card.correct-ex { background:#eafaf1; border:1px solid #a3e4bc; color:#145a32; }
+        .explain-card.wrong-ex { background:#fdedec; border:1px solid #f5b7b1; color:#922b21; }
+        .explain-card .ex-head { font-weight:700; margin-bottom:6px; font-size:0.95rem; }
+
+        @media (max-width:768px) {
+            .toc { transform:translateX(-260px); }
+            .toc.show { transform:translateX(0); }
+            .toc-toggle { display:flex; }
+            .main { max-width:100%; margin:0 auto; }
+            .card { padding:18px 14px; }
+        }
+    </style>
+</head>
+<body>
+
+<button class="toc-toggle" id="tocToggle" aria-label="目录" onclick="toggleToc()">☰</button>
+<div class="toc-overlay" id="tocOverlay" onclick="closeToc()"></div>
+<nav class="toc" id="toc">
+    <div class="toc-title">📑 行政许可法目录</div>
+    <a href="#mod1">一、概念与基本原则</a>
+    <a href="#mod2">二、行政许可的类型</a>
+    <a href="#mod3">三、设定权限</a>
+</nav>
+
+<div class="main" id="mainContent"></div>
+
+<script>
+// ==================== 知识数据 ====================
+const knowledgeData = [
+    // ===== 模块1：概念与基本原则 =====
+    {
+        id: 'mod1',
+        iconClass: 'icon-red',
+        iconEmoji: '📌',
+        title: '一、行政许可的概念与基本原则',
+        subtitle: '什么是行政许可？六大原则是什么？',
+        items: [
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core', title: '行政许可的定义',
+              content: '行政许可，是指<span class="kh">行政机关</span>根据<span class="kh">公民、法人或其他组织的申请</span>，经依法审查，<span class="kh kh-red">准予其从事特定活动</span>的行为。<br><b>特征：</b>①依申请行为（被动）②依法审查 ③授益性（给你权利）④要式行为（必须书面）。',
+              example: { q: '🚗 张三想开车上路，必须先取得什么？', a: '✅ <b>驾驶证</b>！这就是典型的行政许可——你不申请，交警不会主动给你发证；你申请了，车管所审查你符合条件（体检、考试通过），才准予你开车。没有证就开车=无证驾驶=违法。' } },
+            { type: 'ki', badge: '区别', badgeClass: 'badge-num', title: '行政许可 vs 行政确认',
+              content: '<b>行政许可：</b>准予从事特定活动（如驾驶证、营业执照）——给你"资格"去做什么。<br><b>行政确认：</b>确认已有法律地位或事实（如婚姻登记、户口登记、税务登记）——只是"认证"你已有的状态。<br><b>口诀：</b>"许可给你新权利，确认只是盖个章。"' },
+            { type: 'ki', badge: '原则1', badgeClass: 'badge-num', title: '法定原则',
+              content: '设定和实施行政许可，必须依照法定的<span class="kh">权限、范围、条件和程序</span>。没有法律依据不得设定或实施许可。' },
+            { type: 'ki', badge: '原则2', badgeClass: 'badge-num', title: '公开、公平、公正、非歧视原则',
+              content: '①行政许可的规定<span class="kh kh-red">必须公布</span>，未经公布不得作为依据。<br>②实施和结果<span class="kh">应当公开</span>（涉密除外）。<br>③符合法定条件的申请人有<span class="kh">平等取得许可</span>的权利，不得歧视。' },
+            { type: 'ki', badge: '原则3', badgeClass: 'badge-num', title: '便民原则',
+              content: '提高办事效率，提供优质服务。<span class="kh">一次性告知</span>补正内容；推行<span class="kh">联合办理、集中办理</span>。' },
+            { type: 'ki', badge: '原则4', badgeClass: 'badge-num', title: '救济原则',
+              content: '申请人享有<span class="kh">陈述权、申辩权</span>；可申请<span class="kh">行政复议</span>或提起<span class="kh">行政诉讼</span>；因违法许可受损害的，有权要求<span class="kh kh-red">赔偿</span>。' },
+            { type: 'ki', badge: '原则5', badgeClass: 'badge-core', title: '信赖保护原则（高频考点）',
+              content: '已生效的行政许可<span class="kh kh-red">不得擅自改变</span>。<br><b>可撤回/变更的条件：</b>①法律法规规章修改或废止；②客观情况发生重大变化；③为公共利益需要。<br><b>造成损失→</b><span class="kh kh-red">补偿</span>（注意：合法行为对应补偿，违法行为对应赔偿！）。',
+              example: { q: '⛏️ 李某依法取得江边采砂许可，后因防洪筑坝需要被撤回。他投入了100万设备，能要回来吗？', a: '✅ 能！这是<b>补偿</b>。撤回是合法的（为了公共利益），但给李某造成了损失，行政机关应依法补偿他的实际投入。如果是李某自己造假骗的许可被撤销——那就不赔，因为是违法行为。' } },
+            { type: 'ki', badge: '原则6', badgeClass: 'badge-num', title: '禁止转让原则',
+              content: '依法取得的行政许可，<span class="kh">原则上不得转让</span>。只有法律、法规规定可转让且依程序的才能转让。<br>例：驾驶证不能卖给别人！采矿证在特定条件下可依法转让。' }
+        ],
+        quizzes: [
+            { type: 'single', q: '下列哪项属于行政许可？', opts: ['A. 婚姻登记', 'B. 企业法人登记（营业执照）', 'C. 税务登记', 'D. 户口登记'], correct: 1,
+              detail: '<b>A选项</b>：不属于。婚姻登记是行政确认——确认婚姻关系。<br><b>B选项</b>：属于。营业执照赋予企业法人资格和经营权。<br><b>C选项</b>：不属于。税务登记是行政确认。<br><b>D选项</b>：不属于。户口登记是行政确认。',
+              tip: '行政许可=给你"资格"去做以前不能做的事。婚姻、税务、户口都是确认你已有的状态，不给你新权利。只有营业执照让你从"不能经营"变成"能经营"。' },
+            { type: 'single', q: '行政机关依法撤回已生效的行政许可给当事人造成损失的，应当？', opts: ['A. 赔偿', 'B. 补偿', 'C. 不赔不补', 'D. 返还费用'], correct: 1,
+              detail: '<b>A选项</b>：错误。赔偿对应违法行为。<br><b>B选项</b>：正确。撤回是合法行为，造成损失应补偿。<br><b>C选项</b>：错误。信赖保护原则要求补偿。<br><b>D选项</b>：错误。不是返还费用。',
+              tip: '"撤回=合法→补偿"，"撤销=违法→赔偿"。记住口诀："合法补，违法赔"。撤回是政府变卦了但没错，补偿你；撤销是你或政府错了，赔你。' },
+            { type: 'single', q: '关于行政许可的便民原则，以下做法正确的是？', opts: ['A. 材料不全直接不予受理', 'B. 分多次告知需要补正的内容', 'C. 一次性告知需要补正的全部内容', 'D. 要求申请人自行准备格式文本'], correct: 2,
+              detail: '<b>A选项</b>：错误。不能直接不受理，应告知补正。<br><b>B选项</b>：错误。必须一次性告知。<br><b>C选项</b>：正确。一次性告知是便民原则的核心要求。<br><b>D选项</b>：错误。行政机关应提供格式文本。',
+              tip: '便民=让老百姓少跑腿。材料不对一次说清楚，别让人家一趟趟跑。格式文本免费提供，别让人家自己瞎写。' }
+        ]
+    },
+
+    // ===== 模块2：行政许可的类型 =====
+    {
+        id: 'mod2',
+        iconClass: 'icon-blue',
+        iconEmoji: '📋',
+        title: '二、行政许可的五种类型',
+        subtitle: '普通许可、特许、认可、核准、登记',
+        items: [
+            { type: 'table', html: '<table class="info-table"><thead><tr><th>类型</th><th>定义</th><th>适用领域</th><th>举例</th></tr></thead><tbody><tr><td><b>普通许可</b></td><td>准许符合条件的人行使权利</td><td>国家安全、公共安全、人身健康等</td><td>驾驶证、排污许可、药品生产许可</td></tr><tr><td><b>特许</b></td><td>授予特定权利或配置有限资源</td><td>有限自然资源、公共资源、垄断行业</td><td>采矿许可、航线许可、电信业务许可</td></tr><tr><td><b>认可</b></td><td>认定资格或资质</td><td>需特殊信誉、技能的行业</td><td>教师资格证、律师证、建筑企业资质</td></tr><tr><td><b>核准</b></td><td>按技术标准判断是否具备条件</td><td>重要设备、特定产品</td><td>电梯安装许可、消防验收、生猪检疫</td></tr><tr><td><b>登记</b></td><td>确认主体资格或特定身份</td><td>企业设立、社团设立</td><td>工商营业执照、社团设立登记</td></tr></tbody></table>' },
+            { type: 'ki', badge: '易混', badgeClass: 'badge-core', title: '特许 vs 普通许可',
+              content: '<b>普通许可：</b>没有数量限制，符合条件就发（如驾驶证——人人能考）。<br><b>特许：</b>资源有限，有数量限制，通常需<span class="kh kh-red">招标、拍卖</span>等公平竞争方式决定（如采矿权——矿就那么多）。',
+              example: { q: '🛩️ 两家公司同时申请同一条航线经营许可，都符合条件。行政机关怎么决定？', a: '✅ 航线是<b>有限资源</b>，属于特许。行政机关应通过<span style="color:#b22222;">招标、拍卖</span>等公平竞争方式决定，或者在没有特别规定时按<span style="color:#b22222;">受理申请的先后顺序</span>决定。' } }
+        ],
+        quizzes: [
+            { type: 'single', q: '下列哪项属于"特许"类行政许可？', opts: ['A. 驾驶证', 'B. 采矿许可', 'C. 教师资格证', 'D. 营业执照'], correct: 1,
+              detail: '<b>A选项</b>：普通许可。无数量限制。<br><b>B选项</b>：特许。有限资源开发利用。<br><b>C选项</b>：认可。资格认定。<br><b>D选项</b>：登记。主体资格确认。',
+              tip: '特许=有数量限制的"稀缺资源"。采矿权就那么几个，航线就那么几条。驾驶证人人能考不算特许。' },
+            { type: 'single', q: '赋予公民特定资格的行政许可（如律师证），行政机关应根据什么作出决定？', opts: ['A. 申请先后顺序', 'B. 考试成绩和其他法定条件', 'C. 招标拍卖', 'D. 行政机关自由裁量'], correct: 1,
+              detail: '<b>A选项</b>：错误。不是按顺序。<br><b>B选项</b>：正确。赋予公民资格应依据考试成绩等。<br><b>C选项</b>：错误。招标拍卖适用于特许。<br><b>D选项</b>：错误。不是自由裁量。',
+              tip: '律师证、教师证这种=考试+条件。考过了还不行，还得符合其他法定条件（如无犯罪记录）。不是谁先申请就给谁，得凭本事。' }
+        ]
+    },
+
+    // ===== 模块3：设定权限 =====
+    {
+        id: 'mod3',
+        iconClass: 'icon-green',
+        iconEmoji: '🏛️',
+        title: '三、行政许可的设定权限',
+        subtitle: '谁能设定许可？法律>行政法规>地方性法规>省级政府规章',
+        items: [
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core', title: '设定权的层级（必考表格）',
+              content: '<b>经常性许可：</b>法律（全国人大）、行政法规（国务院）、地方性法规（省市级人大）可设定。<br><b>临时性许可：</b>国务院（决定形式）、省级政府规章可设定。<br><b>无权设定：</b>市级政府规章、部门规章、其他规范性文件<span class="kh kh-red">一律不得设定</span>行政许可。' },
+            { type: 'table', html: '<table class="info-table"><thead><tr><th>文件类型</th><th>经常性许可</th><th>临时性许可</th></tr></thead><tbody><tr><td>法律</td><td>✓ 可设定</td><td>—</td></tr><tr><td>行政法规</td><td>✓ 可设定</td><td>—</td></tr><tr><td>地方性法规</td><td>✓ 可设定（省级+设区的市级）</td><td>—</td></tr><tr><td>国务院决定</td><td>—</td><td>✓ 可设定（非临时事项需及时转法律/行政法规）</td></tr><tr><td>省级政府规章</td><td>—</td><td>✓ 可设定（满1年需转地方性法规）</td></tr><tr><td>市级政府规章</td><td>✗ 不可</td><td>✗ 不可</td></tr><tr><td>部门规章</td><td>✗ 不可</td><td>✗ 不可</td></tr></tbody></table>' },
+            { type: 'ki', badge: '必考', badgeClass: 'badge-core', title: '地方性法规和省级政府规章的禁止事项',
+              content: '①不得设定<span class="kh kh-red">国家统一确定的资格资质</span>许可（如律师证、教师证——必须全国统一）。<br>②不得设定<span class="kh kh-red">企业设立登记及其前置性许可</span>。<br>③不得<span class="kh kh-red">限制外地企业/商品进入本地市场</span>（禁止地方保护主义）。' },
+            { type: 'ki', badge: '注意', badgeClass: 'badge-num', title: '设定权 vs 规定权',
+              content: '<b>设定权：</b>从无到有创设新许可（只有上述有权主体能设定）。<br><b>规定权：</b>在上位法已设定的范围内细化具体操作（行政法规、地方性法规、规章都可以）。<br><b>核心限制：</b>规定权<span class="kh kh-red">不得增设行政许可</span>，不得增设违反上位法的条件。' }
+        ],
+        quizzes: [
+            { type: 'single', q: '下列哪个文件可以设定经常性行政许可？', opts: ['A. 国务院部门规章', 'B. 省级政府规章', 'C. 行政法规', 'D. 市级政府规章'], correct: 2,
+              detail: '<b>A选项</b>：不可。部门规章无设定权。<br><b>B选项</b>：不可。省级政府规章只能设临时性许可。<br><b>C选项</b>：正确。行政法规可设定经常性许可。<br><b>D选项</b>：不可。市级政府规章无设定权。',
+              tip: '经常性=法律、行政法规、地方性法规。规章只能临时"救急"（省级政府规章1年有效）。市级规章连临时都不行。' },
+            { type: 'single', q: '直辖市政府发布通知设定摩的运营许可证，该规定？', opts: ['A. 合法，政府有权管理城市', 'B. 违法，通知无权设定许可', 'C. 合理但需经国务院批准', 'D. 合法但需举行听证'], correct: 1,
+              detail: '<b>A选项</b>：错误。权限不合法。<br><b>B选项</b>：正确。通知不属于可设定许可的文件类型。<br><b>C选项</b>：错误。通知不是规章，不能设定。<br><b>D选项</b>：错误。不是听证的问题。',
+              tip: '直辖市政府虽是省级，但必须用"规章"形式才能设临时许可，发个"通知"不算数！文件形式不对，就是违法。' },
+            { type: 'multi', q: '地方性法规和省级政府规章不得设定哪些许可？', opts: ['A. 国家统一确定的律师资格', 'B. 企业设立登记', 'C. 限制外地商品进入本地市场', 'D. 采矿许可', 'E. 驾驶证'], correct: [0,1,2], multi: true,
+              detail: '<b>A选项</b>：不得。国家统一资格。<br><b>B选项</b>：不得。企业设立登记。<br><b>C选项</b>：不得。禁止地方保护。<br><b>D选项</b>：可设定。采矿属地方可设。<br><b>E选项</b>：可设定。驾驶证由法律设定。',
+              tip: '口诀："资格全国统一，企业登记不许，地方保护禁止"。D和E不在禁止范围内——采矿许可地方可设，驾驶证由法律设定。' }
+        ]
+    },
+    // ===== 模块4：实施主体 =====
+    {
+        id: 'mod4',
+        iconClass: 'icon-yellow',
+        iconEmoji: '🏢',
+        title: '四、行政许可的实施主体',
+        subtitle: '谁有权实施许可？行政机关、被授权组织、受委托机关',
+        items: [
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core', title: '实施主体的三种类型',
+              content: '①<span class="kh">行政机关</span>：在法定职权范围内实施。<br>②<span class="kh kh-red">被授权组织</span>：法律、法规授权，具有管理公共事务职能的组织，以自己名义实施，独立担责。<br>③<span class="kh">受委托机关</span>：只能委托其他行政机关，以委托机关名义实施，不得再委托；委托机关负责监督并承担法律责任。',
+              extra: '<b>注意：</b>规章无权授权实施行政许可！受委托的必须是行政机关，不能是组织或个人。' },
+            { type: 'ki', badge: '对比', badgeClass: 'badge-num', title: '行政许可 vs 行政处罚 委托区别',
+              content: '<b>行政许可</b>委托：对象是<span class="kh">其他行政机关</span>。<br><b>行政处罚</b>委托：对象是<span class="kh kh-red">管理公共事务的组织</span>（非行政机关）。<br>两者不同，是跨越三部法的易混淆考点！' },
+            { type: 'ki', badge: '便民', badgeClass: 'badge-case', title: '集中办理与统一受理',
+              content: '经国务院批准，省级政府可决定一个行政机关行使多个机关的许可权（<span class="kh">集中办理</span>）。<br>涉及多个部门的，可确定一个机构<span class="kh">统一受理</span>并转告相关部门。<br>体现便民高效原则——"一个窗口对外"。',
+              example: { q: '🏢 开一家食品公司，需要工商执照和食品经营许可。以前要跑两个部门，现在怎么方便了？', a: '✅ 现在可以由<b>市场监管部门</b>统一受理，内部流转审批。你只跑一个窗口，交一套材料，两个证都能办下来。这就是便民原则的体现——"一窗受理，并行办理"。' } }
+        ],
+        quizzes: [
+            { type: 'single', q: '受委托实施行政许可的机关，以下说法正确的是？', opts: ['A. 可以自己的名义实施许可', 'B. 可以再委托其他机关', 'C. 以委托机关名义实施', 'D. 独立承担法律责任'], correct: 2,
+              detail: '<b>A选项</b>：错误。必须以委托机关名义。<br><b>B选项</b>：错误。不得再委托。<br><b>C选项</b>：正确。以委托机关名义实施。<br><b>D选项</b>：错误。责任由委托机关承担。',
+              tip: '受委托=替别人干活，签别人的名，出了事别人担。不能自己再转包出去。和行政处罚委托不一样——处罚委托的是组织，许可委托的是机关。' },
+            { type: 'single', q: '关于行政许可的集中实施，以下说法正确的是？', opts: ['A. 任何行政机关都可以自行集中', 'B. 经国务院批准，省级政府可决定一个机关行使多个机关的许可权', 'C. 需要全国人大批准', 'D. 集中实施后原机关不再存在'], correct: 1,
+              detail: '<b>A选项</b>：错误。需经批准。<br><b>B选项</b>：正确。国务院批准+省级政府决定。<br><b>C选项</b>：错误。不是全国人大批准。<br><b>D选项</b>：错误。原机关仍存在。',
+              tip: '集中办理=国务院批准、省级政府决定，把几个部门的许可权集中到一个部门。不是谁想集中就能集中的。' }
+        ]
+    },
+
+    // ===== 模块5：申请与受理 =====
+    {
+        id: 'mod5',
+        iconClass: 'icon-blue',
+        iconEmoji: '📨',
+        title: '五、行政许可的申请与受理',
+        subtitle: '怎么申请？材料不全怎么办？受理后有什么凭证？',
+        items: [
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core', title: '申请方式',
+              content: '<b>必须书面</b>（可委托代理人，但依法需本人到场的除外）。可通过信函、电报、传真、电子数据交换等方式提交。<br><b>申请人义务：</b>对申请材料<span class="kh kh-red">实质内容的真实性</span>负责。',
+              extra: '<b>行政机关义务：</b>提供格式文本（免费！）、公示材料目录和示范文本、解释说明。不得要求提交与许可无关的材料。' },
+            { type: 'ki', badge: '受理', badgeClass: 'badge-core', title: '受理的三种情形',
+              content: '<b>①不予受理：</b>无需许可的告知无需；不属本机关职权的作出不予受理决定+告知正确机关。<br><b>②补正后受理：</b>材料可当场更正的<span class="kh">允许当场更正</span>；不全或不符合形式的<span class="kh kh-red">当场或5日内一次性告知</span>补正内容；逾期未告知的视为受理。<br><b>③当场受理：</b>材料齐全+符合形式。',
+              extra: '<b>必须出具书面凭证：</b>受理或不予受理，均需出具加盖印章和注明日期的书面凭证。' }
+        ],
+        quizzes: [
+            { type: 'single', q: '申请材料不齐全或不符合法定形式的，行政机关应如何处理？', opts: ['A. 直接不予受理', 'B. 当场或5日内一次性告知补正', 'C. 分多次告知需要补正的内容', 'D. 先受理后要求补正'], correct: 1,
+              detail: '<b>A选项</b>：错误。不能直接不受理。<br><b>B选项</b>：正确。一次性告知补正。<br><b>C选项</b>：错误。必须一次性。<br><b>D选项</b>：错误。应先告知补正。',
+              tip: '材料不对就让你补，但必须一次说清楚要补什么！不能今天说缺A，明天又说缺B——那就不便民了。5天内不告你，就算受理了。' },
+            { type: 'single', q: '行政机关受理行政许可申请后，应当出具什么？', opts: ['A. 口头告知即可', 'B. 加盖印章和注明日期的书面凭证', 'C. 由申请人自行记录', 'D. 无需出具凭证'], correct: 1,
+              detail: '<b>A选项</b>：错误。必须书面。<br><b>B选项</b>：正确。书面凭证是法定要求。<br><b>C选项</b>：错误。不是申请人记录。<br><b>D选项</b>：错误。必须出具。',
+              tip: '受理了就得给个"收据"——盖章的书面凭证。这是你日后申请复议或诉讼的重要证据！口头说的不算数。' }
+        ]
+    },
+
+    // ===== 模块6：审查与决定 =====
+    {
+        id: 'mod6',
+        iconClass: 'icon-green',
+        iconEmoji: '🔍',
+        title: '六、行政许可的审查与决定',
+        subtitle: '怎么审？多久出结果？准予/不准予有何要求？',
+        items: [
+            { type: 'ki', badge: '审查', badgeClass: 'badge-core', title: '审查方式',
+              content: '<b>形式审查：</b>只看材料是否齐全、符合格式。<br><b>实质审查：</b>核实质内容，需<span class="kh">2名以上工作人员</span>（如采矿许可需实地考察）。<br><b>重大利益告知：</b>直接涉及申请人与他人重大利益关系的，应<span class="kh kh-red">告知利害关系人</span>，听取陈述申辩。<br><b>多级审查：</b>下级初审后报上级决定，上级不得要求申请人重复提交材料。' },
+            { type: 'ki', badge: '决定', badgeClass: 'badge-core', title: '决定的类型与时限',
+              content: '<b>准予许可：</b>书面决定，一般无需说明理由。<br><b>不予许可：</b>书面决定+<span class="kh kh-red">说明理由</span>+告知复议/诉讼权利。<br><b>有数量限制：</b>按<span class="kh">受理申请先后顺序</span>决定（不是申请顺序！）。<br><b>时限：</b>一般<span class="kh kh-red">20日</span>（可延长10日）；联合办理<span class="kh">45日</span>（可延长15日）；多级审查下级20日内初审。作出决定后<span class="kh">10日内</span>送达证件。',
+              extra: '<b>注意：</b>所有期限均为<b>工作日</b>！听证、招标、拍卖、检验、检测、检疫、专家评审的时间不计入。' },
+            { type: 'ki', badge: '延续', badgeClass: 'badge-num', title: '许可的变更与延续',
+              content: '<b>变更：</b>许可内容变化，向原机关申请。<br><b>延续：</b>有效期届满<span class="kh kh-red">30日前</span>申请。行政机关逾期未作决定的，<span class="kh kh-red">视为准予延续</span>。',
+              example: { q: '📅 张三的许可证11月1日到期，他9月20日申请延续，行政机关一直没回复。许可证还有效吗？', a: '✅ <b>有效！</b>张三在届满30日前（10月1日前）申请了，行政机关逾期没答复，<b>视为准予延续</b>。许可证继续有效。如果他10月2日才申请，就过期了，得重新申请。' } }
+        ],
+        quizzes: [
+            { type: 'single', q: '行政许可决定的一般时限是受理后多少日内？', opts: ['A. 10日', 'B. 20日', 'C. 30日', 'D. 45日'], correct: 1,
+              detail: '<b>A选项</b>：错误。10日是延期天数或送达期限。<br><b>B选项</b>：正确。一般20日，可延长10日。<br><b>C选项</b>：错误。30日是许可证延续提前申请天数。<br><b>D选项</b>：错误。45日是联合办理的期限。',
+              tip: '20天出结果，搞不定可延长10天=30天。联合办理（多部门）45天，延长15天=60天。记住：20+10和45+15两组数字。' },
+            { type: 'single', q: '有数量限制的行政许可，多个申请人都符合条件时，应按什么顺序决定？', opts: ['A. 提出申请先后', 'B. 受理申请先后', 'C. 行政机关指定', 'D. 抽签决定'], correct: 1,
+              detail: '<b>A选项</b>：错误。不是申请顺序。<br><b>B选项</b>：正确。按受理先后顺序。<br><b>C选项</b>：错误。不能随意指定。<br><b>D选项</b>：错误。不是抽签。',
+              tip: '就是"先受理的先得"！不是你先交申请就排队，而是正式受理才开始排。谁先被受理谁优先。' }
+        ]
+    },
+
+    // ===== 模块7：听证与期限 =====
+    {
+        id: 'mod7',
+        iconClass: 'icon-red',
+        iconEmoji: '🔊',
+        title: '七、行政许可的听证与期限',
+        subtitle: '什么时候要听证？听证怎么进行？各种期限如何算？',
+        items: [
+            { type: 'ki', badge: '启动', badgeClass: 'badge-core', title: '听证的启动方式',
+              content: '<b>依职权启动：</b>法律法规规章规定应听证的；涉及<span class="kh">公共利益</span>的重大许可事项。<br><b>依申请启动：</b>直接涉及申请人与他人<span class="kh kh-red">重大利益关系</span>的，应告知听证权利；申请人/利害关系人在<span class="kh">5日内</span>提出申请，行政机关<span class="kh">20日内</span>组织听证。' },
+            { type: 'ki', badge: '程序', badgeClass: 'badge-core', title: '听证程序要点',
+              content: '<b>通知：</b>举行听证<span class="kh kh-red">7日前</span>通知时间地点（必要时公告）。<br><b>公开：</b>原则公开，涉密除外。<br><b>主持人：</b><span class="kh kh-red">案外人</span>主持（审查人员不得担任），可申请回避。<br><b>质证：</b>双方可提供证据、质证辩论。<br><b>案卷排他：</b>根据<span class="kh">听证笔录</span>作出决定。<br><b>费用：</b><span class="kh kh-red">免费</span>，行政机关承担。' },
+            { type: 'ki', badge: '期限汇总', badgeClass: 'badge-num', title: '行政许可期限速记表',
+              content: '<b>单个机关决定：</b>20日+10日=最长30工作日<br><b>联合/集中办理：</b>45日+15日=最长60工作日<br><b>多级审查（下级初审）：</b>下级20日内完成<br><b>送达证件：</b>决定后10日内<br><b>延续申请：</b>届满30日前<br><b>检验检测检疫：</b>受理后5日内指派2人以上<br><b>听证申请：</b>被告知权利后5日内<br><b>听证组织：</b>申请后20日内<br><b>听证通知：</b>举行7日前<br><b>材料不全补正告知：</b>当场或5日内一次性<br><b>所有期限均为工作日！</b>' }
+        ],
+        quizzes: [
+            { type: 'single', q: '行政许可听证的通知应在举行听证几日前？', opts: ['A. 3日', 'B. 5日', 'C. 7日', 'D. 10日'], correct: 2,
+              detail: '<b>A选项</b>：错误。不是3日。<br><b>B选项</b>：错误。5日是听证申请期限。<br><b>C选项</b>：正确。7日前通知。<br><b>D选项</b>：错误。不是10日。',
+              tip: '听证通知=7天前。与行政复议听证（5天前）不同！许可听证更早通知，给你更多时间准备。' },
+            { type: 'single', q: '关于行政许可听证，以下说法正确的是？', opts: ['A. 听证费用由申请人承担', 'B. 审查人员可担任听证主持人', 'C. 听证笔录是作出决定的唯一依据', 'D. 听证一律公开举行'], correct: 2,
+              detail: '<b>A选项</b>：错误。听证免费。<br><b>B选项</b>：错误。必须案外人主持。<br><b>C选项</b>：正确。案卷排他原则。<br><b>D选项</b>：错误。涉密可不公开。',
+              tip: '听证不要钱！主持人不能是查案子的人（自己查自己审不公平）。听证会上说的才算数（案卷排他）。涉密案件关起门来听。' }
+        ]
+    },
+
+    // ===== 模块8：监督检查 =====
+    {
+        id: 'mod8',
+        iconClass: 'icon-blue',
+        iconEmoji: '🔎',
+        title: '八、行政许可的监督检查',
+        subtitle: '上级怎么查？对被许可人怎么管？',
+        items: [
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core', title: '监督检查的三种类型',
+              content: '①<span class="kh">上级对下级</span>的监督：纠正违法实施许可。<br>②<span class="kh kh-red">对被许可人</span>的监督：核查是否依法从事许可活动。可书面检查、实地检查、抽样检验。<br>③对<span class="kh">许可事项</span>的实地检查与检测：涉及公共安全、人身健康的设备产品，需定期检验。',
+              extra: '<b>记录归档：</b>监督检查情况和处理结果必须记录、签字、归档，<span class="kh kh-red">公众有权查阅</span>。' },
+            { type: 'ki', badge: '禁止', badgeClass: 'badge-num', title: '监督检查的禁止事项',
+              content: '①不得妨碍被许可人正常生产经营。<br>②不得索取或收受财物。<br>③不得谋取其他利益。<br>④监督检查<span class="kh">一般不收费</span>（法律、行政法规另有规定的除外）。' }
+        ],
+        quizzes: [
+            { type: 'single', q: '关于行政许可监督检查，以下说法正确的是？', opts: ['A. 监督检查必须实地检查', 'B. 监督检查记录公众有权查阅', 'C. 监督检查可收取必要费用', 'D. 监督检查无需归档'], correct: 1,
+              detail: '<b>A选项</b>：错误。主要方式为书面检查，实地只是特殊情况。<br><b>B选项</b>：正确。公众有权查阅监督记录。<br><b>C选项</b>：错误。一般不收费。<br><b>D选项</b>：错误。必须归档。',
+              tip: '检查记录要存档，老百姓有权看。检查不收费（除非法律另有规定）。检查不能干扰正常经营。' }
+        ]
+    },
+
+    // ===== 模块9：撤回、撤销、吊销、注销 =====
+    {
+        id: 'mod9',
+        iconClass: 'icon-red',
+        iconEmoji: '📜',
+        title: '九、撤回、撤销、吊销、注销',
+        subtitle: '四个"销"，傻傻分不清？——案情与后果全对比',
+        items: [
+            { type: 'table', html: '<table class="info-table"><thead><tr><th>类型</th><th>原因</th><th>责任方</th><th>后果</th></tr></thead><tbody><tr><td><b>撤回</b></td><td>公共利益需要（谁都没错）</td><td>—</td><td><span style="color:#145a32;">补偿</span></td></tr><tr><td><b>撤销</b></td><td>行政机关违法（可以撤销）</td><td>行政机关</td><td><span style="color:#145a32;">赔偿</span></td></tr><tr><td><b>撤销</b></td><td>被许可人违法（应当撤销）</td><td>被许可人</td><td><span style="color:#b22222;">不赔偿</span></td></tr><tr><td><b>吊销</b></td><td>合法取得后违法行为</td><td>被许可人</td><td>行政处罚</td></tr><tr><td><b>注销</b></td><td>许可失效（到期、死亡等）</td><td>—</td><td>程序性手续</td></tr></tbody></table>' },
+            { type: 'ki', badge: '必考', badgeClass: 'badge-core', title: '速记口诀与辨析',
+              content: '<b>撤回=合法收回→补偿</b>（客观变了/公共利益）<br><b>撤销=违法收回→行政机关错要赔，被许可人错不赔</b><br><b>吊销=处罚</b>（你拿到证后违法了）<br><b>注销=到期走人</b>（到期、死亡、终止、不可抗力）',
+              example: { q: '🏥 某药店用假材料骗取了药品经营许可证，后被举报查实。该证如何处理？', a: '✅ <b>撤销</b>！这是被许可人违法取得，应当撤销，<b>且不予赔偿</b>。如果涉及人身健康安全，3年内不得再申请。如果是合法取得后卖假药，那才是<b>吊销</b>（处罚）。' } },
+            { type: 'ki', badge: '注销', badgeClass: 'badge-num', title: '注销的法定情形（高频多选）',
+              content: '①有效期届满未延续<br>②公民死亡或丧失行为能力<br>③法人或其他组织终止<br>④被撤销、撤回、吊销<br>⑤不可抗力导致无法实施<br>⑥法律法规规定的其他情形' }
+        ],
+        quizzes: [
+            { type: 'single', q: '行政机关依法撤回已生效许可给当事人造成损失的，应如何处理？', opts: ['A. 赔偿', 'B. 补偿', 'C. 不赔不补', 'D. 返还费用'], correct: 1,
+              detail: '<b>A选项</b>：错误。赔偿对应违法。<br><b>B选项</b>：正确。撤回是合法行为→补偿。<br><b>C选项</b>：错误。信赖保护原则要求补偿。<br><b>D选项</b>：错误。不是返还费用。',
+              tip: '"合法补，违法赔"。撤回=政府没错但变卦了→补你。撤销=政府或你错了→赔你（或你错了不赔）。' },
+            { type: 'multi', q: '以下哪些属于应当注销行政许可的情形？', opts: ['A. 许可证有效期届满未延续', 'B. 法人依法终止', 'C. 许可被撤销', 'D. 公民退休', 'E. 不可抗力导致无法实施'], correct: [0,1,2,4], multi: true,
+              detail: '<b>A选项</b>：属于。到期未续→注销。<br><b>B选项</b>：属于。法人终止→注销。<br><b>C选项</b>：属于。撤销后应注销。<br><b>D选项</b>：不属于。退休不等于丧失行为能力。<br><b>E选项</b>：属于。不可抗力→注销。',
+              tip: 'D是陷阱！退休≠丧失行为能力。退休还能活动，只有死亡或丧失行为能力才注销。其他都是注销的法定情形。' }
+        ]
+    },
+
+    // ===== 模块10：法律责任 =====
+    {
+        id: 'mod10',
+        iconClass: 'icon-yellow',
+        iconEmoji: '⚖️',
+        title: '十、行政许可的法律责任',
+        subtitle: '骗许可有什么后果？申请阶段和取得后处罚不同！',
+        items: [
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core', title: '申请阶段欺骗 vs 取得后撤销',
+              content: '<b>申请阶段欺骗：</b>隐瞒情况或提供虚假材料→不予受理/不予许可+警告；涉及公共安全人身健康的→<span class="kh kh-red">1年内</span>不得再申请。<br><b>取得后撤销：</b>以欺骗、贿赂等手段取得→撤销许可+行政处罚；涉及公共安全人身健康的→<span class="kh kh-red">3年内</span>不得再申请；构成犯罪的追刑责。<br><b>口诀：</b>"申请骗→1年禁，取得骗→3年禁"。' },
+            { type: 'ki', badge: '费用', badgeClass: 'badge-num', title: '行政许可的费用规则',
+              content: '①实施许可<span class="kh">一般不收费</span>（法律、行政法规另规定的除外）。<br>②提供格式文本<span class="kh kh-red">不得收费</span>。<br>③收取的费用<span class="kh kh-red">全部上缴国库</span>，不得截留私分，财政部门不得返还。<br>④听证费用由<span class="kh">行政机关</span>承担。' }
+        ],
+        quizzes: [
+            { type: 'single', q: '申请人隐瞒情况申请涉及人身健康的行政许可，被发现后应如何处理？', opts: ['A. 不予受理，1年内不得再申请', 'B. 撤销许可，3年内不得再申请', 'C. 警告后允许继续申请', 'D. 直接罚款放行'], correct: 0,
+              detail: '<b>A选项</b>：正确。申请阶段欺骗，涉及人身健康→1年禁。<br><b>B选项</b>：错误。那是取得后撤销的处罚。<br><b>C选项</b>：错误。不能继续。<br><b>D选项</b>：错误。不予受理。',
+              tip: '关键看"申请时"还是"取得后"！申请时被发现=还没拿到证，1年不准再申请。拿到证后被发现=撤销+3年不准申请。' },
+            { type: 'single', q: '行政机关实施行政许可，以下收费正确的是？', opts: ['A. 收取申请书格式文本工本费', 'B. 依行政法规收取的费用全部上缴国库', 'C. 收取听证组织费', 'D. 将收费作为机关福利发放'], correct: 1,
+              detail: '<b>A选项</b>：错误。格式文本免费。<br><b>B选项</b>：正确。收费全部上缴国库。<br><b>C选项</b>：错误。听证免费。<br><b>D选项</b>：错误。不得截留私分。',
+              tip: '格式文本不要钱！听证不要钱！收的钱全部进国库，不能当小金库。只有法律、行政法规明确规定的才能收费。' }
+        ]
+    },
+
+    // ===== 模块11：综合练习 =====
+    {
+        id: 'mod11',
+        iconClass: 'icon-red',
+        iconEmoji: '📝',
+        title: '十一、综合练习 · 判断题30道 + 单选题15道 + 多选题8道',
+        subtitle: '全部做完，行政许可法就通关了！',
+        items: [],
+        quizzes: (function() {
+            // ==================== 判断题30道 ====================
+            const tfQuizzes = [
+                { type: 'tf', q: '行政许可，是指行政机关根据公民、法人或者其他组织的申请，经依法审查，准予其从事特定活动的行为。', correct: true,
+                  detail: '<b>A选项"正确"</b>：正确。这是《行政许可法》第二条的定义。<br><b>B选项"错误"</b>：错误。定义完全正确。',
+                  tip: '这就是行政许可的标准定义。关键词：申请→审查→准予从事特定活动。' },
+                { type: 'tf', q: '有关行政许可的规定应当公布；未经公布的，可以作为实施行政许可的依据。', correct: false,
+                  detail: '<b>A选项"正确"</b>：错误。未经公布<b>不得</b>作为依据。<br><b>B选项"错误"</b>：正确。"可以"应改为"不得"。',
+                  tip: '没公布的规定不能拿来管人！否则老百姓怎么知道什么能做什么不能做？公开原则的基本要求。' },
+                { type: 'tf', q: '行政机关实施行政许可，不得向申请人提出购买指定商品、接受有偿服务等不正当要求。', correct: true,
+                  detail: '<b>A选项"正确"</b>：正确。禁止以权谋私。<br><b>B选项"错误"</b>：错误。这是法定禁止行为。',
+                  tip: '不能因为你有权发证，就让人家买你的东西、交额外费用。这叫"权力寻租"，法律严禁。' },
+                { type: 'tf', q: '依法取得的行政许可，除法律、法规规定依照法定条件和程序可以转让的外，不得转让。', correct: true,
+                  detail: '<b>A选项"正确"</b>：正确。禁止转让是原则。<br><b>B选项"错误"</b>：错误。这正是禁止转让原则。',
+                  tip: '证是你的，但不能卖！驾驶证不能卖给别人，采矿证在特殊情况下可以依法转让。原则上是不能转让的。' },
+                { type: 'tf', q: '行政许可的申请书需要采用格式文本的，行政机关可以向申请人收取工本费。', correct: false,
+                  detail: '<b>A选项"正确"</b>：错误。格式文本<b>不得收费</b>。<br><b>B选项"错误"</b>：正确。格式文本免费提供。',
+                  tip: '申请书格式文本=免费的！制作证件的工本费可以收，但申请书本身不能收钱。' },
+                { type: 'tf', q: '行政机关实施行政许可，依照法律、行政法规收取的费用，可以部分留作机关经费。', correct: false,
+                  detail: '<b>A选项"正确"</b>：错误。必须<b>全部上缴国库</b>。<br><b>B选项"错误"</b>：正确。不能留一分钱。',
+                  tip: '收的钱全部进国库，不能截留、不能私分、不能变相返还。财政也不得返还给机关。' },
+                { type: 'tf', q: '行政许可申请人提交的申请材料不齐全的，行政机关应当当场或者在五日内一次性告知申请人需要补正的全部内容。', correct: true,
+                  detail: '<b>A选项"正确"</b>：正确。一次性告知是法定要求。<br><b>B选项"错误"</b>：错误。这是便民原则的体现。',
+                  tip: '缺材料？一次说清楚！不能让人一趟趟跑。5天内不告诉你，就算受理了。' },
+                { type: 'tf', q: '行政机关应当自受理行政许可申请之日起三十日内作出行政许可决定。', correct: false,
+                  detail: '<b>A选项"正确"</b>：错误。一般是<b>20日</b>，不是30日。<br><b>B选项"错误"</b>：正确。20日可延长10日。',
+                  tip: '20天出结果，搞不定可延长10天=30天。不是直接30天。联合办理才是45天。' },
+                { type: 'tf', q: '行政许可直接涉及申请人与他人之间重大利益关系的，行政机关应当告知利害关系人享有要求听证的权利。', correct: true,
+                  detail: '<b>A选项"正确"</b>：正确。应当告知听证权利。<br><b>B选项"错误"</b>：错误。这是法定告知义务。',
+                  tip: '你申请的事可能影响别人（如建工厂影响邻居），必须告诉别人有听证权。别人可以在5天内申请听证。' },
+                { type: 'tf', q: '被许可人以欺骗手段取得行政许可的，应当予以撤销，被许可人基于行政许可取得的利益不受保护。', correct: true,
+                  detail: '<b>A选项"正确"</b>：正确。骗来的许可必须撤销，不保护。<br><b>B选项"错误"</b>：错误。骗证不受信赖保护。',
+                  tip: '骗证=撤销+不赔。你是通过不正当手段拿到的证，法律不保护你的利益。涉及人身健康安全的，3年内不能再申请。' },
+                { type: 'tf', q: '行政机关工作人员办理行政许可，不得索取或者收受申请人的财物，不得谋取其他利益。', correct: true,
+                  detail: '<b>A选项"正确"</b>：正确。禁止以权谋私。<br><b>B选项"错误"</b>：错误。这是廉洁要求。',
+                  tip: '办证的不能收红包！这是基本职业操守，也是法律红线。' },
+                { type: 'tf', q: '行政许可的监督检查，行政机关一律不得收取任何费用。', correct: false,
+                  detail: '<b>A选项"正确"</b>：错误。"一律"太绝对——法律、行政法规另有规定的除外。<br><b>B选项"错误"</b>：正确。有例外。',
+                  tip: '检查一般不收费，但法律、行政法规规定可以收的例外。所以不能说"一律"不收。' },
+                { type: 'tf', q: '地方性法规可以在法律、行政法规设定的行政许可事项范围内，对实施该行政许可作出具体规定。', correct: true,
+                  detail: '<b>A选项"正确"</b>：正确。这是规定权，不是设定权。<br><b>B选项"错误"</b>：错误。可以细化但不得增设。',
+                  tip: '地方性法规可以对已有许可做细化规定，但不能自己创设新许可。这叫"规定权"，不是"设定权"。' },
+                { type: 'tf', q: '行政许可需要行政机关内设的多个机构办理的，该行政机关各相关机构应当分别受理行政许可申请。', correct: false,
+                  detail: '<b>A选项"正确"</b>：错误。应确定<b>一个机构统一受理</b>。<br><b>B选项"错误"</b>：正确。分别受理违反便民原则。',
+                  tip: '一个机关内部多个科室都要审？那也得一个窗口统一收件，内部流转，不能让人跑多个窗口。' },
+                { type: 'tf', q: '行政许可的听证应当公开举行，但涉及国家秘密、商业秘密或者个人隐私的除外。', correct: true,
+                  detail: '<b>A选项"正确"</b>：正确。公开是原则，不公开是例外。<br><b>B选项"错误"</b>：错误。涉密可不公开。',
+                  tip: '听证一般公开，让大家旁听。但涉及秘密的关起门来。和诉讼庭审规则一样。' },
+                { type: 'tf', q: '行政许可申请人提交的申请材料存在可以当场更正的错误的，行政机关应当要求申请人回去修改后再提交。', correct: false,
+                  detail: '<b>A选项"正确"</b>：错误。应<b>允许当场更正</b>。<br><b>B选项"错误"</b>：正确。让人回去再跑一趟就不便民了。',
+                  tip: '小错当场改！比如名字写错了、电话写错了，当场改正就行，别让人再跑一趟。' },
+                { type: 'tf', q: '赋予公民特定资格的行政许可，该公民死亡或者丧失行为能力的，行政机关应当依法办理注销手续。', correct: true,
+                  detail: '<b>A选项"正确"</b>：正确。死亡/丧失行为能力→注销。<br><b>B选项"错误"</b>：错误。这是注销法定情形。',
+                  tip: '人死了，证自然作废。律师证、驾驶证这些跟人走的资格，人没了就注销。' },
+                { type: 'tf', q: '国务院部门规章可以设定临时性行政许可。', correct: false,
+                  detail: '<b>A选项"正确"</b>：错误。部门规章<b>无任何许可设定权</b>。<br><b>B选项"错误"</b>：正确。只有省级政府规章可设临时性。',
+                  tip: '部门规章=不能设定任何许可！临时性的也不行！只有省级政府规章可以设1年有效的临时许可。' },
+                { type: 'tf', q: '行政机关作出准予行政许可的决定，应当向申请人颁发加盖本行政机关印章的行政许可证件。', correct: true,
+                  detail: '<b>A选项"正确"</b>：正确。准予许可要发证。<br><b>B选项"错误"</b>：错误。证件须加盖印章。',
+                  tip: '批准了就得给个凭证——盖了章的许可证、执照等。口头说"你可以了"不算数。' },
+                { type: 'tf', q: '申请人申请行政许可，应当如实向行政机关提交有关材料和反映真实情况，并对其申请材料实质内容的真实性负责。', correct: true,
+                  detail: '<b>A选项"正确"</b>：正确。申请人对材料真实性负责。<br><b>B选项"错误"</b>：错误。这是申请人的法定义务。',
+                  tip: '你交的材料你负责！造假骗证要承担法律责任——撤销许可+处罚+禁止再申请。' },
+                { type: 'tf', q: '行政许可的期限均为自然日，包含法定节假日。', correct: false,
+                  detail: '<b>A选项"正确"</b>：错误。行政许可期限为<b>工作日</b>。<br><b>B选项"错误"</b>：正确。不含节假日。',
+                  tip: '行政许可的期限都是工作日！20天=20个工作日=差不多1个月自然日。节假日不算在内。' },
+                { type: 'tf', q: '受委托实施行政许可的行政机关，在委托范围内可以自己的名义实施行政许可。', correct: false,
+                  detail: '<b>A选项"正确"</b>：错误。必须以<b>委托机关名义</b>实施。<br><b>B选项"错误"</b>：正确。自己名义就错了。',
+                  tip: '受委托=替人干活，签别人的名。不能签自己的名，因为你不是行政主体。' },
+                { type: 'tf', q: '行政机关实施检验、检测、检疫，应当自受理申请之日起五日内指派两名以上工作人员进行。', correct: true,
+                  detail: '<b>A选项"正确"</b>：正确。5日内派2人以上。<br><b>B选项"错误"</b>：错误。这是法定时限。',
+                  tip: '检验检测=5天内派人+至少2人。一个人去不行，得两人以上。' },
+                { type: 'tf', q: '行政许可有效期届满未延续的，行政机关应当依法办理注销手续。', correct: true,
+                  detail: '<b>A选项"正确"</b>：正确。到期不续→注销。<br><b>B选项"错误"</b>：错误。这是注销最常见的情形。',
+                  tip: '证过期了又不续，那就注销。驾驶证6年到期了不去换，就给你注销了。' },
+                { type: 'tf', q: '行政机关对行政许可事项进行监督检查，不得妨碍被许可人正常的生产经营活动。', correct: true,
+                  detail: '<b>A选项"正确"</b>：正确。不能干扰正常经营。<br><b>B选项"错误"</b>：错误。这是监督检查的禁止事项。',
+                  tip: '来检查可以，但不能影响人家做生意。不能动不动就让人家停工停产配合检查。' },
+                { type: 'tf', q: '行政机关作出不予行政许可的决定，无需说明理由。', correct: false,
+                  detail: '<b>A选项"正确"</b>：错误。<b>必须说明理由</b>+告知救济权利。<br><b>B选项"错误"</b>：正确。准予可不说明，不予必须说明。',
+                  tip: '不批？你得告诉我为什么！还得告诉我可以去哪里告（复议/诉讼）。准予的话一般不用说理由。' },
+                { type: 'tf', q: '省级政府规章设定的临时性行政许可，实施满一年需要继续实施的，应当提请国务院制定行政法规。', correct: false,
+                  detail: '<b>A选项"正确"</b>：错误。应提请<b>本级人大及其常委会制定地方性法规</b>。<br><b>B选项"错误"</b>：正确。不是找国务院。',
+                  tip: '省级规章设的临时许可，到期了要转正找谁？找省人大！不是找国务院。国务院管的是自己设的临时许可。' },
+                { type: 'tf', q: '行政许可申请可以通过信函、电报、传真、电子数据交换和电子邮件等方式提出。', correct: true,
+                  detail: '<b>A选项"正确"</b>：正确。多种方式均可。<br><b>B选项"错误"</b>：错误。体现了便民原则。',
+                  tip: '申请许可不一定非要跑现场。发邮件、寄信、传真都可以。这也是便民。' },
+                { type: 'tf', q: '行政机关应当将法律、法规、规章规定的有关行政许可的事项、依据、条件、数量、程序、期限等在办公场所公示。', correct: true,
+                  detail: '<b>A选项"正确"</b>：正确。公示是法定义务。<br><b>B选项"错误"</b>：错误。让老百姓知道怎么办。',
+                  tip: '办证需要什么材料、什么条件、多长时间——都必须在办公场所贴出来。不能让人"摸着石头过河"。' },
+                { type: 'tf', q: '行政许可申请人可以委托代理人提出行政许可申请，但依法应当由申请人本人到场的除外。', correct: true,
+                  detail: '<b>A选项"正确"</b>：正确。可委托但有例外。<br><b>B选项"错误"</b>：错误。一般可委托，特殊需本人。',
+                  tip: '可以找人帮忙交材料。但有些必须本人去的（如驾驶证体检、身份证拍照）就得亲自去。' }
+            ];
+
+            // ==================== 单选题15道 ====================
+            const singleQuizzes = [
+                { type: 'single', q: '下列哪一选项不属于行政许可？', opts: ['A. 企业法人登记', 'B. 教师资格认定', 'C. 婚姻登记', 'D. 采矿许可'], correct: 2,
+                  detail: '<b>A选项</b>：属于。企业登记是许可。<br><b>B选项</b>：属于。资格认定是认可类许可。<br><b>C选项</b>：不属于。婚姻登记是行政确认。<br><b>D选项</b>：属于。采矿是特许。',
+                  tip: '婚姻登记=确认你们是夫妻，不给新权利。企业登记=让你能经营，是许可。' },
+                { type: 'single', q: '行政机关对申请人提出的行政许可申请，处理错误的是？', opts: ['A. 不需要取得许可的，即时告知不受理', 'B. 不属于本机关职权的，作出不予受理决定并告知正确机关', 'C. 材料可当场更正的，由工作人员决定是否允许更正', 'D. 材料不全的，当场或5日内一次性告知补正'], correct: 2,
+                  detail: '<b>A选项</b>：正确。告知不受理。<br><b>B选项</b>：正确。不予受理+指引。<br><b>C选项</b>：错误。应当允许更正，不是由工作人员决定。<br><b>D选项</b>：正确。一次性告知。',
+                  tip: 'C错在"工作人员决定"——不是他决定能不能改，是法律规定应当允许改！不能为难人。' },
+                { type: 'single', q: '行政许可采取统一办理的，办理时间一般不得超过？', opts: ['A. 20日', 'B. 30日', 'C. 45日', 'D. 60日'], correct: 2,
+                  detail: '<b>A选项</b>：错误。20日是单个机关。<br><b>B选项</b>：错误。30日是单个机关最长。<br><b>C选项</b>：正确。联合办理45日。<br><b>D选项</b>：错误。60日是45+15的延长。',
+                  tip: '一个部门办=20天，多个部门联合办=45天。复杂案子可延长。' },
+                { type: 'single', q: '关于行政许可听证，以下说法错误的是？', opts: ['A. 听证费用由行政机关承担', 'B. 听证主持人由审查该申请的工作人员担任', 'C. 听证应公开举行，涉密除外', 'D. 申请人可申请主持人回避'], correct: 1,
+                  detail: '<b>A选项</b>：正确。免费。<br><b>B选项</b>：错误。须案外人主持。<br><b>C选项</b>：正确。公开为原则。<br><b>D选项</b>：正确。可申请回避。',
+                  tip: 'B错了——查案的人不能当主持人！自己查自己审，谁能放心？必须找案外人主持。' },
+                { type: 'single', q: '被许可人需要延续行政许可有效期的，应在有效期届满多少日前申请？', opts: ['A. 15日', 'B. 20日', 'C. 30日', 'D. 60日'], correct: 2,
+                  detail: '<b>A选项</b>：错误。不是15日。<br><b>B选项</b>：错误。不是20日。<br><b>C选项</b>：正确。30日前申请。<br><b>D选项</b>：错误。60日是复议申请期限。',
+                  tip: '提前1个月申请延续！晚了就可能过期。行政机关30天内没回复，就当同意了。' },
+                { type: 'single', q: '申请人以欺骗手段取得直接关系公共安全的行政许可，应如何处理？', opts: ['A. 1年内不得再申请', 'B. 3年内不得再申请', 'C. 5年内不得再申请', 'D. 永久禁止'], correct: 1,
+                  detail: '<b>A选项</b>：错误。1年是申请阶段欺骗。<br><b>B选项</b>：正确。取得后欺骗+涉及公共安全=3年禁。<br><b>C选项</b>：错误。没有5年的规定。<br><b>D选项</b>：错误。不是永久。',
+                  tip: '申请时骗=1年禁，拿到证后骗=3年禁。前提是涉及公共安全/人身健康/生命财产安全。' },
+                { type: 'single', q: '行政机关实施行政许可，依法收取的费用应如何处理？', opts: ['A. 上缴上级机关', 'B. 作为机关福利', 'C. 全部上缴国库', 'D. 用于补充办公经费'], correct: 2,
+                  detail: '<b>A选项</b>：错误。不是上缴上级。<br><b>B选项</b>：错误。不能当福利。<br><b>C选项</b>：正确。全部上缴国库。<br><b>D选项</b>：错误。不能自留。',
+                  tip: '收的钱全部进国库！不能截留、不能私分、不能变相返还。财政也不得返还。一分不能留。' },
+                { type: 'single', q: '关于行政许可的撤回和撤销，以下说法正确的是？', opts: ['A. 撤回和撤销是一回事', 'B. 撤回造成损失应赔偿', 'C. 撤销被许可人违法取得的，不予赔偿', 'D. 撤回后许可自始无效'], correct: 2,
+                  detail: '<b>A选项</b>：错误。撤回合法，撤销违法。<br><b>B选项</b>：错误。撤回是补偿不是赔偿。<br><b>C选项</b>：正确。骗证不赔。<br><b>D选项</b>：错误。撤回不溯及既往。',
+                  tip: '撤回=政府变卦（合法）→补偿；撤销=你骗证（违法）→不赔。撤回是从撤的时候失效，撤销是从一开始就无效。' },
+                { type: 'single', q: '行政许可需要行政机关内设多个机构办理的，应如何处理？', opts: ['A. 各机构分别受理', 'B. 确定一个机构统一受理', 'C. 由申请人自行选择', 'D. 由上级机关指定'], correct: 1,
+                  detail: '<b>A选项</b>：错误。违反便民原则。<br><b>B选项</b>：正确。一个窗口对外。<br><b>C选项</b>：错误。不由申请人选。<br><b>D选项</b>：错误。不由上级指定。',
+                  tip: '内部流转，一个窗口对外。你只交一次材料，内部怎么分活是他们的事。' },
+                { type: 'single', q: '关于行政许可的监督检查，以下错误的是？', opts: ['A. 监督检查情况应记录归档', 'B. 公众有权查阅监督检查记录', 'C. 监督检查主要方式是实地检查', 'D. 不得妨碍被许可人正常经营'], correct: 2,
+                  detail: '<b>A选项</b>：正确。必须归档。<br><b>B选项</b>：正确。公众可查阅。<br><b>C选项</b>：错误。主要方式是书面检查。<br><b>D选项</b>：正确。不得干扰。',
+                  tip: '主要方式是书面检查（看材料），实地检查只是特殊情况。不是动不动就上门查人家。' },
+                { type: 'single', q: '省级政府规章设定临时性行政许可的实施期限最长不超过？', opts: ['A. 6个月', 'B. 1年', 'C. 2年', 'D. 3年'], correct: 1,
+                  detail: '<b>A选项</b>：错误。不是6个月。<br><b>B选项</b>：正确。1年。<br><b>C选项</b>：错误。不是2年。<br><b>D选项</b>：错误。不是3年。',
+                  tip: '省级规章只能设1年有效的临时许可。满1年还想继续？必须找省人大制定地方性法规，转成正式的。' },
+                { type: 'single', q: '行政许可的审查中，需要对申请材料的实质内容进行核实的，行政机关应当指派几名以上工作人员？', opts: ['A. 1名', 'B. 2名', 'C. 3名', 'D. 5名'], correct: 1,
+                  detail: '<b>A选项</b>：错误。至少2人。<br><b>B选项</b>：正确。2名以上。<br><b>C选项</b>：错误。2名即可。<br><b>D选项</b>：错误。检验检测检疫是5日。',
+                  tip: '实质审查（如实地考察）=至少2人。一个人去不行，两人以上互相监督。' },
+                { type: 'single', q: '下列哪一文件不得设定行政许可？', opts: ['A. 法律', 'B. 行政法规', 'C. 国务院决定', 'D. 部门规章'], correct: 3,
+                  detail: '<b>A选项</b>：可设定。<br><b>B选项</b>：可设定。<br><b>C选项</b>：可设定临时性。<br><b>D选项</b>：不可。部门规章无权设定。',
+                  tip: '部门规章（如公安部规章）=不能设任何许可！连临时性的都不行。只有省级政府规章能设临时性。' },
+                { type: 'single', q: '被许可人以贿赂手段取得行政许可的，该许可应如何处理？', opts: ['A. 撤回', 'B. 吊销', 'C. 撤销', 'D. 注销'], correct: 2,
+                  detail: '<b>A选项</b>：错误。撤回针对合法取得。<br><b>B选项</b>：错误。吊销是处罚合法取得后的违法行为。<br><b>C选项</b>：正确。贿赂取得→撤销。<br><b>D选项</b>：错误。注销是程序性手续。',
+                  tip: '行贿拿到的证=撤销！这和骗证一样，都是违法取得。撤销后不赔偿，还可能3年禁申请。' },
+                { type: 'single', q: '行政机关作出行政许可决定，依法需要听证的，听证时间如何计算？', opts: ['A. 计入行政许可期限', 'B. 不计入行政许可期限', 'C. 由行政机关决定', 'D. 由申请人申请计入'], correct: 1,
+                  detail: '<b>A选项</b>：错误。不计入。<br><b>B选项</b>：正确。听证时间不计入期限。<br><b>C选项</b>：错误。不是自由决定。<br><b>D选项</b>：错误。不是申请计入。',
+                  tip: '听证、检验、检测、招标、拍卖、专家评审——这些时间都不算在20天/45天里面。所以实际可能需要更长时间。' }
+            ];
+
+            // ==================== 多选题8道 ====================
+            const multiQuizzes = [
+                { type: 'multi', q: '以下哪些属于行政许可的基本原则？', opts: ['A. 法定原则', 'B. 信赖保护原则', 'C. 处罚与教育相结合原则', 'D. 便民原则', 'E. 禁止转让原则'], correct: [0,1,3,4], multi: true,
+                  detail: '<b>A选项</b>：属于。法定是基本原则。<br><b>B选项</b>：属于。信赖保护是基本原则。<br><b>C选项</b>：不属于。这是行政处罚的原则。<br><b>D选项</b>：属于。便民是基本原则。<br><b>E选项</b>：属于。禁止转让是基本原则。',
+                  tip: 'C是"卧底"——处罚与教育相结合是行政处罚的原则，不是许可的。许可六大原则：法定、公开公平公正非歧视、便民、救济、信赖保护、禁止转让。' },
+                { type: 'multi', q: '以下文件中，哪些可以设定行政许可？', opts: ['A. 法律', 'B. 行政法规', 'C. 地方性法规', 'D. 部门规章', 'E. 省级政府规章（临时性）'], correct: [0,1,2,4], multi: true,
+                  detail: '<b>A选项</b>：可设定。<br><b>B选项</b>：可设定。<br><b>C选项</b>：可设定。<br><b>D选项</b>：不可。部门规章无设定权。<br><b>E选项</b>：可设定临时性许可。',
+                  tip: 'D是唯一不能设的。法律、行政法规、地方性法规都能设；省级政府规章只能设临时性的（1年有效）。部门规章=零权限。' },
+                { type: 'multi', q: '行政机关作出不予行政许可的决定，应当？', opts: ['A. 书面决定', 'B. 说明理由', 'C. 告知复议诉讼权利', 'D. 口头告知即可', 'E. 只需内部记录'], correct: [0,1,2], multi: true,
+                  detail: '<b>A选项</b>：应选。必须书面。<br><b>B选项</b>：应选。必须说明理由。<br><b>C选项</b>：应选。必须告知救济途径。<br><b>D选项</b>：不选。不能口头。<br><b>E选项</b>：不选。不能只内部记录。',
+                  tip: '不批=书面+理由+告你去哪告。准予=书面就行（一般不需要理由）。三个缺一不可。' },
+                { type: 'multi', q: '以下哪些属于应当注销行政许可的情形？', opts: ['A. 有效期届满未延续', 'B. 公民死亡', 'C. 许可被撤销', 'D. 不可抗力导致无法实施', 'E. 被许可人暂时困难'], correct: [0,1,2,3], multi: true,
+                  detail: '<b>A选项</b>：属于。到期不续→注销。<br><b>B选项</b>：属于。人死了→注销。<br><b>C选项</b>：属于。撤销后应注销。<br><b>D选项</b>：属于。不可抗力→注销。<br><b>E选项</b>：不属于。暂时困难不是注销理由。',
+                  tip: 'E是陷阱！暂时困难不是注销理由。注销的情形都是"彻底不行了"——到期、死亡、撤销、不可抗力等。' },
+                { type: 'multi', q: '关于行政许可听证，以下说法正确的有？', opts: ['A. 申请人可申请听证主持人回避', 'B. 听证一律公开举行', 'C. 听证费用由行政机关承担', 'D. 听证笔录是作出决定的唯一依据', 'E. 申请人提出听证的，行政机关必须组织'], correct: [0,2,3], multi: true,
+                  detail: '<b>A选项</b>：正确。可申请回避。<br><b>B选项</b>：错误。涉密可不公开。<br><b>C选项</b>：正确。免费。<br><b>D选项</b>：正确。案卷排他。<br><b>E选项</b>：错误。必须涉及重大利益关系才依申请听证。',
+                  tip: 'B错——不是"一律"公开，涉密不公开。E错——不是所有申请都听证，只有涉及重大利益关系的才必须组织。' },
+                { type: 'multi', q: '行政机关实施行政许可，以下哪些行为是违法的？', opts: ['A. 要求申请人购买指定商品', 'B. 收取申请书格式文本工本费', 'C. 截留依法收取的费用', 'D. 要求提交与许可无关的材料', 'E. 一次性告知补正内容'], correct: [0,1,2,3], multi: true,
+                  detail: '<b>A选项</b>：违法。禁止指定购买。<br><b>B选项</b>：违法。格式文本免费。<br><b>C选项</b>：违法。全部上缴国库。<br><b>D选项</b>：违法。不得要求无关材料。<br><b>E选项</b>：合法。一次性告知是义务。',
+                  tip: 'E是唯一合法的。其他都是常见的违法行为：要人买东西、收格式费、截留钱、要无关材料——统统不行。' },
+                { type: 'multi', q: '关于行政许可的变更与延续，以下说法正确的有？', opts: ['A. 变更应向原许可机关申请', 'B. 延续应在有效期届满30日前申请', 'C. 逾期未作决定视为不准予延续', 'D. 变更需符合法定条件', 'E. 期满未申请延续应注销'], correct: [0,1,3,4], multi: true,
+                  detail: '<b>A选项</b>：正确。变更找原机关。<br><b>B选项</b>：正确。30日前申请。<br><b>C选项</b>：错误。逾期未决定视为<b>准予</b>延续。<br><b>D选项</b>：正确。变更也需符合条件。<br><b>E选项</b>：正确。到期不续→注销。',
+                  tip: 'C说反了！行政机关逾期没回复=默认同意延续，不是默认拒绝。这是保护被许可人的制度。' },
+                { type: 'multi', q: '地方性法规和省级政府规章在设定行政许可时，不得？', opts: ['A. 设定国家统一确定的资格许可', 'B. 设定企业设立登记', 'C. 限制外地商品进入本地市场', 'D. 对行政法规设定的许可作具体规定', 'E. 限制外地企业来本地经营'], correct: [0,1,2,4], multi: true,
+                  detail: '<b>A选项</b>：不得。国家统一资格。<br><b>B选项</b>：不得。企业设立登记。<br><b>C选项</b>：不得。禁止地方保护。<br><b>D选项</b>：可以做具体规定。<br><b>E选项</b>：不得。限制外来经营。',
+                  tip: 'D是唯一可以的——地方可以对上级的许可做细化规定，但不能增设。其他四个都是禁止事项：统一资格、企业登记、地方保护。' }
+            ];
+
+            // 转换判断题为统一格式
+            const tfConverted = tfQuizzes.map((q, i) => ({
+                ...q,
+                type: 'single',
+                opts: ['✅ 正确', '❌ 错误'],
+                correct: q.correct ? 0 : 1,
+                isTF: true,
+                tfId: 'tf' + (i + 1)
+            }));
+
+            return [...tfConverted, ...singleQuizzes, ...multiQuizzes];
+        })()
+    }
+];
+
+
+
+// ==================== 渲染引擎 ====================
+function renderAll() {
+    var main = document.getElementById('mainContent');
+    var html = '';
+    knowledgeData.forEach(function(mod) {
+        html += '<div class="card" id="' + mod.id + '"><div class="section-title"><div class="icon ' + mod.iconClass + '">' + mod.iconEmoji + '</div>' + mod.title + '</div>';
+        if (mod.subtitle) html += '<div class="subtitle">' + mod.subtitle + '</div>';
+        if (mod.items && mod.items.length > 0) {
+            html += '<div class="ki-grid">';
+            mod.items.forEach(function(item) {
+                if (item.type === 'table') html += item.html;
+                else if (item.type === 'ki') html += renderKI(item);
+            });
+            html += '</div>';
+        }
+        if (mod.quizzes && mod.quizzes.length > 0) {
+            mod.quizzes.forEach(function(q, qi) {
+                html += renderQuiz(q, mod.id + '-q' + qi);
+            });
+        }
+        html += '</div>';
+    });
+    main.innerHTML = html;
+    generateTOC();
+}
+
+function renderKI(item) {
+    var h = '<div class="ki-item">';
+    h += '<div class="ki-title-row">' + (item.badge ? '<span class="badge ' + (item.badgeClass || 'badge-num') + '">' + item.badge + '</span>' : '') + item.title + '</div>';
+    h += '<div class="ki-content">' + item.content + '</div>';
+    if (item.extra) h += '<div style="margin-top:6px;color:#5c5347;font-size:0.88rem;">' + item.extra + '</div>';
+    if (item.example) {
+        h += '<div class="example-block"><div class="ex-label">📖 生动案例</div><div class="ex-q">' + item.example.q + '</div><div class="ex-a">' + item.example.a + '</div></div>';
+    }
+    h += '</div>';
+    return h;
+}
+
+function renderQuiz(q, qid) {
+    var qTypeLabel = q.isTF ? '【判断题】' : (q.multi ? '【多选题】' : '【单选题】');
+    var h = '<div class="quiz-wrap" data-qid="' + qid + '">';
+    h += '<div class="q-type">📝 ' + qTypeLabel + '</div>';
+    if (q.quizIndex) {
+        h += '<div style="font-size:0.78rem;color:#b7950b;">第' + q.quizIndex + '题</div>';
+    } else if (q.tfId) {
+        h += '<div style="font-size:0.78rem;color:#b7950b;">' + q.tfId + '</div>';
+    }
+    h += '<div class="q-text">' + q.q + '</div>';
+    h += '<ul class="opt-list">';
+    for (var i = 0; i < q.opts.length; i++) {
+        h += '<li data-idx="' + i + '" onclick="selectOpt(this,\'' + qid + '\',' + i + ',' + (q.multi || false) + ')">' + q.opts[i] + '</li>';
+    }
+    h += '</ul>';
+    h += '<div class="btn-row"><button class="btn btn-primary" onclick="submitQuiz(\'' + qid + '\',' + JSON.stringify(q.correct) + ',' + (q.multi || false) + ')">✅ 提交答案</button><button class="btn btn-outline" onclick="resetQuiz(\'' + qid + '\')">🔄 重做</button></div>';
+    h += '<div class="explain-card" id="ex-' + qid + '">';
+    h += '<div class="ex-head"></div>';
+    h += '<div class="ex-body"></div>';
+    if (q.detail) {
+        var detailHtml = q.detail
+            // === 判断题特殊格式 ===
+            .replace(/([A-B])选项"正确"<\/b>：正确/g, '$1选项</b>：<span style="color:#145a32;">✅ 正确</span>')
+            .replace(/([A-B])选项"错误"<\/b>：错误/g, '$1选项</b>：<span style="color:#b22222;">❌ 错误</span>')
+            .replace(/([A-B])选项"正确"<\/b>：错误/g, '$1选项</b>：<span style="color:#b22222;">❌ 错误</span>')
+            .replace(/([A-B])选项"错误"<\/b>：正确/g, '$1选项</b>：<span style="color:#145a32;">✅ 正确</span>')
+            // === 通用正确类 ===
+            .replace(/([A-E])选项<\/b>：正确/g, '<span style="color:#145a32;">✅ $1选项</b>：正确</span>')
+            .replace(/([A-E])选项<\/b>：属于/g, '<span style="color:#145a32;">✅ $1选项</b>：属于</span>')
+            .replace(/([A-E])选项<\/b>：应选/g, '<span style="color:#145a32;">✅ $1选项</b>：应选</span>')
+            .replace(/([A-E])选项<\/b>：是/g, '<span style="color:#145a32;">✅ $1选项</b>：是</span>')
+            .replace(/([A-E])选项<\/b>：可/g, '<span style="color:#145a32;">✅ $1选项</b>：可</span>')
+            // === 通用错误类 ===
+            .replace(/([A-E])选项<\/b>：错误/g, '<span style="color:#b22222;">❌ $1选项</b>：错误</span>')
+            .replace(/([A-E])选项<\/b>：不属于/g, '<span style="color:#b22222;">❌ $1选项</b>：不属于</span>')
+            .replace(/([A-E])选项<\/b>：不选/g, '<span style="color:#b22222;">❌ $1选项</b>：不选</span>')
+            .replace(/([A-E])选项<\/b>：不是/g, '<span style="color:#b22222;">❌ $1选项</b>：不是</span>')
+            .replace(/([A-E])选项<\/b>：不可/g, '<span style="color:#b22222;">❌ $1选项</b>：不可</span>');
+        h += '<div class="ex-detail" style="margin-top:10px;padding:10px 14px;background:#fff;border-radius:6px;font-size:0.88rem;line-height:1.8;display:none;">📋 <b>逐项解析：</b><br>' + detailHtml + '</div>';
+    }
+    h += '<div class="ex-tip">💡 <b>大白话理解：</b>' + q.tip + '</div>';
+    h += '</div></div>';
+    return h;
+}
+// ==================== 答题交互 ====================
+function selectOpt(el, qid, idx, multi) {
+    var wrap = el.closest('.quiz-wrap');
+    if (wrap.classList.contains('submitted')) return;
+    var allOpts = wrap.querySelectorAll('.opt-list li');
+    if (multi) { el.classList.toggle('selected'); }
+    else { allOpts.forEach(function(o) { o.classList.remove('selected'); }); el.classList.add('selected'); }
+}
+
+function submitQuiz(qid, correct, multi) {
+    var wrap = document.querySelector('[data-qid="' + qid + '"]');
+    if (wrap.classList.contains('submitted')) return;
+    wrap.classList.add('submitted');
+    var allOpts = wrap.querySelectorAll('.opt-list li');
+    var correctArr = Array.isArray(correct) ? correct : [correct];
+    var selectedIdxs = [];
+    for (var i = 0; i < allOpts.length; i++) { if (allOpts[i].classList.contains('selected')) selectedIdxs.push(i); }
+    var isCorrect;
+    if (multi) {
+        isCorrect = selectedIdxs.length === correctArr.length;
+        for (var j = 0; j < selectedIdxs.length; j++) { if (correctArr.indexOf(selectedIdxs[j]) === -1) { isCorrect = false; break; } }
+    } else { isCorrect = selectedIdxs.length === 1 && selectedIdxs[0] === correctArr[0]; }
+
+    for (var k = 0; k < allOpts.length; k++) {
+        allOpts[k].classList.add('disabled');
+        if (correctArr.indexOf(k) !== -1) allOpts[k].classList.add('correct');
+    }
+    if (!isCorrect) {
+        for (var m = 0; m < selectedIdxs.length; m++) { if (correctArr.indexOf(selectedIdxs[m]) === -1) allOpts[selectedIdxs[m]].classList.add('wrong'); }
+    }
+
+    var exEl = document.getElementById('ex-' + qid);
+    exEl.classList.add('show');
+    if (isCorrect) {
+        exEl.classList.add('correct-ex'); exEl.classList.remove('wrong-ex');
+        exEl.querySelector('.ex-head').textContent = '🎉 回答正确！';
+        exEl.querySelector('.ex-body').textContent = '';
+        var exDetail = exEl.querySelector('.ex-detail');
+        if (exDetail) exDetail.style.display = 'block';
+    } else {
+        exEl.classList.add('wrong-ex'); exEl.classList.remove('correct-ex');
+        exEl.querySelector('.ex-head').textContent = '😞 回答错误';
+        var letters = ['A','B','C','D','E'];
+        var correctLetters = correctArr.map(function(c) { return letters[c]; }).join('、');
+        exEl.querySelector('.ex-body').innerHTML = '正确答案是：<b>' + correctLetters + '</b>';
+        var exDetail2 = exEl.querySelector('.ex-detail');
+        if (exDetail2) exDetail2.style.display = 'block';
+    }
+}
+
+function resetQuiz(qid) {
+    var wrap = document.querySelector('[data-qid="' + qid + '"]');
+    wrap.classList.remove('submitted');
+    wrap.querySelectorAll('.opt-list li').forEach(function(o) { o.classList.remove('selected','correct','wrong','disabled'); });
+    var exEl = document.getElementById('ex-' + qid);
+    exEl.classList.remove('show','correct-ex','wrong-ex');
+}
+
+function generateTOC() {
+    var toc = document.getElementById('toc');
+    if (!toc) return;
+    var titleHtml = '<div class="toc-title">📑 行政许可法目录</div>';
+    var links = '';
+    knowledgeData.forEach(function(mod) { links += '<a href="#' + mod.id + '">' + mod.title + '</a>'; });
+    toc.innerHTML = titleHtml + links;
+    document.querySelectorAll('.toc a').forEach(function(link) {
+        link.addEventListener('click', function() { if (window.innerWidth <= 768) closeToc(); });
+    });
+}
+
+function toggleToc() { document.getElementById('toc').classList.toggle('show'); document.getElementById('tocOverlay').classList.toggle('show'); }
+function closeToc() { document.getElementById('toc').classList.remove('show'); document.getElementById('tocOverlay').classList.remove('show'); }
+
+document.addEventListener('DOMContentLoaded', renderAll);
+</script>
+</body>
+</html>

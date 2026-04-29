@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>刑法 · 从零到做题</title>
+    <style>
+        :root {
+            --bg: #fdf8f3;
+            --card-bg: #ffffff;
+            --text: #2c2416;
+            --text-light: #5c5347;
+            --accent: #b22222;
+            --highlight: #fff3cd;
+            --highlight-border: #f0c040;
+            --example-bg: #f0faf5;
+            --example-border: #a3e4bc;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+            --radius: 14px;
+            --radius-sm: 10px;
+            --font: 'PingFang SC','Microsoft YaHei','Hiragino Sans GB','Noto Sans SC',system-ui,-apple-system,sans-serif;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior: smooth; scroll-padding-top: 20px; }
+        body { font-family: var(--font); background: var(--bg); color: var(--text); line-height: 1.75; padding: 12px; font-size: 16px; -webkit-font-smoothing: antialiased; }
+        a { color: var(--accent); text-decoration: none; }
+
+        .toc-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.35); z-index:98; }
+        .toc-overlay.show { display:block; }
+        .toc { position:fixed; top:16px; left:16px; width:230px; max-height:calc(100vh - 32px); background:var(--card-bg); border-radius:var(--radius); box-shadow:0 8px 30px rgba(0,0,0,0.12); padding:18px 14px; overflow-y:auto; z-index:100; font-size:0.84rem; transition:transform 0.3s; }
+        .toc.hidden { transform:translateX(-260px); }
+        .toc-title { font-weight:700; margin-bottom:10px; color:var(--accent); font-size:1rem; display:flex; align-items:center; gap:6px; position:sticky; top:0; background:var(--card-bg); padding-bottom:8px; border-bottom:1px solid #f0ebe0; }
+        .toc a { display:block; padding:7px 10px; border-radius:6px; margin:2px 0; color:var(--text-light); transition:all 0.2s; font-size:0.82rem; }
+        .toc a:hover,.toc a.active { background:#fdedec; color:var(--accent); font-weight:600; }
+        .toc-toggle { position:fixed; top:16px; left:16px; width:42px; height:42px; border-radius:50%; background:var(--accent); color:#fff; border:none; font-size:1.3rem; cursor:pointer; z-index:101; display:none; box-shadow:0 4px 14px rgba(178,34,34,0.3); align-items:center; justify-content:center; }
+
+        .main { max-width:820px; margin:0 auto 0 270px; display:flex; flex-direction:column; gap:20px; padding-bottom:40px; }
+        .card { background:var(--card-bg); border-radius:var(--radius); padding:22px 26px; box-shadow:var(--shadow-md); border:1px solid #f0ebe0; }
+        .section-title { font-size:1.45rem; font-weight:700; margin-bottom:4px; display:flex; align-items:center; gap:10px; }
+        .section-title .icon { width:34px; height:34px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; flex-shrink:0; }
+        .icon-red { background:#fdedec; color:#b22222; }
+        .icon-blue { background:#eaf2f8; color:#1a5276; }
+        .icon-green { background:#eafaf1; color:#145a32; }
+        .icon-yellow { background:#fef9e7; color:#b7950b; }
+        .subtitle { color:var(--text-light); font-size:0.9rem; margin-bottom:18px; padding-left:44px; }
+
+        .ki-grid { display:flex; flex-direction:column; gap:14px; }
+        .ki-item { border:1px solid #f0ebe0; border-radius:var(--radius-sm); padding:14px 18px; background:#fefefe; }
+        .ki-title-row { font-weight:700; font-size:1rem; margin-bottom:6px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+        .badge { font-size:0.7rem; padding:3px 10px; border-radius:14px; font-weight:600; letter-spacing:0.3px; white-space:nowrap; }
+        .badge-core { background:#fdedec; color:#b22222; }
+        .badge-num { background:#eaf2f8; color:#1a5276; }
+        .badge-case { background:#eafaf1; color:#145a32; }
+        .ki-content { color:var(--text-light); font-size:0.92rem; }
+        .kh { display:inline-block; background:var(--highlight); border:1px solid var(--highlight-border); padding:2px 8px; border-radius:4px; font-weight:600; color:#7d6608; margin:0 2px; font-size:0.9rem; }
+        .kh-red { background:#fdedec; border-color:#f5b7b1; color:#922b21; }
+        .kh-blue { background:#eaf2f8; border-color:#aed6f1; color:#1a5276; }
+        .kh-green { background:#eafaf1; border-color:#a3e4bc; color:#145a32; }
+
+        .example-block { background:var(--example-bg); border-left:3px solid var(--example-border); border-radius:0 var(--radius-sm) var(--radius-sm) 0; padding:12px 16px; margin-top:10px; font-size:0.9rem; color:#1e5a3a; }
+        .example-block .ex-label { font-weight:700; font-size:0.75rem; text-transform:uppercase; letter-spacing:0.5px; color:#1e8449; margin-bottom:4px; }
+        .example-block .ex-q { font-weight:600; color:#145a32; margin-bottom:3px; }
+        .example-block .ex-a { color:#2d6a4f; }
+
+        .info-table { width:100%; border-collapse:collapse; margin:8px 0; font-size:0.88rem; }
+        .info-table th { background:#fef9e7; text-align:left; padding:10px 14px; font-weight:700; border-bottom:2px solid #f0c040; color:#7d6608; }
+        .info-table td { padding:10px 14px; border-bottom:1px solid #f0ebe0; vertical-align:top; }
+        .info-table tr:hover td { background:#fefdf9; }
+
+        .quiz-wrap { border:2px solid #f0ebe0; border-radius:var(--radius-sm); padding:18px 20px; margin-top:12px; background:#fefefe; }
+        .quiz-wrap .q-type { font-size:0.78rem; font-weight:700; color:var(--accent); margin-bottom:4px; letter-spacing:0.4px; }
+        .quiz-wrap .q-text { font-weight:600; margin-bottom:12px; font-size:0.98rem; }
+        .opt-list { list-style:none; display:flex; flex-direction:column; gap:7px; }
+        .opt-list li { padding:10px 14px; border-radius:var(--radius-sm); cursor:pointer; border:2px solid #e9e4db; transition:all 0.2s; background:#fdfdfc; font-size:0.9rem; user-select:none; }
+        .opt-list li:hover { border-color:#c0b090; background:#fefdf9; }
+        .opt-list li.selected { border-color:#1a5276; background:#eaf2f8; font-weight:600; }
+        .opt-list li.correct { border-color:#1e8449 !important; background:#eafaf1 !important; color:#145a32 !important; }
+        .opt-list li.wrong { border-color:#b22222 !important; background:#fdedec !important; color:#922b21 !important; }
+        .opt-list li.disabled { pointer-events:none; opacity:0.85; }
+        .btn-row { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
+        .btn { display:inline-block; padding:10px 22px; border-radius:25px; font-weight:600; cursor:pointer; border:none; font-size:0.88rem; transition:all 0.2s; letter-spacing:0.3px; }
+        .btn-primary { background:var(--accent); color:#fff; }
+        .btn-primary:hover { background:#8b1a1a; transform:translateY(-1px); box-shadow:0 4px 12px rgba(178,34,34,0.3); }
+        .btn-outline { background:#fff; color:var(--accent); border:2px solid var(--accent); }
+        .btn-outline:hover { background:#fdedec; }
+
+        .explain-card { margin-top:12px; padding:14px 18px; border-radius:var(--radius-sm); display:none; font-size:0.9rem; line-height:1.7; }
+        .explain-card.show { display:block; }
+        .explain-card.correct-ex { background:#eafaf1; border:1px solid #a3e4bc; color:#145a32; }
+        .explain-card.wrong-ex { background:#fdedec; border:1px solid #f5b7b1; color:#922b21; }
+        .explain-card .ex-head { font-weight:700; margin-bottom:6px; font-size:0.95rem; }
+
+        @media (max-width:768px) {
+            .toc { transform:translateX(-260px); }
+            .toc.show { transform:translateX(0); }
+            .toc-toggle { display:flex; }
+            .main { max-width:100%; margin:0 auto; }
+            .card { padding:18px 14px; }
+        }
+    </style>
+</head>
+<body>
+
+<button class="toc-toggle" id="tocToggle" aria-label="目录" onclick="toggleToc()">☰</button>
+<div class="toc-overlay" id="tocOverlay" onclick="closeToc()"></div>
+<nav class="toc" id="toc">
+    <div class="toc-title">📑 刑法目录</div>
+    <a href="#mod1">一、基本原则</a>
+    <a href="#mod2">二、犯罪构成要件</a>
+    <a href="#mod3">三、刑事责任年龄与能力</a>
+</nav>
+
+<div class="main" id="mainContent"></div>
+
+<script>
+// ==================== 知识数据 ====================
+const knowledgeData = [
+    // ===== 模块1：基本原则 =====
+    {
+        id: 'mod1',
+        iconClass: 'icon-red',
+        iconEmoji: '📌',
+        title: '一、刑法的三大基本原则',
+        subtitle: '罪刑法定、平等适用、罪刑相适应',
+        items: [
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core', title: '罪刑法定原则（最核心）',
+              content: '法律明文规定为犯罪行为的，依照法律定罪处刑；<span class="kh kh-red">法律没有明文规定为犯罪行为的，不得定罪处刑</span>。<br><b>口诀：</b>法无明文规定不为罪，法无明文规定不处罚。<br><b>考点：</b>罪名和刑罚必须由法律规定，不能自创罪名。',
+              example: { q: '⚖️ 某地政府发布通告，规定"随地吐痰构成犯罪，处拘留15天"。这个通告合法吗？', a: '❌ 不合法！犯罪和刑罚只能由全国人大及其常委会制定的<b>法律</b>来规定。政府通告不是法律，不能创设罪名和刑罚。这违反了<b>罪刑法定原则</b>。' } },
+            { type: 'ki', badge: '原则2', badgeClass: 'badge-num', title: '平等适用刑法原则',
+              content: '对任何人犯罪，在适用法律上一律平等。不允许任何人有超越法律的特权。<br><b>理解：</b>不论身份、地位、财富，犯了同样的罪就受同样的罚。' },
+            { type: 'ki', badge: '原则3', badgeClass: 'badge-num', title: '罪刑相适应原则',
+              content: '刑罚的轻重，应当与犯罪分子所犯罪行和承担的刑事责任<span class="kh">相适应</span>。<br><b>口诀：</b>重罪重罚，轻罪轻罚，无罪不罚。<br><b>考点：</b>罚当其罪——偷手机不能用板凳把人拍死（过当了）。',
+              example: { q: '⚖️ 张三偷了一部价值2000元的手机，法院判他无期徒刑。这判决有问题吗？', a: '❌ 严重违反<b>罪刑相适应原则</b>！盗窃2000元属于数额较大，法定刑是3年以下有期徒刑。判无期徒刑明显"重罪轻罚"的反面——"轻罪重罚"。' } }
+        ],
+        quizzes: [
+            { type: 'single', q: '"法无明文规定不为罪，法无明文规定不处罚"体现了刑法的哪项原则？', opts: ['A. 平等适用刑法原则', 'B. 罪刑相适应原则', 'C. 罪刑法定原则', 'D. 无罪推定原则'], correct: 2,
+              detail: '<b>A选项</b>：错误。平等适用强调法律面前人人平等。<br><b>B选项</b>：错误。罪刑相适应强调刑罚与罪行匹配。<br><b>C选项</b>：正确。这是罪刑法定原则的核心表述。<br><b>D选项</b>：错误。无罪推定是刑事诉讼原则。',
+              tip: '凡是提到"法无明文规定"的，一定选罪刑法定。这是刑法的"铁律"——法律没写就不能定罪。' },
+            { type: 'single', q: '下列哪项最可能违反罪刑相适应原则？', opts: ['A. 对抢劫罪判处有期徒刑10年', 'B. 对盗窃200元判处无期徒刑', 'C. 对故意杀人罪判处死刑', 'D. 对贪污罪判处罚金'], correct: 1,
+              detail: '<b>A选项</b>：不违反。抢劫罪法定刑幅度内含10年。<br><b>B选项</b>：违反。盗窃200元数额未达标准，更不可能判无期。<br><b>C选项</b>：不违反。故意杀人最高可判死刑。<br><b>D选项</b>：不违反。贪污罪可以并处罚金。',
+              tip: '轻罪重判=违反罪刑相适应。偷200块判无期，明显"杀鸡用牛刀"。' }
+        ]
+    },
+
+    // ===== 模块2：犯罪构成要件 =====
+    {
+        id: 'mod2',
+        iconClass: 'icon-blue',
+        iconEmoji: '🧩',
+        title: '二、犯罪的构成要件',
+        subtitle: '四个要件缺一不可：主体、主观方面、客体、客观方面',
+        items: [
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core', title: '四要件口诀："主客主客"',
+              content: '①<span class="kh kh-red">犯罪主体</span>：谁干的？（自然人/单位，年龄+精神状态）<br>②<span class="kh kh-red">犯罪主观方面</span>：怎么想的？（故意/过失）<br>③<span class="kh kh-red">犯罪客体</span>：侵犯了什么？（刑法保护的社会关系/权益）<br>④<span class="kh kh-red">犯罪客观方面</span>：干了什么？（行为/结果/因果关系）<br><b>缺一不可！</b>四个条件全部满足才构成犯罪。' },
+            { type: 'ki', badge: '客体', badgeClass: 'badge-num', title: '犯罪客体 ≠ 具体物品',
+              content: '客体是刑法保护的<b>权益</b>（如财产权、人身权），不是具体的物品。<br><b>盗窃罪的客体</b>：财产权（不是被盗的手机本身）。<br><b>抢劫罪的客体</b>：人身权+财产权（复杂客体）。<br><b>非法拘禁罪的客体</b>：人身自由权。' },
+            { type: 'ki', badge: '客观', badgeClass: 'badge-num', title: '危害行为：作为 vs 不作为',
+              content: '<b>作为</b>：积极实施刑法禁止的行为（如持刀杀人、盗窃）。<br><b>不作为</b>：有义务履行而不履行（如警察见死不救、母亲不喂婴儿）。<br><b>不作为犯罪的义务来源：</b>①法律规定（如赡养父母）②职务要求（如警察、消防员）③合同约定（如保姆）④先行行为引起（如带别人孩子去玩就有保护义务）。',
+              example: { q: '👶 保姆与雇主签订合同照顾婴儿，但保姆连续3天忘记喂奶，导致婴儿饿死。保姆构成犯罪吗？', a: '✅ 构成！保姆基于<b>合同义务</b>有照顾婴儿的责任，她有能力喂奶却不喂，属于<b>不作为犯罪</b>。这就是"有义务、有能力、却不做"的典型案例。' } }
+        ],
+        quizzes: [
+            { type: 'single', q: '盗窃罪的犯罪客体是什么？', opts: ['A. 被盗的手机', 'B. 公民的财产权', 'C. 社会管理秩序', 'D. 人身安全'], correct: 1,
+              detail: '<b>A选项</b>：错误。手机是犯罪对象，不是客体。<br><b>B选项</b>：正确。盗窃侵犯的是财产权。<br><b>C选项</b>：错误。这是其他犯罪的客体。<br><b>D选项</b>：错误。盗窃不直接侵犯人身安全。',
+              tip: '客体=抽象的权益，不是具体的东西。手机只是"受害人丢的东西"，他真正失去的是财产权。' },
+            { type: 'single', q: '消防员在火灾现场因害怕而逃跑，导致被困人员死亡。消防员的行为属于？', opts: ['A. 紧急避险', 'B. 正当防卫', 'C. 不作为犯罪', 'D. 不构成犯罪'], correct: 2,
+              detail: '<b>A选项</b>：错误。职务人员不能以紧急避险为由逃避职责。<br><b>B选项</b>：错误。没有不法侵害人。<br><b>C选项</b>：正确。消防员有职务上的救助义务。<br><b>D选项</b>：错误。构成不作为犯罪。',
+              tip: '消防员、警察这类特殊职业，有危险也得上的时候不能跑。跑了就是不作为犯罪。' }
+        ]
+    },
+
+    // ===== 模块3：刑事责任年龄与能力 =====
+    {
+        id: 'mod3',
+        iconClass: 'icon-green',
+        iconEmoji: '🎂',
+        title: '三、刑事责任年龄与能力',
+        subtitle: '多大年龄要负责？精神病人怎么处理？',
+        items: [
+            { type: 'ki', badge: '必考', badgeClass: 'badge-core', title: '刑事责任年龄划分（犯罪时年龄）',
+              content: '<b>①不满12周岁</b>：<span class="kh kh-red">完全无责</span>，一律不负责。<br><b>②12~14周岁</b>：对故意杀人、故意伤害致人死亡/特别残忍手段重伤残疾，经<span class="kh">最高检核准</span>才负责。<br><b>③14~16周岁</b>：对<span class="kh kh-red">8种重罪</span>负责。<br><b>④16周岁以上</b>：<span class="kh">完全负责</span>。<br><b>⑤不满18周岁</b>：<span class="kh">应当从轻或减轻</span>处罚，且<span class="kh kh-red">不适用死刑</span>。' },
+            { type: 'ki', badge: '口诀', badgeClass: 'badge-num', title: '8种重罪速记口诀',
+              content: '<b>"烧杀淫掠，伤贩爆投"</b><br>烧=放火 | 杀=故意杀人 | 淫=强奸 | 掠=抢劫<br>伤=故意伤害致重伤/死亡 | 贩=贩卖毒品 | 爆=爆炸 | 投=投放危险物质<br><b>注意：</b>投毒只是"投"的一种，投放放射性物质也算！' },
+            { type: 'ki', badge: '能力', badgeClass: 'badge-core', title: '刑事责任能力（精神状态）',
+              content: '<b>全疯（无责任能力）</b>：不能辨认/控制行为→<span class="kh kh-red">不负刑责</span>（责令看管医疗）。<br><b>半疯（限制责任能力）</b>：尚未完全丧失→应负刑责，<span class="kh">可以从轻减轻</span>。<br><b>正常</b>：完全负责。<br><b>间歇性精神病人</b>：看<span class="kh kh-red">行为时</span>的状态——正常时犯罪应负责，发病时犯罪不负责。<br><b>醉酒的人</b>：<span class="kh kh-red">应当负刑责</span>（不能免责！）。',
+              example: { q: '🍺 张三喝醉后把人打伤，他辩称"我喝醉了不知道自己在干嘛"。这能免责吗？', a: '❌ 绝对不能！<b>醉酒的人犯罪应当负刑事责任</b>。你可以控制喝不喝酒，所以不能以醉酒为借口逃避责任。醉酒不是"免罪金牌"。' } }
+        ],
+        quizzes: [
+            { type: 'single', q: '15岁的张三实施了下列哪项行为应当负刑事责任？', opts: ['A. 盗窃他人手机', 'B. 非法持有毒品', 'C. 持刀抢劫便利店', 'D. 故意伤害致人轻伤'], correct: 2,
+              detail: '<b>A选项</b>：不负。盗窃不在8种重罪中。<br><b>B选项</b>：不负。只有贩卖毒品才负责。<br><b>C选项</b>：应负。抢劫是8种重罪之一。<br><b>D选项</b>：不负。必须是重伤或死亡。',
+              tip: '14-16岁只对8种重罪负责：烧杀淫掠，伤贩爆投。抢劫在列，盗窃不在。轻伤不行，必须重伤或死亡。' },
+            { type: 'single', q: '间歇性精神病人在精神正常时实施杀人行为，应如何处理？', opts: ['A. 不负刑责', 'B. 应当负刑责', 'C. 可以从轻处罚', 'D. 由政府强制医疗'], correct: 1,
+              detail: '<b>A选项</b>：错误。正常时犯罪要负责。<br><b>B选项</b>：正确。看行为时的精神状态。<br><b>C选项</b>：错误。正常状态不可从轻。<br><b>D选项</b>：错误。需负责而非仅医疗。',
+              tip: '间歇性=时好时坏。判断标准：作案那一刻精神是否正常。正常=负全责，发病=不负责。' },
+            { type: 'multi', q: '以下哪些属于14-16周岁应负刑责的8种重罪？', opts: ['A. 放火', 'B. 绑架', 'C. 抢劫', 'D. 贩卖毒品', 'E. 盗窃'], correct: [0,2,3], multi: true,
+              detail: '<b>A选项</b>：属于。放火在8种重罪中。<br><b>B选项</b>：不属于。绑架不在列。<br><b>C选项</b>：属于。抢劫在列。<br><b>D选项</b>：属于。贩卖毒品在列。<br><b>E选项</b>：不属于。盗窃不在列。',
+              tip: '口诀"烧杀淫掠，伤贩爆投"——绑架和盗窃都不在其中。绑架只有在杀害人质时才以故意杀人罪追责。' }
+        ]
+    },
+    // ===== 模块4：犯罪主观方面 =====
+    {
+        id: 'mod4',
+        iconClass: 'icon-yellow',
+        iconEmoji: '🧠',
+        title: '四、犯罪主观方面',
+        subtitle: '故意与过失——"明知+希望/放任" vs "应当预见而没预见"',
+        items: [
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core', title: '犯罪故意（直接故意 vs 间接故意）',
+              content: '<b>直接故意</b>：<span class="kh">明知</span>自己的行为必然或可能发生危害结果，并且<span class="kh kh-red">希望</span>结果发生。<br><b>间接故意</b>：明知可能发生危害结果，<span class="kh kh-red">放任</span>结果发生。<br><b>区分关键：</b>希望=积极追求；放任=无所谓、听之任之。',
+              example: { q: '🔪 张三在妻子米饭里投毒想毒死她，明知妻子有时会喂女儿吃饭，结果女儿也被毒死。张三对女儿死亡的主观心态是什么？', a: '✅ 对女儿是<b>间接故意</b>。他明知可能毒死女儿，但没有阻止也不追求，属于放任。对妻子是<b>直接故意</b>——目的明确就是要杀妻。' } },
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core', title: '犯罪过失（疏忽大意 vs 过于自信）',
+              content: '<b>疏忽大意的过失</b>：<span class="kh">应当预见</span>危害结果，因疏忽大意没预见。<br><b>过于自信的过失</b>：<span class="kh">已经预见</span>但轻信能避免。<br><b>口诀：</b>"应见未见=疏忽，已见轻信=自信"。',
+              example: { q: '🚗 老司机张三弯道不减速，觉得自己20年驾龄不会出事，结果撞死行人。什么心态？', a: '✅ <b>过于自信的过失</b>。他已经预见到弯道不减速可能出事，但轻信自己技术好能避免。如果是没注意到弯道就直接冲过去，那才是疏忽大意。' } },
+            { type: 'ki', badge: '无罪', badgeClass: 'badge-num', title: '不可抗力与意外事件（不构成犯罪）',
+              content: '<b>不可抗力</b>：不能抗拒的原因导致损害（如火车刹车不及撞死人）。<br><b>意外事件</b>：不能预见的原因导致损害（如流浪汉躺稻草堆里被车碾过）。<br><b>核心：</b>既无故意也无过失→<span class="kh kh-red">不是犯罪</span>。' }
+        ],
+        quizzes: [
+            { type: 'single', q: '张三在自家花房周围私拉电网防偷花，未设任何警示标志，结果小偷触电身亡。张三对小偷死亡的主观心态是？', opts: ['A. 直接故意', 'B. 间接故意', 'C. 过于自信的过失', 'D. 疏忽大意的过失'], correct: 1,
+              detail: '<b>A选项</b>：错误。张三不是追求死亡结果。<br><b>B选项</b>：正确。明知可能电死人却放任不管。<br><b>C选项</b>：错误。没有"轻信能避免"的情节。<br><b>D选项</b>：错误。不属于"应预见而未预见"。',
+              tip: '私拉电网不警示=明知可能电死人还放任=间接故意。如果拉了电网还写了"有电危险"警示牌，才可能算过于自信。' },
+            { type: 'single', q: '消防员在火灾现场因害怕自己受伤而逃跑，导致被困人员死亡。消防员的主观心态是？', opts: ['A. 直接故意', 'B. 间接故意', 'C. 紧急避险', 'D. 不构成犯罪'], correct: 1,
+              detail: '<b>A选项</b>：错误。不是希望死亡。<br><b>B选项</b>：正确。有救助义务而放任不管。<br><b>C选项</b>：错误。职务人员不能以紧急避险为由逃避职责。<br><b>D选项</b>：错误。构成不作为犯罪。',
+              tip: '消防员和警察在职责范围内不能紧急避险。跑了就是不作为犯罪，主观上至少是间接故意。' }
+        ]
+    },
+
+    // ===== 模块5：正当防卫与紧急避险 =====
+    {
+        id: 'mod5',
+        iconClass: 'icon-green',
+        iconEmoji: '🛡️',
+        title: '五、正当防卫与紧急避险',
+        subtitle: '刑法中的"免责金牌"——满足条件就不构成犯罪',
+        items: [
+            { type: 'ki', badge: '5条件', badgeClass: 'badge-core', title: '正当防卫的5个条件',
+              content: '①<span class="kh">起因</span>：存在现实不法侵害<br>②<span class="kh">时间</span>：不法侵害<span class="kh kh-red">正在进行</span>（事前事后都不行！）<br>③<span class="kh">意图</span>：具有防卫意识（不能是报复泄愤）<br>④<span class="kh">对象</span>：针对<span class="kh kh-red">不法侵害人本人</span><br>⑤<span class="kh">限度</span>：没有明显超过必要限度',
+              example: { q: '🥊 高铁上甲打了乙一巴掌，乙反击一巴掌后甲停手，乙又追打甲致重伤。乙的行为？', a: '❌ 乙的反击第一巴掌是<b>正当防卫</b>。但甲停手后乙再追打=不法侵害已经结束=属于<b>事后防卫</b>，构成故意伤害罪。' } },
+            { type: 'ki', badge: '特殊', badgeClass: 'badge-core', title: '特殊正当防卫（打死都不为过）',
+              content: '对正在进行的<span class="kh kh-red">行凶、杀人、抢劫、强奸、绑架</span>等严重危及人身安全的暴力犯罪，防卫致不法侵害人伤亡的，<span class="kh">不负刑事责任</span>。<br><b>口诀：</b>不是你死就是我活的时候，法律不再要求你考虑"过不过当"。' },
+            { type: 'ki', badge: '对比', badgeClass: 'badge-num', title: '紧急避险 vs 正当防卫',
+              content: '<b>紧急避险</b>：为避免正在发生的<span class="kh">危险</span>，<span class="kh kh-red">不得已损害第三人合法权益</span>。<br><b>区别：</b>①避险损害的是无辜第三人，防卫针对的是不法侵害人本人。②避险必须"不得已"，防卫不一定。③避险造成的损害必须<span class="kh">小于</span>避免的损害。<br><b>注意：</b>职务上有特定责任的人（警察、消防员）不能以紧急避险为由逃避职责！' }
+        ],
+        quizzes: [
+            { type: 'single', q: '甲持刀砍乙，乙捡起掉落的刀反杀甲。乙的行为属于？', opts: ['A. 防卫过当', 'B. 正当防卫', 'C. 紧急避险', 'D. 故意伤害'], correct: 1,
+              detail: '<b>A选项</b>：错误。面对持刀砍人这种严重暴力，反杀不过当。<br><b>B选项</b>：正确。符合特殊正当防卫。<br><b>C选项</b>：错误。针对的是不法侵害人本人。<br><b>D选项</b>：错误。是合法行为。',
+              tip: '龙哥反杀案就是这个道理——你拿刀砍我，我捡刀反杀，属于特殊正当防卫，打死都不为过。' },
+            { type: 'single', q: '公交车司机为避免撞上逆行大卡车，急打方向撞伤路边行人。司机行为属于？', opts: ['A. 正当防卫', 'B. 紧急避险', 'C. 交通肇事', 'D. 故意伤害'], correct: 1,
+              detail: '<b>A选项</b>：错误。大卡车可能是故障而非不法侵害。<br><b>B选项</b>：正确。为避让危险损害第三人。<br><b>C选项</b>：错误。非过失行为。<br><b>D选项</b>：错误。非故意。',
+              tip: '避险损害的是无辜路人，防卫针对的是坏人本人。这是两者最核心的区别。' }
+        ]
+    },
+
+    // ===== 模块6：故意犯罪形态 =====
+    {
+        id: 'mod6',
+        iconClass: 'icon-red',
+        iconEmoji: '⏳',
+        title: '六、故意犯罪的形态',
+        subtitle: '预备、未遂、中止、既遂——四种形态，处罚不同',
+        items: [
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core', title: '四种形态的判断方法',
+              content: '<b>第一步：先看有没有既遂。</b>既遂了就定既遂，不用看其他的。<br><b>第二步：没既遂，看停在哪。</b>准备阶段停=预备；着手后停=未遂。<br><b>第三步：看什么原因停。</b>意志以内（主动放弃）=<span class="kh kh-red">中止</span>；意志以外（被迫停止）=<span class="kh">预备或未遂</span>。',
+              extra: '<b>口诀：</b>"能而不欲=中止，欲而不能=未遂"。主动停是中止，被动停是未遂。' },
+            { type: 'ki', badge: '处罚', badgeClass: 'badge-num', title: '四种形态的处罚规则',
+              content: '<b>既遂</b>：按刑法分则规定处罚。<br><b>预备</b>：可以比照既遂从轻、减轻或免除处罚。<br><b>未遂</b>：可以比照既遂从轻或减轻处罚。<br><b>中止</b>：没有造成损害的<span class="kh kh-red">应当免除</span>处罚；造成损害的<span class="kh kh-red">应当减轻</span>处罚。<br><b>注意：</b>中止用的是"应当"，预备和未遂用的是"可以"。',
+              example: { q: '🔪 张三砍了李四几刀后主动打120送医院，但李四最后还是死了。张三属于什么形态？', a: '✅ <b>故意杀人罪既遂</b>。虽然张三中途后悔了，但没能有效阻止死亡结果，不符合中止的"有效性"要求。中止必须是"主动停止+有效防果"，两个条件缺一不可。' } }
+        ],
+        quizzes: [
+            { type: 'single', q: '张三准备毒杀妻子，在购买老鼠药时被警察抓获。张三属于？', opts: ['A. 犯罪既遂', 'B. 犯罪未遂', 'C. 犯罪预备', 'D. 犯罪中止'], correct: 2,
+              detail: '<b>A选项</b>：错误。没达到既遂。<br><b>B选项</b>：错误。还没着手实施。<br><b>C选项</b>：正确。准备工具阶段因意志外原因停止。<br><b>D选项</b>：错误。不是主动放弃。',
+              tip: '买药=准备工具=预备阶段。被警察抓=意志外原因=犯罪预备。如果是买药时自己良心发现不买了=犯罪中止。' },
+            { type: 'single', q: '甲开枪杀乙，因子弹卡壳未能击发。甲的行为属于？', opts: ['A. 犯罪既遂', 'B. 犯罪未遂', 'C. 犯罪预备', 'D. 犯罪中止'], correct: 1,
+              detail: '<b>A选项</b>：错误。没打死。<br><b>B选项</b>：正确。已着手开枪，因子弹卡壳未得逞。<br><b>C选项</b>：错误。已经着手了。<br><b>D选项</b>：错误。不是主动放弃。',
+              tip: '开枪=已经着手（进入实施阶段）。子弹卡壳=意志外原因=犯罪未遂。"欲而不能"就是未遂。' }
+        ]
+    },
+
+    // ===== 模块7：共同犯罪 =====
+    {
+        id: 'mod7',
+        iconClass: 'icon-blue',
+        iconEmoji: '👥',
+        title: '七、共同犯罪',
+        subtitle: '两人以上共同故意犯罪——"一人既遂，全体既遂"',
+        items: [
+            { type: 'ki', badge: '条件', badgeClass: 'badge-core', title: '共同犯罪的成立条件',
+              content: '①<span class="kh kh-red">两人以上</span>（都必须有刑事责任能力）<br>②<span class="kh kh-red">共同故意</span>（事前有共谋，过失不构成共犯）<br>③<span class="kh kh-red">共同行为</span>（都参与了，分工不同也算）<br><b>不成立共犯的情形：</b>①过失犯罪 ②一方故意一方过失 ③无共谋的同时犯 ④超出共谋范围的行为（过限行为）',
+              example: { q: '👥 张三（16岁）和李四（11岁）一起去盗窃。两人构成共同犯罪吗？', a: '❌ 不构成！李四不满12周岁，无刑事责任能力。张三单独构成盗窃罪，属于<b>间接正犯</b>——把李四当"犯罪工具"了。如果两人都16岁，有共谋一起偷，就是共同犯罪。' } },
+            { type: 'ki', badge: '类型', badgeClass: 'badge-num', title: '共同犯罪人的分类',
+              content: '<b>主犯</b>：起主要作用，按全部罪行处罚。<br><b>从犯</b>：起辅助/次要作用，<span class="kh">应当从轻、减轻或免除</span>处罚。<br><b>胁从犯</b>：被胁迫参加，<span class="kh">应当减轻或免除</span>处罚。<br><b>教唆犯</b>：怂恿他人犯罪。教唆未成年人=间接正犯；教唆有责任能力的人=共犯。<br><b>原则：</b>一人既遂，全体既遂。' }
+        ],
+        quizzes: [
+            { type: 'single', q: '甲和乙约好一起盗窃，到了现场乙突然肚子疼回家，甲独自盗窃成功。以下正确的是？', opts: ['A. 甲和乙不构成共同犯罪', 'B. 甲构成盗窃既遂，乙构成盗窃预备', 'C. 甲和乙均构成盗窃既遂', 'D. 甲构成盗窃既遂，乙不构成犯罪'], correct: 2,
+              detail: '<b>A选项</b>：错误。有共谋就成立共犯。<br><b>B选项</b>：错误。一人既遂全体既遂。<br><b>C选项</b>：正确。有共谋，一人完成，全体既遂。<br><b>D选项</b>：错误。乙也构成犯罪。',
+              tip: '约好一起偷，你去了就算没干成也是共犯，而且同伴偷成了你也是既遂。"一人既遂，全体既遂"是铁律。' },
+            { type: 'single', q: '甲让11岁的乙去投毒杀人。以下正确的是？', opts: ['A. 甲和乙构成共同犯罪', 'B. 甲是教唆犯', 'C. 甲是间接正犯', 'D. 乙单独构成犯罪'], correct: 2,
+              detail: '<b>A选项</b>：错误。乙无刑事责任能力。<br><b>B选项</b>：错误。教唆无责能力人属于间接正犯。<br><b>C选项</b>：正确。利用无责人作为犯罪工具。<br><b>D选项</b>：错误。乙不构成犯罪。',
+              tip: '教唆有责任能力的人=教唆犯。教唆无责任能力的人（如小孩）=间接正犯——小孩只是你的"工具"。' }
+        ]
+    },
+    // ===== 模块8：刑罚体系 =====
+    {
+        id: 'mod8',
+        iconClass: 'icon-red',
+        iconEmoji: '⚖️',
+        title: '八、刑罚体系',
+        subtitle: '5种主刑 + 4种附加刑 + 死刑限制 + 缓刑假释',
+        items: [
+            { type: 'table', html: '<table class="info-table"><thead><tr><th>主刑</th><th>期限</th><th>执行特点</th></tr></thead><tbody><tr><td><b>管制</b></td><td>3月-2年，数罪≤3年</td><td>社区矫正，同工同酬，羁押1日抵2日</td></tr><tr><td><b>拘役</b></td><td>1月-6月，数罪≤1年</td><td>公安机关就近执行，酌量发报酬，每月可回家1-2天</td></tr><tr><td><b>有期徒刑</b></td><td>6月-15年，数罪≤25年</td><td>监狱执行，强制劳动，无报酬</td></tr><tr><td><b>无期徒刑</b></td><td>终身</td><td>监狱执行，强制劳动</td></tr><tr><td><b>死刑</b></td><td>—</td><td>仅最严重犯罪；未成年/孕妇不适用；死缓报高院核准</td></tr></tbody></table>' },
+            { type: 'ki', badge: '必考', badgeClass: 'badge-core', title: '死刑适用限制（3个不适用）',
+              content: '①犯罪时<span class="kh kh-red">不满18周岁</span>的人<br>②<span class="kh kh-red">审判时怀孕</span>的妇女（"审判时"扩大解释：从羁押到执行前）<br>③审判时已满75周岁的人（以特别残忍手段致人死亡的除外）<br><b>核准：</b>死刑立即执行报<span class="kh">最高人民法院</span>核准；死缓可由<span class="kh">高级人民法院</span>核准。' },
+            { type: 'ki', badge: '附加', badgeClass: 'badge-num', title: '4种附加刑',
+              content: '<b>罚金、剥夺政治权利、没收财产、驱逐出境</b>（针对外国人）。<br><b>注意：</b>罚金≠罚款！罚金是刑罚（犯罪），罚款是行政处罚（违法）。<br>被判处无期/死刑的<span class="kh kh-red">必须同时</span>剥夺政治权利终身。' },
+            { type: 'ki', badge: '缓刑', badgeClass: 'badge-num', title: '缓刑与假释',
+              content: '<b>缓刑</b>：判3年以下有期/拘役，有条件不执行。适用于轻罪、有悔罪表现、无再犯危险。<br><b>不适用缓刑：</b><span class="kh kh-red">累犯</span>和<span class="kh kh-red">犯罪集团首要分子</span>。<br><b>假释</b>：服刑期间表现好，提前释放。假释考验期内实行<span class="kh">社区矫正</span>。' }
+        ],
+        quizzes: [
+            { type: 'single', q: '下列哪种刑罚属于主刑？', opts: ['A. 罚金', 'B. 剥夺政治权利', 'C. 管制', 'D. 没收财产'], correct: 2,
+              detail: '<b>A选项</b>：附加刑。<br><b>B选项</b>：附加刑。<br><b>C选项</b>：正确。管制是主刑。<br><b>D选项</b>：附加刑。',
+              tip: '主刑5种：管、拘、有、无、死。附加刑4种：罚金、剥权、没收、驱逐。' },
+            { type: 'single', q: '下列关于死刑的说法，正确的是？', opts: ['A. 犯罪时不满18周岁的人可以判死缓', 'B. 死刑缓期执行由最高人民法院核准', 'C. 死刑立即执行由最高人民法院核准', 'D. 审判时怀孕的妇女可以判死缓'], correct: 2,
+              detail: '<b>A选项</b>：错误。未成年人不适用任何死刑。<br><b>B选项</b>：错误。死缓由高院核准。<br><b>C选项</b>：正确。死刑立即执行报最高院核准。<br><b>D选项</b>：错误。孕妇不适用死刑。',
+              tip: '死刑立即=最高院核准，死缓=高院核准。未成年人和孕妇完全不能死刑。' }
+        ]
+    },
+
+    // ===== 模块9：重点罪名 =====
+    {
+        id: 'mod9',
+        iconClass: 'icon-yellow',
+        iconEmoji: '🔪',
+        title: '九、刑法分论重点罪名',
+        subtitle: '抢劫、盗窃、诈骗、绑架、非法拘禁、敲诈勒索等',
+        items: [
+            { type: 'ki', badge: '抢劫', badgeClass: 'badge-core', title: '抢劫罪（侵犯人身+财产）',
+              content: '以暴力、胁迫或其他方法<span class="kh kh-red">压制反抗</span>后劫取财物。<br><b>既遂标准：</b>劫到财物或造成轻伤以上，满足其一即既遂。<br><b>转化型抢劫：</b>犯盗窃/诈骗/抢夺后，为窝藏赃物、抗拒抓捕、毁灭罪证而<span class="kh">当场使用暴力或以暴力相威胁</span>→定抢劫罪。<br><b>加重情节：</b>入户抢劫、在公共交通工具上抢劫、持枪抢劫等。' },
+            { type: 'ki', badge: '盗窃', badgeClass: 'badge-num', title: '盗窃罪（秘密窃取）',
+              content: '以非法占有为目的，秘密窃取公私财物。<br><b>既遂标准：</b>被害人<span class="kh kh-red">失去对财物的控制</span>时既遂。<br><b>与抢夺的区别：</b>抢夺是公然夺取（趁人不备），盗窃是秘密窃取。' },
+            { type: 'ki', badge: '诈骗', badgeClass: 'badge-num', title: '诈骗罪（基于错误认识交付）',
+              content: '虚构事实或隐瞒真相→被害人<span class="kh kh-red">基于错误认识</span>主动交付财物。<br><b>关键：</b>必须是"骗→信→交"的因果链条。如果被害人识破了骗局但出于同情给钱，则诈骗<span class="kh">未遂</span>。' },
+            { type: 'ki', badge: '绑架', badgeClass: 'badge-num', title: '绑架罪 vs 非法拘禁罪',
+              content: '<b>绑架罪</b>：以勒索财物为目的绑架他人或绑架他人作为人质。<br><b>非法拘禁罪</b>：非法剥夺他人人身自由（无勒索目的）。<br><b>区别：</b>绑架是向<span class="kh kh-red">第三人</span>要钱，从被绑架人身上直接取财=抢劫。<br><b>杀害被绑架人</b>：定绑架罪（加重情节），不另定故意杀人罪。' },
+            { type: 'ki', badge: '敲诈', badgeClass: 'badge-num', title: '敲诈勒索罪',
+              content: '以威胁/要挟方式，使被害人产生恐惧心理而交付财物。<br><b>与抢劫的区别：</b>抢劫是当场暴力压制，敲诈是威胁（不一定是当场）。<br><b>既遂标准：</b>基于恐惧心理交付财物。若因同情给钱=未遂。' }
+        ],
+        quizzes: [
+            { type: 'single', q: '甲入室盗窃后准备离开，撞见回家的主人，甲为逃跑将主人打伤。甲的行为构成？', opts: ['A. 盗窃罪', 'B. 故意伤害罪', 'C. 抢劫罪', 'D. 盗窃罪和故意伤害罪并罚'], correct: 2,
+              detail: '<b>A选项</b>：不全面。<br><b>B选项</b>：不全面。<br><b>C选项</b>：正确。转化型抢劫。<br><b>D选项</b>：错误。转化后只定抢劫。',
+              tip: '偷完东西被人发现，为逃跑打人=转化型抢劫。记住口诀："盗转抢，当场暴"。' },
+            { type: 'single', q: '甲将乙绑架，打电话给乙的父亲索要10万元赎金。甲构成？', opts: ['A. 非法拘禁罪', 'B. 绑架罪', 'C. 抢劫罪', 'D. 敲诈勒索罪'], correct: 1,
+              detail: '<b>A选项</b>：错误。有勒索目的。<br><b>B选项</b>：正确。绑架+向第三人索财。<br><b>C选项</b>：错误。不是直接取财。<br><b>D选项</b>：错误。没有威胁。',
+              tip: '绑人+找家属要钱=绑架。绑人+直接从被绑人身上拿钱=抢劫。' },
+            { type: 'multi', q: '以下哪些行为构成抢劫罪？', opts: ['A. 持刀威胁取走财物', 'B. 用迷药迷晕后取财', 'C. 趁人不备夺走挎包', 'D. 灌醉后取走财物', 'E. 盗窃后为逃跑当场打人'], correct: [0,1,3,4], multi: true,
+              detail: '<b>A选项</b>：构成。暴力胁迫。<br><b>B选项</b>：构成。其他方法压制反抗。<br><b>C选项</b>：抢夺。趁人不备无压制。<br><b>D选项</b>：构成。灌醉=其他方法。<br><b>E选项</b>：构成。转化型抢劫。',
+              tip: 'C是抢夺——趁人不备，没有压制反抗。其他都是抢劫：暴力(持刀)、其他方法(迷药、灌醉)、转化(盗后打人)。' }
+        ]
+    },
+
+    // ===== 模块10：综合练习 =====
+    {
+        id: 'mod10',
+        iconClass: 'icon-red',
+        iconEmoji: '📝',
+        title: '十、综合练习 ',
+        subtitle: '全部做完，刑法总论分论就通关了！',
+        items: [],
+        quizzes: (function() {
+            // 判断题30道
+            const tf = [
+                { q:'罪刑法定原则要求罪名和刑罚必须由法律规定，不能自创罪名。', c:true,
+                  d:'<b>A"正确"</b>：正确。这是罪行法定原则的核心。<br><b>B"错误"</b>：错误。',
+                  t:'法无明文规定不为罪，法无明文规定不处罚。政府通知不能创设罪名。' },
+                { q:'已满14周岁不满16周岁的人犯盗窃罪，应当负刑事责任。', c:false,
+                  d:'<b>A"正确"</b>：错误。盗窃不在8种重罪中。<br><b>B"错误"</b>：正确。',
+                  t:'14-16只对8种重罪负责：烧杀淫掠伤贩爆投。盗窃不在列。' },
+                { q:'间歇性精神病人在精神正常时犯罪的，应当负刑事责任。', c:true,
+                  d:'<b>A"正确"</b>：正确。正常时负责。<br><b>B"错误"</b>：错误。',
+                  t:'看行为时的状态。正常时就该负全责。' },
+                { q:'醉酒的人犯罪，可以从轻或减轻处罚。', c:false,
+                  d:'<b>A"正确"</b>：错误。醉酒不影响刑责。<br><b>B"错误"</b>：正确。',
+                  t:'醉酒不是免罪金牌，更不能从轻。你能控制喝不喝酒。' },
+                { q:'犯罪时不满18周岁的人，不适用死刑。', c:true,
+                  d:'<b>A"正确"</b>：正确。未成年不适用死刑。<br><b>B"错误"</b>：错误。',
+                  t:'不管是立即执行还是死缓，未成年人都不能判死刑。' },
+                { q:'正当防卫必须针对不法侵害人本人实施，不能针对第三人。', c:true,
+                  d:'<b>A"正确"</b>：正确。防卫对象限于侵害人。<br><b>B"错误"</b>：错误。',
+                  t:'别人打你，你不能去打他家人——那不是防卫是报复。' },
+                { q:'紧急避险造成的损害必须小于所避免的损害。', c:true,
+                  d:'<b>A"正确"</b>：正确。避险限度。<br><b>B"错误"</b>：错误。',
+                  t:'大家都是合法利益，你避险损害的利益必须更小。' },
+                { q:'犯罪未遂是指犯罪过程中自动放弃犯罪的行为。', c:false,
+                  d:'<b>A"正确"</b>：错误。自动放弃是中止。<br><b>B"错误"</b>：正确。',
+                  t:'未遂=意志外被迫停；中止=意志内主动停。说反了。' },
+                { q:'共同犯罪要求两人以上共同故意犯罪，过失犯罪不构成共犯。', c:true,
+                  d:'<b>A"正确"</b>：正确。共犯需故意。<br><b>B"错误"</b>：错误。',
+                  t:'两人一起过失造成结果，各算各的，不叫共犯。' },
+                { q:'管制是最轻的主刑，实行社区矫正，同工同酬。', c:true,
+                  d:'<b>A"正确"</b>：正确。管制半自由。<br><b>B"错误"</b>：错误。',
+                  t:'不用关起来，在社区接受矫正，干活拿一样的钱。' },
+                { q:'死刑缓期执行应当报请最高人民法院核准。', c:false,
+                  d:'<b>A"正确"</b>：错误。死缓由高院核准。<br><b>B"错误"</b>：正确。',
+                  t:'死缓=高级法院核准；死刑立即=最高院核准。' },
+                { q:'审判时怀孕的妇女不适用死刑，"审判时"仅指法院审理阶段。', c:false,
+                  d:'<b>A"正确"</b>：错误。扩大解释到羁押至执行前。<br><b>B"错误"</b>：正确。',
+                  t:'从被抓到执行死刑前发现怀孕，都不能判死刑。' },
+                { q:'被判处无期徒刑的犯罪分子，应当同时附加剥夺政治权利终身。', c:true,
+                  d:'<b>A"正确"</b>：正确。无期/死刑必剥权。<br><b>B"错误"</b>：错误。',
+                  t:'无期和死刑是必须同时剥夺政治权利的。' },
+                { q:'累犯不适用缓刑，但犯罪集团首要分子可以适用缓刑。', c:false,
+                  d:'<b>A"正确"</b>：错误。首要分子也不能缓刑。<br><b>B"错误"</b>：正确。',
+                  t:'累犯和犯罪集团首要分子都不能缓刑。' },
+                { q:'假释考验期内，被假释的犯罪分子应当依法实行社区矫正。', c:true,
+                  d:'<b>A"正确"</b>：正确。假释、缓刑、管制都社区矫正。<br><b>B"错误"</b>：错误。',
+                  t:'放出来了但不是完全自由，得在社区接受矫正监督。' },
+                { q:'抢劫罪侵犯的客体是单一客体，即财产权。', c:false,
+                  d:'<b>A"正确"</b>：错误。抢劫是复杂客体。<br><b>B"错误"</b>：正确。',
+                  t:'抢劫既侵犯人身又侵犯财产，是复杂客体。' },
+                { q:'盗窃罪的既遂标准是行为人实际取得财物。', c:false,
+                  d:'<b>A"正确"</b>：错误。是被害人失去控制。<br><b>B"错误"</b>：正确。',
+                  t:'东西脱离主人控制就算既遂，哪怕你还没拿回家。' },
+                { q:'转化型抢劫是指犯盗窃、诈骗、抢夺罪后当场使用暴力或以暴力相威胁的行为。', c:true,
+                  d:'<b>A"正确"</b>：正确。这就是转化型抢劫。<br><b>B"错误"</b>：错误。',
+                  t:'偷完东西被人发现打人逃跑=转化型抢劫。' },
+                { q:'绑架罪中杀害被绑架人的，应定绑架罪和故意杀人罪数罪并罚。', c:false,
+                  d:'<b>A"正确"</b>：错误。绑架杀人定绑架罪加重处罚。<br><b>B"错误"</b>：正确。',
+                  t:'绑架中杀了人不另定罪，是绑架罪的加重情节。' },
+                { q:'又聋又哑的人犯罪，应当从轻、减轻或者免除处罚。', c:false,
+                  d:'<b>A"正确"</b>：错误。是"可以"不是"应当"。<br><b>B"错误"</b>：正确。',
+                  t:'聋哑人是可以宽大处理，不是必须宽大。' },
+                { q:'单位犯罪实行双罚制，既处罚单位也处罚直接负责的主管人员。', c:true,
+                  d:'<b>A"正确"</b>：正确。双罚制。<br><b>B"错误"</b>：错误。',
+                  t:'单位罚钱+负责人判刑，两个都要罚。' },
+                { q:'教唆不满14周岁的人犯罪的，教唆者属于间接正犯。', c:true,
+                  d:'<b>A"正确"</b>：正确。小孩是犯罪工具。<br><b>B"错误"</b>：错误。',
+                  t:'教唆有责任能力的人=教唆犯；教唆小孩=间接正犯。' },
+                { q:'犯罪中止如果造成损害的，可以减轻处罚。', c:false,
+                  d:'<b>A"正确"</b>：错误。应当减轻。<br><b>B"错误"</b>：正确。',
+                  t:'中止用的是"应当"，预备和未遂才是"可以"。' },
+                { q:'已满75周岁的人故意犯罪的，应当从轻或减轻处罚。', c:false,
+                  d:'<b>A"正确"</b>：错误。是"可以"不是"应当"。<br><b>B"错误"</b>：正确。',
+                  t:'老人是"可以"从轻，未成年人是"应当"从轻。' },
+                { q:'高铁上甲打了乙一巴掌停手后，乙继续追打甲致重伤。乙属于正当防卫。', c:false,
+                  d:'<b>A"正确"</b>：错误。不法侵害已结束。<br><b>B"错误"</b>：正确。',
+                  t:'人家停手了你还打=事后防卫，不是正当防卫。' },
+                { q:'刑法中的罚金和行政处罚中的罚款性质相同，可以互换使用。', c:false,
+                  d:'<b>A"正确"</b>：错误。罚金是刑罚，罚款是行政处罚。<br><b>B"错误"</b>：正确。',
+                  t:'罚金=犯罪了法院判的；罚款=违法了行政机关罚的。' },
+                { q:'故意杀人罪和故意伤害致人死亡罪都要求造成死亡结果。', c:false,
+                  d:'<b>A"正确"</b>：错误。故意杀人包括未遂。<br><b>B"错误"</b>：正确。',
+                  t:'故意杀人未遂也定故意杀人罪，只是没死所以是未遂。' },
+                { q:'被判处有期徒刑的犯罪分子，服刑期间一律没有政治权利。', c:false,
+                  d:'<b>A"正确"</b>：错误。不一定，需附加剥夺才行。<br><b>B"错误"</b>：正确。',
+                  t:'有期不一定剥权，只有附加剥夺政治权利的时候才没有。' },
+                { q:'放火罪属于14-16周岁应负刑事责任的8种重罪之一。', c:true,
+                  d:'<b>A"正确"</b>：正确。放火在8种重罪中。<br><b>B"错误"</b>：错误。',
+                  t:'口诀"烧杀淫掠伤贩爆投"，烧就是放火。' },
+                { q:'互殴行为中，后动手的一方属于正当防卫。', c:false,
+                  d:'<b>A"正确"</b>：错误。互殴不是防卫。<br><b>B"错误"</b>：正确。',
+                  t:'你打我我打你=互殴，双方都没防卫意图，都构成故意伤害。' }
+            ];
+            // 单选题15道
+            const s = [
+                { q:'关于罪刑法定原则，以下说法正确的是？', o:['A. 可以根据社会危害性创设新罪名','B. 行政法规可以规定犯罪和刑罚','C. 法无明文规定不为罪','D. 法官可根据正义感定罪'], c:2,
+                  d:'<b>A</b>：错误。不能自创。<br><b>B</b>：错误。只能由法律规定。<br><b>C</b>：正确。罪刑法定核心。<br><b>D</b>：错误。必须依法。',
+                  t:'罪刑法定=法律没写就不能定罪，谁都不能自创。' },
+                { q:'15岁的张三实施了抢劫行为，应如何处理？', o:['A. 不负刑责','B. 应当负刑责','C. 等满16岁再处理','D. 只处罚其监护人'], c:1,
+                  d:'<b>A</b>：错误。抢劫在8种重罪中。<br><b>B</b>：正确。14-16对抢劫负责。<br><b>C</b>：错误。犯罪时年龄为准。<br><b>D</b>：错误。自己负责。',
+                  t:'14-16岁对8种重罪负责，抢劫是其中之一。' },
+                { q:'甲开枪杀乙，子弹穿过乙的身体后又击中路人丙致其死亡。甲对丙死亡的主观心态是？', o:['A. 直接故意','B. 间接故意','C. 过于自信的过失','D. 疏忽大意的过失'], c:1,
+                  d:'<b>A</b>：错误。不是追求丙死。<br><b>B</b>：正确。明知可能误伤而放任。<br><b>C</b>：错误。没有轻信情节。<br><b>D</b>：错误。不是过失。',
+                  t:'开枪时明知可能打到别人还不管=间接故意。' },
+                { q:'以下哪种情况构成正当防卫？', o:['A. 甲得知乙明天要杀自己，当晚先将乙杀死','B. 甲在乙持刀砍来时反击致乙死亡','C. 甲被乙打后过了3天找乙报复','D. 甲为泄愤在乙行凶时趁机将其重伤'], c:1,
+                  d:'<b>A</b>：事前防卫。<br><b>B</b>：正确。特殊正当防卫。<br><b>C</b>：事后防卫。<br><b>D</b>：缺乏防卫意图。',
+                  t:'A提前、C事后、D泄愤，都不是防卫。B面临砍杀反击=正当防卫。' },
+                { q:'犯罪中止与犯罪未遂的核心区别是？', o:['A. 发生阶段不同','B. 停止原因不同','C. 处罚轻重不同','D. 犯罪主体不同'], c:1,
+                  d:'<b>A</b>：错误。中止可在任何阶段。<br><b>B</b>：正确。中止是意志内主动停。<br><b>C</b>：错误。处罚是结果非原因。<br><b>D</b>：错误。主体都需有责。',
+                  t:'主动停=中止，被动停=未遂。看原因不是看阶段。' },
+                { q:'甲乙共谋盗窃，乙望风，甲入室窃得财物。以下正确的是？', o:['A. 甲既遂乙未遂','B. 甲既遂乙中止','C. 甲乙均盗窃既遂','D. 甲乙均盗窃未遂'], c:2,
+                  d:'<b>A</b>：错误。一人既遂全体既遂。<br><b>B</b>：错误。不是中止。<br><b>C</b>：正确。共犯原则。<br><b>D</b>：错误。已既遂。',
+                  t:'约好一起干的，有人干成了大家都既遂。' },
+                { q:'以下哪种刑罚属于附加刑？', o:['A. 管制','B. 拘役','C. 罚金','D. 有期徒刑'], c:2,
+                  d:'<b>A</b>：主刑。<br><b>B</b>：主刑。<br><b>C</b>：正确。附加刑。<br><b>D</b>：主刑。',
+                  t:'附加刑4种：罚金、剥权、没收、驱逐。' },
+                { q:'被判处死刑缓期执行的，应当报请哪个机关核准？', o:['A. 最高人民法院','B. 高级人民法院','C. 中级人民法院','D. 最高人民检察院'], c:1,
+                  d:'<b>A</b>：错误。那是立即执行。<br><b>B</b>：正确。死缓由高院核准。<br><b>C</b>：错误。<br><b>D</b>：错误。',
+                  t:'死刑立即=最高院，死缓=高院。' },
+                { q:'甲用迷药将乙迷晕后拿走其财物。甲的行为构成？', o:['A. 盗窃罪','B. 抢夺罪','C. 抢劫罪','D. 诈骗罪'], c:2,
+                  d:'<b>A</b>：错误。不是秘密窃取。<br><b>B</b>：错误。不是趁人不备。<br><b>C</b>：正确。其他方法压制反抗。<br><b>D</b>：错误。没有虚构事实。',
+                  t:'迷药=其他方法压制反抗=抢劫。' },
+                { q:'累犯不适用什么制度？', o:['A. 减刑','B. 假释','C. 缓刑','D. 保外就医'], c:2,
+                  d:'<b>A</b>：错误。累犯可以减刑。<br><b>B</b>：错误。假释条件不同。<br><b>C</b>：正确。累犯不适用缓刑。<br><b>D</b>：错误。不是绝对禁止。',
+                  t:'累犯和犯罪集团首要分子都不能缓刑。' },
+                { q:'甲盗窃时被主人发现，为抗拒抓捕当场使用暴力。甲构成？', o:['A. 盗窃罪','B. 故意伤害罪','C. 抢劫罪','D. 盗窃罪和故意伤害罪'], c:2,
+                  d:'<b>A</b>：错误。已转化。<br><b>B</b>：错误。转化后只定抢劫。<br><b>C</b>：正确。转化型抢劫。<br><b>D</b>：错误。不并罚。',
+                  t:'盗转抢=偷东西被发现后动手打人。' },
+                { q:'关于缓刑的适用，以下说法正确的是？', o:['A. 累犯可以适用缓刑','B. 判处5年有期徒刑的可以适用缓刑','C. 被宣告缓刑的应社区矫正','D. 犯罪集团首要分子应当缓刑'], c:2,
+                  d:'<b>A</b>：错误。累犯不行。<br><b>B</b>：错误。3年以下才行。<br><b>C</b>：正确。缓刑社区矫正。<br><b>D</b>：错误。首要分子不行。',
+                  t:'缓刑条件：3年以下+悔罪+无危险。累犯和首要分子不能缓刑。' },
+                { q:'甲绑架乙后，直接从乙身上搜走现金5000元。甲的行为构成？', o:['A. 绑架罪','B. 非法拘禁罪','C. 抢劫罪','D. 敲诈勒索罪'], c:2,
+                  d:'<b>A</b>：错误。没有向第三人索财。<br><b>B</b>：错误。有取财目的。<br><b>C</b>：正确。直接取财=抢劫。<br><b>D</b>：错误。不是威胁。',
+                  t:'向被绑人要钱=抢劫，向家属要钱=绑架。' },
+                { q:'甲为报复乙，故意挑衅乙动手，然后以"正当防卫"名义将乙打伤。甲属于？', o:['A. 正当防卫','B. 防卫挑拨','C. 防卫过当','D. 紧急避险'], c:1,
+                  d:'<b>A</b>：错误。没有防卫意图。<br><b>B</b>：正确。故意挑拨后"防卫"。<br><b>C</b>：错误。不是防卫。<br><b>D</b>：错误。不是避险。',
+                  t:'故意惹人动手然后"反击"=防卫挑拨，不是正当防卫。' },
+                { q:'甲在公交车上抢夺方向盘致车失控撞墙，多人受伤。甲构成？', o:['A. 交通肇事罪','B. 危险驾驶罪','C. 以危险方法危害公共安全罪','D. 寻衅滋事罪'], c:2,
+                  d:'<b>A</b>：错误。交通事故是过失。<br><b>B</b>：错误。危险驾驶无结果。<br><b>C</b>：正确。故意危害公共安全。<br><b>D</b>：错误。不符合特征。',
+                  t:'抢方向盘=故意危害不特定多数人=以危险方法危害公共安全罪。' }
+            ];
+            // 多选题10道
+            const m = [
+                { q:'以下属于14-16周岁应负刑责的8种重罪的是？', o:['A. 放火','B. 贩卖毒品','C. 绑架','D. 抢劫','E. 爆炸'], c:[0,1,3,4],
+                  d:'<b>A</b>：属于。烧=放火。<br><b>B</b>：属于。贩=贩卖毒品。<br><b>C</b>：不属于。绑架不在列。<br><b>D</b>：属于。掠=抢劫。<br><b>E</b>：属于。爆=爆炸。',
+                  t:'口诀"烧杀淫掠伤贩爆投"，绑架不在8种内。' },
+                { q:'正当防卫的成立条件包括？', o:['A. 存在现实不法侵害','B. 侵害正在进行','C. 防卫对象可以是第三人','D. 具有防卫意图','E. 不能明显超过必要限度'], c:[0,1,3,4],
+                  d:'<b>A</b>：正确。起因条件。<br><b>B</b>：正确。时间条件。<br><b>C</b>：错误。只能针对不法侵害人本人。<br><b>D</b>：正确。意图条件。<br><b>E</b>：正确。限度条件。',
+                  t:'C错——防卫对象必须是坏人本人，不能是路人。' },
+                { q:'以下不构成共同犯罪的有？', o:['A. 两人共同过失致人死亡','B. 甲故意乙过失共同造成结果','C. 无共谋的同时犯','D. 超出共谋范围的过限行为','E. 甲乙共谋后共同盗窃'], c:[0,1,2,3],
+                  d:'<b>A</b>：不构成。过失不构成共犯。<br><b>B</b>：不构成。一方故意一方过失。<br><b>C</b>：不构成。无共谋。<br><b>D</b>：不构成。过限不构成共犯。<br><b>E</b>：构成。共谋共行。',
+                  t:'E是唯一构成共犯的。不构成共犯的：过失、一方过失、无共谋、过限行为。' },
+                { q:'以下哪些属于主刑？', o:['A. 管制','B. 罚金','C. 有期徒刑','D. 剥夺政治权利','E. 死刑'], c:[0,2,4],
+                  d:'<b>A</b>：主刑。<br><b>B</b>：附加刑。<br><b>C</b>：主刑。<br><b>D</b>：附加刑。<br><b>E</b>：主刑。',
+                  t:'主刑5种：管、拘、有、无、死。附加刑4种：罚金、剥权、没收、驱逐。' },
+                { q:'以下哪些情形不适用死刑？', o:['A. 犯罪时不满18周岁','B. 审判时怀孕的妇女','C. 犯罪时已满75周岁','D. 审判时已满75周岁以特别残忍手段杀人','E. 犯罪时不满16周岁'], c:[0,1,3],
+                  d:'<b>A</b>：不适用。<br><b>B</b>：不适用。<br><b>C</b>：错误。是审判时不满75才不适用。<br><b>D</b>：不适用。特别残忍除外。<br><b>E</b>：错误。不是不适用原因。',
+                  t:'三大不适用：未成年+孕妇+审判时满75（残忍手段除外）。' },
+                { q:'以下哪些属于抢劫罪的加重情节？', o:['A. 入户抢劫','B. 在公共交通工具上抢劫','C. 抢劫银行','D. 持枪抢劫','E. 抢劫致人死亡'], c:[0,1,2,3,4],
+                  d:'<b>A</b>：加重。<br><b>B</b>：加重。<br><b>C</b>：加重。<br><b>D</b>：加重。<br><b>E</b>：加重。',
+                  t:'全选。这些情况十年起步，最高死刑。' },
+                { q:'以下哪些情况属于"意志以外的原因"导致犯罪未完成？', o:['A. 警察突然出现','B. 被害人强烈反抗','C. 行为人良心发现停止','D. 作案工具失灵','E. 被人发现后逃跑'], c:[0,1,3,4],
+                  d:'<b>A</b>：意志外。<br><b>B</b>：意志外。<br><b>C</b>：意志内（中止）。<br><b>D</b>：意志外。<br><b>E</b>：意志外。',
+                  t:'C是主动放弃=中止，其他都是被迫停=未遂或预备。' },
+                { q:'以下哪些犯罪属于侵犯财产罪？', o:['A. 抢劫罪','B. 盗窃罪','C. 诈骗罪','D. 绑架罪','E. 敲诈勒索罪'], c:[0,1,2,4],
+                  d:'<b>A</b>：属于。<br><b>B</b>：属于。<br><b>C</b>：属于。<br><b>D</b>：属于侵犯人身权利罪。<br><b>E</b>：属于。',
+                  t:'绑架的不是财产罪，而是侵犯人身权利罪。' },
+                { q:'以下哪些是正确的不作为犯罪义务来源？', o:['A. 法律规定（如赡养）','B. 职务要求（如警察）','C. 合同约定（如保姆）','D. 先行行为引起','E. 道德义务'], c:[0,1,2,3],
+                  d:'<b>A</b>：正确。<br><b>B</b>：正确。<br><b>C</b>：正确。<br><b>D</b>：正确。<br><b>E</b>：错误。道德义务不是来源。',
+                  t:'道德义务不能成为不作为犯罪的来源。' },
+                { q:'以下关于缓刑的说法正确的有？', o:['A. 缓刑适用3年以下有期或拘役','B. 累犯不适用缓刑','C. 缓刑考验期需社区矫正','D. 缓刑期满原判刑罚不再执行','E. 犯罪集团首要分子可缓刑'], c:[0,1,2,3],
+                  d:'<b>A</b>：正确。<br><b>B</b>：正确。<br><b>C</b>：正确。<br><b>D</b>：正确。<br><b>E</b>：错误。首要分子不能缓刑。',
+                  t:'E是雷——首要分子和累犯都不能缓刑。' }
+            ];
+            // 转换判断题格式
+            const tfQ = tf.map(function(q,i){ return { type:'single', q:q.q, opts:['✅ 正确','❌ 错误'], correct:q.c?0:1, isTF:true, tfId:'tf'+(i+1), detail:q.d, tip:q.t }; });
+            const sQ = s.map(function(q,i){ return { type:'single', q:q.q, opts:q.o, correct:q.c, detail:q.d, tip:q.t, quizIndex:i+1 }; });
+            const mQ = m.map(function(q,i){ return { type:'multi', q:q.q, opts:q.o, correct:q.c, multi:true, detail:q.d, tip:q.t, quizIndex:i+1 }; });
+            return [...tfQ, ...sQ, ...mQ];
+        })()
+    }
+];
+
+
+// ==================== 渲染引擎 ====================
+function renderAll() {
+    var main = document.getElementById('mainContent');
+    var html = '';
+    knowledgeData.forEach(function(mod) {
+        html += '<div class="card" id="' + mod.id + '"><div class="section-title"><div class="icon ' + mod.iconClass + '">' + mod.iconEmoji + '</div>' + mod.title + '</div>';
+        if (mod.subtitle) html += '<div class="subtitle">' + mod.subtitle + '</div>';
+        if (mod.items && mod.items.length > 0) {
+            html += '<div class="ki-grid">';
+            mod.items.forEach(function(item) {
+                if (item.type === 'table') html += item.html;
+                else if (item.type === 'ki') html += renderKI(item);
+            });
+            html += '</div>';
+        }
+        if (mod.quizzes && mod.quizzes.length > 0) {
+            mod.quizzes.forEach(function(q, qi) {
+                html += renderQuiz(q, mod.id + '-q' + qi);
+            });
+        }
+        html += '</div>';
+    });
+    main.innerHTML = html;
+    generateTOC();
+}
+
+function renderKI(item) {
+    var h = '<div class="ki-item">';
+    h += '<div class="ki-title-row">' + (item.badge ? '<span class="badge ' + (item.badgeClass || 'badge-num') + '">' + item.badge + '</span>' : '') + item.title + '</div>';
+    h += '<div class="ki-content">' + item.content + '</div>';
+    if (item.extra) h += '<div style="margin-top:6px;color:#5c5347;font-size:0.88rem;">' + item.extra + '</div>';
+    if (item.example) {
+        h += '<div class="example-block"><div class="ex-label">📖 生动案例</div><div class="ex-q">' + item.example.q + '</div><div class="ex-a">' + item.example.a + '</div></div>';
+    }
+    h += '</div>';
+    return h;
+}
+
+function renderQuiz(q, qid) {
+    var qTypeLabel = q.multi ? '【多选题】' : '【单选题】';
+    var h = '<div class="quiz-wrap" data-qid="' + qid + '">';
+
+    if (q.quizIndex) {
+    h += '<div class="q-type">📝 ' + qTypeLabel + ' · 第' + q.quizIndex + '题</div>';
+} else if (q.tfId) {
+    h += '<div class="q-type">📝 ' + qTypeLabel + ' · ' + q.tfId + '</div>';
+} else {
+    h += '<div class="q-type">📝 ' + qTypeLabel + '</div>';
+}
+
+
+    h += '<div class="q-text">' + q.q + '</div>';
+    h += '<ul class="opt-list">';
+    for (var i = 0; i < q.opts.length; i++) {
+        h += '<li data-idx="' + i + '" onclick="selectOpt(this,\'' + qid + '\',' + i + ',' + (q.multi || false) + ')">' + q.opts[i] + '</li>';
+    }
+    h += '</ul>';
+    h += '<div class="btn-row"><button class="btn btn-primary" onclick="submitQuiz(\'' + qid + '\',' + JSON.stringify(q.correct) + ',' + (q.multi || false) + ')">✅ 提交答案</button><button class="btn btn-outline" onclick="resetQuiz(\'' + qid + '\')">🔄 重做</button></div>';
+    h += '<div class="explain-card" id="ex-' + qid + '">';
+    h += '<div class="ex-head"></div>';
+    h += '<div class="ex-body"></div>';
+
+                 if (q.detail) {
+        var detailHtml = q.detail
+            // 去掉英文引号
+            .replace(/"([^"]*)"/g, '$1')
+            // 判断题：A正确</b>：正确
+            .replace(/([A-B])正确<\/b>：正确/g, '$1选项</b>：<span style="color:#145a32;">✅ 正确</span>')
+            .replace(/([A-B])错误<\/b>：错误/g, '$1选项</b>：<span style="color:#b22222;">❌ 错误</span>')
+            .replace(/([A-B])正确<\/b>：错误/g, '$1选项</b>：<span style="color:#b22222;">❌ 错误</span>')
+            .replace(/([A-B])错误<\/b>：正确/g, '$1选项</b>：<span style="color:#145a32;">✅ 正确</span>')
+            // 带"选项"的判断题
+            .replace(/([A-B])选项正确<\/b>：正确/g, '$1选项</b>：<span style="color:#145a32;">✅ 正确</span>')
+            .replace(/([A-B])选项错误<\/b>：错误/g, '$1选项</b>：<span style="color:#b22222;">❌ 错误</span>')
+            // 单选题/多选题（带"选项"）：A选项：正确
+            .replace(/([A-E])选项<\/b>：(属于|应选|是|可|正确)/g, '<span style="color:#145a32;">✅ $1选项</b>：$2</span>')
+            .replace(/([A-E])选项<\/b>：(不属于|不选|不是|不可|错误)/g, '<span style="color:#b22222;">❌ $1选项</b>：$2</span>')
+            // 单选题/多选题（不带"选项"）：A：属于
+            .replace(/([A-E])<\/b>：(属于|应选|是|可|正确)/g, '<span style="color:#145a32;">✅ $1</b>：$2</span>')
+            .replace(/([A-E])<\/b>：(不属于|不选|不是|不可|错误)/g, '<span style="color:#b22222;">❌ $1</b>：$2</span>');
+        h += '<div class="ex-detail" style="margin-top:10px;padding:10px 14px;background:#fff;border-radius:6px;font-size:0.88rem;line-height:1.8;display:none;">📋 <b>逐项解析：</b><br>' + detailHtml + '</div>';
+    }
+
+    h += '<div class="ex-tip">💡 <b>大白话理解：</b>' + q.tip + '</div>';
+    h += '</div></div>';
+    return h;
+}
+
+// ==================== 答题交互 ====================
+function selectOpt(el, qid, idx, multi) {
+    var wrap = el.closest('.quiz-wrap');
+    if (wrap.classList.contains('submitted')) return;
+    var allOpts = wrap.querySelectorAll('.opt-list li');
+    if (multi) { el.classList.toggle('selected'); }
+    else { allOpts.forEach(function(o) { o.classList.remove('selected'); }); el.classList.add('selected'); }
+}
+
+function submitQuiz(qid, correct, multi) {
+    var wrap = document.querySelector('[data-qid="' + qid + '"]');
+    if (wrap.classList.contains('submitted')) return;
+    wrap.classList.add('submitted');
+    var allOpts = wrap.querySelectorAll('.opt-list li');
+    var correctArr = Array.isArray(correct) ? correct : [correct];
+    var selectedIdxs = [];
+    for (var i = 0; i < allOpts.length; i++) { if (allOpts[i].classList.contains('selected')) selectedIdxs.push(i); }
+    var isCorrect;
+    if (multi) {
+        isCorrect = selectedIdxs.length === correctArr.length;
+        for (var j = 0; j < selectedIdxs.length; j++) { if (correctArr.indexOf(selectedIdxs[j]) === -1) { isCorrect = false; break; } }
+    } else { isCorrect = selectedIdxs.length === 1 && selectedIdxs[0] === correctArr[0]; }
+
+    for (var k = 0; k < allOpts.length; k++) {
+        allOpts[k].classList.add('disabled');
+        if (correctArr.indexOf(k) !== -1) allOpts[k].classList.add('correct');
+    }
+    if (!isCorrect) {
+        for (var m = 0; m < selectedIdxs.length; m++) { if (correctArr.indexOf(selectedIdxs[m]) === -1) allOpts[selectedIdxs[m]].classList.add('wrong'); }
+    }
+
+    var exEl = document.getElementById('ex-' + qid);
+    exEl.classList.add('show');
+    if (isCorrect) {
+        exEl.classList.add('correct-ex'); exEl.classList.remove('wrong-ex');
+        exEl.querySelector('.ex-head').textContent = '🎉 回答正确！';
+        exEl.querySelector('.ex-body').textContent = '';
+        var exDetail = exEl.querySelector('.ex-detail');
+        if (exDetail) exDetail.style.display = 'block';
+    } else {
+        exEl.classList.add('wrong-ex'); exEl.classList.remove('correct-ex');
+        exEl.querySelector('.ex-head').textContent = '😞 回答错误';
+        var letters = ['A','B','C','D','E'];
+        var correctLetters = correctArr.map(function(c) { return letters[c]; }).join('、');
+        exEl.querySelector('.ex-body').innerHTML = '正确答案是：<b>' + correctLetters + '</b>';
+        var exDetail2 = exEl.querySelector('.ex-detail');
+        if (exDetail2) exDetail2.style.display = 'block';
+    }
+}
+
+function resetQuiz(qid) {
+    var wrap = document.querySelector('[data-qid="' + qid + '"]');
+    wrap.classList.remove('submitted');
+    wrap.querySelectorAll('.opt-list li').forEach(function(o) { o.classList.remove('selected','correct','wrong','disabled'); });
+    var exEl = document.getElementById('ex-' + qid);
+    exEl.classList.remove('show','correct-ex','wrong-ex');
+}
+
+function generateTOC() {
+    var toc = document.getElementById('toc');
+    if (!toc) return;
+    var titleHtml = '<div class="toc-title">📑 刑法目录</div>';
+    var links = '';
+    knowledgeData.forEach(function(mod) { links += '<a href="#' + mod.id + '">' + mod.title + '</a>'; });
+    toc.innerHTML = titleHtml + links;
+    document.querySelectorAll('.toc a').forEach(function(link) {
+        link.addEventListener('click', function() { if (window.innerWidth <= 768) closeToc(); });
+    });
+}
+
+function toggleToc() { document.getElementById('toc').classList.toggle('show'); document.getElementById('tocOverlay').classList.toggle('show'); }
+function closeToc() { document.getElementById('toc').classList.remove('show'); document.getElementById('tocOverlay').classList.remove('show'); }
+
+document.addEventListener('DOMContentLoaded', renderAll);
+</script>
+</body>
+</html>

@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>刑事诉讼法 · 从零到做题</title>
+    <style>
+        :root {
+            --bg: #fdf8f3; --card-bg: #ffffff; --text: #2c2416; --text-light: #5c5347;
+            --accent: #b22222; --highlight: #fff3cd; --highlight-border: #f0c040;
+            --example-bg: #f0faf5; --example-border: #a3e4bc;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05); --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+            --radius: 14px; --radius-sm: 10px;
+            --font: 'PingFang SC','Microsoft YaHei','Hiragino Sans GB','Noto Sans SC',system-ui,-apple-system,sans-serif;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior: smooth; scroll-padding-top: 20px; }
+        body { font-family: var(--font); background: var(--bg); color: var(--text); line-height: 1.75; padding: 12px; font-size: 16px; -webkit-font-smoothing: antialiased; }
+        a { color: var(--accent); text-decoration: none; }
+        .toc-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.35); z-index:98; }
+        .toc-overlay.show { display:block; }
+        .toc { position:fixed; top:16px; left:16px; width:230px; max-height:calc(100vh - 32px); background:var(--card-bg); border-radius:var(--radius); box-shadow:0 8px 30px rgba(0,0,0,0.12); padding:18px 14px; overflow-y:auto; z-index:100; font-size:0.84rem; transition:transform 0.3s; }
+        .toc.hidden { transform:translateX(-260px); }
+        .toc-title { font-weight:700; margin-bottom:10px; color:var(--accent); font-size:1rem; display:flex; align-items:center; gap:6px; position:sticky; top:0; background:var(--card-bg); padding-bottom:8px; border-bottom:1px solid #f0ebe0; }
+        .toc a { display:block; padding:7px 10px; border-radius:6px; margin:2px 0; color:var(--text-light); transition:all 0.2s; font-size:0.82rem; }
+        .toc a:hover,.toc a.active { background:#fdedec; color:var(--accent); font-weight:600; }
+        .toc-toggle { position:fixed; top:16px; left:16px; width:42px; height:42px; border-radius:50%; background:var(--accent); color:#fff; border:none; font-size:1.3rem; cursor:pointer; z-index:101; display:none; box-shadow:0 4px 14px rgba(178,34,34,0.3); align-items:center; justify-content:center; }
+        .main { max-width:820px; margin:0 auto 0 270px; display:flex; flex-direction:column; gap:20px; padding-bottom:40px; }
+        .card { background:var(--card-bg); border-radius:var(--radius); padding:22px 26px; box-shadow:var(--shadow-md); border:1px solid #f0ebe0; }
+        .section-title { font-size:1.45rem; font-weight:700; margin-bottom:4px; display:flex; align-items:center; gap:10px; }
+        .section-title .icon { width:34px; height:34px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; flex-shrink:0; }
+        .icon-red { background:#fdedec; color:#b22222; } .icon-blue { background:#eaf2f8; color:#1a5276; }
+        .icon-green { background:#eafaf1; color:#145a32; } .icon-yellow { background:#fef9e7; color:#b7950b; }
+        .subtitle { color:var(--text-light); font-size:0.9rem; margin-bottom:18px; padding-left:44px; }
+        .ki-grid { display:flex; flex-direction:column; gap:14px; }
+        .ki-item { border:1px solid #f0ebe0; border-radius:var(--radius-sm); padding:14px 18px; background:#fefefe; }
+        .ki-title-row { font-weight:700; font-size:1rem; margin-bottom:6px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+        .badge { font-size:0.7rem; padding:3px 10px; border-radius:14px; font-weight:600; letter-spacing:0.3px; }
+        .badge-core { background:#fdedec; color:#b22222; } .badge-num { background:#eaf2f8; color:#1a5276; } .badge-case { background:#eafaf1; color:#145a32; }
+        .ki-content { color:var(--text-light); font-size:0.92rem; }
+        .kh { display:inline-block; background:var(--highlight); border:1px solid var(--highlight-border); padding:2px 8px; border-radius:4px; font-weight:600; color:#7d6608; margin:0 2px; font-size:0.9rem; }
+        .kh-red { background:#fdedec; border-color:#f5b7b1; color:#922b21; } .kh-blue { background:#eaf2f8; border-color:#aed6f1; color:#1a5276; } .kh-green { background:#eafaf1; border-color:#a3e4bc; color:#145a32; }
+        .example-block { background:var(--example-bg); border-left:3px solid var(--example-border); border-radius:0 var(--radius-sm) var(--radius-sm) 0; padding:12px 16px; margin-top:10px; font-size:0.9rem; color:#1e5a3a; }
+        .example-block .ex-label { font-weight:700; font-size:0.75rem; color:#1e8449; margin-bottom:4px; }
+        .example-block .ex-q { font-weight:600; color:#145a32; margin-bottom:3px; }
+        .example-block .ex-a { color:#2d6a4f; }
+        .info-table { width:100%; border-collapse:collapse; margin:8px 0; font-size:0.88rem; }
+        .info-table th { background:#fef9e7; text-align:left; padding:10px 14px; font-weight:700; border-bottom:2px solid #f0c040; color:#7d6608; }
+        .info-table td { padding:10px 14px; border-bottom:1px solid #f0ebe0; }
+        .info-table tr:hover td { background:#fefdf9; }
+        .quiz-wrap { border:2px solid #f0ebe0; border-radius:var(--radius-sm); padding:18px 20px; margin-top:12px; background:#fefefe; }
+        .quiz-wrap .q-type { font-size:0.78rem; font-weight:700; color:var(--accent); margin-bottom:4px; }
+        .quiz-wrap .q-text { font-weight:600; margin-bottom:12px; font-size:0.98rem; }
+        .opt-list { list-style:none; display:flex; flex-direction:column; gap:7px; }
+        .opt-list li { padding:10px 14px; border-radius:var(--radius-sm); cursor:pointer; border:2px solid #e9e4db; transition:all 0.2s; background:#fdfdfc; font-size:0.9rem; user-select:none; }
+        .opt-list li:hover { border-color:#c0b090; background:#fefdf9; }
+        .opt-list li.selected { border-color:#1a5276; background:#eaf2f8; font-weight:600; }
+        .opt-list li.correct { border-color:#1e8449 !important; background:#eafaf1 !important; color:#145a32 !important; }
+        .opt-list li.wrong { border-color:#b22222 !important; background:#fdedec !important; color:#922b21 !important; }
+        .opt-list li.disabled { pointer-events:none; opacity:0.85; }
+        .btn-row { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
+        .btn { display:inline-block; padding:10px 22px; border-radius:25px; font-weight:600; cursor:pointer; border:none; font-size:0.88rem; }
+        .btn-primary { background:var(--accent); color:#fff; } .btn-primary:hover { background:#8b1a1a; }
+        .btn-outline { background:#fff; color:var(--accent); border:2px solid var(--accent); } .btn-outline:hover { background:#fdedec; }
+        .explain-card { margin-top:12px; padding:14px 18px; border-radius:var(--radius-sm); display:none; font-size:0.9rem; line-height:1.7; }
+        .explain-card.show { display:block; }
+        .explain-card.correct-ex { background:#eafaf1; border:1px solid #a3e4bc; color:#145a32; }
+        .explain-card.wrong-ex { background:#fdedec; border:1px solid #f5b7b1; color:#922b21; }
+        .explain-card .ex-head { font-weight:700; margin-bottom:6px; font-size:0.95rem; }
+        @media (max-width:768px) {
+            .toc { transform:translateX(-260px); } .toc.show { transform:translateX(0); }
+            .toc-toggle { display:flex; } .main { max-width:100%; margin:0 auto; } .card { padding:18px 14px; }
+        }
+    </style>
+</head>
+<body>
+<button class="toc-toggle" id="tocToggle" aria-label="目录" onclick="toggleToc()">☰</button>
+<div class="toc-overlay" id="tocOverlay" onclick="closeToc()"></div>
+<nav class="toc" id="toc">
+    <div class="toc-title">📑 刑事诉讼法目录</div>
+    <a href="#mod1">一、基本原则</a>
+    <a href="#mod2">二、专门机关与参与人</a>
+    <a href="#mod3">三、管辖与回避</a>
+</nav>
+<div class="main" id="mainContent"></div>
+<script>
+const knowledgeData = [
+    // ===== 模块1：基本原则 =====
+    {
+        id: 'mod1', iconClass: 'icon-red', iconEmoji: '📌',
+        title: '一、刑事诉讼法基本原则',
+        subtitle: '程序法的核心——谁有权做什么？',
+        items: [
+            { type:'ki', badge:'核心', badgeClass:'badge-core', title:'侦查权、检察权、审判权由专门机关行使',
+              content:'①<span class="kh kh-red">公安机关</span>：侦查、拘留、执行逮捕、预审<br>②<span class="kh kh-red">人民检察院</span>：检察、批准逮捕、直接受理案件的侦查、提起公诉<br>③<span class="kh kh-red">人民法院</span>：审判<br><b>注意：</b>享有侦查权的机关不止公安！还有检察院、国安、军队保卫部门、监狱、海关走私侦查部门。',
+              example:{q:'🔍 某监狱内发生罪犯杀人案，谁有侦查权？',a:'✅ <b>监狱</b>有侦查权！虽然监狱主要执行刑罚，但对罪犯在监狱内犯罪的案件有权侦查。此外，国安管危害国家安全案，海关管走私案。'} },
+            { type:'ki', badge:'原则', badgeClass:'badge-num', title:'法院、检察院独立行使职权',
+              content:'<b>独立于</b>：行政机关、社会团体、个人。<br><b>不等于</b>：不受任何机关监督（人大可监督，检察院可监督法院）。' },
+            { type:'ki', badge:'原则', badgeClass:'badge-num', title:'未经法院判决不得确定有罪',
+              content:'<b>定罪权专属人民法院</b>。<br>侦查、审查起诉阶段称<span class="kh">"犯罪嫌疑人"</span>；提起公诉后称<span class="kh">"被告人"</span>。<br>确立<span class="kh kh-red">疑罪从无</span>原则：证据不足不起诉。' },
+            { type:'ki', badge:'原则', badgeClass:'badge-num', title:'认罪认罚从宽原则',
+              content:'适用<span class="kh">所有刑事案件</span>，贯穿<span class="kh">侦查、起诉、审判</span>全过程。<br><b>从宽幅度：</b>认罪认罚 > 坦白 > 仅认罪不认罚。<br>与自首、坦白不作重复评价，但给予更大从宽幅度。' }
+        ],
+        quizzes: [
+            { type:'single', q:'对刑事案件的侦查、拘留、执行逮捕、预审，由哪个机关负责？', opts:['A. 人民检察院','B. 人民法院','C. 公安机关','D. 国家安全机关'], correct:2,
+              detail:'<b>A</b>：错误。检察院负责批准逮捕和部分侦查。<br><b>B</b>：错误。法院负责审判。<br><b>C</b>：正确。公安机关是主要侦查机关。<br><b>D</b>：错误。国安负责危害国家安全案件。', tip:'口诀："公安侦查拘留预审，检察院批捕和公诉，法院只管审判权。"' },
+            { type:'single', q:'认罪认罚从宽制度适用于哪些案件？', opts:['A. 仅适用于轻微刑事案件','B. 仅适用于审判阶段','C. 所有刑事案件','D. 仅适用于被告人认罪的案件'], correct:2,
+              detail:'<b>A</b>：错误。所有刑事案件均可适用。<br><b>B</b>：错误。贯穿侦查、起诉、审判全过程。<br><b>C</b>：正确。无罪名和刑罚限定。<br><b>D</b>：错误。认罪认罚包括"认罪"和"认罚"两部分。', tip:'不管什么罪、什么阶段，只要自愿认罪认罚都可以从宽处理。' }
+        ]
+    },
+    // ===== 模块2：专门机关与参与人 =====
+    {
+        id:'mod2', iconClass:'icon-blue', iconEmoji:'👥',
+        title:'二、专门机关与诉讼参与人',
+        subtitle:'公检法国安监狱...谁是谁？',
+        items:[
+            { type:'ki', badge:'机关', badgeClass:'badge-core', title:'国家专门机关',
+              content:'<b>公检法</b>为核心，外加：国家安全机关（危害国家安全案）、军队保卫部门（军队内部案）、监狱（罪犯狱内犯罪）、海关走私侦查部门（走私案）。<br><b>分工：</b>公安负责一般案件侦查；检察院负责职务犯罪侦查+批捕+公诉；法院负责审判。' },
+            { type:'ki', badge:'参与人', badgeClass:'badge-num', title:'诉讼参与人',
+              content:'<b>当事人：</b>被害人、自诉人、犯罪嫌疑人/被告人、附带民事诉讼当事人。<br><b>其他参与人：</b>法定代理人、诉讼代理人、辩护人、证人、鉴定人、翻译人员。<br><b>近亲属（刑诉特有）：</b>夫、妻、父、母、子、女、同胞兄弟姐妹（比民法范围窄！）。<br><b>证人：</b>知道案件情况的人有作证<b>义务</b>；不可替代；<span class="kh kh-red">不适用回避</span>。' }
+        ],
+        quizzes:[
+            { type:'single', q:'下列人员中，不属于刑事诉讼当事人的是？', opts:['A. 被害人','B. 犯罪嫌疑人','C. 辩护人','D. 自诉人'], correct:2,
+              detail:'<b>A</b>：属于当事人。<br><b>B</b>：属于当事人。<br><b>C</b>：不属于。辩护人是其他诉讼参与人。<br><b>D</b>：属于当事人。', tip:'当事人=案件直接利害关系人。辩护人是帮人打官司的，不是当事人。' },
+            { type:'single', q:'关于证人，以下说法正确的是？', opts:['A. 证人可以适用回避制度','B. 证人可由他人替代','C. 知道案件情况的人有作证义务','D. 证人不用承担任何费用'], correct:2,
+              detail:'<b>A</b>：错误。证人不适用回避。<br><b>B</b>：错误。证人具有不可替代性。<br><b>C</b>：正确。作证是法定义务。<br><b>D</b>：错误。费用由国家财政保障。', tip:'证人看到就必须说，不能因为认识当事人就不作证——这就是不可替代、不回避。' }
+        ]
+    },
+    // ===== 模块3：管辖与回避 =====
+    {
+        id:'mod3', iconClass:'icon-green', iconEmoji:'📍',
+        title:'三、管辖与回避',
+        subtitle:'去哪告？谁不能审？',
+        items:[
+            { type:'ki', badge:'立案管辖', badgeClass:'badge-core', title:'立案管辖——谁来查案？',
+              content:'<b>公安：</b>大多数刑事案件。<br><b>检察院：</b>司法工作人员利用职权犯罪（非法拘禁、刑讯逼供、虐待被监管人等14类）。<br><b>法院（自诉）：</b>告诉才处理（侮辱诽谤、暴力干涉婚姻自由、虐待、侵占）<br><b>监察委：</b>公职人员贪污贿赂等职务犯罪。<br><b>国安：</b>危害国家安全案。' },
+            { type:'ki', badge:'审判管辖', badgeClass:'badge-core', title:'审判管辖——去哪级法院？',
+              content:'<b>基层法院：</b>大多数一审案件。<br><b>中级法院（必记！）：</b><span class="kh kh-red">①危害国家安全 ②恐怖活动 ③可能判处无期/死刑</span>。<br><b>地域管辖：</b>犯罪地法院为主，居住地法院为辅。几个法院都有管辖权→由<span class="kh">最初受理</span>的法院审判。<br><b>口诀：</b>"国恐无死"归中院。' },
+            { type:'ki', badge:'回避', badgeClass:'badge-core', title:'回避——谁不能参与办案？',
+              content:'<b>回避理由：</b>①是当事人或近亲属 ②本人或近亲属与本案有利害关系 ③担任过证人/鉴定人/辩护人/代理人 ④与当事人有其他关系可能影响公正 ⑤违规会见、请客送礼。<br><b>决定主体：</b>普通人员→本单位负责人；院长→审判委员会；检察长/公安局长→同级检察委员会。<br><b>特别规定：</b>侦查人员回避前<span class="kh kh-red">不得停止侦查</span>！' }
+        ],
+        quizzes:[
+            { type:'single', q:'下列哪类案件应由中级人民法院一审？', opts:['A. 盗窃案','B. 危害国家安全案','C. 故意伤害致轻伤','D. 侵占案'], correct:1,
+              detail:'<b>A</b>：基层管辖。<br><b>B</b>：正确。危害国家安全案由中院管辖。<br><b>C</b>：基层管辖。<br><b>D</b>：自诉案件，基层管辖。', tip:'口诀"国恐无死"——危害国家安全、恐怖活动、可能无期或死刑的案件归中院。' },
+            { type:'single', q:'审判人员回避的决定主体是？', opts:['A. 公安机关负责人','B. 法院院长','C. 检察长','D. 审判委员会'], correct:1,
+              detail:'<b>A</b>：决定侦查人员回避。<br><b>B</b>：正确。普通审判人员回避由院长决定。<br><b>C</b>：决定检察人员回避。<br><b>D</b>：决定院长本人回避。', tip:'一般人员→本单位老大决定。老大自己回避→找委员会。' },
+            { type:'multi', q:'检察院直接立案侦查的案件包括？', opts:['A. 盗窃罪','B. 刑讯逼供罪','C. 贪污贿赂罪','D. 非法拘禁罪（司法工作人员实施）','E. 虐待被监管人罪'], correct:[1,3,4],
+              detail:'<b>A</b>：公安管。<br><b>B</b>：检察院管。<br><b>C</b>：监察委管。<br><b>D</b>：检察院管。<br><b>E</b>：检察院管。', tip:'记住：检察院只管司法工作人员利用职权犯的罪。贪污贿赂现在归监察委了！' }
+        ]
+    },
+    // ===== 模块4：辩护制度 =====
+    {
+        id: 'mod4',
+        iconClass: 'icon-yellow',
+        iconEmoji: '🛡️',
+        title: '四、辩护制度',
+        subtitle: '谁可以当辩护人？什么时候能请律师？',
+        items: [
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core', title: '辩护的种类',
+              content: '①<span class="kh">自行辩护</span>：贯穿整个诉讼过程，嫌疑人/被告人自己为自己辩护。<br>②<span class="kh">委托辩护</span>：委托律师或符合条件的人辩护。侦查期间<span class="kh kh-red">只能委托律师</span>。<br>③<span class="kh kh-red">法律援助辩护</span>（指定辩护）：符合条件但没委托辩护人的，公检法应当通知法律援助机构指派律师。',
+              extra: '<b>应当指派律师的情形（口诀：盲聋哑、半疯傻、无死未）：</b>盲聋哑人；尚未完全丧失辨认或控制能力的精神病人；可能判处无期/死刑的人；未成年人。经济困难的可申请法律援助。' },
+            { type: 'ki', badge: '资格', badgeClass: 'badge-num', title: '谁可以担任辩护人？',
+              content: '<b>可以担任：</b>律师；人民团体或嫌疑人/被告人单位推荐的人；监护人、亲友。<br><b>不得担任：</b>正在执行刑罚或被限制人身自由的；被开除公职或吊销律师/公证员执业证书的（但系近亲属的除外）；公检法国安监狱现职人员（近亲属除外）；与本案有利害关系的人。' },
+            { type: 'ki', badge: '权利', badgeClass: 'badge-num', title: '辩护人的权利',
+              content: '<b>会见通信权：</b>辩护律师持"三证"可会见，看守所48小时内安排。侦查期间<span class="kh">只能委托律师</span>。<br><b>阅卷权：</b>自检察院审查起诉之日起可查阅案卷材料。侦查阶段<span class="kh kh-red">没有阅卷权</span>！<br><b>调查取证权：</b>律师可自行调查，也可申请检察院、法院调取证据。',
+              example: { q: '📋 张三涉嫌盗窃被刑事拘留，他妻子（不是律师）想当辩护人去会见张三，可以吗？', a: '❌ 在侦查阶段不可以！侦查期间<span style="color:#b22222;">只能委托律师</span>作为辩护人。张三妻子只能在案件移送检察院审查起诉后，经检察院许可才能会见。律师则持"三证"即可会见，无需许可。' } }
+        ],
+        quizzes: [
+            { type: 'single', q: '下列哪种情形，公检法应当通知法律援助机构指派律师？', opts: ['A. 经济困难的嫌疑人', 'B. 可能判处无期徒刑的被告人', 'C. 嫌疑人自行辩护', 'D. 嫌疑人委托了亲友辩护'], correct: 1,
+              detail: '<b>A选项</b>：错误。经济困难需主动申请。<br><b>B选项</b>：正确。可能判无期/死刑属于应当指派律师情形。<br><b>C选项</b>：错误。自行辩护不影响。<br><b>D选项</b>：错误。已委托辩护人则无需指派。',
+              tip: '口诀"盲聋哑、半疯傻、无死未"——这四类人没律师的，公检法必须主动给找律师，不用他们自己申请。经济困难的需要自己去申请。' },
+            { type: 'single', q: '侦查期间，犯罪嫌疑人可以委托谁作为辩护人？', opts: ['A. 亲友', 'B. 所在单位推荐的人', 'C. 律师', 'D. 监护人'], correct: 2,
+              detail: '<b>A选项</b>：错误。侦查阶段只能委托律师。<br><b>B选项</b>：错误。同上。<br><b>C选项</b>：正确。侦查期间只能委托律师。<br><b>D选项</b>：错误。同上。',
+              tip: '侦查阶段=只能请律师！等到了审查起诉阶段，亲友、监护人、单位推荐的人都可以当辩护人了。' }
+        ]
+    },
+
+    // ===== 模块5：刑事证据 =====
+    {
+        id: 'mod5',
+        iconClass: 'icon-blue',
+        iconEmoji: '🔍',
+        title: '五、刑事证据',
+        subtitle: '8种法定证据类型——物证、书证、证人证言...',
+        items: [
+            { type: 'ki', badge: '三性', badgeClass: 'badge-core', title: '证据的三大基本特征',
+              content: '①<span class="kh">客观性</span>：证据必须是客观存在的事实，不能是主观猜测。<br>②<span class="kh">关联性</span>：证据必须与案件事实有客观联系。<br>③<span class="kh kh-red">合法性</span>：证据必须依法取得，非法证据应被排除。' },
+            { type: 'ki', badge: '种类', badgeClass: 'badge-core', title: '8种法定证据类型',
+              content: '①物证 ②书证 ③证人证言 ④被害人陈述 ⑤犯罪嫌疑人/被告人供述和辩解 ⑥鉴定意见 ⑦勘验、检查、辨认、侦查实验等笔录 ⑧视听资料、电子数据。<br><b>物证 vs 书证：</b>物证以<span class="kh">外部特征、物理属性</span>证明案件；书证以<span class="kh kh-red">记载内容和思想</span>证明案件。一个物品可同时是物证和书证。',
+              example: { q: '📄 案发现场发现一封遗书，上面有被害人的指纹。遗书是什么证据？', a: '✅ 遗书上的<b>文字内容</b>（证明自杀意图）→<b>书证</b>；遗书上的<b>指纹</b>（证明谁摸过）→<b>物证</b>。这就是"物证书证同体"。' } },
+            { type: 'ki', badge: '分类', badgeClass: 'badge-num', title: '直接证据 vs 间接证据',
+              content: '<b>直接证据</b>：能单独直接证明案件主要事实（如监控拍下全过程、被告人认罪供述）。<br><b>间接证据</b>：需与其他证据结合才能证明（如指纹、DNA、作案工具）。<br><b>注意：</b>任何<span class="kh kh-red">物证都不是直接证据</span>——单凭一把带血的刀不能断定谁是凶手。' }
+        ],
+        quizzes: [
+            { type: 'single', q: '下列哪项属于书证？', opts: ['A. 现场提取的指纹', 'B. 记载犯罪计划的笔记本', 'C. 作案用的刀具', 'D. 监控录像'], correct: 1,
+              detail: '<b>A选项</b>：物证。以物理痕迹证明。<br><b>B选项</b>：正确。以记载内容证明。<br><b>C选项</b>：物证。以外部特征证明。<br><b>D选项</b>：视听资料。',
+              tip: '书证=看内容，物证=看实物。笔记本上的文字内容是书证，笔记本上的指纹是物证。' },
+            { type: 'single', q: '关于直接证据，以下说法正确的是？', opts: ['A. 指纹是直接证据', 'B. 任何物证都可以是直接证据', 'C. 监控拍下作案全过程的视频是直接证据', 'D. 直接证据不需要其他证据印证'], correct: 2,
+              detail: '<b>A选项</b>：错误。指纹是间接证据。<br><b>B选项</b>：错误。物证都不是直接证据。<br><b>C选项</b>：正确。能直接证明作案过程。<br><b>D选项</b>：错误。仍需查证属实。',
+              tip: '直接证据=一眼就能看出是谁干的。监控拍到你偷东西=直接证据。只找到指纹=还得推理是谁留下的。' }
+        ]
+    },
+
+    // ===== 模块6：强制措施 =====
+    {
+        id: 'mod6',
+        iconClass: 'icon-red',
+        iconEmoji: '⛓️',
+        title: '六、刑事强制措施',
+        subtitle: '拘传、取保候审、监视居住、拘留、逮捕',
+        items: [
+            { type: 'table', html: '<table class="info-table"><thead><tr><th>强制措施</th><th>决定机关</th><th>执行机关</th><th>期限</th></tr></thead><tbody><tr><td>拘传</td><td>公检法</td><td>公检法</td><td>12小时（重大复杂24小时）</td></tr><tr><td>取保候审</td><td>公检法</td><td>公安/国安</td><td>最长12个月</td></tr><tr><td>监视居住</td><td>公检法</td><td>公安/国安</td><td>最长6个月</td></tr><tr><td>刑事拘留</td><td>公安/检察院</td><td>公安</td><td>一般3日内提请批捕，最长37日</td></tr><tr><td>逮捕</td><td>检察院批准/法院决定</td><td>公安</td><td>侦查羁押一般2个月</td></tr></tbody></table>' },
+            { type: 'ki', badge: '取保', badgeClass: 'badge-core', title: '取保候审重点',
+              content: '<b>适用对象：</b>可能判管制/拘役/附加刑；或有期徒刑以上但无社会危险性；严重疾病/怀孕/哺乳。<br><b>保证方式：</b>保证金（起点<span class="kh kh-red">1000元</span>）或保证人，<span class="kh kh-red">只能选其一</span>。<br><b>被取保人义务：</b>未经批准不得离开所居住市/县；住址、工作、联系方式变动24小时内报告；传讯及时到案；不得干扰证人；不得毁灭伪造证据或串供。' },
+            { type: 'ki', badge: '逮捕', badgeClass: 'badge-core', title: '逮捕的批准与执行（必考）',
+              content: '<b>批准逮捕</b>：<span class="kh kh-red">只有检察院</span>有权批准。<br><b>决定逮捕</b>：检察院或法院都可以决定。<br><b>执行逮捕</b>：<span class="kh kh-red">只有公安机关</span>执行。<br><b>逮捕后：</b>24小时内送看守所、24小时内讯问、24小时内通知家属（无法通知或国恐有碍侦查除外）。',
+              example: { q: '🔒 公安机关认为某嫌疑人该抓，能自己决定逮捕吗？', a: '❌ 不能！公安机关必须<span style="color:#b22222;">向检察院提请批准逮捕</span>，检察院批准后才能拿着批准书去执行逮捕。法院和检察院可以自己决定逮捕，然后通知公安去执行。' } }
+        ],
+        quizzes: [
+            { type: 'single', q: '取保候审最长不得超过多久？', opts: ['A. 6个月', 'B. 12个月', 'C. 3个月', 'D. 24个月'], correct: 1,
+              detail: '<b>A选项</b>：错误。6个月是监视居住。<br><b>B选项</b>：正确。取保候审最长12个月。<br><b>C选项</b>：错误。3个月是侦查羁押一般期限。<br><b>D选项</b>：错误。无此期限。',
+              tip: '取保=12个月，监视居住=6个月。两倍关系。' },
+            { type: 'single', q: '下列哪项不属于被监视居住人应当遵守的规定？', opts: ['A. 未经批准不得离开住处', 'B. 将驾驶证交执行机关保存', 'C. 将行驶证交执行机关保存', 'D. 传讯时及时到案'], correct: 2,
+              detail: '<b>A选项</b>：属于。离开需批准。<br><b>B选项</b>：属于。驾驶证需上交。<br><b>C选项</b>：不属于。行驶证不需要上交。<br><b>D选项</b>：属于。及时到案是义务。',
+              tip: '监视居住要交：护照、身份证、驾驶证。行驶证不用交——车可以不开，但证不用扣。' }
+        ]
+    },
+
+    // ===== 模块7：侦查程序 =====
+    {
+        id: 'mod7',
+        iconClass: 'icon-green',
+        iconEmoji: '🔎',
+        title: '七、侦查程序',
+        subtitle: '讯问、询问、勘验、搜查、技术侦查',
+        items: [
+            { type: 'ki', badge: '讯问', badgeClass: 'badge-core', title: '讯问犯罪嫌疑人',
+              content: '<b>人员：</b>侦查人员<span class="kh kh-red">不得少于2人</span>。<br><b>地点：</b>未羁押的可在指定地点或住处；已羁押的<span class="kh kh-red">必须在看守所内</span>。<br><b>时间：</b>传唤/拘传一般不超过<span class="kh">12小时</span>，重大复杂不超过<span class="kh">24小时</span>，不得变相拘禁。<br><b>录音录像：</b>一般案件<span class="kh">可以</span>录音录像；可能判无期/死刑的重大案件<span class="kh kh-red">应当</span>全程录音录像。' },
+            { type: 'ki', badge: '询问', badgeClass: 'badge-num', title: '询问证人',
+              content: '地点灵活：可在现场、证人单位/住处或证人提出的地点。<br><b>个别进行</b>：多个证人应分别询问，防止串供。<br>现场询问出示工作证件，非现场询问出示证明文件。' },
+            { type: 'ki', badge: '搜查', badgeClass: 'badge-num', title: '搜查与检查',
+              content: '<b>搜查</b>：一般需出示<span class="kh">搜查证</span>；紧急情况（执行拘留/逮捕时）可无证搜查。<b>搜查妇女身体</b>应由<span class="kh kh-red">女工作人员</span>进行。<br><b>人身检查</b>：嫌疑人拒绝可强制检查；<span class="kh kh-red">被害人不得强制检查</span>。检查妇女身体由女工作人员或医师进行。',
+              example: { q: '👩‍⚕️ 侦查人员需要对女性嫌疑人进行人身检查，她拒绝配合怎么办？', a: '✅ 对<span style="color:#145a32;">嫌疑人可以强制检查</span>，但必须由<span style="color:#b22222;">女工作人员或医师</span>进行。如果是女性被害人拒绝，则不能强制检查——只能说服配合。' } }
+        ],
+        quizzes: [
+            { type: 'single', q: '讯问已被羁押的犯罪嫌疑人，应当在何处进行？', opts: ['A. 公安机关办案场所', 'B. 看守所内', 'C. 嫌疑人住处', 'D. 检察院办公室'], correct: 1,
+              detail: '<b>A选项</b>：错误。已羁押必须在看守所。<br><b>B选项</b>：正确。送交看守所后只能在所内讯问。<br><b>C选项</b>：错误。适用于未羁押者。<br><b>D选项</b>：错误。',
+              tip: '人已经关进看守所了，讯问就得在所里，不能提出来带回公安局审——防止途中串供或逃跑。' },
+            { type: 'single', q: '关于搜查，以下说法正确的是？', opts: ['A. 搜查必须出示搜查证，无例外', 'B. 搜查妇女身体应由女工作人员进行', 'C. 搜查时无需见证人在场', 'D. 夜间搜查无需特别审批'], correct: 1,
+              detail: '<b>A选项</b>：错误。紧急情况可无证搜查。<br><b>B选项</b>：正确。妇女身体由女工作人员搜查。<br><b>C选项</b>：错误。应有被搜查人或见证人在场。<br><b>D选项</b>：错误。紧急情况才可。',
+              tip: '搜查妇女=必须女工作人员。执行逮捕时遇紧急情况可以不另用搜查证。' }
+        ]
+    },
+    // ===== 模块8：审判程序 =====
+    {
+        id: 'mod8',
+        iconClass: 'icon-yellow',
+        iconEmoji: '⚖️',
+        title: '八、审判程序',
+        subtitle: '一审、二审、简易程序、公开审判与不公开审理',
+        items: [
+            { type: 'ki', badge: '公开', badgeClass: 'badge-core', title: '公开审判原则与不公开审理',
+              content: '<b>原则：</b>人民法院审理案件应当公开进行。<br><b>不公开审理的例外（必记）：</b>①涉及<span class="kh kh-red">国家秘密</span>——一律不公开<br>②涉及<span class="kh kh-red">个人隐私</span>——一律不公开<br>③<span class="kh kh-red">未成年人</span>犯罪（审判时不满18周岁）——一律不公开，无需申请<br>④涉及<span class="kh">商业秘密</span>——经当事人申请可以不公开',
+              extra: '<b>注意：</b>未成年人是不公开审理，但宣判必须公开！' },
+            { type: 'ki', badge: '一审', badgeClass: 'badge-num', title: '第一审程序审理期限',
+              content: '<b>普通公诉案件：</b>受理后<span class="kh">2个月</span>内宣判，至迟不超过<span class="kh">3个月</span>。死刑/附带民事/重大复杂案件可延长3个月（报上一级法院批准）。特殊情况还需延长的报最高法批准。<br><b>简易程序：</b>受理后<span class="kh kh-red">20日内</span>审结；可能判超过3年有期徒刑的可延长至一个半月。<br><b>自诉案件：</b>被告人被羁押的适用公诉案件期限；未被羁押的<span class="kh">6个月内</span>宣判。' },
+            { type: 'ki', badge: '二审', badgeClass: 'badge-num', title: '第二审程序',
+              content: '<b>上诉/抗诉期限：</b>不服判决<span class="kh kh-red">10日</span>，不服裁定<span class="kh kh-red">5日</span>。<br><b>二审审理期限：</b>受理后<span class="kh">2个月</span>内审结；死刑/附带民事/重大复杂可延长2个月（报省高院批准）。<br><b>审判组织：</b>二审由<span class="kh">审判员三人或五人</span>组成合议庭（不能独任！不能有陪审员！）。<br><b>两审终审：</b>二审判决为终审判决，不得再上诉。' },
+            { type: 'ki', badge: '简易', badgeClass: 'badge-num', title: '简易程序适用条件',
+              content: '<b>三个条件缺一不可：</b>①案件事实清楚、证据充分 ②被告人承认罪行且对指控无异议 ③被告人对适用简易程序无异议。<br><b>不适用简易程序：</b>盲聋哑人、半疯傻、重大社会影响、部分不认罪、无罪辩护等。' }
+        ],
+        quizzes: [
+            { type: 'single', q: '下列哪类案件应当不公开审理？', opts: ['A. 涉及商业秘密的案件', 'B. 涉及国家秘密的案件', 'C. 可能判处死刑的案件', 'D. 被告人认罪的案件'], correct: 1,
+              detail: '<b>A选项</b>：错误。需经申请才不公开。<br><b>B选项</b>：正确。国家秘密一律不公开。<br><b>C选项</b>：错误。不必然不公开。<br><b>D选项</b>：错误。与公开与否无关。',
+              tip: '国家秘密、个人隐私、未成年人=一律不公开。商业秘密=申请了才不公开。' },
+            { type: 'single', q: '简易程序的审理期限是？', opts: ['A. 10日', 'B. 20日', 'C. 30日', 'D. 45日'], correct: 1,
+              detail: '<b>A选项</b>：错误。<br><b>B选项</b>：正确。20日内审结。<br><b>C选项</b>：错误。<br><b>D选项</b>：错误。45日是行政诉讼简易程序。',
+              tip: '简易=20天搞定，可能判3年以上的可延长至一个半月。普通程序2-3个月。' }
+        ]
+    },
+
+    // ===== 模块9：执行程序 =====
+    {
+        id: 'mod9',
+        iconClass: 'icon-blue',
+        iconEmoji: '🏛️',
+        title: '九、刑罚执行',
+        subtitle: '不同刑罚由谁执行？',
+        items: [
+            { type: 'table', html: '<table class="info-table"><thead><tr><th>执行机关</th><th>执行的刑罚/措施</th></tr></thead><tbody><tr><td><b>公安机关</b></td><td>拘役、剥夺政治权利、驱逐出境</td></tr><tr><td><b>社区矫正机构</b></td><td>管制、宣告缓刑、假释、暂予监外执行</td></tr><tr><td><b>监狱</b></td><td>死刑缓期二年执行、无期徒刑、有期徒刑（余刑超3个月）</td></tr><tr><td><b>人民法院</b></td><td>没收财产、罚金（必要时会同公安执行）</td></tr></tbody></table>' },
+            { type: 'ki', badge: '释放', badgeClass: 'badge-num', title: '无罪释放',
+              content: '一审判决被告人无罪或免除刑事处罚的，如果被告人在押，<span class="kh kh-red">宣判后应当立即释放</span>。不需要等二审！' }
+        ],
+        quizzes: [
+            { type: 'single', q: '拘役由哪个机关执行？', opts: ['A. 监狱', 'B. 社区矫正机构', 'C. 公安机关', 'D. 人民法院'], correct: 2,
+              detail: '<b>A选项</b>：错误。监狱执行有期徒刑、无期、死缓。<br><b>B选项</b>：错误。社区矫正机构执行管制、缓刑、假释。<br><b>C选项</b>：正确。拘役由公安机关就近执行。<br><b>D选项</b>：错误。法院执行没收财产、罚金。',
+              tip: '拘役=公安就近执行，每月可回家1-2天。管制=社区矫正，不用关。' }
+        ]
+    },
+
+    // ===== 模块10：综合练习 =====
+    {
+        id: 'mod10',
+        iconClass: 'icon-red',
+        iconEmoji: '📝',
+        title: '十、综合练习 ',
+        subtitle: '全部做完，刑事诉讼法就通关了！',
+        items: [],
+        quizzes: (function() {
+            // 判断题30道（逐项解析版）
+            const tf = [
+                { q:'对刑事案件的侦查、拘留、执行逮捕、预审，由公安机关负责。', c:true,
+                  d:'<b>A选项"正确"</b>：正确。根据《刑事诉讼法》第三条，公安机关负责刑事案件的侦查、拘留、执行逮捕、预审。<br><b>B选项"错误"</b>：错误。这是正确的说法。',
+                  t:'公安是侦查的主力军——抓人、关人、查案都是公安的活。检察院负责批捕和公诉，法院负责审判。' },
+                { q:'人民法院、人民检察院依法独立行使职权，不受任何机关干涉。', c:false,
+                  d:'<b>A选项"正确"</b>：错误。"任何机关"太绝对了。<br><b>B选项"错误"</b>：正确。法条原文是"不受行政机关、社会团体和个人干涉"，并未说"不受任何机关干涉"。人大可以监督，检察院也可以监督法院。',
+                  t:'独立≠无法无天。行政机关不能干涉，但人大可以监督你，检察院也可以抗诉监督法院。所以不能说"任何机关"都不能管。' },
+                { q:'未经人民法院依法判决，对任何人都不得确定有罪。', c:true,
+                  d:'<b>A选项"正确"</b>：正确。这是《刑事诉讼法》第十二条的明文规定，定罪权专属人民法院。<br><b>B选项"错误"</b>：错误。这正是"未经法院判决不得确定有罪"原则。',
+                  t:'只有法院能判你有罪！侦查阶段叫"犯罪嫌疑人"，提起公诉后叫"被告人"，判决生效后才叫"罪犯"。' },
+                { q:'侦查阶段，犯罪嫌疑人只能委托律师作为辩护人。', c:true,
+                  d:'<b>A选项"正确"</b>：正确。根据《刑事诉讼法》第三十四条，侦查期间只能委托律师作为辩护人。<br><b>B选项"错误"</b>：错误。这是法定的限制。',
+                  t:'侦查阶段只能请律师！你七大姑八大姨想当辩护人？得等案子到了检察院审查起诉阶段才可以。' },
+                { q:'辩护律师在侦查阶段有权查阅案卷材料。', c:false,
+                  d:'<b>A选项"正确"</b>：错误。侦查阶段辩护律师没有阅卷权。<br><b>B选项"错误"</b>：正确。阅卷权从审查起诉之日起才享有，侦查阶段只能会见和通信。',
+                  t:'侦查阶段律师可以去看守所见人，但不能翻案卷。等案子移交到检察院了，律师才能查阅、摘抄、复制案卷材料。' },
+                { q:'凡是知道案件情况的人，都有作证的义务。', c:true,
+                  d:'<b>A选项"正确"</b>：正确。这是《刑事诉讼法》第六十二条的明文规定。<br><b>B选项"错误"</b>：错误。作证是公民的法定义务。',
+                  t:'看到了就必须说！不管你是谁、跟当事人什么关系，只要知道案情就有义务作证。不能装作不知道。' },
+                { q:'证人与案件有利害关系的，应当回避。', c:false,
+                  d:'<b>A选项"正确"</b>：错误。证人不适用回避制度。<br><b>B选项"错误"</b>：正确。证人具有不可替代性——只有他看到了，别人替代不了他。',
+                  t:'证人不用回避！哪怕证人是被告人的亲爹，他看到的也得说出来。法官会判断他说的是真是假，但不能不让他说。' },
+                { q:'生理上、精神上有缺陷的人绝对不能作证人。', c:false,
+                  d:'<b>A选项"正确"</b>：错误。"绝对"二字太绝对了。<br><b>B选项"错误"</b>：正确。关键看"能否辨别是非、能否正确表达"。聋哑人可以用手势表达，儿童能说清楚的也能作证。',
+                  t:'不能一刀切！盲人可以听见声音作证，聋哑人可以用手语表达。只有完全不能辨别是非、不能正确表达的人才不行。' },
+                { q:'拘传的持续时间一般不得超过12小时。', c:true,
+                  d:'<b>A选项"正确"</b>：正确。根据《刑事诉讼法》第一百一十九条，一般不超过12小时。<br><b>B选项"错误"</b>：错误。案情特别重大复杂的，不得超过24小时。',
+                  t:'叫来问话最多12小时。特别重大复杂的案件可以延长到24小时。不能连续拘传，等于变相关人。' },
+                { q:'取保候审的保证金起点数额为1000元。', c:true,
+                  d:'<b>A选项"正确"</b>：正确。根据规定，保证金起点为1000元。<br><b>B选项"错误"</b>：错误。这是法定起点数额。',
+                  t:'取保候审交钱最少1000元起步。钱保和人保只能选一个——要么交钱，要么找人担保。' },
+                { q:'取保候审和监视居住的期限都是最长12个月。', c:false,
+                  d:'<b>A选项"正确"</b>：错误。取保候审最长12个月，监视居住最长6个月。<br><b>B选项"错误"</b>：正确。两者期限不同，不是都是12个月。',
+                  t:'取保12月，监视6月——刚好两倍关系。别记反了！' },
+                { q:'公安机关有权批准逮捕。', c:false,
+                  d:'<b>A选项"正确"</b>：错误。批准逮捕是检察院的专属权力。<br><b>B选项"错误"</b>：正确。公安机关只能向检察院提请批准逮捕，不能自己批。',
+                  t:'公安想抓人？得找检察院"批条子"。检察院说可以抓才能抓。法院和检察院可以自己决定逮捕，公安只是执行者。' },
+                { q:'逮捕后应在24小时内将被逮捕人送看守所羁押。', c:true,
+                  d:'<b>A选项"正确"</b>：正确。逮捕后应立即送看守所，至迟不超过24小时。<br><b>B选项"错误"</b>：错误。这是法定时限。',
+                  t:'抓了人赶紧送看守所，不能自己关着。看守所是专门关人的地方，有规范管理。' },
+                { q:'讯问已被羁押的犯罪嫌疑人，应当在看守所内进行。', c:true,
+                  d:'<b>A选项"正确"</b>：正确。根据《刑事诉讼法》第一百一十八条，已羁押的必须在看守所内讯问。<br><b>B选项"错误"</b>：错误。不能提出来审。',
+                  t:'人已经关进看守所了，就得在所里审。不能提出来带回公安局——防止途中串供、逃跑或发生意外。' },
+                { q:'对被害人的人身检查，被害人拒绝的可以强制进行。', c:false,
+                  d:'<b>A选项"正确"</b>：错误。被害人不能强制检查。<br><b>B选项"错误"</b>：正确。只有犯罪嫌疑人拒绝检查时，侦查人员认为必要才可以强制检查。',
+                  t:'被害人是受害者，不能强制检查人家——太不人道了。嫌疑人拒绝才可以用强。' },
+                { q:'搜查妇女的身体，应当由女工作人员进行。', c:true,
+                  d:'<b>A选项"正确"</b>：正确。根据《刑事诉讼法》规定，搜查妇女身体应由女工作人员进行。<br><b>B选项"错误"</b>：错误。这是保护妇女权益的规定。',
+                  t:'不管是检查还是搜查，涉及女性身体的必须由女工作人员来。男警察不能直接上手。' },
+                { q:'中级人民法院管辖可能判处无期徒刑、死刑的一审刑事案件。', c:true,
+                  d:'<b>A选项"正确"</b>：正确。口诀"国恐无死"——危害国家安全、恐怖活动、无期徒刑、死刑案件由中院管辖。<br><b>B选项"错误"</b>：错误。这是正确的。',
+                  t:'中院管"大案"——危害国家安全的、恐怖活动的、可能判无期或死刑的。普通案子去基层法院。' },
+                { q:'涉及国家秘密的案件，经当事人申请可以不公开审理。', c:false,
+                  d:'<b>A选项"正确"</b>：错误。国家秘密案件一律不公开，不需要当事人申请。<br><b>B选项"错误"</b>：正确。"经申请"只适用于商业秘密。',
+                  t:'国家秘密、个人隐私、未成年人=一律不公开，不需要申请。只有商业秘密才需要当事人申请。' },
+                { q:'第二审程序可以由一名审判员独任审理。', c:false,
+                  d:'<b>A选项"正确"</b>：错误。二审必须组成合议庭。<br><b>B选项"错误"</b>：正确。二审由审判员三人或五人组成合议庭，不能独任。',
+                  t:'二审是大事情——不服一审才上诉的，必须三个人或五个人一起审。一个人审不了二审。' },
+                { q:'不服判决的上诉期限为10日，不服裁定的上诉期限为5日。', c:true,
+                  d:'<b>A选项"正确"</b>：正确。判决10天，裁定5天。<br><b>B选项"错误"</b>：错误。判决影响实体权利，多给5天考虑时间。',
+                  t:'判决=定你有罪没罪（大事），给10天。裁定=程序问题（小事），给5天。' },
+                { q:'审判时不满18周岁的未成年人案件，应当不公开审理。', c:true,
+                  d:'<b>A选项"正确"</b>：正确。未成年人案件一律不公开审理，保护未成年人权益。<br><b>B选项"错误"</b>：错误。但宣判必须公开。',
+                  t:'未成年人不公开审——保护隐私。但判决结果必须公开宣读。' },
+                { q:'被告人认罪的案件都可以适用简易程序。', c:false,
+                  d:'<b>A选项"正确"</b>：错误。光认罪不够，还需"案件事实清楚、证据充分"和"对适用简易程序无异议"两个条件。<br><b>B选项"错误"</b>：正确。三个条件缺一不可。',
+                  t:'认罪只是第一步。还得案情简单、证据充分，而且你同意用简易程序才行。' },
+                { q:'适用简易程序审理的案件，人民法院应当在受理后20日内审结。', c:true,
+                  d:'<b>A选项"正确"</b>：正确。简易程序20日内审结。<br><b>B选项"错误"</b>：错误。可能判处超过3年有期徒刑的可延长至一个半月。',
+                  t:'简易=快！20天搞定。如果可能判3年以上，延长到45天。' },
+                { q:'公安机关执行逮捕时，执行人员不得少于2人。', c:true,
+                  d:'<b>A选项"正确"</b>：正确。执行逮捕不得少于2人。<br><b>B选项"错误"</b>：错误。这是法律规定的程序要求。',
+                  t:'执法至少2人——互相监督，也防止一个人执法时发生危险。' },
+                { q:'被取保候审人住址、工作单位、联系方式变动的，应在24小时内报告。', c:true,
+                  d:'<b>A选项"正确"</b>：正确。变动后24小时内报告执行机关。<br><b>B选项"错误"</b>：错误。确保随时能找到被取保人。',
+                  t:'换地址、换工作、换手机号？24小时内必须报告！否则执行机关找不到你，就要变更强制措施了。' },
+                { q:'几个同级法院都有管辖权的案件，由被告人选择管辖法院。', c:false,
+                  d:'<b>A选项"正确"</b>：错误。由最初受理的法院审判，不是由被告人选择。<br><b>B选项"错误"</b>：正确。必要时可移送主要犯罪地法院。',
+                  t:'不是你爱去哪告就去哪！谁先立案谁管。' },
+                { q:'技术侦查措施的批准决定自签发之日起6个月内有效。', c:false,
+                  d:'<b>A选项"正确"</b>：错误。批准决定自签发之日起3个月内有效。<br><b>B选项"错误"</b>：正确。每次延长不超过3个月。',
+                  t:'技术侦查不是无限期的——3个月有效，用完可以续，每次续不超过3个月。' },
+                { q:'刑事强制措施包括拘传、取保候审、监视居住、拘留、逮捕五种。', c:true,
+                  d:'<b>A选项"正确"</b>：正确。这是《刑事诉讼法》规定的五种强制措施。<br><b>B选项"错误"</b>：错误。从轻到重排列。',
+                  t:'刑诉强制措施就这五样：拘传、取保、监视、拘留、逮捕。传唤不是强制措施，只是通知。' },
+                { q:'公诉案件中被告人有罪的举证责任由人民检察院承担。', c:true,
+                  d:'<b>A选项"正确"</b>：正确。检察院作为公诉人，承担举证责任。<br><b>B选项"错误"</b>：错误。谁主张谁举证。',
+                  t:'检察院说你有罪，就得拿出证据证明。不能让被告人自己证明自己无罪。' },
+                { q:'被监视居住人应当将护照、身份证、驾驶证、行驶证交执行机关保存。', c:false,
+                  d:'<b>A选项"正确"</b>：错误。行驶证不在上交范围内。<br><b>B选项"错误"</b>：正确。只需交护照等出入境证件、身份证件、驾驶证。',
+                  t:'三证上交：护照、身份证、驾驶证。行驶证不用交——不开车就行了，证件不用扣。' }
+            ];
+            // 单选题15道（逐项解析版）
+            const s = [
+                { q:'下列哪项属于书证？', o:['A. 现场提取的指纹','B. 遗书记载的内容','C. 作案用的刀具','D. 监控录像'], c:1,
+                  d:'<b>A选项</b>：不属于。指纹是物证——以物理痕迹的外部特征来证明案件。<br><b>B选项</b>：属于。遗书的内容和思想用来证明案件事实，属于书证。<br><b>C选项</b>：不属于。刀具是物证——以物品的外部特征和属性来证明案件。<br><b>D选项</b>：不属于。监控录像是视听资料。',
+                  t:'书证=看内容；物证=看实物。遗书的文字内容是书证，遗书上的指纹是物证。一个东西可以同时是两种证据。' },
+                { q:'侦查人员讯问犯罪嫌疑人时，侦查人员不得少于几人？', o:['A. 1人','B. 2人','C. 3人','D. 5人'], c:1,
+                  d:'<b>A选项</b>：错误。1人不合法，无法互相监督。<br><b>B选项</b>：正确。讯问时侦查人员不得少于2人。<br><b>C选项</b>：错误。没有3人的硬性规定。<br><b>D选项</b>：错误。没有5人的硬性规定。',
+                  t:'任何时候执法都至少2人，互相监督、互相作证。1个人问话不算数。' },
+                { q:'监视居住最长不得超过多久？', o:['A. 3个月','B. 6个月','C. 12个月','D. 24个月'], c:1,
+                  d:'<b>A选项</b>：错误。3个月不是监视居住的期限。<br><b>B选项</b>：正确。监视居住最长6个月。<br><b>C选项</b>：错误。12个月是取保候审的最长期限。<br><b>D选项</b>：错误。无此期限规定。',
+                  t:'监视6个月，取保12个月。两倍关系。' },
+                { q:'下列哪项不属于刑事强制措施？', o:['A. 拘传','B. 取保候审','C. 强制戒毒','D. 刑事拘留'], c:2,
+                  d:'<b>A选项</b>：属于。拘传是五种刑事强制措施之一。<br><b>B选项</b>：属于。取保候审是五种刑事强制措施之一。<br><b>C选项</b>：不属于。强制戒毒是行政强制措施，不是刑事强制措施。<br><b>D选项</b>：属于。刑事拘留是五种刑事强制措施之一。',
+                  t:'强制戒毒=行政强制措施（行政强制法管的）。刑事强制措施只有五种：拘传、取保、监视、拘留、逮捕。' },
+                { q:'可能判处无期徒刑的一审案件由哪级法院管辖？', o:['A. 基层人民法院','B. 中级人民法院','C. 高级人民法院','D. 最高人民法院'], c:1,
+                  d:'<b>A选项</b>：错误。基层法院不管无期案件。<br><b>B选项</b>：正确。可能判无期、死刑的由中院管辖。<br><b>C选项</b>：错误。高院管全省重大案件。<br><b>D选项</b>：错误。最高院管全国重大案件。',
+                  t:'口诀"国恐无死"——无期徒刑归中院。' },
+                { q:'被取保候审人未经批准不得离开哪里？', o:['A. 所居住的房屋','B. 所居住的市、县','C. 所居住的省','D. 不得离开中国'], c:1,
+                  d:'<b>A选项</b>：错误。不得离开住处是监视居住的要求。<br><b>B选项</b>：正确。取保候审不得离开所居住的市、县。<br><b>C选项</b>：错误。范围没这么小。<br><b>D选项</b>：错误。不是出国问题。', t:'取保=不能出市县，监视=不能出住处。取保范围大一些。'},
+                { q:'审判人员回避由谁决定？', o:['A. 公安机关负责人','B. 法院院长','C. 检察长','D. 审判委员会'], c:1,
+                  d:'<b>A选项</b>：错误。公安机关负责人决定侦查人员回避。<br><b>B选项</b>：正确。普通审判人员回避由法院院长决定。<br><b>C选项</b>：错误。检察长决定检察人员回避。<br><b>D选项</b>：错误。审判委员会决定院长本人的回避。',
+                  t:'一般人员找老大，老大回避找委员会。' },
+                { q:'第一审普通程序一般应在受理后多久宣判？', o:['A. 1个月','B. 2个月','C. 3个月','D. 6个月'], c:1,
+                  d:'<b>A选项</b>：错误。<br><b>B选项</b>：正确。受理后2个月内宣判，至迟不超过3个月。<br><b>C选项</b>：错误。3个月是"至迟"的期限。<br><b>D选项</b>：错误。6个月是自诉案件未被羁押的期限。',
+                  t:'一审一般2个月，搞不定最多3个月。' },
+                { q:'关于辩护律师的阅卷权，以下正确的是？', o:['A. 侦查阶段即可查阅案卷','B. 自审查起诉之日起可查阅','C. 需经检察院许可才能查阅','D. 只能查阅不能复制'], c:1,
+                  d:'<b>A选项</b>：错误。侦查阶段辩护律师没有阅卷权。<br><b>B选项</b>：正确。自检察院审查起诉之日起，辩护律师可以查阅、摘抄、复制案卷材料。<br><b>C选项</b>：错误。辩护律师阅卷无需检察院许可。<br><b>D选项</b>：错误。可以查阅、摘抄、复制。',
+                  t:'侦查阶段律师只能会见不能看卷。等到案子到了检察院才能看卷。' },
+                { q:'被害人拒绝人身检查的，侦查人员可以如何处理？', o:['A. 强制检查','B. 说服教育，不得强制','C. 申请法院批准后强制','D. 视为妨碍公务'], c:1,
+                  d:'<b>A选项</b>：错误。被害人不能强制检查。<br><b>B选项</b>：正确。只能说服配合，不得强制。<br><b>C选项</b>：错误。法院批准也不行。<br><b>D选项</b>：错误。不构成妨碍公务。',
+                  t:'被害人是受害者，不能强制检查人家。嫌疑人拒绝才可以强制。' },
+                { q:'几个同级法院都有管辖权时，由哪个法院管辖？', o:['A. 被告人选择','B. 被害人选择','C. 最初受理的法院','D. 上级法院指定'], c:2,
+                  d:'<b>A选项</b>：错误。不是被告人选。<br><b>B选项</b>：错误。不是被害人选。<br><b>C选项</b>：正确。由最初受理的法院审判。<br><b>D选项</b>：错误。必要时可移送，但不是指定。',
+                  t:'谁先立案谁管。必要时可移送主要犯罪地。' },
+                { q:'侦查实验的批准主体是？', o:['A. 办案部门负责人','B. 公安机关负责人','C. 检察院','D. 法院院长'], c:1,
+                  d:'<b>A选项</b>：错误。办案部门负责人无权批准。<br><b>B选项</b>：正确。需经公安机关负责人批准。<br><b>C选项</b>：错误。检察院不是批准主体。<br><b>D选项</b>：错误。法院不批侦查实验。',
+                  t:'侦查实验=公安局局长批，不是办案队长。' },
+                { q:'公安机关拘留人时，必须出示什么？', o:['A. 工作证','B. 拘留证','C. 逮捕证','D. 搜查证'], c:1,
+                  d:'<b>A选项</b>：错误。工作证是表明身份用的。<br><b>B选项</b>：正确。拘留人必须出示拘留证。<br><b>C选项</b>：错误。逮捕时才用逮捕证。<br><b>D选项</b>：错误。搜查时才用搜查证。',
+                  t:'抓人=拘留证，搜查=搜查证，各用各的。' },
+                { q:'关于监视居住的执行场所，以下正确的是？', o:['A. 可以在看守所执行','B. 应在住处执行，无住处的在指定居所','C. 可以在讯问室执行','D. 可以在拘留所执行'], c:1,
+                  d:'<b>A选项</b>：错误。不得在羁押场所执行监视居住。<br><b>B选项</b>：正确。应在住处执行，无固定住处的在指定居所。<br><b>C选项</b>：错误。不得在专门的办案场所执行。<br><b>D选项</b>：错误。不得在羁押场所执行。',
+                  t:'监视居住不能关在看守所里——那不是监视居住那是羁押。' },
+                { q:'下列人员中不能担任辩护人的是？', o:['A. 被告人的监护人','B. 正在被执行刑罚的人','C. 被告人所在单位推荐的人','D. 被告人的近亲属'], c:1,
+                  d:'<b>A选项</b>：可以。监护人可担任辩护人。<br><b>B选项</b>：不可以。正在服刑的人没有自由，无法履行辩护职责。<br><b>C选项</b>：可以。单位推荐的人可担任辩护人。<br><b>D选项</b>：可以。近亲属可担任辩护人。',
+                  t:'自己都关在里面，怎么出来给别人辩护？' }
+            ];
+            // 多选题10道（逐项解析版）
+            const m = [
+                { q:'属于中级人民法院管辖的一审案件有？', o:['A. 危害国家安全案件','B. 恐怖活动案件','C. 可能判处无期徒刑的案件','D. 盗窃案','E. 可能判处死刑的案件'], c:[0,1,2,4],
+                  d:'<b>A选项</b>：属于。危害国家安全案件由中院管辖。<br><b>B选项</b>：属于。恐怖活动案件由中院管辖。<br><b>C选项</b>：属于。可能判处无期徒刑的案件由中院管辖。<br><b>D选项</b>：不属于。盗窃案一般由基层法院管辖。<br><b>E选项</b>：属于。可能判处死刑的案件由中院管辖。',
+                  t:'口诀"国恐无死"归中院。D盗窃案除非金额巨大可能判无期，否则去基层。' },
+                { q:'应当不公开审理的案件包括？', o:['A. 涉及国家秘密','B. 涉及个人隐私','C. 涉及商业秘密','D. 审判时被告人不满18周岁','E. 被告人认罪的案件'], c:[0,1,3],
+                  d:'<b>A选项</b>：应当不公开。国家秘密一律不公开。<br><b>B选项</b>：应当不公开。个人隐私一律不公开。<br><b>C选项</b>：不属于应当不公开。商业秘密需要当事人申请才不公开。<br><b>D选项</b>：应当不公开。未成年人一律不公开审理。<br><b>E选项</b>：不属于。认罪与否不影响公开审理。',
+                  t:'C是陷阱——商业秘密要"申请"才不公开，不是"应当"不公开。国家秘密、个人隐私、未成年人才是"应当"不公开。' },
+                { q:'被取保候审人应当遵守的规定有？', o:['A. 未经批准不得离开所居住的市县','B. 住址变动24小时内报告','C. 传讯时及时到案','D. 不得干扰证人作证','E. 将护照交执行机关保存'], c:[0,1,2,3],
+                  d:'<b>A选项</b>：应选。离开所居住的市县需批准。<br><b>B选项</b>：应选。住址、工作、联系方式变动应24小时内报告。<br><b>C选项</b>：应选。传讯时必须及时到案。<br><b>D选项</b>：应选。不得以任何形式干扰证人作证。<br><b>E选项</b>：不属于取保候审的义务。将护照等交执行机关保存是被监视居住人的义务。',
+                  t:'E是监视居住的义务，不是取保候审的。取保候审不用交护照。' },
+                { q:'检察院直接立案侦查的案件包括？', o:['A. 刑讯逼供罪','B. 贪污贿赂罪','C. 虐待被监管人罪','D. 非法拘禁罪（司法工作人员实施的）','E. 盗窃罪'], c:[0,2,3],
+                  d:'<b>A选项</b>：应选。刑讯逼供罪由检察院立案侦查。<br><b>B选项</b>：不属于检察院管辖。贪污贿赂罪现由监察委调查。<br><b>C选项</b>：应选。虐待被监管人罪由检察院立案侦查。<br><b>D选项</b>：应选。司法工作人员利用职权实施的非法拘禁罪由检察院立案侦查。<br><b>E选项</b>：不属于。盗窃罪由公安机关立案侦查。',
+                  t:'B是监察委的活，不是检察院的。检察院只管司法工作人员利用职权犯的罪。' },
+                { q:'刑事诉讼证据的"三性"包括？', o:['A. 客观性','B. 关联性','C. 合法性','D. 真实性','E. 充分性'], c:[0,1,2],
+                  d:'<b>A选项</b>：应选。证据必须客观存在，不能是主观猜测。<br><b>B选项</b>：应选。证据必须与案件事实有关联。<br><b>C选项</b>：应选。证据必须依法取得，非法证据应排除。<br><b>D选项</b>：不属于三性。"真实性"不是刑诉证据三性之一。<br><b>E选项</b>：不属于。"充分性"是证明标准，不是证据特征。',
+                  t:'证据三性="客关合"——客观性、关联性、合法性。"真实性"和"充分性"不是三性内容。' },
+                { q:'公安机关对现行犯可以先行拘留的情形有？', o:['A. 正在预备犯罪','B. 被被害人指认','C. 在身边发现犯罪证据','D. 企图自杀逃跑','E. 可能判处罚金'], c:[0,1,2,3],
+                  d:'<b>A选项</b>：应选。正在预备犯罪、实行犯罪或犯罪后即时被发觉的。<br><b>B选项</b>：应选。被害人或在现场亲眼看见的人指认他犯罪的。<br><b>C选项</b>：应选。在身边或住处发现有犯罪证据的。<br><b>D选项</b>：应选。犯罪后企图自杀、逃跑或在逃的。<br><b>E选项</b>：不属于。罚金是轻刑，不是先行拘留的法定情形。',
+                  t:'E罚款太轻了，不构成先行拘留条件。先行拘留针对的是有社会危险性的紧急情况。' },
+                { q:'第二审程序与第一审程序的区别包括？', o:['A. 二审不能独任审理','B. 二审由审判员组成合议庭','C. 二审不能有人民陪审员','D. 二审审理期限一般为2个月','E. 二审判决为终审判决'], c:[0,1,2,3,4],
+                  d:'<b>A选项</b>：应选。二审必须组成合议庭，不能独任。<br><b>B选项</b>：应选。二审由审判员组成合议庭（三人或五人）。<br><b>C选项</b>：应选。二审不能有人民陪审员。<br><b>D选项</b>：应选。二审一般在2个月内审结。<br><b>E选项</b>：应选。二审判决是终审判决，不能再上诉。',
+                  t:'全选。二审=审判员合议庭（3或5人）+2个月期限+终审判决。独任和陪审员只存在于一审。' },
+                { q:'以下哪些属于刑事强制措施？', o:['A. 拘传','B. 取保候审','C. 监视居住','D. 传唤','E. 逮捕'], c:[0,1,2,4],
+                  d:'<b>A选项</b>：属于。拘传是五种强制措施之一。<br><b>B选项</b>：属于。取保候审是五种强制措施之一。<br><b>C选项</b>：属于。监视居住是五种强制措施之一。<br><b>D选项</b>：不属于。传唤只是通知，不具有强制性。<br><b>E选项</b>：属于。逮捕是五种强制措施中最严厉的。',
+                  t:'D传唤=通知你来，你不来才可能用拘传。传唤本身不是强制措施。' },
+                { q:'关于法律援助辩护，以下说法正确的有？', o:['A. 盲聋哑人未委托辩护人的应当指派律师','B. 经济困难的可以申请法律援助','C. 可能判处死刑的应当指派律师','D. 未成年人应当指派律师','E. 所有案件都应当指派律师'], c:[0,1,2,3],
+                  d:'<b>A选项</b>：正确。盲聋哑人属于应当指派律师的情形。<br><b>B选项</b>：正确。经济困难可以申请法律援助。<br><b>C选项</b>：正确。可能判无期或死刑的应当指派律师。<br><b>D选项</b>：正确。未成年人应当指派律师。<br><b>E选项</b>：错误。"所有案件"太绝对了，只有法定情形才应当指派。',
+                  t:'E太绝对。口诀"盲聋哑、半疯傻、无死未"——这四类应当指派，经济困难需自己申请。' },
+                { q:'侦查机关可以采取技术侦查措施的案件类型包括？', o:['A. 危害国家安全犯罪','B. 恐怖活动犯罪','C. 黑社会性质组织犯罪','D. 重大毒品犯罪','E. 普通盗窃犯罪'], c:[0,1,2,3],
+                  d:'<b>A选项</b>：应选。危害国家安全犯罪可采取技术侦查措施。<br><b>B选项</b>：应选。恐怖活动犯罪可采取技术侦查措施。<br><b>C选项</b>：应选。黑社会性质组织犯罪可采取技术侦查措施。<br><b>D选项</b>：应选。重大毒品犯罪可采取技术侦查措施。<br><b>E选项</b>：不选。普通盗窃犯罪不能用技术侦查措施。',
+                  t:'口诀"国恐黑毒"才能用技术侦查（监听、监控等）。普通盗窃不能用，否则侵犯隐私。' }
+            ];
+            // 转换判断题
+            const tfQ = tf.map(function(q,i){ return { type:'single', q:q.q, opts:['✅ 正确','❌ 错误'], correct:q.c?0:1, isTF:true, tfId:'tf'+(i+1), detail:q.d, tip:q.t }; });
+            const sQ = s.map(function(q,i){ return { type:'single', q:q.q, opts:q.o, correct:q.c, detail:q.d, tip:q.t, quizIndex:i+1 }; });
+            const mQ = m.map(function(q,i){ return { type:'multi', q:q.q, opts:q.o, correct:q.c, multi:true, detail:q.d, tip:q.t, quizIndex:i+1 }; });
+            return [...tfQ, ...sQ, ...mQ];
+        })()
+               
+    }
+
+
+];
+</script>
+<script>
+// ==================== 渲染引擎（含完善的✅❌标识规则） ====================
+function renderAll(){var m=document.getElementById('mainContent');var h='';knowledgeData.forEach(function(mod){h+='<div class="card" id="'+mod.id+'"><div class="section-title"><div class="icon '+mod.iconClass+'">'+mod.iconEmoji+'</div>'+mod.title+'</div>';if(mod.subtitle)h+='<div class="subtitle">'+mod.subtitle+'</div>';if(mod.items&&mod.items.length>0){h+='<div class="ki-grid">';mod.items.forEach(function(item){if(item.type==='table')h+=item.html;else if(item.type==='ki')h+=renderKI(item);});h+='</div>';}if(mod.quizzes&&mod.quizzes.length>0){mod.quizzes.forEach(function(q,qi){h+=renderQuiz(q,mod.id+'-q'+qi);});}h+='</div>';});m.innerHTML=h;generateTOC();}
+function renderKI(item){var h='<div class="ki-item">';h+='<div class="ki-title-row">'+(item.badge?'<span class="badge '+(item.badgeClass||'badge-num')+'">'+item.badge+'</span>':'')+item.title+'</div>';h+='<div class="ki-content">'+item.content+'</div>';if(item.extra)h+='<div style="margin-top:6px;color:#5c5347;font-size:0.88rem;">'+item.extra+'</div>';if(item.example){h+='<div class="example-block"><div class="ex-label">📖 生动案例</div><div class="ex-q">'+item.example.q+'</div><div class="ex-a">'+item.example.a+'</div></div>';}h+='</div>';return h;}
+function renderQuiz(q,qid){var qTypeLabel=q.multi?'【多选题】':'【单选题】';var h='<div class="quiz-wrap" data-qid="'+qid+'">';
+
+if (q.quizIndex) {
+    h += '<div class="q-type">📝 ' + qTypeLabel + ' · 第' + q.quizIndex + '题</div>';
+} else if (q.tfId) {
+    h += '<div class="q-type">📝 ' + qTypeLabel + ' · ' + q.tfId + '</div>';
+} else {
+    h += '<div class="q-type">📝 ' + qTypeLabel + '</div>';
+}
+
+h+='<div class="q-text">'+q.q+'</div>';h+='<ul class="opt-list">';for(var i=0;i<q.opts.length;i++){h+='<li data-idx="'+i+'" onclick="selectOpt(this,\''+qid+'\','+i+','+(q.multi||false)+')">'+q.opts[i]+'</li>';}h+='</ul>';h+='<div class="btn-row"><button class="btn btn-primary" onclick="submitQuiz(\''+qid+'\','+JSON.stringify(q.correct)+','+(q.multi||false)+')">✅ 提交答案</button><button class="btn btn-outline" onclick="resetQuiz(\''+qid+'\')">🔄 重做</button></div>';h+='<div class="explain-card" id="ex-'+qid+'"><div class="ex-head"></div><div class="ex-body"></div>';
+
+       if (q.detail) {
+        var detailHtml = q.detail
+            // 先去掉英文引号，统一格式
+            .replace(/"([^"]*)"/g, '$1')
+            // 判断题特有格式：A正确</b>：正确 → A选项：✅ 正确
+            .replace(/([A-B])正确<\/b>：正确/g, '$1选项</b>：<span style="color:#145a32;">✅ 正确</span>')
+            .replace(/([A-B])错误<\/b>：错误/g, '$1选项</b>：<span style="color:#b22222;">❌ 错误</span>')
+            .replace(/([A-B])正确<\/b>：错误/g, '$1选项</b>：<span style="color:#b22222;">❌ 错误</span>')
+            .replace(/([A-B])错误<\/b>：正确/g, '$1选项</b>：<span style="color:#145a32;">✅ 正确</span>')
+            // 带"选项"的判断题格式（兼容）
+            .replace(/([A-B])选项正确<\/b>：正确/g, '$1选项</b>：<span style="color:#145a32;">✅ 正确</span>')
+            .replace(/([A-B])选项错误<\/b>：错误/g, '$1选项</b>：<span style="color:#b22222;">❌ 错误</span>')
+            // 单选题/多选题带"选项"的格式
+            .replace(/([A-E])选项<\/b>：(正确|属于|应选|是|可)/g, '<span style="color:#145a32;">✅ $1选项</b>：$2</span>')
+            .replace(/([A-E])选项<\/b>：(错误|不属于|不选|不是|不可)/g, '<span style="color:#b22222;">❌ $1选项</b>：$2</span>')
+            // 单选题/多选题不带"选项"的简洁格式
+            .replace(/([A-E])<\/b>：(正确|属于|应选|是|可)/g, '<span style="color:#145a32;">✅ $1</b>：$2</span>')
+            .replace(/([A-E])<\/b>：(错误|不属于|不选|不是|不可)/g, '<span style="color:#b22222;">❌ $1</b>：$2</span>');
+        h += '<div class="ex-detail" style="margin-top:10px;padding:10px 14px;background:#fff;border-radius:6px;font-size:0.88rem;line-height:1.8;display:none;">📋 <b>逐项解析：</b><br>' + detailHtml + '</div>';
+    }
+
+
+h+='<div class="ex-tip">💡 <b>大白话理解：</b>'+q.tip+'</div>';h+='</div></div>';return h;}
+function selectOpt(el,qid,idx,multi){var w=el.closest('.quiz-wrap');if(w.classList.contains('submitted'))return;var o=w.querySelectorAll('.opt-list li');if(multi){el.classList.toggle('selected');}else{o.forEach(function(x){x.classList.remove('selected');});el.classList.add('selected');}}
+function submitQuiz(qid,correct,multi){var w=document.querySelector('[data-qid="'+qid+'"]');if(w.classList.contains('submitted'))return;w.classList.add('submitted');var o=w.querySelectorAll('.opt-list li');var ca=Array.isArray(correct)?correct:[correct];var si=[];for(var i=0;i<o.length;i++){if(o[i].classList.contains('selected'))si.push(i);}var ic;if(multi){ic=si.length===ca.length;for(var j=0;j<si.length;j++){if(ca.indexOf(si[j])===-1){ic=false;break;}}}else{ic=si.length===1&&si[0]===ca[0];}for(var k=0;k<o.length;k++){o[k].classList.add('disabled');if(ca.indexOf(k)!==-1)o[k].classList.add('correct');}if(!ic){for(var m=0;m<si.length;m++){if(ca.indexOf(si[m])===-1)o[si[m]].classList.add('wrong');}}var ex=document.getElementById('ex-'+qid);ex.classList.add('show');if(ic){ex.classList.add('correct-ex');ex.classList.remove('wrong-ex');ex.querySelector('.ex-head').textContent='🎉 回答正确！';ex.querySelector('.ex-body').textContent='';var ed=ex.querySelector('.ex-detail');if(ed)ed.style.display='block';}else{ex.classList.add('wrong-ex');ex.classList.remove('correct-ex');ex.querySelector('.ex-head').textContent='😞 回答错误';var lt=['A','B','C','D','E'];var cl=ca.map(function(c){return lt[c];}).join('、');ex.querySelector('.ex-body').innerHTML='正确答案是：<b>'+cl+'</b>';var ed2=ex.querySelector('.ex-detail');if(ed2)ed2.style.display='block';}}
+function resetQuiz(qid){var w=document.querySelector('[data-qid="'+qid+'"]');w.classList.remove('submitted');w.querySelectorAll('.opt-list li').forEach(function(o){o.classList.remove('selected','correct','wrong','disabled');});var ex=document.getElementById('ex-'+qid);ex.classList.remove('show','correct-ex','wrong-ex');}
+function generateTOC(){var toc=document.getElementById('toc');if(!toc)return;var th='<div class="toc-title">📑 刑事诉讼法目录</div>';var links='';knowledgeData.forEach(function(mod){links+='<a href="#'+mod.id+'">'+mod.title+'</a>';});toc.innerHTML=th+links;document.querySelectorAll('.toc a').forEach(function(link){link.addEventListener('click',function(){if(window.innerWidth<=768)closeToc();});});}
+function toggleToc(){document.getElementById('toc').classList.toggle('show');document.getElementById('tocOverlay').classList.toggle('show');}
+function closeToc(){document.getElementById('toc').classList.remove('show');document.getElementById('tocOverlay').classList.remove('show');}
+document.addEventListener('DOMContentLoaded',renderAll);
+</script>
+</body>
+</html>
