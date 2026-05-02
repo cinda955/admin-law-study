@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>病句辨析 · 从零到做题</title>
+    <style>
+        :root {
+            --bg: #fdf8f3; --card-bg: #ffffff; --text: #2c2416; --text-light: #5c5347;
+            --accent: #b22222; --highlight: #fff3cd; --highlight-border: #f0c040;
+            --example-bg: #f0faf5; --example-border: #a3e4bc;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05); --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+            --radius: 14px; --radius-sm: 10px;
+            --font: 'PingFang SC','Microsoft YaHei','Hiragino Sans GB','Noto Sans SC',system-ui,-apple-system,sans-serif;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior: smooth; scroll-padding-top: 20px; }
+        body { font-family: var(--font); background: var(--bg); color: var(--text); line-height: 1.75; padding: 12px; font-size: 16px; -webkit-font-smoothing: antialiased; }
+        a { color: var(--accent); text-decoration: none; }
+        .toc-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.35); z-index:98; }
+        .toc-overlay.show { display:block; }
+        .toc { position:fixed; top:16px; left:16px; width:230px; max-height:calc(100vh - 32px); background:var(--card-bg); border-radius:var(--radius); box-shadow:0 8px 30px rgba(0,0,0,0.12); padding:18px 14px; overflow-y:auto; z-index:100; font-size:0.84rem; transition:transform 0.3s; }
+        .toc.hidden { transform:translateX(-260px); }
+        .toc-title { font-weight:700; margin-bottom:10px; color:var(--accent); font-size:1rem; display:flex; align-items:center; gap:6px; position:sticky; top:0; background:var(--card-bg); padding-bottom:8px; border-bottom:1px solid #f0ebe0; }
+        .toc a { display:block; padding:7px 10px; border-radius:6px; margin:2px 0; color:var(--text-light); transition:all 0.2s; font-size:0.82rem; }
+        .toc a:hover,.toc a.active { background:#fdedec; color:var(--accent); font-weight:600; }
+        .toc-toggle { position:fixed; top:16px; left:16px; width:42px; height:42px; border-radius:50%; background:var(--accent); color:#fff; border:none; font-size:1.3rem; cursor:pointer; z-index:101; display:none; box-shadow:0 4px 14px rgba(178,34,34,0.3); align-items:center; justify-content:center; }
+        .main { max-width:820px; margin:0 auto 0 270px; display:flex; flex-direction:column; gap:20px; padding-bottom:40px; }
+        .card { background:var(--card-bg); border-radius:var(--radius); padding:22px 26px; box-shadow:var(--shadow-md); border:1px solid #f0ebe0; }
+        .section-title { font-size:1.45rem; font-weight:700; margin-bottom:4px; display:flex; align-items:center; gap:10px; }
+        .section-title .icon { width:34px; height:34px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; flex-shrink:0; }
+        .icon-red { background:#fdedec; color:#b22222; } .icon-blue { background:#eaf2f8; color:#1a5276; }
+        .icon-green { background:#eafaf1; color:#145a32; } .icon-yellow { background:#fef9e7; color:#b7950b; }
+        .subtitle { color:var(--text-light); font-size:0.9rem; margin-bottom:18px; padding-left:44px; }
+        .ki-grid { display:flex; flex-direction:column; gap:14px; }
+        .ki-item { border:1px solid #f0ebe0; border-radius:var(--radius-sm); padding:14px 18px; background:#fefefe; }
+        .ki-title-row { font-weight:700; font-size:1rem; margin-bottom:6px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+        .badge { font-size:0.7rem; padding:3px 10px; border-radius:14px; font-weight:600; letter-spacing:0.3px; white-space:nowrap; }
+        .badge-core { background:#fdedec; color:#b22222; } .badge-num { background:#eaf2f8; color:#1a5276; } .badge-case { background:#eafaf1; color:#145a32; }
+        .ki-content { color:var(--text-light); font-size:0.92rem; }
+        .kh { display:inline-block; background:var(--highlight); border:1px solid var(--highlight-border); padding:2px 8px; border-radius:4px; font-weight:600; color:#7d6608; margin:0 2px; font-size:0.9rem; }
+        .kh-red { background:#fdedec; border-color:#f5b7b1; color:#922b21; } .kh-blue { background:#eaf2f8; border-color:#aed6f1; color:#1a5276; } .kh-green { background:#eafaf1; border-color:#a3e4bc; color:#145a32; }
+        .example-block { background:var(--example-bg); border-left:3px solid var(--example-border); border-radius:0 var(--radius-sm) var(--radius-sm) 0; padding:12px 16px; margin-top:10px; font-size:0.9rem; color:#1e5a3a; }
+        .example-block .ex-label { font-weight:700; font-size:0.75rem; color:#1e8449; margin-bottom:4px; }
+        .example-block .ex-q { font-weight:600; color:#145a32; margin-bottom:3px; }
+        .example-block .ex-a { color:#2d6a4f; }
+        .info-table { width:100%; border-collapse:collapse; margin:8px 0; font-size:0.88rem; }
+        .info-table th { background:#fef9e7; text-align:left; padding:10px 14px; font-weight:700; border-bottom:2px solid #f0c040; color:#7d6608; }
+        .info-table td { padding:10px 14px; border-bottom:1px solid #f0ebe0; }
+        .info-table tr:hover td { background:#fefdf9; }
+        .quiz-wrap { border:2px solid #f0ebe0; border-radius:var(--radius-sm); padding:18px 20px; margin-top:12px; background:#fefefe; }
+        .quiz-wrap .q-type { font-size:0.78rem; font-weight:700; color:var(--accent); margin-bottom:4px; }
+        .quiz-wrap .q-text { font-weight:600; margin-bottom:12px; font-size:0.98rem; }
+        .opt-list { list-style:none; display:flex; flex-direction:column; gap:7px; }
+        .opt-list li { padding:10px 14px; border-radius:var(--radius-sm); cursor:pointer; border:2px solid #e9e4db; transition:all 0.2s; background:#fdfdfc; font-size:0.9rem; user-select:none; }
+        .opt-list li:hover { border-color:#c0b090; background:#fefdf9; }
+        .opt-list li.selected { border-color:#1a5276; background:#eaf2f8; font-weight:600; }
+        .opt-list li.correct { border-color:#1e8449 !important; background:#eafaf1 !important; color:#145a32 !important; }
+        .opt-list li.wrong { border-color:#b22222 !important; background:#fdedec !important; color:#922b21 !important; }
+        .opt-list li.disabled { pointer-events:none; opacity:0.85; }
+        .btn-row { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
+        .btn { display:inline-block; padding:10px 22px; border-radius:25px; font-weight:600; cursor:pointer; border:none; font-size:0.88rem; }
+        .btn-primary { background:var(--accent); color:#fff; } .btn-primary:hover { background:#8b1a1a; }
+        .btn-outline { background:#fff; color:var(--accent); border:2px solid var(--accent); } .btn-outline:hover { background:#fdedec; }
+        .explain-card { margin-top:12px; padding:14px 18px; border-radius:var(--radius-sm); display:none; font-size:0.9rem; line-height:1.7; }
+        .explain-card.show { display:block; }
+        .explain-card.correct-ex { background:#eafaf1; border:1px solid #a3e4bc; color:#145a32; }
+        .explain-card.wrong-ex { background:#fdedec; border:1px solid #f5b7b1; color:#922b21; }
+        .explain-card .ex-head { font-weight:700; margin-bottom:6px; font-size:0.95rem; }
+        @media (max-width:768px) {
+            .toc { transform:translateX(-260px); } .toc.show { transform:translateX(0); }
+            .toc-toggle { display:flex; } .main { max-width:100%; margin:0 auto; } .card { padding:18px 14px; }
+        }
+    </style>
+</head>
+<body>
+<button class="toc-toggle" id="tocToggle" aria-label="目录" onclick="toggleToc()">☰</button>
+<div class="toc-overlay" id="tocOverlay" onclick="closeToc()"></div>
+<nav class="toc" id="toc"><div class="toc-title">📑 病句辨析目录</div>
+    <a href="#mod1">一、病句概述与句子成分</a>
+    <a href="#mod2">二、搭配不当</a>
+    <a href="#mod3">三、成分残缺与赘余</a>
+</nav>
+<div class="main" id="mainContent"></div>
+<script>
+const knowledgeData = [
+    // ===== 模块1：病句概述与句子成分 =====
+    {
+        id: 'mod1', iconClass: 'icon-red', iconEmoji: '📌',
+        title: '一、病句概述与句子成分',
+        subtitle: '什么是病句？句子由哪些成分组成？',
+        items: [
+            { type:'ki', badge:'核心', badgeClass:'badge-core', title:'病句的定义',
+              content:'凡是违反<span class="kh kh-red">语法结构规律</span>或<span class="kh kh-red">客观事理</span>的句子都是病句。在辅警考试中，病句辨析通常考<b>8道题</b>，是必须掌握的重点模块。',
+              extra:'<b>常见病句类型（7类）：</b>搭配不当、成分残缺、表意不明、语序不当、结构混乱、不合逻辑、成分赘余/用词不当。' },
+            { type:'ki', badge:'基础', badgeClass:'badge-num', title:'句子成分速记',
+              content:'汉语单句正常语序：<b>定语 + 主语 + 状语 + 谓语 + 补语 + 定语 + 宾语</b><br><b>主语</b>：动作执行者（谁）<br><b>谓语</b>：动作或状态（干什么）<br><b>宾语</b>：动作承受者（什么）<br><b>定语</b>：修饰主语或宾语（什么样的）<br><b>状语</b>：修饰谓语，在谓语<span class="kh">之前</span>（怎么干）<br><b>补语</b>：补充谓语，在谓语<span class="kh">之后</span>（干得怎么样）',
+              example:{q:'📝 "一穷二白的我无可救药地喜欢聪明可爱的你。"——这句话的主谓宾定状补分别是什么？',a:'✅ <b>主语</b>：我 | <b>谓语</b>：喜欢 | <b>宾语</b>：你 | <b>定语</b>（修饰主语）：一穷二白 | <b>定语</b>（修饰宾语）：聪明可爱 | <b>状语</b>（修饰谓语）：无可救药 | <b>补语</b>：喜欢得无可救药。'} }
+        ],
+        quizzes: [
+            { type:'single', q:'下列哪项不属于常见的病句类型？', opts:['A. 搭配不当','B. 成分残缺','C. 语序不当','D. 修辞不当'], correct:3,
+              detail:'<b>A选项</b>：属于常见病句类型。<br><b>B选项</b>：属于常见病句类型。<br><b>C选项</b>：属于常见病句类型。<br><b>D选项</b>：不属于。病句类型中没有"修辞不当"，而是"不合逻辑"和"表意不明"。',
+              tip:'病句七大类型：搭配不当、成分残缺、表意不明、语序不当、结构混乱、不合逻辑、成分赘余。' },
+            { type:'single', q:'"我喜欢你喜欢得无可救药"中，"无可救药"是什么句子成分？', opts:['A. 定语','B. 状语','C. 补语','D. 宾语'], correct:2,
+              detail:'<b>A选项</b>：错误。定语修饰主语或宾语。<br><b>B选项</b>：错误。状语在谓语之前。<br><b>C选项</b>：正确。补语在谓语之后，补充说明喜欢得怎么样。<br><b>D选项</b>：错误。宾语是动作的承受者。',
+              tip:'在谓语之前=状语（无可救药地喜欢），在谓语之后=补语（喜欢得无可救药）。' }
+        ]
+    },
+    // ===== 模块2：搭配不当 =====
+    {
+        id: 'mod2', iconClass: 'icon-blue', iconEmoji: '🔗',
+        title: '二、搭配不当（最高频考点）',
+        subtitle: '主谓宾不搭、修饰语不搭、两面对一面、关联词不搭',
+        items: [
+            { type:'ki', badge:'主谓宾', badgeClass:'badge-core', title:'① 主语与谓语搭配不当',
+              content:'主语和谓语在语义上不匹配。<br><b>例：</b>"一条好狗的<span class="kh kh-red">毛色</span>必须光亮油润、<span class="kh kh-red">聪明可爱</span>、善解人意。"<br>"毛色"不能"聪明可爱"——这是狗狗的性格，不是毛色的属性。',
+              example:{q:'🐶 "这碗汤的味道又白又滑"——问题在哪？',a:'❌ "味道"是尝出来的，不能"白"（颜色）也不能"滑"（触感）。应改为"这碗汤的肉又白又滑"或"这碗汤的味道鲜美"。'} },
+            { type:'ki', badge:'主谓宾', badgeClass:'badge-num', title:'② 主语与宾语搭配不当',
+              content:'主语和宾语不是同一类概念。<br><b>例：</b>"<span class="kh kh-red">中学生</span>是德智体美劳全面发展的<span class="kh kh-red">重要阶段</span>。"<br>"中学生"是人，"阶段"是抽象概念——人不能是阶段！',
+              extra:'<b>快速发现：</b>看到"是"字句，立即检查主语和宾语是否属于同一类别。' },
+            { type:'ki', badge:'主谓宾', badgeClass:'badge-num', title:'③ 谓语与宾语搭配不当',
+              content:'谓语动词和宾语语义不匹配。<br><b>例：</b>"努力<span class="kh kh-red">开拓</span>教学方式和<span class="kh kh-red">科研成果</span>。"<br>"开拓成果"不对——"开拓"搭配"领域"，"成果"搭配"取得"。' },
+            { type:'ki', badge:'修饰', badgeClass:'badge-num', title:'④ 修饰语与中心语搭配不当',
+              content:'形容词、副词等修饰成分与被修饰的词语义不协调。<br><b>例：</b>"有一双<span class="kh kh-red">聪明</span>能干的手。"<br>"聪明"形容人的思维，不能修饰"手"。可以说"灵巧的手"。' },
+            { type:'ki', badge:'必考', badgeClass:'badge-core', title:'⑤ 一面与两面搭配不当（高频！）',
+              content:'句子前面用了"能否""是否""有没有"等两面词，后面却只对应了一面结果。<br><b>例：</b>"<span class="kh kh-red">能否</span>抓住机遇，<span class="kh kh-red">关键在于</span>加速培养人才。"<br>"能否"是两面（能/不能），"关键在于"只对应"能"的一面。去掉"能否"即可。',
+              extra:'<b>秒杀技巧：</b>看到"能否/是否/有没有"，立刻检查后面是否有"能否/是否"与之对应。没有的话就是病句！' },
+            { type:'ki', badge:'关联词', badgeClass:'badge-num', title:'⑥ 关联词搭配不当',
+              content:'关联词固定搭配不能乱换。<br><b>例：</b>"<span class="kh kh-red">只有</span>解决房价问题，<span class="kh kh-red">就能</span>更好地服务人民。"<br>"只有……就……"错了！应改为"只有……才……"或"只要……就……"。' }
+        ],
+        quizzes: [
+            { type:'single', q:'下列句子中，哪一句存在"两面对一面"的语病？', opts:['A. 睡眠对健康很重要','B. 能否坚持锻炼，决定着身体素质的好坏','C. 能否通过考试，关键在于努力学习','D. 他的成功离不开勤奋'], correct:2,
+              detail:'<b>A选项</b>：无语病。一面判断。<br><b>B选项</b>：无语病。"能否"对"好坏"——两面对两面，正确。<br><b>C选项</b>：有语病。"能否"是两面，"关键在于努力"只有"能"的一面。应在"努力"前加"是否"。<br><b>D选项</b>：无语病。',
+              tip:'口诀："能否"后面要有"能否/是否"，否则就是两面对一面。C中"能否"后面没有对应的两面词。' },
+            { type:'single', q:'"江西的瓷器是省份之一"属于什么语病？', opts:['A. 主语与谓语搭配不当','B. 主语与宾语搭配不当','C. 谓语与宾语搭配不当','D. 成分残缺'], correct:1,
+              detail:'<b>A选项</b>：错误。<br><b>B选项</b>：正确。"瓷器"（物品）不能是"省份"（行政区域），主宾概念不匹配。<br><b>C选项</b>：错误。<br><b>D选项</b>：错误。',
+              tip:'看到"是"字句，先看主语和宾语是不是同一类东西。"瓷器"是物，"省份"是行政区，明显不搭。' }
+        ]
+    },
+    // ===== 模块3：成分残缺与赘余 =====
+    {
+        id: 'mod3', iconClass: 'icon-green', iconEmoji: '✂️',
+        title: '三、成分残缺与成分赘余',
+        subtitle: '缺主语最常见，词义重复也常考',
+        items: [
+            { type:'ki', badge:'残缺', badgeClass:'badge-core', title:'① 滥用介词导致主语缺失（最高频！）',
+              content:'当句子以"经过""通过""随着""由于""使""让""对"等介词开头时，很容易把主语"吃掉"。<br><b>例：</b>"<span class="kh kh-red">经过</span>专家的指导，<span class="kh kh-red">让</span>葡萄产量得到改善。"<br>"经过……让……"把主语吞了！去掉"经过"或去掉"让"即可。',
+              extra:'<b>秒杀技巧：</b>看到"经过……让……""随着……使得……""由于……让……"这种结构，直接判定为缺少主语！' },
+            { type:'ki', badge:'残缺', badgeClass:'badge-num', title:'② 暗中更换主语',
+              content:'前半句说A，后半句说B却没把B写出来。<br><b>例：</b>"建立黑名单制度，对老赖是一记重拳，<span class="kh kh-red">主动履行执行义务</span>。"<br>前句主语是"制度"，后句"主动履行"的主语应该是"老赖"——但没写出来！' },
+            { type:'ki', badge:'残缺', badgeClass:'badge-num', title:'③ 缺少谓语或宾语',
+              content:'<b>缺谓语：</b>"互联网的发展，碎片化阅读逐渐成为主要方式。"——应在"碎片化阅读"前加"使得"。<br><b>缺宾语：</b>"我国航天技术实现了从单舱到三舱。"——"实现了"什么？缺宾语，应加"的突破"。' },
+            { type:'ki', badge:'赘余', badgeClass:'badge-core', title:'④ 词义重复（高频考点）',
+              content:'两个意思相同的词叠在一起使用。<br><b>例：</b>"<span class="kh kh-red">历代</span><span class="kh kh-red">古今中外</span>的经验证明……"<br>"历代"已经包含"古今中外"的意思，语义重复！<br><b>例：</b>"可以<span class="kh kh-red">堪称</span>奇迹。"<br>"堪称"本身就有"可以称为"的意思，"可"字多余！',
+              example:{q:'🔁 "美国牙科费用是高达数万美元左右"——哪里重复了？',a:'❌ "<b>高达</b>"表示数量大，"<b>左右</b>"表示约数——两个不能一起用。"高达"后面应接明确数字，"左右"前面不能加"高达"。改为"高达数万美元"或"数万美元左右"。'} }
+        ],
+        quizzes: [
+            { type:'single', q:'"随着民族文化的交融，使得中华饮食逐渐接受不同饮食理念。"这句话的语病是？', opts:['A. 搭配不当','B. 主客颠倒','C. 主语残缺','D. 语序不当'], correct:2,
+              detail:'<b>A选项</b>：错误。<br><b>B选项</b>：错误。<br><b>C选项</b>：正确。"随着……使得……"滥用介词，导致主语缺失。<br><b>D选项</b>：错误。',
+              tip:'"随着……使得……"是典型的"吃主语"结构。去掉"随着"或"使得"即可。' },
+            { type:'single', q:'下列哪句存在"词义重复"的语病？', opts:['A. 他经常去图书馆看书','B. 历代古今中外的经验证明要重视榜样作用','C. 我们要认真学习','D. 这件衣服很漂亮'], correct:1,
+              detail:'<b>A选项</b>：无语病。<br><b>B选项</b>：有语病。"历代"和"古今中外"语义重复。<br><b>C选项</b>：无语病。<br><b>D选项</b>：无语病。',
+              tip:'"历代"=历代以来，"古今中外"=古往今来中内外——两个都表示时间跨度大，重复了。只留一个即可。' }
+        ]
+    },
+
+    // ===== 模块4：语序不当 =====
+    {
+        id: 'mod4', iconClass: 'icon-yellow', iconEmoji: '↔️',
+        title: '四、语序不当',
+        subtitle: '词语顺序错了、关联词位置错了、递进关系反了',
+        items: [
+            { type:'ki', badge:'核心', badgeClass:'badge-core', title:'① 多层定语次序不当',
+              content:'量词、形容词、名词的排列顺序有规则。<br><b>例：</b>"远看着像<span class="kh kh-red">黑黢黢的一辆</span>装甲运兵车。"<br>"一辆"是量词，应放在形容词"黑黢黢"之前——"像<b>一辆黑黢黢的</b>装甲运兵车"。<br><b>口诀：</b>量词紧贴名词，形容词在量词前。' },
+            { type:'ki', badge:'核心', badgeClass:'badge-num', title:'② 多层状语次序不当',
+              content:'时间状语应在地点状语之前。<br><b>例：</b>"在这片神奇的土地上<span class="kh kh-red">上一世纪</span>曾发生过一场血战。"<br>时间"上一世纪"应在句首——"<b>上一世纪</b>，在这片神奇的土地上……"。<br><b>口诀：</b>什么时候 → 在哪儿 → 干什么。' },
+            { type:'ki', badge:'必考', badgeClass:'badge-core', title:'③ 关联词位置不当',
+              content:'<b>同一主语：</b>主语在前，关联词在后。<br>"不仅绿色出行可以节约能源……"→应改为"<b>绿色出行不仅</b>可以节约能源……"<br><b>不同主语：</b>关联词在前，主语在后。<br>"理事会如果在会议上……伊朗就将……"→应改为"<b>如果理事会</b>在会议上……<b>伊朗就</b>将……"',
+              extra:'<b>速记：</b>同一个主语→主语管两头；不同主语→关联词打头。' },
+            { type:'ki', badge:'高频', badgeClass:'badge-num', title:'④ 递进关系错位',
+              content:'递进关系前后语义应为<span class="kh kh-red">前轻后重</span>。<br><b>例：</b>"保证旅客不仅<span class="kh kh-red">走得快、走得好</span>还要<span class="kh kh-red">走得了</span>。"<br>"走得了"是最基本要求，应放在最前——"不仅<b>走得了</b>，还要<b>走得快、走得好</b>"。' }
+        ],
+        quizzes: [
+            { type:'single', q:'下列句子中，关联词位置正确的是？', opts:['A. 不仅绿色出行可以节约能源，而且促进健康','B. 绿色出行不仅可以节约能源，而且促进健康','C. 如果理事会在会议上提交，伊朗就将停止核查','D. 由于古木年画蕴含着内涵，所以至今价值不菲'], correct:1,
+              detail:'<b>A</b>：错误。同主语，主语应在前。<br><b>B</b>：正确。<br><b>C</b>：错误。不同主语，关联词应前置。<br><b>D</b>：错误。同主语，主语应在前。',
+              tip:'同主语=主语打头；不同主语=关联词打头。' },
+            { type:'single', q:'"保证旅客不仅走得快、走得好还要走得了"的语序问题是什么？', opts:['A. 搭配不当','B. 成分残缺','C. 递进关系错位','D. 表意不明'], correct:2,
+              detail:'<b>A</b>：错误。<br><b>B</b>：错误。<br><b>C</b>：正确。"走得了"是最基本要求，应放在最前。<br><b>D</b>：错误。',
+              tip:'递进=先轻后重。' }
+        ]
+    },
+    // ===== 模块5：结构混乱 =====
+    {
+        id: 'mod5', iconClass: 'icon-red', iconEmoji: '🔀',
+        title: '五、结构混乱（句式杂糅）',
+        subtitle: '把两个句子硬凑成一个——最常见的是"深受……所欢迎"',
+        items: [
+            { type:'ki', badge:'高频', badgeClass:'badge-core', title:'① 表被动的杂糅',
+              content:'"<span class="kh kh-red">深受</span>广大消费者<span class="kh kh-red">所</span>欢迎"——"深受……欢迎"与"深为……所欢迎"杂糅。<br>应改为"<b>深受</b>广大消费者欢迎"或"<b>深为</b>广大消费者<b>所</b>欢迎"。' },
+            { type:'ki', badge:'常考', badgeClass:'badge-num', title:'② 表原因的杂糅',
+              content:'"其根本原因是<span class="kh kh-red">党风不正在作怪</span>"——"其根本原因是党风不正"与"是党风不正在作怪"杂糅。改为"其根本原因是党风不正"。' },
+            { type:'ki', badge:'常考', badgeClass:'badge-num', title:'③ 表目的的杂糅',
+              content:'"<span class="kh kh-red">把</span>我国的教育事业<span class="kh kh-red">达到</span>先进水平"——"把……提高到"与"使……达到"杂糅。改为"<b>使</b>达到"或"<b>把</b>提高到"。' },
+            { type:'ki', badge:'其他', badgeClass:'badge-num', title:'④ 前后牵连与中途易辙',
+              content:'<b>前后牵连：</b>前句后半部分当后句开头。"除北大人员外，还有清华等高校的师生<span class="kh kh-red">也参加了学习</span>"——"还有"和"也"选一个。<br><b>中途易辙：</b>一句话没说完就换话题。"梵高在死了很多年以后，<span class="kh kh-red">评论家</span>才……"——梵高怎么样还没说完呢。' }
+        ],
+        quizzes: [
+            { type:'single', q:'"《消费者权益保护法》深受广大消费者所欢迎"的语病类型是？', opts:['A. 成分残缺','B. 句式杂糅','C. 搭配不当','D. 语序不当'], correct:1,
+              detail:'<b>A</b>：错误。<br><b>B</b>：正确。"深受……"与"……所欢迎"是两套句式杂糅。<br><b>C</b>：错误。<br><b>D</b>：错误。',
+              tip:'"深受"后面不能加"所"——要么"深受欢迎"，要么"为……所欢迎"。' }
+        ]
+    },
+    // ===== 模块6：不合逻辑 =====
+    {
+        id: 'mod6', iconClass: 'icon-blue', iconEmoji: '🧩',
+        title: '六、不合逻辑',
+        subtitle: '事理矛盾、概念混乱、主客颠倒、强加因果',
+        items: [
+            { type:'ki', badge:'常见', badgeClass:'badge-core', title:'① 事实与事理矛盾',
+              content:'<b>例：</b>"在<span class="kh kh-red">蜿蜒曲折的山路</span>上像<span class="kh kh-red">离弦的箭</span>一样奔驰。"——蜿蜒山路不能高速行驶。<br><b>例：</b>"冒着<span class="kh kh-red">酷暑和严寒</span>"——酷暑和严寒不可能同时出现。' },
+            { type:'ki', badge:'陷阱', badgeClass:'badge-num', title:'② 绝对化表达',
+              content:'含有"凡是……都……""只要……就……""唯一""绝对"等词语的句子，往往过于绝对。<br><b>例：</b>"<span class="kh kh-red">凡是</span>有杰出成就的人，<span class="kh kh-red">都是</span>在艰苦环境中磨练成才的。"——显然有例外。' },
+            { type:'ki', badge:'必考', badgeClass:'badge-core', title:'③ 概念分类不当',
+              content:'<b>从属关系并列：</b>"水产品、鱼、虾、甲鱼"——鱼虾本就属于水产品，不能并列。<br><b>交叉关系并列：</b>"工人、农民、青年、妇女"——工人中也有青年和妇女，标准不一致。' },
+            { type:'ki', badge:'常考', badgeClass:'badge-num', title:'④ 主客颠倒',
+              content:'"<span class="kh kh-red">我们</span>对于比较文学<span class="kh kh-red">是个陌生的概念</span>"——主语和客体位置反了。<br>应改为"比较文学对于我们来说是个陌生的概念"。',
+              example:{q:'📝 主客颠倒怎么改？把"我"和"节目"换位置——"这个节目对我很了解"→"我对这个节目很了解"。' } }
+        ],
+        quizzes: [
+            { type:'single', q:'下列哪项属于"概念分类不当"的语病？', opts:['A. 农贸市场有蔬菜、肉类、水产品、鱼虾','B. 他每天坚持跑步锻炼','C. 学习需要勤奋和努力','D. 天气很好，适合出行'], correct:0,
+              detail:'<b>A</b>：有语病。"鱼虾"属于"水产品"，不能并列。<br><b>B</b>：无语病。<br><b>C</b>：无语病。<br><b>D</b>：无语病。',
+              tip:'鱼虾是水产品的一种，不能和"水产品"这个大类并列。' },
+            { type:'single', q:'"我两次看见他从这个工厂走出来，我才知道这个老人原来是个工人"——语病是？', opts:['A. 搭配不当','B. 强加因果','C. 成分残缺','D. 语序不当'], correct:1,
+              detail:'<b>A</b>：错误。<br><b>B</b>：正确。从工厂走出来≠是工人，因果关系不成立。<br><b>C</b>：错误。<br><b>D</b>：错误。',
+              tip:'"看到从工厂出来"不能直接推出"是工人"。他可能是去办事的。' }
+        ]
+    },
+    // ===== 模块7：表意不明与用词不当 =====
+    {
+        id: 'mod7', iconClass: 'icon-green', iconEmoji: '❓',
+        title: '七、表意不明与用词不当',
+        subtitle: '一句话两个意思？成语用错了？',
+        items: [
+            { type:'ki', badge:'歧义', badgeClass:'badge-core', title:'表意不明（歧义）的四种常见原因',
+              content:'①<span class="kh">多音字</span>："这个人<b>好</b>说话"→hào（喜欢说话）/hào（容易沟通）。<br>②<span class="kh">词义多义</b>："门没<b>锁</b>"→没锁上/没安装锁。<br>③<span class="kh">停顿歧义</b>："本月15日<b>前去</b>汇报"→15日之前去/15日当天去。<br>④<span class="kh">指代不明</b>："写论文不容易，精力就用在<b>这一方面</b>"→哪方面？<br><b>秒杀：</b>看到代词（这/那/他/她），立即检查指代是否明确。' },
+            { type:'ki', badge:'成语', badgeClass:'badge-core', title:'成语使用不当（高频考点）',
+              content:'<b>差强人意：</b>勉强让人满意（不是"让人不满意"！）<br><b>耳濡目染：</b>长期熏陶受影响（≠耳闻目睹）<br><b>举一反三：</b>褒义词，指触类旁通（不能用于狡辩）<br><b>津津乐道：</b>乐于谈论（≠回味无穷）<br><b>等量齐观：</b>同等看待（只能用于否定句）<br><b>望其项背：</b>赶得上（只能用于否定句）',
+              example:{q:'📖 "差强人意"到底是好还是不好？',a:'✅ "差"是"稍微"，"强"是"振奋"。原意是"勉强能让人满意"，是<b>偏褒义</b>的。很多人误以为是"让人不满意"，完全反了！'} }
+        ],
+        quizzes: [
+            { type:'single', q:'下列成语使用恰当的是？', opts:['A. 几首歌都不好听，只有这首还差强人意','B. 他父母是音乐家，平日耳闻目睹，他也爱好音乐','C. 小明狡辩时举一反三，回了好几句','D. 这本书情节好，读起来让人津津乐道'], correct:0,
+              detail:'<b>A</b>：正确。"差强人意"=勉强还行。<br><b>B</b>：错误。"耳闻目睹"应改为"耳濡目染"。<br><b>C</b>：错误。"举一反三"是褒义词。<br><b>D</b>：错误。"津津乐道"应改为"回味无穷"。',
+              tip:'"差强人意"=勉强还行（不是差劲！）。"举一反三"=聪明会学习（不是顶嘴！）。' },
+            { type:'single', q:'下列哪句存在"指代不明"的语病？', opts:['A. 他每天准时到校','B. 沈建新非常恼火他的说话','C. 我们认真完成了作业','D. 她喜欢唱歌和跳舞'], correct:1,
+              detail:'<b>A</b>：无语病。<br><b>B</b>：有语病。"他"指代不明。<br><b>C</b>：无语病。<br><b>D</b>：无语病。',
+              tip:'看到"他""她""这""那"，一定问自己：☞的是什么？如果答案不唯一，就是病句。' }
+        ]
+    },
+
+    // ===== 模块8：综合练习（判断题30道 + 单选题30道） =====
+    {
+        id: 'mod8', iconClass: 'icon-red', iconEmoji: '📝',
+        title: '八、综合练习 · ',
+        subtitle: '覆盖病句辨析全部7种类型，做完就通关了！',
+        items: [],
+        quizzes: (function() {
+            // ==================== 判断题30道 ====================
+            const tf = [
+                { q:'"一条好狗的毛色必须聪明可爱"存在语病。', c:true,
+                  d:'<b>A"正确"</b>：正确。"毛色"不能"聪明可爱"——主谓搭配不当。<br><b>B"错误"</b>：错误。',
+                  t:'毛色只能油亮光滑，聪明可爱是狗的性格，不是毛的。' },
+                { q:'"中学生是德智体美劳全面发展的重要阶段"没有语病。', c:false,
+                  d:'<b>A"正确"</b>：错误。"中学生"是人，"阶段"是抽象概念——主宾搭配不当。<br><b>B"错误"</b>：正确。',
+                  t:'人是人，阶段是时间段——不能画等号。' },
+                { q:'"能否通过考试，关键在于努力学习"存在两面对一面的语病。', c:true,
+                  d:'<b>A"正确"</b>：正确。"能否"是两面，"关键在于努力学习"只有一面。<br><b>B"错误"</b>：错误。',
+                  t:'"能否"是yes/no，后面必须对应正反两面。应在"努力"前加"是否"。' },
+                { q:'"只有从根本上解决房价问题，就能更好地为人民服务"关联词使用正确。', c:false,
+                  d:'<b>A"正确"</b>：错误。"只有……就……"搭配错误。<br><b>B"错误"</b>：正确。应为"只有……才……"或"只要……就……"。',
+                  t:'"只有"配"才"，"只要"配"就"——固定搭配不能乱。' },
+                { q:'"经过专家的指导，让葡萄产量得到了改善"存在主语残缺。', c:true,
+                  d:'<b>A"正确"</b>：正确。"经过……让……"滥用介词，把主语吞掉了。<br><b>B"错误"</b>：错误。',
+                  t:'"经过……让……"=吃主语的经典结构。去掉"经过"或"让"即可。' },
+                { q:'"古旧村落可以堪称活着的文物"中"可以"和"堪称"语义重复。', c:true,
+                  d:'<b>A"正确"</b>：正确。"堪称"本身就含"可以称为"的意思。<br><b>B"错误"</b>：错误。',
+                  t:'"堪"=可以，所以"可以堪称"="可以可以称为"——啰嗦。' },
+                { q:'"历代古今中外的经验证明"没有词义重复的问题。', c:false,
+                  d:'<b>A"正确"</b>：错误。"历代"和"古今中外"语义重复。<br><b>B"错误"</b>：正确。',
+                  t:'"历代"已经包含古往今来了，"古今中外"又来一遍——重复。' },
+                { q:'"远看着像一辆黑黢黢的装甲运兵车"语序是正确的。', c:true,
+                  d:'<b>A"正确"</b>：正确。量词"一辆"在形容词"黑黢黢"之前。<br><b>B"错误"</b>：错误。',
+                  t:'量词紧贴名词——"一辆黑黢黢的"对；"黑黢黢的一辆"错。' },
+                { q:'"绿色出行不仅可以节约能源，而且促进身心健康"关联词位置正确。', c:true,
+                  d:'<b>A"正确"</b>：正确。同一主语"绿色出行"在主句首，关联词在后。<br><b>B"错误"</b>：错误。',
+                  t:'同一个主语=主语管两头，放在关联词前面。' },
+                { q:'"保证旅客不仅走得快、走得好还要走得了"语序没有问题。', c:false,
+                  d:'<b>A"正确"</b>：错误。递进关系应为前轻后重。"走得了"是基本要求，应放在最前。<br><b>B"错误"</b>：正确。',
+                  t:'先能走（基本），再走快走好（高级）——顺序反了。' },
+                { q:'"《消费者权益保护法》深为广大消费者所欢迎"句式正确。', c:true,
+                  d:'<b>A"正确"</b>：正确。"深为……所欢迎"是正确文言句式。<br><b>B"错误"</b>：错误。',
+                  t:'"为……所……"是正确句式，"深受……所……"才是杂糅。' },
+                { q:'"其根本原因是党风不正在作怪"存在句式杂糅。', c:true,
+                  d:'<b>A"正确"</b>：正确。"其根本原因是党风不正"与"是党风不正在作怪"杂糅。<br><b>B"错误"</b>：错误。',
+                  t:'"在作怪"三个字多余——"其根本原因是党风不正"就足够了。' },
+                { q:'"在蜿蜒曲折的山路上像离弦的箭一样奔驰"符合事理。', c:false,
+                  d:'<b>A"正确"</b>：错误。蜿蜒山路无法高速行驶。<br><b>B"错误"</b>：正确。',
+                  t:'弯弯绕绕的山路飙车？物理上不现实。' },
+                { q:'"工人、农民、青年、妇女都应遵守法律"存在交叉关系并列不当。', c:true,
+                  d:'<b>A"正确"</b>：正确。工人中也有青年和妇女，分类标准不一致。<br><b>B"错误"</b>：错误。',
+                  t:'用不同标准分出来的东西不能放在一起并列。' },
+                { q:'"这个节目对我很了解"表达正确。', c:false,
+                  d:'<b>A"正确"</b>：错误。主客颠倒——应为"我对这个节目很了解"。<br><b>B"错误"</b>：正确。',
+                  t:'人是主体、节目是客体——"我了解节目"才对。' },
+                { q:'"看见他从工厂走出来，才知道他是个工人"因果关系成立。', c:false,
+                  d:'<b>A"正确"</b>：错误。从工厂走出来≠是工人——强加因果。<br><b>B"错误"</b>：正确。',
+                  t:'他可能是去送货的、找人的——不能因为从工厂出来就说是工人。' },
+                { q:'"晚上睡觉之后，把运动服放在床头"表述没有问题。', c:false,
+                  d:'<b>A"正确"</b>：错误。"睡觉之后"无法完成"放衣服"的动作——自相矛盾。<br><b>B"错误"</b>：正确。',
+                  t:'都睡着了还怎么放衣服？梦游吗？应改为"睡觉之前"。' },
+                { q:'多音字可能造成表意不明的歧义。', c:true,
+                  d:'<b>A"正确"</b>：正确。"这个人好说话"中"好"有两个读音和含义。<br><b>B"错误"</b>：错误。',
+                  t:'hǎo=容易沟通，hào=喜欢说话——一个字两个意思。' },
+                { q:'"沈建新非常恼火他的说话"中存在指代不明的问题。', c:true,
+                  d:'<b>A"正确"</b>：正确。"他"指代不明——是沈建新自己还是别人？<br><b>B"错误"</b>：错误。',
+                  t:'"他"是谁？不知道——这就是指代不明。' },
+                { q:'"差强人意"的意思是"让人非常不满意"。', c:false,
+                  d:'<b>A"正确"</b>：错误。"差强人意"=勉强还能让人满意，不是不满意。<br><b>B"错误"</b>：正确。',
+                  t:'这个成语被误解最多！"差"是"稍微"，"强"是"振奋"——勉强还行。' },
+                { q:'"他父母是音乐家，平日耳闻目睹，他也爱好音乐"成语使用正确。', c:false,
+                  d:'<b>A"正确"</b>：错误。"耳闻目睹"强调亲眼所见，应改为"耳濡目染"。<br><b>B"错误"</b>：正确。',
+                  t:'"耳濡目染"=长期熏陶受影响，"耳闻目睹"=亲自看到听到。' },
+                { q:'"举一反三"是褒义词，可以用于夸奖学生学习能力强。', c:true,
+                  d:'<b>A"正确"</b>：正确。"举一反三"指触类旁通，是褒义词。<br><b>B"错误"</b>：错误。',
+                  t:'"举一反三"=聪明，不能用于顶嘴狡辩。' },
+                { q:'"等量齐观"和"望其项背"都只能用于否定句。', c:true,
+                  d:'<b>A"正确"</b>：正确。通常说"不能等量齐观""难以望其项背"。<br><b>B"错误"</b>：错误。',
+                  t:'这两个成语天生"否定命"——前面总带"不能/难以"。' },
+                { q:'"美国牙科费用是高达数万美元左右"中"高达"和"左右"语义重复。', c:true,
+                  d:'<b>A"正确"</b>：正确。"高达"是概数夸大，"左右"也是约数。<br><b>B"错误"</b>：错误。',
+                  t:'"高达"后面跟确定数，"左右"前面不能加"高达"。' },
+                { q:'"水产品、鱼、虾、甲鱼及各种调味品"存在从属关系并列不当。', c:true,
+                  d:'<b>A"正确"</b>：正确。"鱼虾甲鱼"本就属于"水产品"。<br><b>B"错误"</b>：错误。',
+                  t:'小类不能和大类并列——鱼虾就是水产品的一种。' },
+                { q:'"我们对于比较文学是个陌生的概念"表达正确。', c:false,
+                  d:'<b>A"正确"</b>：错误。主客颠倒——应为"比较文学对于我们来说是个陌生的概念"。<br><b>B"错误"</b>：正确。',
+                  t:'人是主体，比较文学是客体——"我们对它陌生"才对。' },
+                { q:'"他背着经理和总经理把钱存到银行"存在停顿歧义。', c:true,
+                  d:'<b>A"正确"</b>：正确。"和"有两种理解——一个人干的？还是和总经理合伙？<br><b>B"错误"</b>：错误。',
+                  t:'"背着经理和总经理"——停顿位置不同，意思完全不同。' },
+                { q:'"经过几代人近三十年的努力，我国通信技术达到了国际先进水平"没有语病。', c:true,
+                  d:'<b>A"正确"</b>：正确。句子结构完整，语义通顺。<br><b>B"错误"</b>：错误。',
+                  t:'这句话没毛病——不是所有带"经过"的句子都缺主语。' },
+                { q:'"该同志的事迹被报道后，在社会上快速引发了热烈讨论"没有语序问题。', c:true,
+                  d:'<b>A"正确"</b>：正确。"快速引发热烈讨论"语序正确。<br><b>B"错误"</b>：错误。',
+                  t:'"快速"修饰"引发"，"热烈"修饰"讨论"——各司其职。' },
+                { q:'"在所到之处，百姓都感受到了环境的变化"没有搭配不当的问题。', c:true,
+                  d:'<b>A"正确"</b>：正确。这里"在所到之处"是独立状语，不直接修饰"百姓"。<br><b>B"错误"</b>：错误。',
+                  t:'"在所到之处"放在句首作状语是可以的，不等于修饰百姓。' }
+            ];
+            // ==================== 单选题30道 ====================
+            const s = [
+                { q:'下列句子中，没有语病的一项是？', o:['A. 随着退耕还林开展，所到之处的百姓感受到变化','B. 没有谁能否认每个思想学派都充实了中国人的精神世界','C. 英语桥不仅为社会培育人才，也为学校提供交流平台','D. 中国队囊括男女四项金牌的好成绩'], correct:1,
+                  d:'<b>A</b>：有语病。"所到之处"不能修饰"百姓"，搭配不当。<br><b>B</b>：正确。句子结构完整，语义通顺。<br><b>C</b>：有语病。递进关系反了——应先"提供平台"再"培育人才"。<br><b>D</b>：有语病。句式杂糅——"囊括金牌"与"取得好成绩"混用。',
+                  t:'A搭配不当，C递进反了，D句式杂糅。B是正确答案。' },
+                { q:'"中学生是德智体美劳全面发展的重要阶段"的病句类型是？', o:['A. 搭配不当','B. 成分残缺','C. 句式杂糅','D. 语序不当'], correct:0,
+                  d:'<b>A</b>：正确。主语"中学生"与宾语"阶段"不搭配——人不能是阶段。<br><b>B</b>：错误。句子成分完整。<br><b>C</b>：错误。不是句式杂糅。<br><b>D</b>：错误。语序没问题。',
+                  t:'"中学生是人，阶段是时间段"——两者不能画等号。' },
+                { q:'下列哪句存在"两面对一面"的语病？', o:['A. 睡眠对健康很重要','B. 能否坚持锻炼，决定身体素质的好坏','C. 能否通过考试，关键在于努力学习','D. 他的成功离不开勤奋'], correct:2,
+                  d:'<b>A</b>：无语病。一面判断。<br><b>B</b>：无语病。"能否"对"好坏"——两面对两面。<br><b>C</b>：有语病。"能否"是两面，"关键在于努力"只有一面。<br><b>D</b>：无语病。',
+                  t:'口诀："能否"后面要有"能否/是否"，否则就是两面对一面。' },
+                { q:'"只有从根本上解决房价问题，就能更好地为人民服务"如何修改？', o:['A. 把"只有"改为"只要"','B. 把"就"改为"才"','C. A和B两种改法都可以','D. 删除"根本上"'], correct:2,
+                  d:'<b>A</b>：正确。改为"只要……就……"。<br><b>B</b>：正确。改为"只有……才……"。<br><b>C</b>：正确。两种改法都符合语法。<br><b>D</b>：错误。删除"根本上"不解决问题。',
+                  t:'"只有"配"才"，"只要"配"就"——固定搭配不能混搭。' },
+                { q:'"远看着像黑黢黢的一辆装甲运兵车"的语病是？', o:['A. 搭配不当','B. 成分残缺','C. 语序不当','D. 表意不明'], correct:2,
+                  d:'<b>A</b>：错误。<br><b>B</b>：错误。<br><b>C</b>：正确。多层定语次序不当——"一辆"应放在"黑黢黢"之前。<br><b>D</b>：错误。',
+                  t:'量词要紧贴名词——"一辆黑黢黢的"才对，"黑黢黢的一辆"是错的。' },
+                { q:'"在这片神奇的土地上上一世纪曾发生过一场血战"怎么改？', o:['A. 把"上一世纪"移到句首','B. 把"在这片土地上"移到句末','C. 删除"上一世纪"','D. 删除"在这片土地上"'], correct:0,
+                  d:'<b>A</b>：正确。时间状语应在地点状语之前。<br><b>B</b>：错误。治标不治本。<br><b>C</b>：错误。删除后语义不完整。<br><b>D</b>：错误。删除后语义不完整。',
+                  t:'什么时候 → 在哪儿 → 干什么——时间要放在前面。' },
+                { q:'"不仅绿色出行可以节约能源，而且促进健康"的语病是？', o:['A. 关联词搭配不当','B. 关联词位置不当','C. 成分残缺','D. 不合逻辑'], correct:1,
+                  d:'<b>A</b>：错误。"不仅……而且……"搭配正确。<br><b>B</b>：正确。同一主语时，主语应在关联词之前——"绿色出行不仅……"。<br><b>C</b>：错误。<br><b>D</b>：错误。',
+                  t:'同主语=主语打头，关联词放后面。' },
+                { q:'"保证旅客不仅走得快、走得好还要走得了"的正确改法是？', o:['A. 改为"不仅走得了，还要走得快、走得好"','B. 删除"走得快"','C. 删除"走得好"','D. 把"走得快"和"走得好"对调'], correct:0,
+                  d:'<b>A</b>：正确。"走得了"是最基本要求，应放在最前。<br><b>B</b>：错误。语义不完整。<br><b>C</b>：错误。语义不完整。<br><b>D</b>：错误。对调不解决问题。',
+                  t:'递进=先轻后重——先能走，再走好。' },
+                { q:'"《消费者权益保护法》深受广大消费者所欢迎"如何修改？', o:['A. 把"深受"改为"深为"','B. 删除"所"','C. A和B两种改法都可以','D. 删除"深受"'], correct:2,
+                  d:'<b>A</b>：正确。改为"深为广大消费者所欢迎"。<br><b>B</b>：正确。改为"深受广大消费者欢迎"。<br><b>C</b>：正确。两种改法都符合语法。<br><b>D</b>：错误。删除后句子不完整。',
+                  t:'"深受……欢迎"和"为……所欢迎"是两套句式，混在一起就是杂糅。' },
+                { q:'"其根本原因是党风不正在作怪"应该怎么改？', o:['A. 删除"在作怪"','B. 把"党风不正"改为"党风问题"','C. 把"根本原因"改为"原因"','D. 删除"其根本原因是"'], correct:0,
+                  d:'<b>A</b>：正确。"其根本原因是党风不正"即可，"在作怪"多余。<br><b>B</b>：错误。不解决问题。<br><b>C</b>：错误。不解决问题。<br><b>D</b>：错误。删除后缺主语。',
+                  t:'"在作怪"三个字是多余的尾巴，砍掉就通顺了。' },
+                { q:'"我们要下决心把我国的教育事业达到先进水平"的语病是？', o:['A. 成分残缺','B. 句式杂糅','C. 语序不当','D. 不合逻辑'], correct:1,
+                  d:'<b>A</b>：错误。<br><b>B</b>：正确。"把……提高到"与"使……达到"杂糅。<br><b>C</b>：错误。<br><b>D</b>：错误。',
+                  t:'"把"配"提高到"，"使"配"达到"——不能乱搭。' },
+                { q:'"在这片神奇的土地上上一世纪曾发生过一场血战"的语病类型是？', o:['A. 搭配不当','B. 成分残缺','C. 语序不当','D. 表意不明'], correct:2,
+                  d:'<b>A</b>：错误。<br><b>B</b>：错误。<br><b>C</b>：正确。多层状语次序不当——时间应在句首。<br><b>D</b>：错误。',
+                  t:'时间状语在地点状语之前——"上一世纪，在这片土地上……"。' },
+                { q:'下列成语使用恰当的是？', o:['A. 几首歌都不好听，只有这首还差强人意','B. 他父母是音乐家，平日耳闻目睹，他也爱好音乐','C. 小明狡辩时举一反三，回了好几句','D. 这本书情节好，读起来让人津津乐道'], correct:0,
+                  d:'<b>A</b>：正确。"差强人意"=勉强还行。<br><b>B</b>：错误。"耳闻目睹"应改为"耳濡目染"。<br><b>C</b>：错误。"举一反三"是褒义词，不能用于狡辩。<br><b>D</b>：错误。"津津乐道"应改为"回味无穷"。',
+                  t:'"差强人意"=勉强还行（不是差劲！）。"举一反三"=聪明会学习（不是顶嘴！）。' },
+                { q:'"看见他从工厂走出来，才知道他是个工人"的语病是？', o:['A. 搭配不当','B. 强加因果','C. 成分残缺','D. 语序不当'], correct:1,
+                  d:'<b>A</b>：错误。<br><b>B</b>：正确。从工厂走出来≠是工人——因果关系不成立。<br><b>C</b>：错误。<br><b>D</b>：错误。',
+                  t:'"看到从工厂出来"不能直接推出"是工人"。他可能是去办事的。' },
+                { q:'"晚上睡觉之后，把自己的运动服放在床头"怎么改？', o:['A. 把"之后"改为"之前"','B. 删除"自己的"','C. 把"放在"改为"放到"','D. 删除"晚上"'], correct:0,
+                  d:'<b>A</b>：正确。睡觉之前放才对。<br><b>B</b>：错误。不解决问题。<br><b>C</b>：错误。不解决问题。<br><b>D</b>：错误。不解决问题。',
+                  t:'都睡着了还怎么放东西？"之后"改成"之前"就通顺了。' },
+                { q:'"水产品、鱼、虾、甲鱼及各种调味品"的病句类型是？', o:['A. 搭配不当','B. 不合逻辑（概念分类不当）','C. 成分残缺','D. 表意不明'], correct:1,
+                  d:'<b>A</b>：错误。<br><b>B</b>：正确。鱼虾甲鱼本就属于水产品——从属关系并列不当。<br><b>C</b>：错误。<br><b>D</b>：错误。',
+                  t:'小类和大类不能并列。鱼虾就是水产品的一种。' },
+                { q:'"我们对于比较文学是个陌生的概念"的正确改法是？', o:['A. 改为"比较文学对于我们来说是个陌生的概念"','B. 改为"对于我们比较文学是个陌生的概念"','C. 删除"对于"','D. 删除"陌生的"'], correct:0,
+                  d:'<b>A</b>：正确。原句主客颠倒，应把客体"比较文学"放在主语位置。<br><b>B</b>：错误。仍然不通顺。<br><b>C</b>：错误。删除后还是不完整。<br><b>D</b>：错误。删除后语义改变。',
+                  t:'人是主体，比较文学是客体——"我们对它陌生"才对。' },
+                { q:'"他背着经理和总经理把这笔钱存到了两家银行"为什么有歧义？', o:['A. 多音字造成歧义','B. 停顿歧义','C. 指代不明','D. 词义多义'], correct:1,
+                  d:'<b>A</b>：错误。不是多音字问题。<br><b>B</b>：正确。"和"的停顿位置不同，意思不同——一个人干的？还是和总经理合伙？<br><b>C</b>：错误。指代明确。<br><b>D</b>：错误。词义明确。',
+                  t:'"背着经理和总经理"——"和"字造成两个意思，停顿一下就不一样了。' },
+                { q:'下列哪句不存在语病？', o:['A. 历代古今中外的经验证明要重视榜样作用','B. 美国牙科费用是高达数万美元左右','C. 经过几代人近三十年的努力，我国通信技术达到了国际先进水平','D. 可以堪称活着的文物'], correct:2,
+                  d:'<b>A</b>：有语病。"历代"和"古今中外"语义重复。<br><b>B</b>：有语病。"高达"和"左右"语义重复。<br><b>C</b>：正确。句子结构完整。<br><b>D</b>：有语病。"可以"和"堪称"语义重复。',
+                  t:'A重复，B重复，D重复——C正确。' },
+                { q:'"随着民族文化的交融，使得中华饮食逐渐接受了不同的饮食理念"的语病是？', o:['A. 搭配不当','B. 主语残缺','C. 语序不当','D. 不合逻辑'], correct:1,
+                  d:'<b>A</b>：错误。<br><b>B</b>：正确。"随着……使得……"滥用介词，导致主语缺失。<br><b>C</b>：错误。<br><b>D</b>：错误。',
+                  t:'"随着……使得……"=吃主语的经典结构。去掉"随着"或"使得"即可。' },
+                { q:'下列哪句属于"主客颠倒"？', o:['A. 我对这部电影很了解','B. 这部电影对我很了解','C. 这部电影被我了解了','D. 我被这部电影感动了'], correct:1,
+                  d:'<b>A</b>：正确表达。<br><b>B</b>：主客颠倒。"电影"不能"了解"我——应为"我对这部电影很了解"。<br><b>C</b>：被动句，没问题。<br><b>D</b>：被动句，没问题。',
+                  t:'"电影对我很了解"=电影成精了，反过来了解你。' },
+                { q:'"沈建新非常恼火他的说话"中"他"指代的是什么问题？', o:['A. 多音字歧义','B. 指代不明','C. 词义多义','D. 停顿歧义'], correct:1,
+                  d:'<b>A</b>：错误。不是多音字。<br><b>B</b>：正确。"他"不知道指谁——沈建新自己还是别人？<br><b>C</b>：错误。<br><b>D</b>：错误。',
+                  t:'看到"他""她""这""那"，一定要问：指的是谁？' },
+                { q:'"在蜿蜒曲折的山路上像离弦的箭一样奔驰"应该怎么改？', o:['A. 把"蜿蜒曲折"改为"宽阔平坦"','B. 把"离弦的箭"改为"蜗牛"','C. 删除"蜿蜒曲折的"','D. 把"山路"改为"公路"'], correct:0,
+                  d:'<b>A</b>：正确。宽阔平坦的路才能高速行驶。<br><b>B</b>：错误。改变了原意。<br><b>C</b>：错误。不解决问题。<br><b>D</b>：错误。公路也可以是蜿蜒的。',
+                  t:'蜿蜒曲折=弯多，离弦的箭=快直——两者矛盾，改一个就行。' },
+                { q:'"我们敢想敢做，又都有一双聪明能干的手"的语病是？', o:['A. 成分残缺','B. 搭配不当','C. 语序不当','D. 结构混乱'], correct:1,
+                  d:'<b>A</b>：错误。<br><b>B</b>：正确。"聪明"不能修饰"手"——修饰语与中心语搭配不当。<br><b>C</b>：错误。<br><b>D</b>：错误。',
+                  t:'手可以能干、灵巧，但不能聪明——聪明形容脑子。' },
+                { q:'"我把教室打扫得干干净净、整整齐齐"的语病是？', o:['A. 成分残缺','B. 搭配不当','C. 表意不明','D. 不合逻辑'], correct:1,
+                  d:'<b>A</b>：错误。<br><b>B</b>：正确。"打扫"不能搭配"整整齐齐"——可以说"打扫得干干净净、收拾得整整齐齐"。<br><b>C</b>：错误。<br><b>D</b>：错误。',
+                  t:'打扫=去灰去脏，整齐=摆放有序——不能用一个动词统领两个不同性质的动作。' },
+                { q:'下列成语中，只能用于否定句的是？', o:['A. 举一反三','B. 耳濡目染','C. 等量齐观','D. 差强人意'], correct:2,
+                  d:'<b>A</b>：错误。可用于肯定句。<br><b>B</b>：错误。可用于肯定句。<br><b>C</b>：正确。通常说"不能等量齐观"。<br><b>D</b>：错误。可用于肯定句。',
+                  t:'"等量齐观"和"望其项背"都是"否定命"——前面总带"不能/难以"。' },
+                { q:'"他虽然是电子专业的高材生，但这次也没看懂电脑屏幕上那条显示错误的命令"为什么表意不明？', o:['A. 多音字歧义','B. 词义多义','C. 词义两可','D. 指代不明'], correct:2,
+                  d:'<b>A</b>：错误。<br><b>B</b>：错误。<br><b>C</b>：正确。"显示错误的命令"有两种理解——命令内容是错的/屏幕显示是错的。<br><b>D</b>：错误。',
+                  t:'到底是命令本身错了，还是屏幕显示出错了？一句话两个意思。' },
+                { q:'"天色晚了，自行车没修好，修车的急坏了"产生歧义的原因是？', o:['A. 多音字','B. 指代不明','C. 停顿歧义','D. 承前省略不当'], correct:3,
+                  d:'<b>A</b>：错误。<br><b>B</b>：错误。指代问题不大。<br><b>C</b>：错误。<br><b>D</b>：正确。"修车的"省略了对象——是修车师傅还是车主？',
+                  t:'"修车的"是省略说法——到底修车的人还是被修车的人？上下文没交代清楚。' },
+                { q:'"我看见张原扶着一位老人走下车来，手里提着一个黑色皮包"的歧义在于？', o:['A. 谁提着皮包不清楚','B. 皮包的颜色有歧义','C. 下车的时间不清楚','D. "扶着"一词有歧义'], correct:0,
+                  d:'<b>A</b>：正确。"手里提着皮包"的主语不明——是张原还是老人？<br><b>B</b>：错误。颜色明确。<br><b>C</b>：错误。时间明确。<br><b>D</b>：错误。词义明确。',
+                  t:'"手里"是谁的手？主语承前省略不当，让人猜。' },
+                { q:'"全国各地社区都在逐步开展建立居民健康档案的工作"是否有语病？', o:['A. 无语病','B. 搭配不当','C. 成分残缺','D. 语序不当'], correct:0,
+                  d:'<b>A</b>：正确。句子结构完整，语义通顺。<br><b>B</b>：错误。<br><b>C</b>：错误。主语"全国各地社区"明确。<br><b>D</b>：错误。语序没问题。',
+                  t:'这句话没毛病，不要看到"逐步开展"就觉得不对。' }
+            ];
+            // 转换判断题格式
+            const tfQ = tf.map(function(q,i){ return { type:'single', q:q.q, opts:['✅ 正确','❌ 错误'], correct:q.c?0:1, isTF:true, tfId:'tf'+(i+1), detail:q.d, tip:q.t }; });
+            const sQ = s.map(function(q,i){ return { type:'single', q:q.q, opts:q.o, correct:q.c, detail:q.d, tip:q.t, quizIndex:i+1 }; });
+            return [...tfQ, ...sQ];
+        })()
+    }
+
+];
+</script>
+<script>
+// ==================== 渲染引擎（含完善的✅❌标识规则） ====================
+function renderAll(){var m=document.getElementById('mainContent');var h='';knowledgeData.forEach(function(mod){h+='<div class="card" id="'+mod.id+'"><div class="section-title"><div class="icon '+mod.iconClass+'">'+mod.iconEmoji+'</div>'+mod.title+'</div>';if(mod.subtitle)h+='<div class="subtitle">'+mod.subtitle+'</div>';if(mod.items&&mod.items.length>0){h+='<div class="ki-grid">';mod.items.forEach(function(item){if(item.type==='table')h+=item.html;else if(item.type==='ki')h+=renderKI(item);});h+='</div>';}if(mod.quizzes&&mod.quizzes.length>0){mod.quizzes.forEach(function(q,qi){h+=renderQuiz(q,mod.id+'-q'+qi);});}h+='</div>';});m.innerHTML=h;generateTOC();}
+function renderKI(item){var h='<div class="ki-item">';h+='<div class="ki-title-row">'+(item.badge?'<span class="badge '+(item.badgeClass||'badge-num')+'">'+item.badge+'</span>':'')+item.title+'</div>';h+='<div class="ki-content">'+item.content+'</div>';if(item.extra)h+='<div style="margin-top:6px;color:#5c5347;font-size:0.88rem;">'+item.extra+'</div>';if(item.example){h+='<div class="example-block"><div class="ex-label">📖 生动案例</div><div class="ex-q">'+item.example.q+'</div><div class="ex-a">'+item.example.a+'</div></div>';}h+='</div>';return h;}
+function renderQuiz(q,qid){var qTypeLabel=q.multi?'【多选题】':'【单选题】';var h='<div class="quiz-wrap" data-qid="'+qid+'">';if(q.quizIndex){h+='<div class="q-type">📝 '+qTypeLabel+' · 第'+q.quizIndex+'题</div>';}else if(q.tfId){h+='<div class="q-type">📝 '+qTypeLabel+' · '+q.tfId+'</div>';}else{h+='<div class="q-type">📝 '+qTypeLabel+'</div>';}h+='<div class="q-text">'+q.q+'</div>';h+='<ul class="opt-list">';for(var i=0;i<q.opts.length;i++){h+='<li data-idx="'+i+'" onclick="selectOpt(this,\''+qid+'\','+i+','+(q.multi||false)+')">'+q.opts[i]+'</li>';}h+='</ul>';h+='<div class="btn-row"><button class="btn btn-primary" onclick="submitQuiz(\''+qid+'\','+JSON.stringify(q.correct)+','+(q.multi||false)+')">✅ 提交答案</button><button class="btn btn-outline" onclick="resetQuiz(\''+qid+'\')">🔄 重做</button></div>';h+='<div class="explain-card" id="ex-'+qid+'"><div class="ex-head"></div><div class="ex-body"></div>';if(q.detail){var detailHtml=q.detail
+    .replace(/"([^"]*)"/g,'$1')
+    .replace(/([A-E])正确<\/b>：正确/g,'$1选项</b>：<span style="color:#145a32;">✅ 正确</span>')
+    .replace(/([A-E])错误<\/b>：错误/g,'$1选项</b>：<span style="color:#b22222;">❌ 错误</span>')
+    .replace(/([A-E])正确<\/b>：错误/g,'$1选项</b>：<span style="color:#b22222;">❌ 错误</span>')
+    .replace(/([A-E])错误<\/b>：正确/g,'$1选项</b>：<span style="color:#145a32;">✅ 正确</span>')
+    .replace(/([A-E])选项<\/b>：(正确|属于|应选|是|可|无语病)/g,'<span style="color:#145a32;">✅ $1选项</b>：$2</span>')
+    .replace(/([A-E])选项<\/b>：(错误|不属于|不选|不是|不可|有语病)/g,'<span style="color:#b22222;">❌ $1选项</b>：$2</span>')
+    .replace(/([A-E])<\/b>：(正确|属于|应选|是|可|无语病)/g,'<span style="color:#145a32;">✅ $1</b>：$2</span>')
+    .replace(/([A-E])<\/b>：(错误|不属于|不选|不是|不可|有语病)/g,'<span style="color:#b22222;">❌ $1</b>：$2</span>')
+    .replace(/([A-E])选项<\/b>：有语病/g,'<span style="color:#b22222;">❌ $1选项</b>：有语病</span>')
+    .replace(/([A-E])<\/b>：有语病/g,'<span style="color:#b22222;">❌ $1</b>：有语病</span>');
+h+='<div class="ex-detail" style="margin-top:10px;padding:10px 14px;background:#fff;border-radius:6px;font-size:0.88rem;line-height:1.8;display:none;">📋 <b>逐项解析：</b><br>'+detailHtml+'</div>';}h+='<div class="ex-tip">💡 <b>大白话理解：</b>'+q.tip+'</div>';h+='</div></div>';return h;}
+function selectOpt(el,qid,idx,multi){var w=el.closest('.quiz-wrap');if(w.classList.contains('submitted'))return;var o=w.querySelectorAll('.opt-list li');if(multi){el.classList.toggle('selected');}else{o.forEach(function(x){x.classList.remove('selected');});el.classList.add('selected');}}
+function submitQuiz(qid,correct,multi){var w=document.querySelector('[data-qid="'+qid+'"]');if(w.classList.contains('submitted'))return;w.classList.add('submitted');var o=w.querySelectorAll('.opt-list li');var ca=Array.isArray(correct)?correct:[correct];var si=[];for(var i=0;i<o.length;i++){if(o[i].classList.contains('selected'))si.push(i);}var ic;if(multi){ic=si.length===ca.length;for(var j=0;j<si.length;j++){if(ca.indexOf(si[j])===-1){ic=false;break;}}}else{ic=si.length===1&&si[0]===ca[0];}for(var k=0;k<o.length;k++){o[k].classList.add('disabled');if(ca.indexOf(k)!==-1)o[k].classList.add('correct');}if(!ic){for(var m=0;m<si.length;m++){if(ca.indexOf(si[m])===-1)o[si[m]].classList.add('wrong');}}var ex=document.getElementById('ex-'+qid);ex.classList.add('show');if(ic){ex.classList.add('correct-ex');ex.classList.remove('wrong-ex');ex.querySelector('.ex-head').textContent='🎉 回答正确！';ex.querySelector('.ex-body').textContent='';var ed=ex.querySelector('.ex-detail');if(ed)ed.style.display='block';}else{ex.classList.add('wrong-ex');ex.classList.remove('correct-ex');ex.querySelector('.ex-head').textContent='😞 回答错误';var lt=['A','B','C','D','E'];var cl=ca.map(function(c){return lt[c];}).join('、');ex.querySelector('.ex-body').innerHTML='正确答案是：<b>'+cl+'</b>';var ed2=ex.querySelector('.ex-detail');if(ed2)ed2.style.display='block';}}
+function resetQuiz(qid){var w=document.querySelector('[data-qid="'+qid+'"]');w.classList.remove('submitted');w.querySelectorAll('.opt-list li').forEach(function(o){o.classList.remove('selected','correct','wrong','disabled');});var ex=document.getElementById('ex-'+qid);ex.classList.remove('show','correct-ex','wrong-ex');}
+function generateTOC(){var toc=document.getElementById('toc');if(!toc)return;var th='<div class="toc-title">📑 病句辨析目录</div>';var links='';knowledgeData.forEach(function(mod){links+='<a href="#'+mod.id+'">'+mod.title+'</a>';});toc.innerHTML=th+links;document.querySelectorAll('.toc a').forEach(function(link){link.addEventListener('click',function(){if(window.innerWidth<=768)closeToc();});});}
+function toggleToc(){document.getElementById('toc').classList.toggle('show');document.getElementById('tocOverlay').classList.toggle('show');}
+function closeToc(){document.getElementById('toc').classList.remove('show');document.getElementById('tocOverlay').classList.remove('show');}
+document.addEventListener('DOMContentLoaded',renderAll);
+</script>
+</body>
+</html>
