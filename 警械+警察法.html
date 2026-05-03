@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>人民警察法+警械武器条例 · 从零到做题</title>
+    <style>
+        :root {
+            --bg: #fdf8f3; --card-bg: #ffffff; --text: #2c2416; --text-light: #5c5347;
+            --accent: #b22222; --highlight: #fff3cd; --highlight-border: #f0c040;
+            --example-bg: #f0faf5; --example-border: #a3e4bc;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05); --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+            --radius: 14px; --radius-sm: 10px;
+            --font: 'PingFang SC','Microsoft YaHei','Hiragino Sans GB','Noto Sans SC',system-ui,-apple-system,sans-serif;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior: smooth; scroll-padding-top: 20px; }
+        body { font-family: var(--font); background: var(--bg); color: var(--text); line-height: 1.75; padding: 12px; font-size: 16px; -webkit-font-smoothing: antialiased; }
+        a { color: var(--accent); text-decoration: none; }
+        .toc-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.35); z-index:98; }
+        .toc-overlay.show { display:block; }
+        .toc { position:fixed; top:16px; left:16px; width:230px; max-height:calc(100vh - 32px); background:var(--card-bg); border-radius:var(--radius); box-shadow:0 8px 30px rgba(0,0,0,0.12); padding:18px 14px; overflow-y:auto; z-index:100; font-size:0.84rem; transition:transform 0.3s; }
+        .toc.hidden { transform:translateX(-260px); }
+        .toc-title { font-weight:700; margin-bottom:10px; color:var(--accent); font-size:1rem; display:flex; align-items:center; gap:6px; position:sticky; top:0; background:var(--card-bg); padding-bottom:8px; border-bottom:1px solid #f0ebe0; }
+        .toc a { display:block; padding:7px 10px; border-radius:6px; margin:2px 0; color:var(--text-light); transition:all 0.2s; font-size:0.82rem; }
+        .toc a:hover,.toc a.active { background:#fdedec; color:var(--accent); font-weight:600; }
+        .toc-toggle { position:fixed; top:16px; left:16px; width:42px; height:42px; border-radius:50%; background:var(--accent); color:#fff; border:none; font-size:1.3rem; cursor:pointer; z-index:101; display:none; box-shadow:0 4px 14px rgba(178,34,34,0.3); align-items:center; justify-content:center; }
+        .main { max-width:820px; margin:0 auto 0 270px; display:flex; flex-direction:column; gap:20px; padding-bottom:40px; }
+        .card { background:var(--card-bg); border-radius:var(--radius); padding:22px 26px; box-shadow:var(--shadow-md); border:1px solid #f0ebe0; }
+        .section-title { font-size:1.45rem; font-weight:700; margin-bottom:4px; display:flex; align-items:center; gap:10px; }
+        .section-title .icon { width:34px; height:34px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; flex-shrink:0; }
+        .icon-red { background:#fdedec; color:#b22222; } .icon-blue { background:#eaf2f8; color:#1a5276; }
+        .icon-green { background:#eafaf1; color:#145a32; } .icon-yellow { background:#fef9e7; color:#b7950b; }
+        .subtitle { color:var(--text-light); font-size:0.9rem; margin-bottom:18px; padding-left:44px; }
+        .ki-grid { display:flex; flex-direction:column; gap:14px; }
+        .ki-item { border:1px solid #f0ebe0; border-radius:var(--radius-sm); padding:14px 18px; background:#fefefe; }
+        .ki-title-row { font-weight:700; font-size:1rem; margin-bottom:6px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+        .badge { font-size:0.7rem; padding:3px 10px; border-radius:14px; font-weight:600; letter-spacing:0.3px; white-space:nowrap; }
+        .badge-core { background:#fdedec; color:#b22222; } .badge-num { background:#eaf2f8; color:#1a5276; } .badge-case { background:#eafaf1; color:#145a32; } .badge-trap { background:#fef9e7; color:#b7950b; }
+        .ki-content { color:var(--text-light); font-size:0.92rem; }
+        .kh { display:inline-block; background:var(--highlight); border:1px solid var(--highlight-border); padding:2px 8px; border-radius:4px; font-weight:600; color:#7d6608; margin:0 2px; font-size:0.9rem; }
+        .kh-red { background:#fdedec; border-color:#f5b7b1; color:#922b21; } .kh-blue { background:#eaf2f8; border-color:#aed6f1; color:#1a5276; } .kh-green { background:#eafaf1; border-color:#a3e4bc; color:#145a32; }
+        .example-block { background:var(--example-bg); border-left:3px solid var(--example-border); border-radius:0 var(--radius-sm) var(--radius-sm) 0; padding:12px 16px; margin-top:10px; font-size:0.9rem; color:#1e5a3a; }
+        .example-block .ex-label { font-weight:700; font-size:0.75rem; text-transform:uppercase; letter-spacing:0.5px; color:#1e8449; margin-bottom:4px; }
+        .example-block .ex-q { font-weight:600; color:#145a32; margin-bottom:3px; }
+        .example-block .ex-a { color:#2d6a4f; }
+        .info-table { width:100%; border-collapse:collapse; margin:8px 0; font-size:0.88rem; }
+        .info-table th { background:#fef9e7; text-align:left; padding:10px 14px; font-weight:700; border-bottom:2px solid #f0c040; color:#7d6608; }
+        .info-table td { padding:10px 14px; border-bottom:1px solid #f0ebe0; vertical-align:top; }
+        .info-table tr:hover td { background:#fefdf9; }
+        .quiz-wrap { border:2px solid #f0ebe0; border-radius:var(--radius-sm); padding:18px 20px; margin-top:12px; background:#fefefe; }
+        .quiz-wrap .q-type { font-size:0.78rem; font-weight:700; color:var(--accent); margin-bottom:4px; }
+        .quiz-wrap .q-text { font-weight:600; margin-bottom:12px; font-size:0.98rem; }
+        .opt-list { list-style:none; display:flex; flex-direction:column; gap:7px; }
+        .opt-list li { padding:10px 14px; border-radius:var(--radius-sm); cursor:pointer; border:2px solid #e9e4db; transition:all 0.2s; background:#fdfdfc; font-size:0.9rem; user-select:none; }
+        .opt-list li:hover { border-color:#c0b090; background:#fefdf9; }
+        .opt-list li.selected { border-color:#1a5276; background:#eaf2f8; font-weight:600; }
+        .opt-list li.correct { border-color:#1e8449 !important; background:#eafaf1 !important; color:#145a32 !important; }
+        .opt-list li.wrong { border-color:#b22222 !important; background:#fdedec !important; color:#922b21 !important; }
+        .opt-list li.disabled { pointer-events:none; opacity:0.85; }
+        .btn-row { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
+        .btn { display:inline-block; padding:10px 22px; border-radius:25px; font-weight:600; cursor:pointer; border:none; font-size:0.88rem; }
+        .btn-primary { background:var(--accent); color:#fff; } .btn-primary:hover { background:#8b1a1a; }
+        .btn-outline { background:#fff; color:var(--accent); border:2px solid var(--accent); } .btn-outline:hover { background:#fdedec; }
+        .explain-card { margin-top:12px; padding:14px 18px; border-radius:var(--radius-sm); display:none; font-size:0.9rem; line-height:1.7; }
+        .explain-card.show { display:block; }
+        .explain-card.correct-ex { background:#eafaf1; border:1px solid #a3e4bc; color:#145a32; }
+        .explain-card.wrong-ex { background:#fdedec; border:1px solid #f5b7b1; color:#922b21; }
+        .explain-card .ex-head { font-weight:700; margin-bottom:6px; font-size:0.95rem; }
+        @media (max-width:768px) {
+            .toc { transform:translateX(-260px); } .toc.show { transform:translateX(0); }
+            .toc-toggle { display:flex; } .main { max-width:100%; margin:0 auto; } .card { padding:18px 14px; }
+        }
+    </style>
+</head>
+<body>
+<button class="toc-toggle" id="tocToggle" aria-label="目录" onclick="toggleToc()">☰</button>
+<div class="toc-overlay" id="tocOverlay" onclick="closeToc()"></div>
+<nav class="toc" id="toc"><div class="toc-title">📑 警械武器+警察法 · 知识目录</div></nav>
+<div class="main" id="mainContent"></div>
+<script>
+const knowledgeData = [
+    // ==================== 模块一：警械武器条例·总则 ====================
+    {
+        id: 'mod1', iconClass: 'icon-red', iconEmoji: '📕',
+        title: '一、警械和武器条例 · 总则（第1-6条）',
+        subtitle: '立法目的 · 警械武器分类 · 使用原则 · 警告程序',
+        items: [
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core',
+              title: '1. 立法目的（第1条）——为什么要制定这个条例？',
+              content: '为了保障人民警察<span class="kh kh-red">依法履行职责</span>，<span class="kh kh-red">正确使用</span>警械和武器，<span class="kh kh-red">及时有效制止违法犯罪</span>，维护公共安全和社会秩序，保护公民人身安全和合法财产、公共财产。',
+              extra: '📌 关键词："依法""正确使用""及时有效制止"。不是不让用，而是规范怎么用。考试常以多选题出现，直接问立法目的。' },
+            { type: 'ki', badge: '必考', badgeClass: 'badge-core',
+              title: '2. 使用梯度原则（第2条）——从轻到重，层层递进',
+              content: '人民警察制止违法犯罪：<br>① 可以采取<span class="kh kh-blue">强制手段</span>（徒手/口头）<br>② 根据需要，可依照本条例使用<span class="kh kh-blue">警械</span><br>③ <span class="kh kh-red">使用警械不能制止</span>，或<span class="kh kh-red">不使用武器可能发生严重危害后果</span>的，可使用<span class="kh kh-red">武器</span>',
+              extra: '💡 口诀："徒手→警械→武器"，能轻则轻。只有警械搞不定或后果严重时，才能动枪。',
+              example: { q: '警察面对持刀歹徒，先用警棍未能制服，歹徒继续砍向群众，此时可以用枪吗？', a: '可以。因为使用警械不能制止，且不使用武器可能发生严重危害后果（群众生命安全受威胁）。' } },
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core',
+              title: '3. 警械 vs 武器的定义（第3条）——年年必考！',
+              content: '<span class="kh kh-red">警械</span>：警棍、催泪弹、高压水枪、特种防暴枪、手铐、脚镣、警绳等<span class="kh kh-red">非致命性</span>警用器械。<br><span class="kh kh-red">武器</span>：枪支、弹药等<span class="kh kh-red">致命性</span>警用武器。<br><span class="kh kh-red">关键区别</span>：警械不致命，武器致命。特种防暴枪属于<span class="kh kh-red">警械</span>，不是武器！',
+              extra: '📌 考试陷阱：①"特种防暴枪"虽然名字带"枪"，但属于警械！②"弹药"属于武器。③手铐、脚镣、警绳属于约束性警械。' },
+            { type: 'ki', badge: '重点', badgeClass: 'badge-num',
+              title: '4. 警械的四大分类（笨鸟点拨版）',
+              content: '<table class="info-table"><tr><th>类型</th><th>代表器械</th><th>功能</th></tr><tr><td><span class="kh kh-red">驱逐性</span></td><td>电击器、麻醉枪、爆震弹、闪光弹</td><td>赶走/驱散</td></tr><tr><td><span class="kh kh-blue">约束性</span></td><td>警绳、镣铐、手铐</td><td>限制行动</td></tr><tr><td><span class="kh kh-green">震慑性</span></td><td>警笛、警报器、红色回转警灯</td><td>警示威慑</td></tr><tr><td><span class="kh kh-yellow">自卫性</span></td><td>防弹衣、头盔、盾牌</td><td>保护自身</td></tr></table>',
+              extra: '💡 口诀："驱逐赶，约束绑，震慑响，自卫防"。驱逐性+制服性常用于警告无效后的主动制止。' },
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core',
+              title: '5. 使用原则（第4条）——贯穿全条例的"灵魂条款"',
+              content: '使用警械和武器，应当以<span class="kh kh-red">制止违法犯罪行为</span>为原则，<span class="kh kh-red">尽量减少人员伤亡和财产损失</span>。',
+              extra: '📌 两个关键词：①"制止"是目的（不是为了惩罚）；②"尽量减少"是义务（能少伤就少伤）。这条原则会反复出现在后面每一条中。' },
+            { type: 'ki', badge: '必考', badgeClass: 'badge-core',
+              title: '6. 依法使用受保护（第5条）+ 命令躲避（第6条）',
+              content: '<span class="kh kh-red">第5条</span>：依法使用警械武器的行为<span class="kh kh-red">受法律保护</span>；但<span class="kh kh-red">不得违反本条例规定</span>使用。<br><span class="kh kh-red">第6条</span>：使用前<span class="kh kh-red">应当命令在场无关人员躲避</span>；在场无关人员<span class="kh kh-red">应当服从</span>命令。',
+              extra: '📌 陷阱：①"依法"二字不能丢！判断题说"警察使用枪支的行为受法律保护"——错，缺"依法"。②命令躲避是"应当"，不是"可以"。' },
+            { type: 'ki', badge: '口诀', badgeClass: 'badge-trap',
+              title: '7. 总则核心数字速记',
+              content: '🔹 条例共<span class="kh kh-red">17条</span>，每年考<span class="kh kh-red">8~9题</span>，性价比极高<br>🔹 1980年第一部→1995年现行→至今近30年未改<br>🔹 警械=<span class="kh kh-red">非致命</span>；武器=<span class="kh kh-red">致命</span>（枪支弹药）<br>🔹 使用原则=<span class="kh kh-red">制止犯罪+减少伤亡财产损失</span>',
+              extra: '💡 这17条法条，考前一定要通读一遍！题干基本都是原文挖空或换说法。' }
+        ],
+        quizzes: [
+            { q: '下列哪项属于"武器"？', opts: ['A. 特种防暴枪', 'B. 弹药', 'C. 高压水枪', 'D. 催泪弹'], correct: 1, type: 'single', quizIndex: 1,
+              d: '<b>A</b>：错误。特种防暴枪属于警械（驱逐性/制服性），虽然名字带"枪"，但不是武器。<br><b>B</b>：正确。弹药与枪支同属致命性警用武器。<br><b>C</b>：错误。高压水枪属于警械。<br><b>D</b>：错误。催泪弹属于警械（驱逐性）。',
+              t: '武器=枪支+弹药，其他带"枪"字的（特种防暴枪、高压水枪）都是警械！' },
+            { q: '人民警察使用警械和武器的根本原则是？', opts: ['A. 从严打击犯罪', 'B. 以制止违法犯罪行为为原则，尽量减少人员伤亡和财产损失', 'C. 先警告后使用', 'D. 上级批准方可使用'], correct: 1, type: 'single', quizIndex: 2,
+              d: '<b>A</b>：错误。不是"从严打击"，而是"制止"。<br><b>B</b>：正确。第4条原文。<br><b>C</b>：错误。警告是程序，不是原则。<br><b>D</b>：错误。紧急情况可先使用后报告。',
+              t: '原则就两个关键词："制止犯罪"+"减少伤亡财产损失"。记住第4条！' },
+            { q: '人民警察使用警械和武器前，应当命令在场无关人员躲避。这体现的是哪条原则？', opts: ['A. 从严打击', 'B. 尽量减少人员伤亡', 'C. 快速处置', 'D. 依法履职'], correct: 1, type: 'single', quizIndex: 3,
+              d: '<b>A</b>：错误。<br><b>B</b>：正确。命令躲避是为了避免误伤无辜，体现了"尽量减少人员伤亡"原则。<br><b>C</b>：错误。<br><b>D</b>：错误。',
+              t: '让人躲开=怕伤到人=减少人员伤亡。' }
+        ]
+    },
+    // ==================== 模块二：警械的使用 ====================
+    {
+        id: 'mod2', iconClass: 'icon-blue', iconEmoji: '🪖',
+        title: '二、警械的使用（第7-8条）',
+        subtitle: '驱逐性制服性警械 · 约束性警械 · 使用限度',
+        items: [
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core',
+              title: '1. 使用驱逐性/制服性警械的法定情形（第7条）',
+              content: '<span class="kh kh-red">前提：经警告无效</span>，可使用警棍、催泪弹、高压水枪、特种防暴枪等。<br>情形包括：<br>① 结伙斗殴、殴打他人、寻衅滋事、侮辱妇女或其他流氓活动<br>② 聚众扰乱车站、码头、航空站、运动场等公共场所秩序<br>③ 非法举行集会、游行、示威<br>④ 强行冲越警戒线<br>⑤ 以暴力方法抗拒或阻碍警察依法履职<br>⑥ <span class="kh kh-red">袭击人民警察</span><br>⑦ 危害公共安全等需当场制止的行为',
+              extra: '📌 口诀："斗殴扰乱非集会，冲线抗法袭警察"。注意：必须是"经警告无效"才能用！' },
+            { type: 'ki', badge: '必考', badgeClass: 'badge-core',
+              title: '2. 使用约束性警械的法定情形（第8条）',
+              content: '<span class="kh kh-red">前提：违法犯罪分子可能脱逃、行凶、自杀、自伤</span>或有其他危险行为。<br>可使用手铐、脚镣、警绳等。<br>适用场景：<br>① 抓获违法犯罪分子或<span class="kh kh-red">重大犯罪嫌疑人</span><br>② 执行逮捕、拘留、看押、押解、审讯、拘传、<span class="kh kh-red">强制传唤</span><br>③ 其他法定情形<br><span class="kh kh-red">注意：不得故意造成人身伤害。</span>',
+              extra: '💡 约束性警械=限制行动自由，通常在控制住嫌疑人后使用。区别于驱逐性（迫使停止行为）。' },
+            { type: 'ki', badge: '重点', badgeClass: 'badge-num',
+              title: '3. 警械使用限度——"得了就停"',
+              content: '使用警械<span class="kh kh-red">以制止违法犯罪为限度</span>。一旦违法犯罪行为<span class="kh kh-red">得到制止</span>，应当<span class="kh kh-red">立即停止</span>使用。',
+              extra: '📌 关键词："制止"是目的，达到了就停。不能对方已经投降了还继续打。' },
+            { type: 'ki', badge: '陷阱', badgeClass: 'badge-trap',
+              title: '4. 常见出题陷阱总结',
+              content: '① 选项说"应当警告三次后方可使用警械"——错，法条只说"经警告无效"，<span class="kh kh-red">没规定次数</span>。<br>② 选项说"警械可以随意使用"——错，必须<span class="kh kh-red">符合法定情形</span>。<br>③ 选项说"约束性警械可以故意造成伤害"——错，<span class="kh kh-red">不得故意</span>造成人身伤害。<br>④ 选项说"驱逐性警械不需要警告"——错，前提是<span class="kh kh-red">经警告无效</span>。',
+              extra: '💡 判断题最爱在上面这些地方"偷换概念"。' }
+        ],
+        quizzes: [
+            { q: '下列哪项情形，经警告无效后可以使用驱逐性、制服性警械？', opts: ['A. 小偷在公交车上扒窃被发现后逃跑', 'B. 非法举行集会游行示威', 'C. 醉酒后在路边睡觉', 'D. 两人因纠纷互相推搡但未动手'], correct: 1, type: 'single', quizIndex: 4,
+              d: '<b>A</b>：错误。扒窃逃跑不属于第7条列举的情形，且逃跑一般不直接用驱逐性警械。<br><b>B</b>：正确。非法举行集会游行示威，属于第7条第(三)项。<br><b>C</b>：错误。醉酒睡觉没有危害行为。<br><b>D</b>：错误。推搡但未动手，情节轻微，不需要驱逐性警械。',
+              t: '"非法集会游行示威"是法条原文，直接入选。其他三项都不够格。' },
+            { q: '人民警察在什么情况下可以使用手铐等约束性警械？', opts: ['A. 对违反交通规则的行人', 'B. 对可能脱逃的重大犯罪嫌疑人', 'C. 对在公园大声喧哗的老人', 'D. 对拒绝出示身份证的路人'], correct: 1, type: 'single', quizIndex: 5,
+              d: '<b>A</b>：错误。交通违规不适用约束性警械。<br><b>B</b>：正确。可能脱逃的重大犯罪嫌疑人属于第8条情形。<br><b>C</b>：错误。喧哗不构成约束条件。<br><b>D</b>：错误。拒绝出示身份证不一定有危险行为。',
+              t: '约束性警械=怕他跑、怕他伤人、怕他自杀自伤。"重大犯罪嫌疑人"最符合。' }
+        ]
+    },
+,
+    // ==================== 模块三：武器的使用 ====================
+    {
+        id: 'mod3', iconClass: 'icon-green', iconEmoji: '🔫',
+        title: '三、武器的使用（第9-15条）',
+        subtitle: '使用武器的法定情形 · 禁止使用 · 立即停止 · 善后处理 · 法律责任',
+        items: [
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core',
+              title: '1. 可使用武器的15种暴力犯罪情形（第9条）',
+              content: '<span class="kh kh-red">前提：判明暴力犯罪紧急情形 + 经警告无效</span><br>① 放火、决水、爆炸等严重危害公共安全<br>② 劫持航空器、船舰、火车、机动车等<br>③ 抢夺抢劫枪支弹药、爆炸、剧毒等危险物品<br>④ 使用枪支/爆炸/剧毒实施犯罪或以此相威胁<br>⑤ 破坏军事、通讯、交通、能源等重要设施<br>⑥ 实施凶杀、劫持人质等危及生命安全<br>⑦ 警卫目标受暴力袭击<br>⑧ 结伙抢劫或持械抢劫<br>⑨ 聚众械斗、暴乱用其他方法不能制止<br>⑩ 暴力抗拒/阻碍警察履职或暴力袭警<span class="kh kh-red">危及警察生命安全</span><br>⑪ 在押人犯聚众骚乱、暴乱、行凶、脱逃<br>⑫ 劫夺在押人犯<br>⑬ 实施严重暴力犯罪后拒捕逃跑<br>⑭ 携带枪支/爆炸/剧毒拒捕逃跑<br>⑮ 其他法定情形',
+              extra: '📌 口诀："火水爆劫持，枪爆毒设施，凶杀劫持人，警卫结伙抢，聚众暴乱抗，人犯劫夺跑，携带危险跑"。核心：都是严重暴力犯罪，危及生命或重大公共安全。' },
+            { type: 'ki', badge: '必考', badgeClass: 'badge-core',
+              title: '2. 可直接使用武器的例外——来不及警告（第9条第二款）',
+              content: '<span class="kh kh-red">来不及警告</span>或<span class="kh kh-red">警告后可能导致更严重危害后果</span>的，可以<span class="kh kh-red">直接使用武器</span>。',
+              extra: '💡 典型场景：歹徒正挥刀砍向群众，你喊"别动"的功夫他可能已经砍下去了——这种情况不需要警告，直接开枪。',
+              example: { q: '警察赶到现场，发现一名男子正持刀连续砍向倒在地上的受害人。警察可以直接开枪吗？', a: '可以。这种情况属于"来不及警告"，如果警告可能导致更严重的危害后果（受害人被砍死），可以直接使用武器。' } },
+            { type: 'ki', badge: '必考', badgeClass: 'badge-core',
+              title: '3. 不得使用武器的两种情形（第10条）——各有一个例外！',
+              content: '🔹 情形一：发现实施犯罪的人是<span class="kh kh-red">怀孕妇女、儿童</span>——不得使用武器。<br>　　例外：使用<span class="kh kh-red">枪支、爆炸、剧毒</span>等危险物品实施暴力犯罪的除外。<br>🔹 情形二：犯罪分子处于<span class="kh kh-red">群众聚集场所</span>或<span class="kh kh-red">存放大量易燃易爆、剧毒、放射性物品场所</span>——不得使用武器。<br>　　例外：<span class="kh kh-red">不使用武器将发生更严重危害后果</span>的除外。',
+              extra: '📌 记忆："孕妇儿童一般不打（除非拿枪爆毒），人多危险品处一般不开枪（除非不开更惨）"。两个"不得"都有一个"但书"。' },
+            { type: 'ki', badge: '重点', badgeClass: 'badge-num',
+              title: '4. 应当立即停止使用武器的情形（第11条）',
+              content: '① 犯罪分子<span class="kh kh-red">停止实施犯罪</span>，<span class="kh kh-red">服从</span>警察命令<br>② 犯罪分子<span class="kh kh-red">失去继续实施犯罪能力</span>',
+              extra: '⚠️ 陷阱：必须是"停止犯罪"+"服从命令"两个条件同时满足！只看"停了"不看"服不服从"是错的。案例：歹徒砍完人停了，但叫他放下刀他不放，不能停止。' },
+            { type: 'ki', badge: '重点', badgeClass: 'badge-num',
+              title: '5. 使用武器后的善后处理（第12-13条）',
+              content: '<span class="kh kh-red">（一）当场处理</span>：① 及时抢救受伤人员（包括犯罪分子和无辜人员）；② 保护现场；③ <span class="kh kh-red">立即</span>向当地公安机关或所属机关报告。<br><span class="kh kh-red">（二）机关处理</span>：接到报告后① 及时勘验调查；② <span class="kh kh-red">及时通知当地人民检察院</span>；③ 及时通知伤亡人员家属或单位。<br><span class="kh kh-red">（三）书面报告</span>：使用武器的情况<span class="kh kh-red">如实书面报告</span>所属机关（口头不行）。',
+              extra: '📌 顺序：抢救→保护→报告。通知检察院是"机关"做的事，不是现场警察做的事。现场警察只需报告。' },
+            { type: 'ki', badge: '必考', badgeClass: 'badge-core',
+              title: '6. 法律责任——"违法"赔偿 vs "依法"补偿（第14-15条）',
+              content: '<span class="kh kh-red">违法使用</span>警械武器造成不应有伤亡损失的：① 构成犯罪→追究刑事责任；② 不构成犯罪→行政处分；③ <span class="kh kh-red">依照</span>《国家赔偿法》<span class="kh kh-red">赔偿</span>。<br><span class="kh kh-red">依法使用</span>警械武器造成无辜伤亡损失的：由所属机关<span class="kh kh-red">参照</span>《国家赔偿法》<span class="kh kh-red">补偿</span>。',
+              extra: '📌 关键词区分："违法→依照→赔偿"；"依法→参照→补偿"。"依照"是直接依据，"参照"是参考。没有专门的《国家补偿法》，补偿参照赔偿法程序。' }
+        ],
+        quizzes: [
+            { q: '下列哪种情形，经警告无效后可以使用武器？', opts: ['A. 小偷在商场扒窃', 'B. 劫持航空器故意危害公共安全', 'C. 非法举行集会游行', 'D. 两人打架斗殴'], correct: 1, type: 'single', quizIndex: 6,
+              d: '<b>A</b>：错误。扒窃是财产犯罪，不危及生命安全，不适用武器。<br><b>B</b>：正确。劫持航空器属于第9条第(二)项，是严重暴力犯罪。<br><b>C</b>：错误。非法集会游行适用驱逐性警械，不适用武器。<br><b>D</b>：错误。打架斗殴适用警械。',
+              t: '武器=严重暴力犯罪、危及生命。劫机是典型可用武器的情形。' },
+            { q: '发现实施犯罪的人为怀孕妇女，人民警察能否使用武器？', opts: ['A. 一律不能', 'B. 如果她使用枪支实施暴力犯罪，可以使用', 'C. 需要上级批准后才能使用', 'D. 只要警告无效就可以使用'], correct: 1, type: 'single', quizIndex: 7,
+              d: '<b>A</b>：错误。有例外——使用危险物品实施暴力犯罪时可用。<br><b>B</b>：正确。第10条的"但书"：使用枪支、爆炸、剧毒实施暴力犯罪的除外。<br><b>C</b>：错误。法条无此规定。<br><b>D</b>：错误。一般情况孕妇儿童不得使用武器。',
+              t: '孕妇一般不打，但她拿枪扫射时——必须打！这是唯一的例外。' },
+            { q: '人民警察使用武器造成犯罪分子伤亡的，应当及时通知哪个机关？', opts: ['A. 当地人民政府', 'B. 当地人民检察院', 'C. 当地人民法院', 'D. 上级公安机关'], correct: 1, type: 'single', quizIndex: 8,
+              d: '<b>A</b>：错误。<br><b>B</b>：正确。第12条规定，接到报告后应及时通知当地人民检察院（检察院是法律监督机关）。<br><b>C</b>：错误。<br><b>D</b>：错误。',
+              t: '检察院=法律监督机关。通知它是让它监督你开枪是否合法。' },
+            { q: '人民警察依法使用武器造成无辜人员伤亡的，应如何处理？', opts: ['A. 由警察个人赔偿', 'B. 由所属机关依照国家赔偿法赔偿', 'C. 由所属机关参照国家赔偿法补偿', 'D. 不予处理'], correct: 2, type: 'single', quizIndex: 9,
+              d: '<b>A</b>：错误。<br><b>B</b>：错误。"赔偿"对应违法使用，"依法"使用用"补偿"。<br><b>C</b>：正确。第15条：依法使用造成无辜伤亡=参照国家赔偿法补偿。<br><b>D</b>：错误。',
+              t: '"违法→赔偿"；"依法→补偿"。一字之差，完全不同的法律后果。' },
+            { q: '犯罪分子停止实施犯罪但拒不服从警察命令，警察能否继续使用武器？', opts: ['A. 应当立即停止', 'B. 可以继续使用', 'C. 视情况而定', 'D. 必须鸣枪示警后再停止'], correct: 1, type: 'single', quizIndex: 10,
+              d: '<b>A</b>：错误。停止使用武器需同时满足"停止犯罪"+"服从命令"两个条件。<br><b>B</b>：正确。只停止犯罪但不服从命令，不符合第11条停止条件，可继续使用。<br><b>C</b>：不够准确。<br><b>D</b>：错误。',
+              t: '停了但不听话=还没完！必须"停了+服了"才能停止使用武器。' }
+        ]
+    },
+    // ==================== 模块四：人民警察法核心考点 ====================
+    {
+        id: 'mod4', iconClass: 'icon-yellow', iconEmoji: '👮',
+        title: '四、人民警察法核心考点',
+        subtitle: '继续盘问 · 职责 · 命令执行 · 辞退 · 奖励 · 优先权 · 现场管制',
+        items: [
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core',
+              title: '1. 继续盘问（留置）——第9条，最多11个出题角度！',
+              content: '<span class="kh kh-red">当场盘问</span>：出示证件 + <span class="kh kh-red">可以</span>（不是应当）盘问检查。<br><span class="kh kh-red">继续盘问适用情形</span>（4种）：① 被指控有犯罪行为；② 有现场作案嫌疑；③ 有作案嫌疑身份不明；④ 携带物品可能是赃物。<br><span class="kh kh-red">批准机关</span>：<span class="kh kh-red">该公安机关</span>（包括派出所、业务部门）。<br><span class="kh kh-red">留置时间</span>：自带至公安机关之时起，一般≤24小时；特殊情况经<span class="kh kh-red">县级以上公安机关</span>批准可延长至48小时。<br><span class="kh kh-red">注意</span>：批准延长后应<span class="kh kh-red">立即</span>通知家属；不批准应<span class="kh kh-red">立即</span>释放。',
+              extra: '📌 关键区别：①"该公安机关"（含派出所）批准继续盘问 vs "县级以上公安机关"批准延长。②"延长至48小时"≠"延长48小时"。③从"带至公安机关之时"起算。' },
+            { type: 'ki', badge: '必考', badgeClass: 'badge-core',
+              title: '2. 公安机关人民警察的职责（第6条）',
+              content: '14项法定职责，常考：<br>🔹 侦查违法犯罪（刑事案件）<br>🔹 维护社会治安、交通秩序<br>🔹 <span class="kh kh-red">消防工作已移交应急管理部门</span>（2018年改革）<br>🔹 管理枪支弹药、危险物品、特种行业<br>🔹 管理户政、国籍、出入境、外国人事务<br>🔹 <span class="kh kh-red">执行刑罚</span>：拘役、剥夺政治权利、<span class="kh kh-red">剩余刑期不足3个月</span>的有期徒刑、驱逐出境<br>🔹 指导和监督治安保卫工作（注意是"指导"不是"负责"）',
+              extra: '📌 陷阱：①消防"组织实施"已不是公安职责；②轻伤案件不可调解（已构成刑事案件）；③"指导"治安保卫工作≠"负责"。' },
+            { type: 'ki', badge: '重点', badgeClass: 'badge-num',
+              title: '3. 执行上级命令与拒绝执行（第32-33条）',
+              content: '<span class="kh kh-red">第32条</span>：<span class="kh kh-red">必须执行</span>上级决定和命令。可提出意见，但<span class="kh kh-red">不得中止或改变</span>执行；意见不被采纳必须服从；执行后果由<span class="kh kh-red">上级负责</span>。<br><span class="kh kh-red">第33条</span>：对<span class="kh kh-red">超越法律法规</span>的指令，有权<span class="kh kh-red">拒绝执行</span>，并同时向<span class="kh kh-red">上级机关</span>报告。',
+              extra: '📌 关键词："必须执行"≠"可以执行"；责任在上级；超越法律的指令（如刑讯逼供）有权拒绝并向上级报告。' },
+            { type: 'ki', badge: '重点', badgeClass: 'badge-num',
+              title: '4. 辞退条件与不得辞退情形',
+              content: '<span class="kh kh-red">应当辞退</span>（5种）：①连续两年考核不称职；②不胜任现职又不接受其他安排；③拒绝合理工作调整；④不履行义务守纪律经教育无转变；⑤旷工连续超15天或1年累计超30天。<br><span class="kh kh-red">不得辞退</span>：①因公致残丧失或部分丧失工作能力；②患病或负伤在医疗期；③女性在孕期、产假、哺乳期。',
+              extra: '📌 数字："两年不称职、15天连续旷、30天累计旷"。保护对象："残、病、孕"。' },
+            { type: 'ki', badge: '必考', badgeClass: 'badge-core',
+              title: '5. 奖励种类与优先权/现场管制',
+              content: '<span class="kh kh-red">奖励</span>（5级）：嘉奖→三等功→二等功→一等功→授予荣誉称号。<span class="kh kh-red">晋升警衔不属于奖励</span>。<br><span class="kh kh-red">优先通行权</span>：交通阻碍时优先通行，需<span class="kh kh-red">出示证件</span>。<br><span class="kh kh-red">优先使用权</span>：因<span class="kh kh-red">侦查犯罪</span>需要可优先使用交通工具等，用后<span class="kh kh-red">应支付费用</span>。<br><span class="kh kh-red">交通管制</span>：<span class="kh kh-red">县级以上公安机关</span>为制止<span class="kh kh-red">严重</span>危害社会治安秩序行为可实施。<br><span class="kh kh-red">现场管制</span>：经<span class="kh kh-red">上级公安机关和同级政府批准</span>。',
+              extra: '📌 陷阱：①征用必须支付费用（不能无偿）；②交通管制是"可以"不是"应当"；③现场管制需双批准（上级公安+同级政府）。' },
+            { type: 'ki', badge: '陷阱', badgeClass: 'badge-trap',
+              title: '6. 易错点——"可以" vs "应当" vs "必须"',
+              content: '🔹 当场盘问检查：<span class="kh kh-red">可以</span>（不是应当/必须）<br>🔹 执行上级命令：<span class="kh kh-red">必须执行</span>（不是可以）<br>🔹 交通管制：<span class="kh kh-red">可以</span>实行（不是应当）<br>🔹 继续盘问通知家属：<span class="kh kh-red">应当立即</span>（不是及时）<br>🔹 武器书面报告：<span class="kh kh-red">应当如实</span>（口头不行）<br>🔹 非工作时间遇紧急情况：<span class="kh kh-red">应当履行职责</span>',
+              extra: '💡 "可以"=有裁量权；"应当/必须"=义务。判断题常在这些词上做文章。' }
+        ],
+        quizzes: [
+            { q: '根据《人民警察法》，对被盘问人的留置时间一般不超过多少小时？', opts: ['A. 8小时', 'B. 12小时', 'C. 24小时', 'D. 48小时'], correct: 2, type: 'single', quizIndex: 11,
+              d: '<b>A</b>：错误。8小时是询问查证时间。<br><b>B</b>：错误。<br><b>C</b>：正确。一般不超过24小时。<br><b>D</b>：错误。48小时是延长后的最长时限。',
+              t: '一般24小时，县级公安批准可延长至48小时。从"带至公安机关之时"起算。' },
+            { q: '根据《人民警察法》，下列哪项不属于公安机关人民警察的职责？', opts: ['A. 侦查刑事案件', 'B. 调解轻伤案件', 'C. 处理交通事故', 'D. 管理户政事务'], correct: 1, type: 'single', quizIndex: 12,
+              d: '<b>A</b>：属于职责。<br><b>B</b>：不属于。轻伤已构成刑事案件，不可调解。治安案件轻微伤才可调解。<br><b>C</b>：属于职责。<br><b>D</b>：属于职责。',
+              t: '轻伤=刑事案件，警察只能侦查不能调解。"调解"是针对治安案件中的轻微伤。' },
+            { q: '人民警察认为上级决定有错误，正确的做法是？', opts: ['A. 拒绝执行', 'B. 可以提出意见，但不得中止执行', 'C. 先执行再投诉', 'D. 自行改变执行方式'], correct: 1, type: 'single', quizIndex: 13,
+              d: '<b>A</b>：错误。必须执行，除非超越法律。<br><b>B</b>：正确。第32条：可提出意见，不得中止或改变执行。<br><b>C</b>：错误。表述不准确。<br><b>D</b>：错误。不得改变执行。',
+              t: '有意见可以提，但活不能停。除非上级叫你干违法的事（如刑讯逼供），才有权拒绝。' },
+            { q: '人民警察非工作时间遇其职责范围内的紧急情况，应如何处理？', opts: ['A. 可以不予理会', 'B. 应当履行职责', 'C. 等上班后再处理', 'D. 通知值班同事处理即可'], correct: 1, type: 'single', quizIndex: 14,
+              d: '<b>A</b>：错误。<br><b>B</b>：正确。第19条：非工作时间遇职责范围内紧急情况，应当履行职责。<br><b>C</b>：错误。<br><b>D</b>：错误。',
+              t: '下班了也是警察！遇到紧急情况必须管，这叫"fate on duty"。' },
+            { q: '实行现场管制需要经过谁批准？', opts: ['A. 只需上级公安机关批准', 'B. 只需同级人民政府批准', 'C. 上级公安机关和同级人民政府批准', 'D. 公安机关负责人直接决定'], correct: 2, type: 'single', quizIndex: 15,
+              d: '<b>A</b>：不全面。<br><b>B</b>：不全面。<br><b>C</b>：正确。第17条：上级公安机关+同级人民政府双批准。<br><b>D</b>：错误。',
+              t: '现场管制=大动作，需要两个"婆婆"都点头：上级公安+同级政府。' }
+        ]
+    },
+,
+    // ==================== 模块五：公安基础知识 ====================
+    {
+        id: 'mod5', iconClass: 'icon-red', iconEmoji: '🏛️',
+        title: '五、公安基础知识',
+        subtitle: '性质 · 职能 · 任务 · 路线方针政策 · 职业道德 · 纪律',
+        items: [
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core',
+              title: '1. 公安机关的性质（一句话记住）',
+              content: '公安机关是<span class="kh kh-red">人民民主专政的重要工具</span>（阶级属性/根本属性），是<span class="kh kh-red">武装性质</span>（组织属性）的国家<span class="kh kh-red">治安行政力量</span>和<span class="kh kh-red">刑事司法力量</span>。<br><span class="kh kh-red">注意</span>：不是"武装力量"（武装力量=解放军+武警+民兵）。',
+              extra: '📌 口诀："专政工具是灵魂，武装性质是身体，治安刑事两职能"。根本属性=人民民主专政的重要工具。' },
+            { type: 'ki', badge: '必考', badgeClass: 'badge-core',
+              title: '2. 公安机关的两大基本职能——专政 vs 民主',
+              content: '<span class="kh kh-red">专政职能</span>：目的=保卫人民民主专政政权、巩固社会主义制度；对象=<span class="kh kh-red">敌对势力、敌对分子、严重刑事犯罪分子</span>；手段=打击、制裁、改造、监督并用。<br><span class="kh kh-red">民主职能</span>：保障人民享有宪法法律规定的民主权利；保障人民参与国家事务管理；用民主方法处理人民内部矛盾；依靠群众搞公安工作；全心全意为人民服务。<br><span class="kh kh-red">二者关系</span>：专政是民主的保障，民主是专政的基础，相辅相成。',
+              extra: '📌 陷阱：①专政对象≠一般违反治安管理的人（那是行政管理的对象）；②题目说"拘留小偷体现专政职能"——错，小偷不够格。' },
+            { type: 'ki', badge: '重点', badgeClass: 'badge-num',
+              title: '3. 公安机关的任务（5项，有层次）',
+              content: '① <span class="kh kh-red">维护国家安全</span>（<span class="kh kh-red">首要任务</span>）<br>② 维护社会治安秩序<br>③ 保护公民人身安全和人身自由<br>④ 保护公共财产和公民合法财产<br>⑤ 预防、制止和惩治违法犯罪活动（事前预防→事中制止→事后惩治）',
+              extra: '📌 逻辑：国家安全>社会治安>个人安全。没有国家安全，其他都无从谈起。' },
+            { type: 'ki', badge: '必考', badgeClass: 'badge-core',
+              title: '4. 公安工作的根本原则、根本路线、基本方针——三个"根本/基本"别搞混',
+              content: '<span class="kh kh-red">根本原则</span>：坚持党对公安工作的<span class="kh kh-red">绝对领导</span>（无条件、全面、直接）<br><span class="kh kh-red">根本路线</span>：<span class="kh kh-red">群众路线</span>——一切为了群众（出发点），一切依靠群众（根本态度），从群众中来、到群众中去（基本方法）<br><span class="kh kh-red">基本方针</span>：党委领导下的<span class="kh kh-red">专门机关与广大群众相结合</span>（专群结合）',
+              extra: '📌 口诀："原则=党领导，路线=群众路，方针=专群结合"。' },
+            { type: 'ki', badge: '重点', badgeClass: 'badge-num',
+              title: '5. 公安工作的六项基本政策',
+              content: '① 严肃与谨慎相结合（刑事）——总精神：<span class="kh kh-red">不枉不纵</span><br>② 惩办与宽大相结合/宽严相济（刑事）——认罪认罚从宽<br>③ 依法从重从快惩处严重刑事犯罪分子<br>④ 重证据、重调查研究，<span class="kh kh-red">严禁刑讯逼供</span><br>⑤ 教育与惩罚相结合（治安）——教育是基本手段，处罚是必要手段<br>⑥ 尊重和保障人权',
+              extra: '📌 口诀："严肃谨慎不枉纵，宽严相济认罪从宽，从重从快打严重，重证据禁逼供，教育处罚相结合，保障人权贯始终"。' },
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core',
+              title: '6. 人民警察职业道德规范（10项）——抽关键词记',
+              content: '① <span class="kh kh-red">忠诚可靠</span>：听党指挥，热爱人民，忠于法律<br>② <span class="kh kh-red">秉公执法</span>：事实为据，秉持公正，惩恶扬善<br>③ 英勇善战：坚韧不拔，机智果敢，崇尚荣誉<br>④ 热诚服务：情系民生，服务社会，热情周到<br>⑤ 文明理性：理性平和，文明礼貌，诚信友善<br>⑥ 严守纪律：遵章守纪，保守秘密，令行禁止<br>⑦ <span class="kh kh-red">爱岗敬业</span>：恪尽职守，勤学善思，精益求精<br>⑧ 甘于奉献：任劳任怨，顾全大局，献身使命<br>⑨ 清正廉洁：艰苦朴素，情趣健康，克己奉公<br>⑩ 团结协作：精诚合作，勇于担当，积极向上',
+              extra: '📌 常考案例匹配：如"警察下班后学习法律知识提升执法能力"→爱岗敬业；"面对危险冲锋在前"→英勇善战；"拒收群众送的烟酒"→清正廉洁。' },
+            { type: 'ki', badge: '必考', badgeClass: 'badge-core',
+              title: '7. 五条禁令——每条都有处罚后果！',
+              content: '<table class="info-table"><tr><th>禁令</th><th>违者</th><th>严重后果</th></tr><tr><td>①严禁违反枪支管理使用规定</td><td>纪律处分</td><td>辞退或开除</td></tr><tr><td>②严禁携带枪支饮酒</td><td><span class="kh kh-red">辞退</span></td><td>开除</td></tr><tr><td>③严禁酒后驾驶机动车</td><td><span class="kh kh-red">辞退</span></td><td>开除</td></tr><tr><td>④严禁在工作时间饮酒</td><td>纪律处分</td><td>辞退或开除</td></tr><tr><td>⑤严禁参与赌博</td><td><span class="kh kh-red">辞退</span></td><td>开除（情节严重）</td></tr></table>',
+              extra: '📌 规律：②③⑤直接辞退（最严厉）；①④先处分再升级。"造成严重后果的予以开除"的有①②③④。' },
+            { type: 'ki', badge: '重点', badgeClass: 'badge-num',
+              title: '8. "四统一"与"五规范"',
+              content: '<span class="kh kh-red">四统一</span>：统一考录制度、统一训练标准、统一纪律要求、统一外观标识<br><span class="kh kh-red">五规范</span>：规范机构设置、规范职务序列、规范编制管理、规范执法执勤、规范行为举止',
+              extra: '📌 口诀："四统=考入纪外；五规=机职编执行"。注意：晋升警衔不属于奖励，属于正常职务管理。' }
+        ],
+        quizzes: [
+            { q: '公安机关的根本属性是什么？', opts: ['A. 武装性质', 'B. 治安行政力量', 'C. 人民民主专政的重要工具', 'D. 刑事司法力量'], correct: 2, type: 'single', quizIndex: 16,
+              d: '<b>A</b>：错误。武装性质是组织属性。<br><b>B</b>：错误。治安行政力量是职能属性。<br><b>C</b>：正确。人民民主专政的重要工具是阶级属性/根本属性。<br><b>D</b>：错误。刑事司法力量是职能属性。',
+              t: '问"根本属性"就选"人民民主专政的重要工具"，这是公安机关的"灵魂"。' },
+            { q: '公安工作的根本原则是什么？', opts: ['A. 群众路线', 'B. 专群结合', 'C. 坚持党对公安工作的绝对领导', 'D. 全心全意为人民服务'], correct: 2, type: 'single', quizIndex: 17,
+              d: '<b>A</b>：错误。群众路线是根本路线。<br><b>B</b>：错误。专群结合是基本方针。<br><b>C</b>：正确。根本原则=党对公安工作的绝对领导。<br><b>D</b>：错误。这是宗旨。',
+              t: '原则=党领导；路线=群众路线；方针=专群结合。三个概念别搞混。' },
+            { q: '根据五条禁令，民警携带枪支饮酒的，应如何处理？', opts: ['A. 警告', 'B. 纪律处分', 'C. 辞退', 'D. 记过'], correct: 2, type: 'single', quizIndex: 18,
+              d: '<b>A</b>：错误。<br><b>B</b>：错误。④工作时间饮酒才是纪律处分。<br><b>C</b>：正确。携带枪支饮酒=直接辞退。<br><b>D</b>：错误。',
+              t: '②③⑤=直接辞退！枪+酒=高压线中的高压线。' },
+            { q: '人民警察职业道德中，"恪尽职守，勤学善思，精益求精"属于哪一项？', opts: ['A. 忠诚可靠', 'B. 秉公执法', 'C. 爱岗敬业', 'D. 甘于奉献'], correct: 2, type: 'single', quizIndex: 19,
+              d: '<b>A</b>：忠诚可靠="听党指挥，热爱人民，忠于法律"。<br><b>B</b>：秉公执法="事实为据，秉持公正，惩恶扬善"。<br><b>C</b>：正确。爱岗敬业="恪尽职守，勤学善思，精益求精"。<br><b>D</b>：甘于奉献="任劳任怨，顾全大局，献身使命"。',
+              t: '看到"勤学善思""精益求精"就知道是"爱岗敬业"——热爱岗位才会不断学习提升。' },
+            { q: '下列哪项属于公安机关的首要任务？', opts: ['A. 维护社会治安秩序', 'B. 维护国家安全', 'C. 保护公民人身安全', 'D. 预防违法犯罪'], correct: 1, type: 'single', quizIndex: 20,
+              d: '<b>A</b>：属于任务但不是首要。<br><b>B</b>：正确。维护国家安全是首要任务。<br><b>C</b>：属于任务但不是首要。<br><b>D</b>：属于任务但不是首要。',
+              t: '国家安全>一切。国家不安全，其他都白搭。' }
+        ]
+    },
+        // ==================== 模块六：综合练习（单选20道） ====================
+    {
+        id: 'mod_final', iconClass: 'icon-red', iconEmoji: '🏆',
+        title: '综合练习 · 单选题20道',
+        subtitle: '覆盖：警械武器条例 · 人民警察法 · 公安基础知识',
+        quizzes: [
+            { q: '下列哪项属于"警械"而非"武器"？', opts: ['A. 弹药', 'B. 特种防暴枪', 'C. 枪支', 'D. 步枪'], correct: 1, type: 'single', quizIndex: 21,
+              d: '<b>A</b>：错误。弹药与枪支配套，属于致命性武器，直接归为"武器"范畴。<br><b>B</b>：正确。特种防暴枪虽然名字里带"枪"，但根据条例属于驱逐性、制服性警械，是非致命性的。<br><b>C</b>：错误。枪支是典型的致命性武器。<br><b>D</b>：错误。步枪属于枪支的一种，是武器。',
+              t: '带"枪"字的不一定都是武器！特种防暴枪其实是警械，用来发射催泪弹、爆震弹的，不致命。' },
+            { q: '人民警察使用警械和武器的根本原则是什么？', opts: ['A. 从严打击犯罪', 'B. 以制止违法犯罪为原则，尽量减少人员伤亡和财产损失', 'C. 先警告后使用', 'D. 经上级批准方可使用'], correct: 1, type: 'single', quizIndex: 22,
+              d: '<b>A</b>：错误。警械武器的使用目的是"制止"而非"打击"，更不是"从严"。<br><b>B</b>：正确。这是条例第4条的原文，是整个条例的"灵魂条款"。<br><b>C</b>：错误。警告是程序性要求，不是根本原则。<br><b>D</b>：错误。紧急情况下可先使用后报告，并非一律需上级批准。',
+              t: '根本原则就两条：①目的是制止犯罪；②过程中尽量别伤人、别毁东西。记住第4条！' },
+            { q: '下列哪种情形，经警告无效后可以使用武器？', opts: ['A. 非法集会游行', 'B. 结伙斗殴', 'C. 劫持航空器危害公共安全', 'D. 侮辱妇女'], correct: 2, type: 'single', quizIndex: 23,
+              d: '<b>A</b>：错误。非法集会游行属于第7条使用驱逐性、制服性警械的情形，不适用武器。<br><b>B</b>：错误。结伙斗殴同样适用警械（警棍、催泪弹等），不适用武器。<br><b>C</b>：正确。劫持航空器是第9条第(二)项明确规定的严重暴力犯罪，经警告无效可使用武器。<br><b>D</b>：错误。侮辱妇女属于流氓活动，适用警械。',
+              t: '武器针对的是"要命"的暴力犯罪。劫机、杀人、爆炸这些才行。打架、骂人、游行用警械就够了。' },
+            { q: '人民警察使用武器造成无辜人员伤亡的，善后处理正确的是？', opts: ['A. 由警察个人负责赔偿', 'B. 依法使用的，由所属机关参照国家赔偿法补偿', 'C. 不需要任何处理', 'D. 只需口头向上级报告'], correct: 1, type: 'single', quizIndex: 24,
+              d: '<b>A</b>：错误。警察依法履职，赔偿责任由所属机关承担，不是个人。<br><b>B</b>：正确。依法使用武器造成无辜伤亡的，由所属机关参照《国家赔偿法》给予补偿（注意是"补偿"不是"赔偿"）。<br><b>C</b>：错误。必须及时抢救、保护现场、报告。<br><b>D</b>：错误。使用武器须书面报告，口头无效。',
+              t: '依法开枪误伤好人→找公安局申请补偿（参照国家赔偿法程序）。违法开枪→才叫赔偿。' },
+            { q: '发现犯罪分子是怀孕妇女，能否使用武器？', opts: ['A. 一律不能', 'B. 若其使用枪支实施暴力犯罪，可以', 'C. 需要上级批准', 'D. 警告无效即可'], correct: 1, type: 'single', quizIndex: 25,
+              d: '<b>A</b>：错误。条例第10条规定了例外——使用枪支、爆炸、剧毒等危险物品实施暴力犯罪的除外。<br><b>B</b>：正确。怀孕妇女使用枪支实施暴力犯罪，属于"但书"情形，可以使用武器。<br><b>C</b>：错误。法条未规定需上级批准。<br><b>D</b>：错误。一般情形下怀孕妇女不得使用武器，不能简单以"警告无效"为由开枪。',
+              t: '孕妇一般不打，但她端枪扫射时——必须打！保护更多人的生命比保护她一个人更重要。' },
+            { q: '应当立即停止使用武器的情形是？', opts: ['A. 犯罪分子停止犯罪但拒不服从命令', 'B. 犯罪分子停止犯罪并服从命令', 'C. 犯罪分子逃跑', 'D. 犯罪分子口头求饶'], correct: 1, type: 'single', quizIndex: 26,
+              d: '<b>A</b>：错误。第11条要求"停止犯罪"和"服从命令"两个条件同时满足，缺一不可。<br><b>B</b>：正确。"停止犯罪+服从命令"是法定的立即停止条件。<br><b>C</b>：错误。逃跑属于继续实施犯罪或拒不服从，不能停止。<br><b>D</b>：错误。口头求饶不等于服从命令，可能是在拖延或欺骗。',
+              t: '歹徒停下来说"我不砍了"但刀还不放下——不能停火！必须"停了+听话"才行。' },
+            { q: '根据《人民警察法》，继续盘问的留置时间从何时起算？', opts: ['A. 从抓获时起算', 'B. 从带至公安机关之时起算', 'C. 从批准继续盘问时起算', 'D. 从进入候问室时起算'], correct: 1, type: 'single', quizIndex: 27,
+              d: '<b>A</b>：错误。抓获可能在外面，起算点是"带至公安机关"。<br><b>B</b>：正确。人民警察法第9条规定"自带至公安机关之时起"计算留置时间。<br><b>C</b>：错误。批准是后续程序，不是起算点。<br><b>D</b>：错误。进入候问室的时间可能晚于带至公安机关的时间，不准确。',
+              t: '从踏进公安局大门那一刻开始计时，不是从批准盘问开始！' },
+            { q: '人民警察法规定，对被盘问人的留置时间一般不超过多少小时？', opts: ['A. 8小时', 'B. 12小时', 'C. 24小时', 'D. 48小时'], correct: 2, type: 'single', quizIndex: 28,
+              d: '<b>A</b>：错误。8小时是行政案件询问查证的一般时限。<br><b>B</b>：错误。12小时是继续盘问初始时限（已废止的老规定），现行法为24小时。<br><b>C</b>：正确。一般不超过24小时。<br><b>D</b>：错误。48小时是经县级以上公安机关批准延长后的最长时限。',
+              t: '一般24小时，搞不完经县级公安批准可以再延24小时，封顶48小时。' },
+            { q: '人民警察在非工作时间遇到职责范围内的紧急情况，应如何处理？', opts: ['A. 可以不处理', 'B. 应当履行职责', 'C. 等上班后再处理', 'D. 通知同事处理'], correct: 1, type: 'single', quizIndex: 29,
+              d: '<b>A</b>：错误。人民警察法第19条规定非工作时间遇紧急情况"应当履行职责"。<br><b>B</b>：正确。不管上不上班，遇到职责范围内的紧急事都得管。<br><b>C</b>：错误。紧急情况不能等。<br><b>D</b>：错误。通知同事不等于自己可以不履职。',
+              t: '下班了也是警察！路上看到有人抢劫，不能装没看见，必须上。' },
+            { q: '公安机关的性质是什么？', opts: ['A. 国家行政机关', 'B. 人民民主专政的重要工具，武装性质的国家治安行政和刑事司法力量', 'C. 国家武装力量', 'D. 司法机关'], correct: 1, type: 'single', quizIndex: 30,
+              d: '<b>A</b>：不完整。公安机关兼有行政和刑事司法双重属性。<br><b>B</b>：正确。这是公安机关性质的完整表述。<br><b>C</b>：错误。公安机关是"武装性质"但不是"武装力量"（武装力量指解放军、武警、民兵）。<br><b>D</b>：错误。公安机关是"刑事司法力量"但不是"司法机关"（司法机关指法院、检察院）。',
+              t: '三个关键词：专政工具（灵魂）+ 武装性质（身体）+ 治安行政&刑事司法（两只手）。' },
+            { q: '公安工作的根本路线是什么？', opts: ['A. 坚持党的领导', 'B. 群众路线', 'C. 专群结合', 'D. 全心全意为人民服务'], correct: 1, type: 'single', quizIndex: 31,
+              d: '<b>A</b>：错误。坚持党的领导是"根本原则"，不是"根本路线"。<br><b>B</b>：正确。群众路线是公安工作的根本路线。<br><b>C</b>：错误。专群结合是"基本方针"。<br><b>D</b>：错误。全心全意为人民服务是"宗旨"。',
+              t: '原则=党领导，路线=群众路，方针=专群结合，宗旨=为人民服务。四个概念别搞混。' },
+            { q: '公安机关的两大基本职能是什么？', opts: ['A. 管理职能和服务职能', 'B. 专政职能和民主职能', 'C. 治安职能和刑事职能', 'D. 预防职能和打击职能'], correct: 1, type: 'single', quizIndex: 32,
+              d: '<b>A</b>：错误。管理、服务是具体工作方式，不是"基本职能"的官方表述。<br><b>B</b>：正确。专政职能（对敌人）和民主职能（对人民）是公安机关的两大基本职能。<br><b>C</b>：错误。治安、刑事是公安专业工作的分类。<br><b>D</b>：错误。预防、打击是工作手段，不是基本职能。',
+              t: '基本职能就两个：对敌人专政，对人民民主。其他都是衍生出来的。' },
+            { q: '严肃与谨慎相结合政策的总精神是什么？', opts: ['A. 执法必严', 'B. 重证据重调查', 'C. 不枉不纵', 'D. 宽严相济'], correct: 2, type: 'single', quizIndex: 33,
+              d: '<b>A</b>：错误。"执法必严"是"严肃"的内涵，不是总精神。<br><b>B</b>：错误。"重证据、重调查研究"是"谨慎"的内涵。<br><b>C</b>：正确。"严肃"+"谨慎"合起来的总精神就是"不枉不纵"——不冤枉一个好人，不放过一个坏人。<br><b>D</b>：错误。宽严相济是另一项独立的刑事政策。',
+              t: '严肃=该抓就抓；谨慎=别抓错人。合起来=不枉不纵，刚刚好。' },
+            { q: '人民警察职业道德中，"事实为据，秉持公正，惩恶扬善"属于哪一项？', opts: ['A. 忠诚可靠', 'B. 秉公执法', 'C. 英勇善战', 'D. 严守纪律'], correct: 1, type: 'single', quizIndex: 34,
+              d: '<b>A</b>：错误。忠诚可靠的内容是"听党指挥，热爱人民，忠于法律"。<br><b>B</b>：正确。秉公执法的原文就是"事实为据，秉持公正，惩恶扬善"。<br><b>C</b>：错误。英勇善战的内容是"坚韧不拔，机智果敢，崇尚荣誉"。<br><b>D</b>：错误。严守纪律的内容是"遵章守纪，保守秘密，令行禁止"。',
+              t: '看到"事实为依据""公正""惩恶扬善"这些词，直接对应"秉公执法"。' },
+            { q: '根据五条禁令，民警酒后驾驶机动车的，应如何处理？', opts: ['A. 警告', 'B. 纪律处分', 'C. 辞退', 'D. 记过'], correct: 2, type: 'single', quizIndex: 35,
+              d: '<b>A</b>：错误。五条禁令中酒后驾车是直接辞退，比警告严厉得多。<br><b>B</b>：错误。只有第①条（违反枪支管理规定）和第④条（工作时间饮酒）初始是纪律处分。<br><b>C</b>：正确。第③条规定"严禁酒后驾驶机动车，违者予以辞退"。<br><b>D</b>：错误。记过属于行政处分的一种，不是五条禁令的直接处理结果。',
+              t: '②③⑤=直接辞退！酒后驾车，一票否决，没得商量。' },
+            { q: '使用驱逐性、制服性警械的前提是什么？', opts: ['A. 上级批准', 'B. 经警告无效', 'C. 任何时候都可以', 'D. 群众同意'], correct: 1, type: 'single', quizIndex: 36,
+              d: '<b>A</b>：错误。法条没有规定需要上级批准。<br><b>B</b>：正确。条例第7条明确规定"经警告无效"后方可使用警棍、催泪弹等驱逐性、制服性警械。<br><b>C</b>：错误。必须符合法定情形且经警告无效。<br><b>D</b>：错误。不需要群众同意，但应命令群众躲避。',
+              t: '先喊"警察！别动！"喊了不听，才能用警棍、辣椒水。' },
+            { q: '行政处分的种类不包括？', opts: ['A. 警告', 'B. 记过', 'C. 降级', 'D. 罚款'], correct: 3, type: 'single', quizIndex: 37,
+              d: '<b>A</b>：包括。行政处分6种：警告、记过、记大过、降级、撤职、开除。<br><b>B</b>：包括。<br><b>C</b>：包括。<br><b>D</b>：不包括。罚款是行政处罚（针对老百姓），不是行政处分（针对警察）。',
+              t: '处分是给警察的（警告、记过、降级、撤职、开除），罚款是给违法老百姓的，两码事。' },
+            { q: '人民警察法规定，奖励的种类不包括？', opts: ['A. 嘉奖', 'B. 三等功', 'C. 晋升警衔', 'D. 授予荣誉称号'], correct: 2, type: 'single', quizIndex: 38,
+              d: '<b>A</b>：包括。嘉奖是最低一级奖励。<br><b>B</b>：包括。三等功是第二级奖励。<br><b>C</b>：不包括。晋升警衔属于正常的职务管理，不是奖励。奖励种类：嘉奖、三等功、二等功、一等功、授予荣誉称号。<br><b>D</b>：包括。授予荣誉称号是最高级奖励。',
+              t: '奖励5级：嘉奖→三等功→二等功→一等功→荣誉称号。升警衔不是奖，是正常晋升。' },
+            { q: '实行交通管制的条件是？', opts: ['A. 任何扰乱秩序的行为', 'B. 严重危害社会治安秩序的行为', 'C. 日常交通拥堵', 'D. 上级领导视察'], correct: 1, type: 'single', quizIndex: 39,
+              d: '<b>A</b>：错误。必须是"严重"危害社会治安秩序，一般扰乱不够格。<br><b>B</b>：正确。人民警察法第15条规定，为预防和制止严重危害社会治安秩序的行为，可实行交通管制。<br><b>C</b>：错误。日常拥堵属于交通管理，不是交通管制。<br><b>D</b>：错误。领导视察不能作为交通管制的法定事由。',
+              t: '"严重"二字是关键词！一般的堵车、一般的闹事不能管制交通。' },
+            { q: '人民警察依法使用警械武器造成无辜人员伤亡的，应如何处理？', opts: ['A. 不予处理', 'B. 由警察个人赔偿', 'C. 由所属机关参照国家赔偿法补偿', 'D. 由上级机关赔偿'], correct: 2, type: 'single', quizIndex: 40,
+              d: '<b>A</b>：错误。必须善后处理，不能不管。<br><b>B</b>：错误。赔偿主体是所属机关，不是警察个人。<br><b>C</b>：正确。条例第15条规定依法使用造成无辜伤亡的，由所属机关参照《国家赔偿法》给予补偿。<br><b>D</b>：错误。补偿主体是"该人民警察所属机关"，不是上级机关。',
+              t: '依法开枪误伤好人→找开枪警察的单位申请补偿。违法开枪→找单位申请赔偿。"补偿"和"赔偿"一字之差。' }
+        ]
+    },
+
+,
+    // ==================== 综合练习：判断题10道 ====================
+    {
+        id: 'mod_tf', iconClass: 'icon-blue', iconEmoji: '✅',
+        title: '综合练习 · 判断题10道',
+        subtitle: '覆盖：警械武器条例 · 人民警察法 · 公安基础知识',
+        quizzes: [
+            { q: '特种防暴枪属于武器。', opts: ['✅ 正确', '❌ 错误'], correct: 1, type: 'single', isTF: true, tfId: 'tf1',
+              d: '<b>A"正确"</b>：错误。特种防暴枪虽然名字里带"枪"，但根据条例第3条，它属于驱逐性、制服性的<span class="kh kh-red">警械</span>，不是致命性武器。<br><b>B"错误"</b>：正确。题干说法错误，特种防暴枪是警械。',
+              t: '带"枪"字的不一定都是武器！特种防暴枪发射的是催泪弹、爆震弹，不致命，所以是警械。' },
+            { q: '人民警察使用警械和武器，应当以制止违法犯罪行为为原则，尽量减少人员伤亡和财产损失。', opts: ['✅ 正确', '❌ 错误'], correct: 0, type: 'single', isTF: true, tfId: 'tf2',
+              d: '<b>A"正确"</b>：正确。这是条例第4条的原文，是贯穿整个条例的核心原则。<br><b>B"错误"</b>：错误。',
+              t: '第4条是"灵魂条款"：目的是制止，过程中要尽量少伤人、少毁东西。' },
+            { q: '人民警察使用武器前必须鸣枪示警。', opts: ['✅ 正确', '❌ 错误'], correct: 1, type: 'single', isTF: true, tfId: 'tf3',
+              d: '<b>A"正确"</b>：错误。法条只规定"经警告无效"，并没有规定警告的具体方式，不一定是鸣枪示警。<br><b>B"错误"</b>：正确。口头警告也是警告，法条从未规定"必须鸣枪示警"。',
+              t: '警告可以是口头喊话，不一定非要朝天开枪。法条没有"必须鸣枪"的要求。' },
+            { q: '发现实施犯罪的人为怀孕妇女，人民警察在任何情况下都不得对其使用武器。', opts: ['✅ 正确', '❌ 错误'], correct: 1, type: 'single', isTF: true, tfId: 'tf4',
+              d: '<b>A"正确"</b>：错误。条例第10条规定了例外——使用枪支、爆炸、剧毒等危险物品实施暴力犯罪的除外。<br><b>B"错误"</b>：正确。"任何情况"太绝对，有例外情形。',
+              t: '孕妇一般不打，但她拿着枪扫射时，可以打。' },
+            { q: '犯罪分子停止实施犯罪并服从人民警察命令的，应当立即停止使用武器。', opts: ['✅ 正确', '❌ 错误'], correct: 0, type: 'single', isTF: true, tfId: 'tf5',
+              d: '<b>A"正确"</b>：正确。条例第11条：犯罪分子停止犯罪且服从命令，应当立即停止使用武器。<br><b>B"错误"</b>：错误。',
+              t: '停了犯罪+听话=立刻停火。两个条件缺一不可。' },
+            { q: '人民警察使用武器后，应当将使用武器的情况口头向所属机关报告即可。', opts: ['✅ 正确', '❌ 错误'], correct: 1, type: 'single', isTF: true, tfId: 'tf6',
+              d: '<b>A"正确"</b>：错误。条例第13条规定应当<span class="kh kh-red">书面报告</span>，口头无效。<br><b>B"错误"</b>：正确。',
+              t: '开枪了必须写书面报告，口头说一声不算数。' },
+            { q: '人民警察依法使用警械、武器造成无辜人员伤亡的，由该人民警察所属机关依照《国家赔偿法》给予赔偿。', opts: ['✅ 正确', '❌ 错误'], correct: 1, type: 'single', isTF: true, tfId: 'tf7',
+              d: '<b>A"正确"</b>：错误。依法使用造成无辜伤亡是"补偿"不是"赔偿"，且是"参照"不是"依照"。<br><b>B"错误"</b>：正确。条例第15条用词是"参照"和"补偿"。',
+              t: '违法=依照赔偿；依法=参照补偿。一字之差，天壤之别。' },
+            { q: '公安机关的根本属性是武装性质。', opts: ['✅ 正确', '❌ 错误'], correct: 1, type: 'single', isTF: true, tfId: 'tf8',
+              d: '<b>A"正确"</b>：错误。武装性质是<span class="kh kh-red">组织属性</span>，根本属性（阶级属性）是<span class="kh kh-red">人民民主专政的重要工具</span>。<br><b>B"错误"</b>：正确。',
+              t: '根本属性=人民民主专政工具（灵魂）；武装性质=组织属性（身体）。别搞混。' },
+            { q: '根据五条禁令，民警携带枪支饮酒的，予以纪律处分。', opts: ['✅ 正确', '❌ 错误'], correct: 1, type: 'single', isTF: true, tfId: 'tf9',
+              d: '<b>A"正确"</b>：错误。五条禁令第②条：携带枪支饮酒的，予以<span class="kh kh-red">辞退</span>，不是纪律处分。<br><b>B"错误"</b>：正确。',
+              t: '枪+酒=直接辞退，不是处分一下就算了。' },
+            { q: '人民警察在非工作时间遇其职责范围内的紧急情况，可以不履行职责。', opts: ['✅ 正确', '❌ 错误'], correct: 1, type: 'single', isTF: true, tfId: 'tf10',
+              d: '<b>A"正确"</b>：错误。人民警察法第19条规定，非工作时间遇职责范围内紧急情况<span class="kh kh-red">应当履行职责</span>。<br><b>B"错误"</b>：正确。',
+              t: '下班了也是警察！路上看到抢劫，不能装没看见。' }
+        ]
+    },
+    // ==================== 综合练习：多选题20道 ====================
+    {
+        id: 'mod_multi', iconClass: 'icon-green', iconEmoji: '📋',
+        title: '综合练习 · 多选题20道',
+        subtitle: '覆盖：警械武器条例 · 人民警察法 · 公安基础知识',
+        quizzes: [
+            { q: '下列哪些属于"警械"？', opts: ['A. 警棍', 'B. 催泪弹', 'C. 枪支', 'D. 手铐', 'E. 弹药'], correct: [0,1,3], type: 'multi', multi: true, quizIndex: '多1',
+              d: '<b>A</b>：正确。警棍是典型的驱逐性警械。<br><b>B</b>：正确。催泪弹属于驱逐性、制服性警械。<br><b>C</b>：错误。枪支是致命性武器。<br><b>D</b>：正确。手铐是约束性警械。<br><b>E</b>：错误。弹药属于武器。',
+              t: '警械=非致命（警棍、辣椒水、手铐）；武器=致命（枪支、弹药）。' },
+            { q: '根据条例第7条，经警告无效可以使用驱逐性、制服性警械的情形包括？', opts: ['A. 结伙斗殴', 'B. 非法举行集会游行示威', 'C. 劫持航空器', 'D. 袭击人民警察', 'E. 聚众扰乱车站秩序'], correct: [0,1,3,4], type: 'multi', multi: true, quizIndex: '多2',
+              d: '<b>A</b>：正确。第7条第(一)项：结伙斗殴、殴打他人等。<br><b>B</b>：正确。第7条第(三)项：非法举行集会游行示威。<br><b>C</b>：错误。劫持航空器属于第9条使用武器的情形。<br><b>D</b>：正确。第7条第(六)项：袭击人民警察。<br><b>E</b>：正确。第7条第(二)项：聚众扰乱公共场所秩序。',
+              t: '注意C劫机是武器情形，不要混到警械里。' },
+            { q: '根据条例第9条，经警告无效可以使用武器的情形包括？', opts: ['A. 放火严重危害公共安全', 'B. 劫持航空器', 'C. 非法集会游行示威', 'D. 实施凶杀危及公民生命安全', 'E. 结伙抢劫公私财物'], correct: [0,1,3,4], type: 'multi', multi: true, quizIndex: '多3',
+              d: '<b>A</b>：正确。第9条第(一)项。<br><b>B</b>：正确。第9条第(二)项。<br><b>C</b>：错误。非法集会游行适用警械，不适用武器。<br><b>D</b>：正确。第9条第(六)项。<br><b>E</b>：正确。第9条第(八)项。',
+              t: '武器针对"要命"的暴力犯罪：放火、劫机、杀人、抢劫等。' },
+            { q: '人民警察使用武器后，应当做哪些处理？', opts: ['A. 及时抢救受伤人员', 'B. 保护现场', 'C. 立即向当地公安机关或所属机关报告', 'D. 将使用武器情况书面报告所属机关', 'E. 等待上级指示再行动'], correct: [0,1,2,3], type: 'multi', multi: true, quizIndex: '多4',
+              d: '<b>A</b>：正确。包括犯罪分子和无辜人员都要抢救。<br><b>B</b>：正确。<br><b>C</b>：正确。是"立即"报告。<br><b>D</b>：正确。必须书面报告。<br><b>E</b>：错误。不能等，应当立即采取行动。',
+              t: '开了枪四件事：救人→保护现场→报告→写书面材料。' },
+            { q: '下列哪些属于行政处分的种类？', opts: ['A. 警告', 'B. 罚款', 'C. 记大过', 'D. 撤职', 'E. 开除'], correct: [0,2,3,4], type: 'multi', multi: true, quizIndex: '多5',
+              d: '<b>A</b>：正确。警告是最轻的处分。<br><b>B</b>：错误。罚款是行政处罚，不是行政处分。<br><b>C</b>：正确。记大过属于处分。<br><b>D</b>：正确。撤职属于处分。<br><b>E</b>：正确。开除是最重的处分。',
+              t: '处分6种：警告、记过、记大过、降级、撤职、开除。罚款不是处分。' },
+            { q: '公安机关的基本任务包括？', opts: ['A. 维护国家安全', 'B. 维护社会治安秩序', 'C. 保护公民人身安全', 'D. 保护公共财产', 'E. 预防、制止和惩治违法犯罪'], correct: [0,1,2,3,4], type: 'multi', multi: true, quizIndex: '多6',
+              d: '<b>A</b>：正确。首要任务。<br><b>B</b>：正确。<br><b>C</b>：正确。<br><b>D</b>：正确。<br><b>E</b>：正确。',
+              t: '五大任务全选！维护国家安全是首要任务。' },
+            { q: '根据条例应当立即停止使用武器的情形包括？', opts: ['A. 犯罪分子停止犯罪但不服从命令', 'B. 犯罪分子停止犯罪并服从命令', 'C. 犯罪分子失去继续实施犯罪能力', 'D. 犯罪分子口头求饶但不放下武器', 'E. 犯罪分子逃跑'], correct: [1,2], type: 'multi', multi: true, quizIndex: '多7',
+              d: '<b>A</b>：错误。需"停止+服从"两个条件。<br><b>B</b>：正确。<br><b>C</b>：正确。失去能力=被制服或受伤无法继续。<br><b>D</b>：错误。不放下武器=不服从命令。<br><b>E</b>：错误。逃跑=不服从命令。',
+              t: '两种情况：①停了+服了；②动不了了。其他情况不能停火。' },
+            { q: '根据条例不得使用武器的情形包括？', opts: ['A. 犯罪分子在人群密集的广场', 'B. 怀孕妇女使用枪支实施暴力犯罪', 'C. 犯罪分子在存放大量易燃易爆物品的仓库', 'D. 儿童持刀威胁他人（非枪支爆炸剧毒）', 'E. 犯罪分子处于群众聚集场所且不使用武器将发生更严重后果'], correct: [0,2,3], type: 'multi', multi: true, quizIndex: '多8',
+              d: '<b>A</b>：正确。群众聚集场所不得使用武器（除非有例外）。<br><b>B</b>：错误。怀孕妇女使用枪支暴力犯罪属于例外，可以使用武器。<br><b>C</b>：正确。存放易燃易爆场所不得使用武器。<br><b>D</b>：正确。儿童使用非危险物品犯罪，不得使用武器。<br><b>E</b>：错误。"不使用武器将发生更严重后果"是例外，此种情况下可以使用武器。',
+              t: '人多、危险品多的地方一般不能开枪，除非不开枪更惨。孕妇、儿童一般不打，除非拿枪扫射。' },
+            { q: '关于继续盘问，下列说法正确的有？', opts: ['A. 留置时间一般不超过24小时', 'B. 经县级以上公安机关批准可延长至48小时', 'C. 批准延长后应当立即通知家属', 'D. 从批准继续盘问时起算留置时间', 'E. 不批准继续盘问的应当立即释放'], correct: [0,1,2,4], type: 'multi', multi: true, quizIndex: '多9',
+              d: '<b>A</b>：正确。<br><b>B</b>：正确。注意"至"不是"48小时"。<br><b>C</b>：正确。"立即"不是"及时"。<br><b>D</b>：错误。从"带至公安机关之时"起算，不是从批准时。<br><b>E</b>：正确。',
+              t: '从带进门开始计时，一般24h，县级批了延到48h。批了马上通知家属，不批马上放人。' },
+            { q: '公安工作的基本政策包括？', opts: ['A. 严肃与谨慎相结合', 'B. 惩办与宽大相结合（宽严相济）', 'C. 依法从重从快惩处严重刑事犯罪分子', 'D. 重证据重调查研究严禁刑讯逼供', 'E. 教育与惩罚相结合'], correct: [0,1,2,3,4], type: 'multi', multi: true, quizIndex: '多10',
+              d: '<b>A</b>：正确。<br><b>B</b>：正确。<br><b>C</b>：正确。<br><b>D</b>：正确。<br><b>E</b>：正确。',
+              t: '六项基本政策（含尊重保障人权），此处五项全选，尊重保障人权也是基本政策之一，常考全选。' },
+            { q: '人民警察职业道德规范包括？', opts: ['A. 忠诚可靠', 'B. 秉公执法', 'C. 热诚服务', 'D. 文明理性', 'E. 清正廉洁'], correct: [0,1,2,3,4], type: 'multi', multi: true, quizIndex: '多11',
+              d: '<b>A</b>：正确。<br><b>B</b>：正确。<br><b>C</b>：正确。<br><b>D</b>：正确。<br><b>E</b>：正确。',
+              t: '职业道德十项，这五项都在其中，全选。' },
+            { q: '根据五条禁令，下列哪些行为直接予以辞退？', opts: ['A. 携带枪支饮酒', 'B. 酒后驾驶机动车', 'C. 参与赌博', 'D. 违反枪支管理使用规定', 'E. 工作时间饮酒'], correct: [0,1,2], type: 'multi', multi: true, quizIndex: '多12',
+              d: '<b>A</b>：正确。②直接辞退。<br><b>B</b>：正确。③直接辞退。<br><b>C</b>：正确。⑤直接辞退。<br><b>D</b>：错误。①初始是纪律处分。<br><b>E</b>：错误。④初始是纪律处分。',
+              t: '②③⑤=直接辞退（枪酒、车酒、赌博）。①④=先处分再升级。' },
+            { q: '公安机关的性质包含以下哪些方面？', opts: ['A. 人民民主专政的重要工具', 'B. 武装性质', 'C. 国家治安行政力量', 'D. 国家刑事司法力量', 'E. 国家武装力量'], correct: [0,1,2,3], type: 'multi', multi: true, quizIndex: '多13',
+              d: '<b>A</b>：正确。阶级属性/根本属性。<br><b>B</b>：正确。组织属性。<br><b>C</b>：正确。职能属性。<br><b>D</b>：正确。职能属性。<br><b>E</b>：错误。公安机关是"武装性质"但不是"武装力量"。',
+              t: '四项全选，E不能选！公安局不是军队，是"武装性质"不是"武装力量"。' },
+            { q: '关于人民警察执行上级命令，下列说法正确的有？', opts: ['A. 必须执行上级决定和命令', 'B. 可以提出意见但不得中止执行', 'C. 意见不被采纳时必须服从', 'D. 执行后果由执行民警负责', 'E. 对超越法律的指令有权拒绝执行并向上级报告'], correct: [0,1,2,4], type: 'multi', multi: true, quizIndex: '多14',
+              d: '<b>A</b>：正确。第32条：必须执行。<br><b>B</b>：正确。<br><b>C</b>：正确。<br><b>D</b>：错误。执行后果由作出决定的上级负责。<br><b>E</b>：正确。第33条：超越法律的指令有权拒绝。',
+              t: '必须执行上级命令，责任上级担。违法的命令（刑讯逼供等）有权拒绝。' },
+            { q: '下列哪些属于公安机关的职责？', opts: ['A. 侦查刑事案件', 'B. 维护交通安全处理交通事故', 'C. 组织实施消防工作', 'D. 管理外国人在中国境内居留事务', 'E. 执行拘役刑罚'], correct: [0,1,3,4], type: 'multi', multi: true, quizIndex: '多15',
+              d: '<b>A</b>：正确。<br><b>B</b>：正确。交警职责。<br><b>C</b>：错误。2018年消防已划归应急管理部门。<br><b>D</b>：正确。管理外国人居留事务。<br><b>E</b>：正确。公安机关执行拘役。',
+              t: '注意C是陷阱！消防组织实施已经不是公安职责了。' },
+            { q: '人民警察不得有哪些行为？', opts: ['A. 散布有损国家声誉的言论', 'B. 参加非法组织', 'C. 参加旨在反对国家的集会游行示威', 'D. 泄露国家秘密', 'E. 刑讯逼供'], correct: [0,1,2,3,4], type: 'multi', multi: true, quizIndex: '多16',
+              d: '<b>A</b>：正确。人民警察法第22条明确禁止。<br><b>B</b>：正确。<br><b>C</b>：正确。注意：正常的集会游行示威是合法权利，但"旨在反对国家"的非法集会不得参加。<br><b>D</b>：正确。<br><b>E</b>：正确。',
+              t: '五项全选。人民警察法第22条列举了12类禁止行为。' },
+            { q: '关于警械的使用，下列说法正确的有？', opts: ['A. 使用驱逐性警械需经警告无效', 'B. 约束性警械不得故意造成人身伤害', 'C. 违法犯罪行为得到制止后应立即停止使用警械', 'D. 警械可以随意使用', 'E. 警械使用以制止违法犯罪为限度'], correct: [0,1,2,4], type: 'multi', multi: true, quizIndex: '多17',
+              d: '<b>A</b>：正确。第7条明文规定。<br><b>B</b>：正确。第8条规定不得故意造成人身伤害。<br><b>C</b>：正确。得到制止应立即停止。<br><b>D</b>：错误。必须符合法定情形。<br><b>E</b>：正确。使用限度。',
+              t: '警械不是随便用的，要符合情形、警告无效、达到目的就停。' },
+            { q: '关于奖励，下列说法正确的有？', opts: ['A. 奖励分为嘉奖、三等功、二等功、一等功、授予荣誉称号', 'B. 晋升警衔属于奖励', 'C. 奖励可给予个人或集体', 'D. 对协助执行职务有显著成绩的公民也可奖励', 'E. 可给予物质奖励'], correct: [0,2,3,4], type: 'multi', multi: true, quizIndex: '多18',
+              d: '<b>A</b>：正确。奖励5级。<br><b>B</b>：错误。晋升警衔是正常职务管理，不是奖励。<br><b>C</b>：正确。<br><b>D</b>：正确。协助的公民也可获得奖励。<br><b>E</b>：正确。可给予一定的物质奖励。',
+              t: '升警衔不等于奖励。老百姓帮了警察也可以被奖励。' },
+            { q: '人民警察使用武器造成伤亡后，接到报告的机关应如何处理？', opts: ['A. 及时勘验调查', 'B. 及时通知当地人民检察院', 'C. 及时通知伤亡人员家属', 'D. 立即开除使用武器的民警', 'E. 等待上级指示再处理'], correct: [0,1,2], type: 'multi', multi: true, quizIndex: '多19',
+              d: '<b>A</b>：正确。第12条：接到报告后及时勘验调查。<br><b>B</b>：正确。检察院是法律监督机关，必须通知。<br><b>C</b>：正确。及时通知家属或单位。<br><b>D</b>：错误。依法使用不会开除。<br><b>E</b>：错误。应及时处理，不能等。',
+              t: '机关接到报告三件事：勘验调查、通知检察院、通知家属。' },
+            { q: '人民检察院在警察使用武器事件中的作用是？', opts: ['A. 法律监督', 'B. 决定是否赔偿', 'C. 可以派员参与勘验检查', 'D. 审批使用武器', 'E. 对违法使用武器的警察提起公诉'], correct: [0,3,4], type: 'multi', multi: true, quizIndex: '多20',
+              d: '<b>A</b>：正确。检察院是法律监督机关。<br><b>B</b>：错误。赔偿/补偿由所属机关决定，不是检察院。<br><b>C</b>：正确。检察院可以派员参与或自行复检。<br><b>D</b>：错误。使用武器不需要检察院审批。<br><b>E</b>：正确。若构成犯罪，检察院依法提起公诉。',
+              t: '检察院=监督+可参与勘验+构成犯罪时公诉。不管赔钱和审批。' }
+        ]
+    }
+
+
+// ⬇️ 第3次输出结束，第4次将追加判断题+多选题并完成闭合
+
+// ⬇️ 第2次输出结束，后续模块将在第3次输出中继续追加
+
+
+];
+// ⬇️ 第1次输出结束，后续模块将在第2次输出中继续追加
+</script>
+<script>
+// ==================== 渲染引擎 ====================
+function renderAll(){var m=document.getElementById('mainContent');var h='';knowledgeData.forEach(function(mod){h+='<div class="card" id="'+mod.id+'"><div class="section-title"><div class="icon '+mod.iconClass+'">'+mod.iconEmoji+'</div>'+mod.title+'</div>';if(mod.subtitle)h+='<div class="subtitle">'+mod.subtitle+'</div>';if(mod.items&&mod.items.length>0){h+='<div class="ki-grid">';mod.items.forEach(function(item){if(item.type==='table')h+=item.html;else if(item.type==='ki')h+=renderKI(item);});h+='</div>';}if(mod.quizzes&&mod.quizzes.length>0){mod.quizzes.forEach(function(q,qi){h+=renderQuiz(q,mod.id+'-q'+qi);});}h+='</div>';});m.innerHTML=h;generateTOC();}
+function renderKI(item){var h='<div class="ki-item">';h+='<div class="ki-title-row">'+(item.badge?'<span class="badge '+(item.badgeClass||'badge-num')+'">'+item.badge+'</span> ':'')+item.title+'</div>';h+='<div class="ki-content">'+item.content+'</div>';if(item.extra)h+='<div style="margin-top:6px;color:#5c5347;font-size:0.88rem;">'+item.extra+'</div>';if(item.example){h+='<div class="example-block"><div class="ex-label">📖 生动案例</div><div class="ex-q">'+item.example.q+'</div><div class="ex-a">'+item.example.a+'</div></div>';}h+='</div>';return h;}
+function renderQuiz(q,qid){var qTypeLabel=q.multi?'【多选题】':'【单选题】';var h='<div class="quiz-wrap" data-qid="'+qid+'">';if(q.quizIndex){h+='<div class="q-type">📝 '+qTypeLabel+' · 第'+q.quizIndex+'题</div>';}else if(q.tfId){h+='<div class="q-type">📝 '+qTypeLabel+' · '+q.tfId+'</div>';}else{h+='<div class="q-type">📝 '+qTypeLabel+'</div>';}h+='<div class="q-text">'+q.q+'</div><ul class="opt-list">';for(var i=0;i<q.opts.length;i++){h+='<li data-idx="'+i+'" onclick="selectOpt(this,\''+qid+'\','+i+','+(q.multi||false)+')">'+q.opts[i]+'</li>';}h+='</ul><div class="btn-row"><button class="btn btn-primary" onclick="submitQuiz(\''+qid+'\','+JSON.stringify(q.correct)+','+(q.multi||false)+')">✅ 提交答案</button><button class="btn btn-outline" onclick="resetQuiz(\''+qid+'\')">🔄 重做</button></div><div class="explain-card" id="ex-'+qid+'"><div class="ex-head"></div><div class="ex-body"></div>';if(q.d){var detailHtml=q.d;detailHtml=detailHtml.replace(/<b>([A-E])"正确"<\/b>：正确/g,'<span style="color:#145a32;">✅ $1选项</b>：正确</span>');detailHtml=detailHtml.replace(/<b>([A-E])"错误"<\/b>：错误/g,'<span style="color:#b22222;">❌ $1选项</b>：错误</span>');detailHtml=detailHtml.replace(/<b>([A-E])"正确"<\/b>：错误/g,'<span style="color:#b22222;">❌ $1选项</b>：错误</span>');detailHtml=detailHtml.replace(/<b>([A-E])"错误"<\/b>：正确/g,'<span style="color:#145a32;">✅ $1选项</b>：正确</span>');detailHtml=detailHtml.replace(/<b>([A-E])<\/b>：(正确)/g,'<span style="color:#145a32;">✅ $1选项</b>：$2</span>');detailHtml=detailHtml.replace(/<b>([A-E])<\/b>：(错误)/g,'<span style="color:#b22222;">❌ $1选项</b>：$2</span>');detailHtml=detailHtml.replace(/<b>([A-E])<\/b>：正确/g,'<span style="color:#145a32;">✅ $1选项</b>：正确</span>');detailHtml=detailHtml.replace(/<b>([A-E])<\/b>：错误/g,'<span style="color:#b22222;">❌ $1选项</b>：错误</span>');h+='<div class="ex-detail" style="margin-top:10px;padding:10px 14px;background:#fff;border-radius:6px;font-size:0.88rem;line-height:1.8;display:none;">📋 <b>逐项解析：</b><br>'+detailHtml+'</div>';}h+='<div class="ex-tip">💡 <b>大白话理解：</b>'+q.t+'</div></div></div>';return h;}
+function selectOpt(el,qid,idx,multi){var w=el.closest('.quiz-wrap');if(w.classList.contains('submitted'))return;var o=w.querySelectorAll('.opt-list li');if(multi){el.classList.toggle('selected');}else{o.forEach(function(x){x.classList.remove('selected');});el.classList.add('selected');}}
+function submitQuiz(qid,correct,multi){var w=document.querySelector('[data-qid="'+qid+'"]');if(w.classList.contains('submitted'))return;w.classList.add('submitted');var o=w.querySelectorAll('.opt-list li');var ca=Array.isArray(correct)?correct:[correct];var si=[];for(var i=0;i<o.length;i++){if(o[i].classList.contains('selected'))si.push(i);}var ic;if(multi){ic=si.length===ca.length;for(var j=0;j<si.length;j++){if(ca.indexOf(si[j])===-1){ic=false;break;}}}else{ic=si.length===1&&si[0]===ca[0];}for(var k=0;k<o.length;k++){o[k].classList.add('disabled');if(ca.indexOf(k)!==-1)o[k].classList.add('correct');}if(!ic){for(var m=0;m<si.length;m++){if(ca.indexOf(si[m])===-1)o[si[m]].classList.add('wrong');}}var ex=document.getElementById('ex-'+qid);ex.classList.add('show');if(ic){ex.classList.add('correct-ex');ex.classList.remove('wrong-ex');ex.querySelector('.ex-head').textContent='🎉 回答正确！';ex.querySelector('.ex-body').textContent='';var ed=ex.querySelector('.ex-detail');if(ed)ed.style.display='block';}else{ex.classList.add('wrong-ex');ex.classList.remove('correct-ex');ex.querySelector('.ex-head').textContent='😞 回答错误';var lt=['A','B','C','D','E'];var cl=ca.map(function(c){return lt[c];}).join('、');ex.querySelector('.ex-body').innerHTML='正确答案是：<b>'+cl+'</b>';var ed2=ex.querySelector('.ex-detail');if(ed2)ed2.style.display='block';}}
+function resetQuiz(qid){var w=document.querySelector('[data-qid="'+qid+'"]');w.classList.remove('submitted');w.querySelectorAll('.opt-list li').forEach(function(o){o.classList.remove('selected','correct','wrong','disabled');});var ex=document.getElementById('ex-'+qid);ex.classList.remove('show','correct-ex','wrong-ex');}
+function generateTOC(){var toc=document.getElementById('toc');if(!toc)return;var th='<div class="toc-title">📑 警械武器+警察法 · 知识目录</div>';var links='';knowledgeData.forEach(function(mod){links+='<a href="#'+mod.id+'">'+mod.title+'</a>';});toc.innerHTML=th+links;document.querySelectorAll('.toc a').forEach(function(link){link.addEventListener('click',function(){if(window.innerWidth<=768)closeToc();});});}
+function toggleToc(){document.getElementById('toc').classList.toggle('show');document.getElementById('tocOverlay').classList.toggle('show');}
+function closeToc(){document.getElementById('toc').classList.remove('show');document.getElementById('tocOverlay').classList.remove('show');}
+document.addEventListener('DOMContentLoaded',renderAll);
+</script>
+</body>
+</html>

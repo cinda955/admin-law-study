@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>公安基础知识 · 从零到做题</title>
+    <style>
+        :root {
+            --bg: #fdf8f3; --card-bg: #ffffff; --text: #2c2416; --text-light: #5c5347;
+            --accent: #b22222; --highlight: #fff3cd; --highlight-border: #f0c040;
+            --example-bg: #f0faf5; --example-border: #a3e4bc;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05); --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+            --radius: 14px; --radius-sm: 10px;
+            --font: 'PingFang SC','Microsoft YaHei','Hiragino Sans GB','Noto Sans SC',system-ui,-apple-system,sans-serif;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior: smooth; scroll-padding-top: 20px; }
+        body { font-family: var(--font); background: var(--bg); color: var(--text); line-height: 1.75; padding: 12px; font-size: 16px; -webkit-font-smoothing: antialiased; }
+        a { color: var(--accent); text-decoration: none; }
+        .toc-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.35); z-index:98; }
+        .toc-overlay.show { display:block; }
+        .toc { position:fixed; top:16px; left:16px; width:230px; max-height:calc(100vh - 32px); background:var(--card-bg); border-radius:var(--radius); box-shadow:0 8px 30px rgba(0,0,0,0.12); padding:18px 14px; overflow-y:auto; z-index:100; font-size:0.84rem; transition:transform 0.3s; }
+        .toc.hidden { transform:translateX(-260px); }
+        .toc-title { font-weight:700; margin-bottom:10px; color:var(--accent); font-size:1rem; display:flex; align-items:center; gap:6px; position:sticky; top:0; background:var(--card-bg); padding-bottom:8px; border-bottom:1px solid #f0ebe0; }
+        .toc a { display:block; padding:7px 10px; border-radius:6px; margin:2px 0; color:var(--text-light); transition:all 0.2s; font-size:0.82rem; }
+        .toc a:hover,.toc a.active { background:#fdedec; color:var(--accent); font-weight:600; }
+        .toc-toggle { position:fixed; top:16px; left:16px; width:42px; height:42px; border-radius:50%; background:var(--accent); color:#fff; border:none; font-size:1.3rem; cursor:pointer; z-index:101; display:none; box-shadow:0 4px 14px rgba(178,34,34,0.3); align-items:center; justify-content:center; }
+        .main { max-width:820px; margin:0 auto 0 270px; display:flex; flex-direction:column; gap:20px; padding-bottom:40px; }
+        .card { background:var(--card-bg); border-radius:var(--radius); padding:22px 26px; box-shadow:var(--shadow-md); border:1px solid #f0ebe0; }
+        .section-title { font-size:1.45rem; font-weight:700; margin-bottom:4px; display:flex; align-items:center; gap:10px; }
+        .section-title .icon { width:34px; height:34px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; flex-shrink:0; }
+        .icon-red { background:#fdedec; color:#b22222; } .icon-blue { background:#eaf2f8; color:#1a5276; }
+        .icon-green { background:#eafaf1; color:#145a32; } .icon-yellow { background:#fef9e7; color:#b7950b; }
+        .subtitle { color:var(--text-light); font-size:0.9rem; margin-bottom:18px; padding-left:44px; }
+        .ki-grid { display:flex; flex-direction:column; gap:14px; }
+        .ki-item { border:1px solid #f0ebe0; border-radius:var(--radius-sm); padding:14px 18px; background:#fefefe; }
+        .ki-title-row { font-weight:700; font-size:1rem; margin-bottom:6px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+        .badge { font-size:0.7rem; padding:3px 10px; border-radius:14px; font-weight:600; letter-spacing:0.3px; white-space:nowrap; }
+        .badge-core { background:#fdedec; color:#b22222; } .badge-num { background:#eaf2f8; color:#1a5276; } .badge-case { background:#eafaf1; color:#145a32; }
+        .ki-content { color:var(--text-light); font-size:0.92rem; }
+        .kh { display:inline-block; background:var(--highlight); border:1px solid var(--highlight-border); padding:2px 8px; border-radius:4px; font-weight:600; color:#7d6608; margin:0 2px; font-size:0.9rem; }
+        .kh-red { background:#fdedec; border-color:#f5b7b1; color:#922b21; } .kh-blue { background:#eaf2f8; border-color:#aed6f1; color:#1a5276; } .kh-green { background:#eafaf1; border-color:#a3e4bc; color:#145a32; }
+        .example-block { background:var(--example-bg); border-left:3px solid var(--example-border); border-radius:0 var(--radius-sm) var(--radius-sm) 0; padding:12px 16px; margin-top:10px; font-size:0.9rem; color:#1e5a3a; }
+        .example-block .ex-label { font-weight:700; font-size:0.75rem; text-transform:uppercase; letter-spacing:0.5px; color:#1e8449; margin-bottom:4px; }
+        .example-block .ex-q { font-weight:600; color:#145a32; margin-bottom:3px; }
+        .example-block .ex-a { color:#2d6a4f; }
+        .info-table { width:100%; border-collapse:collapse; margin:8px 0; font-size:0.88rem; }
+        .info-table th { background:#fef9e7; text-align:left; padding:10px 14px; font-weight:700; border-bottom:2px solid #f0c040; color:#7d6608; }
+        .info-table td { padding:10px 14px; border-bottom:1px solid #f0ebe0; vertical-align:top; }
+        .info-table tr:hover td { background:#fefdf9; }
+        .quiz-wrap { border:2px solid #f0ebe0; border-radius:var(--radius-sm); padding:18px 20px; margin-top:12px; background:#fefefe; }
+        .quiz-wrap .q-type { font-size:0.78rem; font-weight:700; color:var(--accent); margin-bottom:4px; }
+        .quiz-wrap .q-text { font-weight:600; margin-bottom:12px; font-size:0.98rem; }
+        .opt-list { list-style:none; display:flex; flex-direction:column; gap:7px; }
+        .opt-list li { padding:10px 14px; border-radius:var(--radius-sm); cursor:pointer; border:2px solid #e9e4db; transition:all 0.2s; background:#fdfdfc; font-size:0.9rem; user-select:none; }
+        .opt-list li:hover { border-color:#c0b090; background:#fefdf9; }
+        .opt-list li.selected { border-color:#1a5276; background:#eaf2f8; font-weight:600; }
+        .opt-list li.correct { border-color:#1e8449 !important; background:#eafaf1 !important; color:#145a32 !important; }
+        .opt-list li.wrong { border-color:#b22222 !important; background:#fdedec !important; color:#922b21 !important; }
+        .opt-list li.disabled { pointer-events:none; opacity:0.85; }
+        .btn-row { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
+        .btn { display:inline-block; padding:10px 22px; border-radius:25px; font-weight:600; cursor:pointer; border:none; font-size:0.88rem; }
+        .btn-primary { background:var(--accent); color:#fff; } .btn-primary:hover { background:#8b1a1a; }
+        .btn-outline { background:#fff; color:var(--accent); border:2px solid var(--accent); } .btn-outline:hover { background:#fdedec; }
+        .explain-card { margin-top:12px; padding:14px 18px; border-radius:var(--radius-sm); display:none; font-size:0.9rem; line-height:1.7; }
+        .explain-card.show { display:block; }
+        .explain-card.correct-ex { background:#eafaf1; border:1px solid #a3e4bc; color:#145a32; }
+        .explain-card.wrong-ex { background:#fdedec; border:1px solid #f5b7b1; color:#922b21; }
+        .explain-card .ex-head { font-weight:700; margin-bottom:6px; font-size:0.95rem; }
+        @media (max-width:768px) {
+            .toc { transform:translateX(-260px); } .toc.show { transform:translateX(0); }
+            .toc-toggle { display:flex; } .main { max-width:100%; margin:0 auto; } .card { padding:18px 14px; }
+        }
+    </style>
+</head>
+<body>
+<button class="toc-toggle" id="tocToggle" aria-label="目录" onclick="toggleToc()">☰</button>
+<div class="toc-overlay" id="tocOverlay" onclick="closeToc()"></div>
+<nav class="toc" id="toc"><div class="toc-title">📑 公安基础 · 知识目录</div></nav>
+<div class="main" id="mainContent"></div>
+<script>
+const knowledgeData = [
+    // ==================== 模块一：公安基础知识 ====================
+    {
+        id: 'mod1', iconClass: 'icon-red', iconEmoji: '🏛️',
+        title: '一、公安基础知识',
+        subtitle: '性质 · 职能 · 根本原则 · 路线 · 方针',
+        items: [
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core',
+              title: '1. 公安机关的性质（一句话记住）',
+              content: '公安机关是<span class="kh kh-red">人民民主专政的重要工具</span>，是<span class="kh kh-red">武装性质</span>的国家<span class="kh kh-red">治安行政力量</span>和<span class="kh kh-red">刑事司法力量</span>。',
+              extra: '🔑 关键词拆解：① 人民民主专政=阶级属性（根本属性）；② 武装性质=组织属性；③ 治安行政+刑事司法=双重职能属性。' },
+            { type: 'ki', badge: '必考', badgeClass: 'badge-core',
+              title: '2. 根本属性 vs 组织属性（别搞混）',
+              content: '阶级属性（根本属性）：<span class="kh kh-red">人民民主专政的重要工具</span>——这是公安机关的"灵魂"。<br>组织属性：<span class="kh kh-blue">武装性质</span>——这是公安机关的"身体"。',
+              extra: '📌 考试陷阱：题目问"根本属性"，选"人民民主专政的重要工具"；问"组织属性"，选"武装性质"。两者换位就是错误选项。',
+              example: { q: '例题：公安机关的根本属性是什么？', a: '答：人民民主专政的重要工具。它表明了公安机关的阶级本质，是公安机关性质的核心内容和本质特征。' } },
+            { type: 'ki', badge: '重点', badgeClass: 'badge-num',
+              title: '3. 公安机关的三大基本职能',
+              content: '① <span class="kh kh-red">专政职能</span>：依法对危害国家安全的敌对势力和严重刑事犯罪分子进行<span class="kh kh-red">镇压、制裁、改造、监督</span>。对象是"敌人"。<br>② <span class="kh kh-blue">民主职能</span>：保护人民的民主权利和合法权益，实质是<span class="kh kh-blue">保障人民当家作主</span>。对象是"人民"。<br>③ <span class="kh kh-green">管理职能</span>：管理枪支弹药、特种行业、集会游行等社会公共事务。',
+              extra: '💡 记忆口诀："专政打敌人，民主护人民，管理管社会"。专政与民主是基本职能，管理是日常职能。',
+              example: { q: '张三在公共场所打架斗殴，公安机关对其处以罚款。这体现了什么职能？', a: '属于管理职能（治安行政管理）。如果是打击间谍，则属于专政职能；如果救助走失儿童，则属于民主职能中的服务人民。' } },
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core',
+              title: '4. 公安工作的根本原则（最高原则）',
+              content: '<span class="kh kh-red">坚持党对公安工作的绝对领导</span>——这是公安机关安身立命的根本所在。<br>关键词："绝对"二字不能丢。',
+              extra: '📌 党的绝对领导体现在五个方面：<br>① 政治领导（方向/路线/政策）<br>② 思想领导（马克思主义/习近平新时代中国特色社会主义思想）<br>③ 组织领导（健全组织、党管干部）<br>④ 决策领导（宏观决策、重大问题指示）<br>⑤ 法制领导（制定公安法规、监督执法）' },
+            { type: 'ki', badge: '重点', badgeClass: 'badge-num',
+              title: '5. 公安工作的根本路线',
+              content: '<span class="kh kh-red">群众路线</span>：一切为了群众，一切依靠群众，从群众中来，到群众中去。<br>· <span class="kh kh-blue">一切为了群众</span> = 公安工作的<span class="kh kh-blue">宗旨和出发点</span><br>· <span class="kh kh-blue">一切依靠群众</span> = 公安工作的<span class="kh kh-blue">根本态度</span><br>· <span class="kh kh-blue">从群众中来，到群众中去</span> = 公安工作的<span class="kh kh-blue">基本方法</span>',
+              extra: '🔑 三者分别对应：出发点（为什么做）、态度（靠谁做）、方法（怎么做）。考试常考"出发点"对应哪一句。' },
+            { type: 'ki', badge: '重点', badgeClass: 'badge-num',
+              title: '6. 公安工作的基本方针',
+              content: '<span class="kh kh-red">党委领导下的专门机关与广大群众相结合</span>。<br>核心是"专群结合"：专门机关（公安机关）+ 人民群众。',
+              extra: '📌 口诀："党委领导，专群结合"。公安机关是主导方，结合好不好取决于公安机关。' },
+            { type: 'ki', badge: '重要', badgeClass: 'badge-case',
+              title: '7. 公安工作的基本政策（一表通）',
+              content: '公安机关有三大基本政策，各自适用不同领域：',
+              extra: '<table class="info-table"><tr><th>政策</th><th>适用领域</th><th>核心内容</th></tr><tr><td>严肃与谨慎相结合</td><td>刑事</td><td>严肃=执法必严；谨慎=重证据、重调查；总精神=<b>不枉不纵</b></td></tr><tr><td>宽严相济</td><td>刑事</td><td>宽：非犯罪化/非监禁化/非司法化；严：依法从重从快惩处严重刑事犯罪</td></tr><tr><td>教育与处罚相结合</td><td>治安</td><td>处罚=必要手段；教育=基本手段；寓教育于处罚全过程</td></tr></table>' },
+            { type: 'ki', badge: '口诀', badgeClass: 'badge-case',
+              title: '8. 群体性事件处置方针（三个慎用）',
+              content: '<span class="kh kh-red">处置方针</span>：内紧外松、疏导为主、快速处置<br><span class="kh kh-red">处置原则</span>：可散不可聚、可顺不可激、可解不可结<br><span class="kh kh-red">三个慎用</span>：<span class="kh kh-red">慎用警力</span>、<span class="kh kh-red">慎用武器警械</span>、<span class="kh kh-red">慎用强制措施</span>',
+              extra: '💡 记忆："散比聚好，顺比激好，解比结好"。三个慎用就是"别动粗，先讲理"。' },
+            { type: 'ki', badge: '数字', badgeClass: 'badge-num',
+              title: '9. 中国近代警察发展简史（时间线）',
+              content: '1898年→<span class="kh kh-red">湖南保卫局</span>（陈宝箴，最早专职警察机构）<br>1905年→<span class="kh kh-red">巡警部</span>（清政府，第一个全国性专职警察机构）<br>1927年→<span class="kh kh-red">中央特科</span>（周恩来/上海，党最早保卫机构）<br>1931年→<span class="kh kh-red">国家政治保卫局</span>（瑞金，最早人民政权公安保卫机关）<br>1938年→<span class="kh kh-red">延安市警察队</span>（"边警"，第一支正规人民警察队伍）<br>1939年→<span class="kh kh-red">党中央社会部</span>',
+              extra: '📌 口诀："湖南最早，巡警全国，特科秘密，保卫瑞金，边警第一，社会部中央"。这几个时间点常出选择题。' }
+        ],
+        quizzes: [
+            { q: '公安机关的根本属性是什么？', opts: ['A. 武装性质', 'B. 治安行政力量', 'C. 人民民主专政的重要工具', 'D. 刑事司法力量'], correct: 2, type: 'single', quizIndex: 1,
+              d: '<b>A</b>：错误。武装性质是组织属性，不是根本属性。<br><b>B</b>：错误。治安行政力量是职能属性之一。<br><b>C</b>：正确。人民民主专政的重要工具是公安机关的阶级属性，也是其根本属性。<br><b>D</b>：错误。刑事司法力量是职能属性之一。',
+              t: '问"根本属性"就选"人民民主专政的重要工具"，这是公安机关的"灵魂"。' },
+            { q: '公安工作的根本原则是什么？', opts: ['A. 群众路线', 'B. 专群结合', 'C. 坚持党对公安工作的绝对领导', 'D. 全心全意为人民服务'], correct: 2, type: 'single', quizIndex: 2,
+              d: '<b>A</b>：错误。群众路线是根本路线，不是根本原则。<br><b>B</b>：错误。专群结合是基本方针。<br><b>C</b>：正确。坚持党对公安工作的绝对领导是公安工作的根本原则。<br><b>D</b>：错误。全心全意为人民服务是宗旨。',
+              t: '原则=党领导；路线=群众路线；方针=专群结合。三个概念不能混。' },
+            { q: '"一切为了群众"是公安工作的什么？', opts: ['A. 根本态度', 'B. 基本方法', 'C. 宗旨和出发点', 'D. 根本原则'], correct: 2, type: 'single', quizIndex: 3,
+              d: '<b>A</b>：错误。"一切依靠群众"才是根本态度。<br><b>B</b>：错误。"从群众中来，到群众中去"才是基本方法。<br><b>C</b>：正确。"一切为了群众"是公安工作的宗旨和出发点。<br><b>D</b>：错误。根本原则是党对公安工作的绝对领导。',
+              t: '出发点=一切为了群众（为什么做）；态度=一切依靠群众（靠谁做）；方法=从群众中来到群众中去（怎么做）。' },
+            { q: '群体性事件处置中，以下哪项不属于"三个慎用"？', opts: ['A. 慎用警力', 'B. 慎用武器警械', 'C. 慎用强制措施', 'D. 慎用行政处罚'], correct: 3, type: 'single', quizIndex: 4,
+              d: '<b>A</b>：属于三个慎用之一。<br><b>B</b>：属于三个慎用之一。<br><b>C</b>：属于三个慎用之一。<br><b>D</b>：不属于。三个慎用是"警力、武器警械、强制措施"。行政处罚不在其中。',
+              t: '三慎用口诀："人、枪、措施"都要慎用。行政处罚是事后处理，不是现场处置的慎用对象。' },
+            { q: '我国最早的一支比较正规的人民警察队伍是？', opts: ['A. 湖南保卫局', 'B. 中央特科', 'C. 延安市警察队', 'D. 国家政治保卫局'], correct: 2, type: 'single', quizIndex: 5,
+              d: '<b>A</b>：错误。湖南保卫局是1898年，最早的专职警察机构，但属于清政府时期。<br><b>B</b>：错误。中央特科是1927年党在中央机关设立的最早保卫机构。<br><b>C</b>：正确。延安市警察队（1938年），简称"边警"，是第一支比较正规的人民警察队伍。<br><b>D</b>：错误。国家政治保卫局是1931年最早人民政权的公安保卫机关。',
+              t: '"最早"分几个：湖南保卫局=最早专职；中央特科=党最早保卫；国家政治保卫局=最早人民政权；延安市警察队=第一支正规人民警察队。' },
+            { q: '公安机关的民主职能，其实质是什么？', opts: ['A. 打击犯罪', 'B. 保障人民享有国家主人翁地位', 'C. 维护社会治安', 'D. 管理公共事务'], correct: 1, type: 'single', quizIndex: 6,
+              d: '<b>A</b>：错误。打击犯罪主要是专政职能的内容。<br><b>B</b>：正确。民主职能的实质就是保障人民享有国家主人翁的地位和保障人民的利益。<br><b>C</b>：错误。维护社会治安是管理职能的内容。<br><b>D</b>：错误。管理公共事务是管理职能的内容。',
+              t: '民主=人民当家作主。专政=打击敌人。两个基本职能，对象不同。' },
+            { q: '关于严肃与谨慎相结合政策，以下说法正确的是？', opts: ['A. 严肃就是重证据', 'B. 谨慎就是执法必严', 'C. 总精神是不枉不纵', 'D. 该政策适用于治安管理'], correct: 2, type: 'single', quizIndex: 7,
+              d: '<b>A</b>：错误。严肃=执法必严；谨慎=重证据、重调查研究。A说反了。<br><b>B</b>：错误。B也说反了。<br><b>C</b>：正确。严肃与谨慎相结合的总精神就是"不枉不纵"。<br><b>D</b>：错误。该政策适用于刑事领域，治安领域适用教育与处罚相结合。',
+              t: '严肃=严打，谨慎=别搞错。合起来就是"不冤枉好人，不放过坏人"。' },
+            { q: '公安机关的基本职能包括哪两个？', opts: ['A. 管理职能和服务职能', 'B. 专政职能和民主职能', 'C. 治安职能和刑事职能', 'D. 预防职能和打击职能'], correct: 1, type: 'single', quizIndex: 8,
+              d: '<b>A</b>：错误。管理和服务是从不同角度划分的职能，不是基本职能。<br><b>B</b>：正确。专政职能和民主职能是公安机关的两大基本职能。<br><b>C</b>：错误。治安和刑事是公安专业工作的分类。<br><b>D</b>：错误。预防和打击是工作手段，不是基本职能。',
+              t: '基本职能就两个：专政（对敌人）+ 民主（对人民）。其他都是衍生出来的。' }
+        ]
+    },
+    // ==================== 模块二：职业素养 ====================
+    {
+        id: 'mod2', iconClass: 'icon-blue', iconEmoji: '🛡️',
+        title: '二、职业素养',
+        subtitle: '核心价值观 · 纪律 · 职业道德 · 枫桥经验',
+        items: [
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core',
+              title: '1. 人民警察的核心价值观（四个词）',
+              content: '<span class="kh kh-red">忠诚</span>——根本要求、政治本色（"忠"字当头）<br><span class="kh kh-blue">为民</span>——宗旨、出发点、落脚点（"民"字为本）<br><span class="kh kh-green">公正</span>——法律精神、价值追求（"公"字为魂）<br><span class="kh kh-red">廉洁</span>——内在要求、道德底线（"廉"字为基）',
+              extra: '📌 口诀："忠诚为民公正廉，四字箴言记心间"。忠诚=政，为民=民，公正=法，廉洁=德。' },
+            { type: 'ki', badge: '必考', badgeClass: 'badge-core',
+              title: '2. 新时代公安工作十六字方针',
+              content: '<span class="kh kh-red">政治建警、改革强警、科技兴警、从严治警</span>',
+              extra: '💡 精简记忆："政改科严"四个字。政治方向→改革动力→科技支撑→纪律保障。' },
+            { type: 'ki', badge: '重点', badgeClass: 'badge-num',
+              title: '3. "四个铁一般"（队伍建设目标）',
+              content: '① 铁一般的<span class="kh kh-red">理想信念</span><br>② 铁一般的<span class="kh kh-red">责任担当</span><br>③ 铁一般的<span class="kh kh-red">过硬本领</span><br>④ 铁一般的<span class="kh kh-red">纪律作风</span>',
+              extra: '📌 口诀："信、担、本、纪"——信仰、担当、本领、纪律。' },
+            { type: 'ki', badge: '必考', badgeClass: 'badge-core',
+              title: '4. 人民警察的三项纪律（高压线）',
+              content: '① 决不允许<span class="kh kh-red">面对群众危难不勇为</span><br>② 决不允许<span class="kh kh-red">酗酒滋事</span><br>③ 决不允许<span class="kh kh-red">进夜总会娱乐</span><br><span class="kh kh-red">违反上述规定→一律先禁闭，再纪律处分；严重后果或恶劣影响→一律开除。</span>',
+              extra: '📌 关键词："不作为、酗酒、夜总会"——三条高压线，碰了就禁闭，严重就开除。' },
+            { type: 'ki', badge: '重点', badgeClass: 'badge-num',
+              title: '5. 五条禁令（五个严禁）',
+              content: '① 严禁违反<span class="kh kh-red">枪支管理使用规定</span>→违纪处分/严重后果辞退开除<br>② 严禁<span class="kh kh-red">携带枪支饮酒</span>→辞退/严重后果开除<br>③ 严禁<span class="kh kh-red">酒后驾驶机动车</span>→辞退/严重后果开除<br>④ 严禁<span class="kh kh-red">工作时间饮酒</span>→纪律处分/严重后果辞退开除<br>⑤ 严禁<span class="kh kh-red">参与赌博</span>→辞退/情节严重开除',
+              extra: '💡 记忆："枪、枪酒、车酒、班酒、赌"——五条都跟"枪""酒""赌"有关。民警违反→所在单位领导也要被处分。' },
+            { type: 'ki', badge: '重要', badgeClass: 'badge-case',
+              title: '6. 人民警察职业道德规范（十项）',
+              content: '忠诚可靠、秉公执法、英勇善战、热诚服务、文明理性、严守纪律、爱岗敬业、甘于奉献、清正廉洁、团结协作',
+              extra: '📌 口诀："忠秉英热文，严爱甘清团"——十个字各取一字。考试常考某行为对应哪项职业道德。',
+              example: { q: '女警带着全套装备逆向而行，履行民警职责，体现了哪项职业道德？', a: '爱岗敬业——恪尽职守，勤学善思，精益求精。她做好了自己的本职工作。' } },
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core',
+              title: '7. "枫桥经验"（三治融合+四化并举+四防齐抓）',
+              content: '<span class="kh kh-red">三治融合</span>：自治、法治、德治<br><span class="kh kh-red">四化并举</span>：社会化、法治化、智能化、专业化<br><span class="kh kh-red">四防齐抓</span>：人防、物防、技防、心防',
+              extra: '💡 口诀："三治自法德，四化社法智专，四防人物技心"。"枫桥经验"的核心是矛盾不上交、平安不出事、服务不缺位。' },
+            { type: 'ki', badge: '重点', badgeClass: 'badge-num',
+              title: '8. 全国公安工作会议要点',
+              content: '<span class="kh kh-red">公平正义</span>是执法司法工作的<span class="kh kh-red">生命线</span>。<br>新时代公安机关三大使命任务：<span class="kh kh-red">捍卫政治安全、维护社会安定、保障人民安宁</span>。<br><span class="kh kh-red">理想信念教育</span>是育警铸魂、固本培元的战略工程。',
+              extra: '📌 三个"安"：政治安全→社会安定→人民安宁。生命线=公平正义，这个不能忘。' }
+        ],
+        quizzes: [
+            { q: '人民警察的核心价值观中，"根本要求"和"政治本色"指的是什么？', opts: ['A. 为民', 'B. 公正', 'C. 忠诚', 'D. 廉洁'], correct: 2, type: 'single', quizIndex: 9,
+              d: '<b>A</b>：错误。为民是宗旨、出发点、落脚点。<br><b>B</b>：错误。公正是法律精神、价值追求。<br><b>C</b>：正确。忠诚是根本要求、政治本色。<br><b>D</b>：错误。廉洁是内在要求、道德底线。',
+              t: '忠诚是"忠"字当头，警察第一要求就是忠诚。' },
+            { q: '新时代公安工作十六字方针是？', opts: ['A. 对党忠诚、服务人民、执法公正、纪律严明', 'B. 政治建警、改革强警、科技兴警、从严治警', 'C. 革命化、正规化、专业化、职业化', 'D. 铁一般的理想信念、责任担当、过硬本领、纪律作风'], correct: 1, type: 'single', quizIndex: 10,
+              d: '<b>A</b>：错误。这是新时代治警建警总要求，不是十六字方针。<br><b>B</b>：正确。政治建警、改革强警、科技兴警、从严治警是十六字方针。<br><b>C</b>：错误。这是公安队伍正规化建设的目标。<br><b>D</b>：错误。这是"四个铁一般"。',
+              t: '十六字方针=政改科严。总要求=对党忠、为人、公正、纪律。别搞混。' },
+            { q: '民警违反三项纪律的，应如何处理？', opts: ['A. 警告', 'B. 记过', 'C. 一律先予禁闭', 'D. 罚款'], correct: 2, type: 'single', quizIndex: 11,
+              d: '<b>A</b>：错误。警告是行政处分，但三项纪律的初始处理是禁闭。<br><b>B</b>：错误。记过也是行政处分，不是初始处理。<br><b>C</b>：正确。违反三项纪律的一律先予禁闭，再视情给予纪律处分。<br><b>D</b>：错误。罚款不是纪律处分方式。',
+              t: '三项纪律是高压线，碰了先禁闭（关起来），严重的直接开除。' },
+            { q: '"枫桥经验"中的"三治融合"指的是什么？', opts: ['A. 人治、法治、德治', 'B. 自治、法治、德治', 'C. 自治、法制、德治', 'D. 自治、法治、心治'], correct: 1, type: 'single', quizIndex: 12,
+              d: '<b>A</b>：错误。不是"人治"，是"自治"。<br><b>B</b>：正确。三治融合=自治、法治、德治。<br><b>C</b>：错误。是"法治"不是"法制"。<br><b>D</b>：错误。心防属于四防，不属于三治。',
+              t: '"自己管、依法管、凭良心管"——自治、法治、德治。' },
+            { q: '人民警察职业道德中，"事实为据，秉持公正，惩恶扬善"属于哪一项？', opts: ['A. 忠诚可靠', 'B. 秉公执法', 'C. 英勇善战', 'D. 严守纪律'], correct: 1, type: 'single', quizIndex: 13,
+              d: '<b>A</b>：错误。忠诚可靠的内容是"听党指挥，热爱人民，忠于法律"。<br><b>B</b>：正确。秉公执法的内容就是"事实为据，秉持公正，惩恶扬善"。<br><b>C</b>：错误。英勇善战的内容是"坚韧不拔，机智果敢，崇尚荣誉"。<br><b>D</b>：错误。严守纪律的内容是"遵章守纪，保守秘密，令行禁止"。',
+              t: '看到"事实为据""公正""惩恶"就知道是"秉公执法"。' }
+        ]
+    },
+,
+    // ==================== 模块三：队伍建设与体制 ====================
+    {
+        id: 'mod3', iconClass: 'icon-green', iconEmoji: '🏗️',
+        title: '三、公安队伍建设与体制',
+        subtitle: '职务序列 · 内务建设 · 执法监督 · 督察制度',
+        items: [
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core',
+              title: '1. 公安机关的管理体制（四个词）',
+              content: '<span class="kh kh-red">统一领导，分级管理，条块结合，以块为主</span>',
+              extra: '📌 口诀："统分结合块为主"。统一领导=公安部领导全国公安；分级管理=各级公安机关分级负责；条块结合=上级公安（条）与同级政府（块）双重领导；以块为主=同级党委政府领导为主。' },
+            { type: 'ki', badge: '必考', badgeClass: 'badge-core',
+              title: '2. 人民警察的职务序列（三类）',
+              content: '🔹 <span class="kh kh-red">警官职务</span>：履行警务指挥职责。如：总队长、支队长、大队长、中队长；政治委员、教导员、指导员。<br>🔹 <span class="kh kh-blue">警员职务</span>：履行警务执行职责。如：一级警长至四级警长、一级警员至三级警员。<br>🔹 <span class="kh kh-green">警务技术职务</span>：从事警务技术工作。如：法医、警犬训练员。',
+              extra: '💡 记忆："指挥当警官，执行当警员，技术当技术"。警官是"长"字辈，警员是"员"字辈，技术是专业岗。' },
+            { type: 'ki', badge: '重点', badgeClass: 'badge-num',
+              title: '3. 警察任职的提名与任免规则',
+              content: '<table class="info-table"><tr><th>职务</th><th>规则</th></tr><tr><td>县级以上公安机关<b>正职</b>领导提名</td><td>应<span class="kh kh-red">事先征得上一级公安机关同意</span></td></tr><tr><td>县级以上公安机关<b>副职</b>领导任免</td><td>应<span class="kh kh-red">征求上一级公安机关意见</span></td></tr><tr><td>内设机构警官、警员职务任免</td><td>由本公安机关按干部管理权限决定或报批</td></tr><tr><td>公安派出所警官、警员职务任免</td><td>由派出公安派出所的公安机关决定</td></tr></table>',
+              extra: '📌 关键词区分："正职=征得同意"（更强硬），"副职=征求意见"（较温和）。正职必须上级点头，副职只需问问上级。' },
+            { type: 'ki', badge: '重点', badgeClass: 'badge-num',
+              title: '4. 内务建设的方针和原则',
+              content: '<span class="kh kh-red">方针</span>：从严治警、依法治警<br><span class="kh kh-red">原则</span>：高效务实、加强监督、着眼基层',
+              extra: '📌 方针是"治警"（从严+依法），原则是"做事"（高效+监督+基层）。' },
+            { type: 'ki', badge: '必考', badgeClass: 'badge-core',
+              title: '5. 人民警察的奖励与处分',
+              content: '<span class="kh kh-red">奖励等级</span>（从低到高）：嘉奖 → 三等功 → 二等功 → 一等功 → 授予荣誉称号（二级英模、一级英模）<br><span class="kh kh-red">行政处分</span>（从低到高）：警告 → 记过 → 记大过 → 降级 → 撤职 → 开除',
+              extra: '📌 奖励5级（含荣誉称号分2级），处分6级。口诀："嘉三二一英，警过过大降撤开"。' },
+            { type: 'ki', badge: '数字', badgeClass: 'badge-num',
+              title: '6. 应当辞退的情形（5种）',
+              content: '① 连续<span class="kh kh-red">两年</span>考核不称职<br>② 不胜任现职又不服从其他安排<br>③ 拒绝合理工作调整<br>④ 不履行义务不守纪律经教育无转变<br>⑤ <span class="kh kh-red">旷工连续超过15天</span>，或<span class="kh kh-red">1年累计超过30天</span>',
+              extra: '📌 数字记忆："两年不称职，15天连续旷，30天累计旷"。' },
+            { type: 'ki', badge: '重点', badgeClass: 'badge-num',
+              title: '7. 不得辞退的情形（3种）',
+              content: '① <span class="kh kh-red">因公致残</span>丧失或部分丧失工作能力<br>② <span class="kh kh-red">患病或负伤</span>在规定医疗期内<br>③ <span class="kh kh-red">女性在孕期、产假、哺乳期</span>',
+              extra: '📌 口诀："残、病、孕"三类人不能辞退。这是法律保护的特殊群体。' },
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core',
+              title: '8. 公安执法监督的分类（三个维度）',
+              content: '<table class="info-table"><tr><th>分类标准</th><th>类型</th><th>示例</th></tr><tr><td>监督主体与对象关系</td><td><span class="kh kh-red">外部监督</span> vs <span class="kh kh-blue">内部监督</span></td><td>外部：人大、检察、社会；内部：督察、法制</td></tr><tr><td>监督时间</td><td><span class="kh kh-red">事前</span> vs <span class="kh kh-blue">事中</span> vs <span class="kh kh-green">事后</span></td><td>事前：逮捕审批；事中：督察现场处置；事后：复议诉讼</td></tr><tr><td>能否直接产生法律效力</td><td><span class="kh kh-red">直接监督</span> vs <span class="kh kh-blue">间接监督</span></td><td>直接：人大、检察；间接：社会监督（需转有关部门处理）</td></tr></table>',
+              extra: '📌 常考：社会监督（舆论、公民）是间接监督，不能直接产生法律效力，需要转有关部门处理。' },
+            { type: 'ki', badge: '必考', badgeClass: 'badge-core',
+              title: '9. 督察机构的两个重要权限（需要报批）',
+              content: '🔹 <span class="kh kh-red">责令执行/撤销变更</span>：督察机构对本级公安机关所属单位或下级公安机关的错误决定，可以决定撤销或变更，但须<span class="kh kh-red">报本级公安机关行政首长批准</span>后执行。<br>🔹 <span class="kh kh-red">停止执行职务/禁闭</span>：须报<span class="kh kh-red">本级公安机关督察长批准</span>后执行。',
+              extra: '📌 期限：停止执行职务=10~60日；禁闭=1~7日。对禁闭不服的申诉→24小时内决定；停止职务不服→5日内决定。申诉期间不停止执行。' },
+            { type: 'ki', badge: '重点', badgeClass: 'badge-num',
+              title: '10. 督察长和督察人员',
+              content: '🔹 <span class="kh kh-red">公安部督察长</span>：由公安部一名副职领导成员担任<br>🔹 <span class="kh kh-red">县级以上公安机关督察长</span>：由公安机关行政首长兼任<br>🔹 <span class="kh kh-red">督察人员条件</span>：大专以上学历+法律/公安业务知识+<span class="kh kh-red">3年以上公安工作经历</span>',
+              extra: '📌 公安部督察长=副职；地方督察长=一把手。督察人员要3年经验+大专学历。' },
+            { type: 'ki', badge: '重点', badgeClass: 'badge-case',
+              title: '11. 不能申请行政复议的情形',
+              content: '① <span class="kh kh-red">抽象行政行为</span>（规章、规范性文件）<br>② <span class="kh kh-red">国家行为</span>（国防、外交等）<br>③ <span class="kh kh-red">内部行为</span>（人事处理、处分）<br>④ <span class="kh kh-red">不具有强制力的行为</span>（行政指导、调解）<br>⑤ <span class="kh kh-red">刑事侦查行为</span>',
+              extra: '💡 口诀："抽国内不强刑"——抽象、国家、内部、不强、刑事。这五种行为不能复议。' },
+            { type: 'ki', badge: '数字', badgeClass: 'badge-num',
+              title: '12. 复议机关的确定（找谁告）',
+              content: '🔹 对<span class="kh kh-red">政府工作部门</span>不服→<span class="kh kh-red">原则上只找：本级政府</span>！！<span class="kh kh-red">不找上一级主管部门</span>（只有少数垂直领导的机关（如海关、金融、外汇管理等）才例外，仍向上一级主管部门申请。）<br>🔹 对<span class="kh kh-red">对派出所依法以自己名义作出的行政行为</span>不服的→<span class="kh kh-red">统一由设立该派出所的公安机关的本级人民政府管辖</span>不能<span class="kh kh-red">不能再找设立该派出所的公安机关申请复议了</span>',
+              extra: '📌 派出所的两个"上级"：公安机关（业务上级）+同级政府（行政上级）。申请人可以二选一。' },
+            { type: 'ki', badge: '必考', badgeClass: 'badge-core',
+              title: '13. 国家不承担赔偿责任的情形',
+              content: '① 人民警察<span class="kh kh-red">与行使职权无关的个人行为</span><br>② 因公民法人<span class="kh kh-red">自己的行为</span>（自伤、自残、自罪）致使损害发生<br>③ <span class="kh kh-red">合法履行职责</span><br>④ <span class="kh kh-red">不负刑事责任人被羁押</span>的<br>⑤ <span class="kh kh-red">有罪不究</span>行为',
+              extra: '💡 口诀："个行、自损、合法、不刑、有罪不究"。核心：不是公安机关的错就不赔。' }
+        ],
+        quizzes: [
+            { q: '公安机关的管理体制是？', opts: ['A. 统一领导，分级管理，条块结合，以条为主', 'B. 统一领导，分级管理，条块结合，以块为主', 'C. 分级领导，统一管理，条块结合，以块为主', 'D. 统一领导，分级管理，条块分离，以块为主'], correct: 1, type: 'single', quizIndex:14,
+              d: '<b>A</b>：错误。是"以块为主"不是"以条为主"。<br><b>B</b>：正确。统一领导、分级管理、条块结合、以块为主。<br><b>C</b>：错误。"统一领导"不是"分级领导"。<br><b>D</b>：错误。"条块结合"不是"条块分离"。',
+              t: '"以块为主"就是同级党委政府说了算，上级公安是辅助。"以条为主"就错了。' },
+            { q: '县级以上公安机关正职领导职务的提名，应当？', opts: ['A. 由同级政府直接任命', 'B. 事先征得上一级公安机关同意', 'C. 征求上一级公安机关意见', 'D. 由上级公安机关直接任命'], correct: 1, type: 'single', quizIndex:15,
+              d: '<b>A</b>：错误。正职提名需征得上级公安同意，不能同级直接任命。<br><b>B</b>：正确。正职=征得同意。<br><b>C</b>：错误。副职才是征求意见。<br><b>D</b>：错误。不是直接任命，是提名时征得同意。',
+              t: '正职=征得同意（更强硬）；副职=征求意见（较温和）。正职必须上级点头！' },
+            { q: '督察机构对公安机关人民警察采取禁闭措施的期限是？', opts: ['A. 1日以上3日以下', 'B. 1日以上7日以下', 'C. 3日以上7日以下', 'D. 7日以上15日以下'], correct: 1, type: 'single', quizIndex:16,
+              d: '<b>A</b>：错误。期限太短。<br><b>B</b>：正确。禁闭期限为1日以上7日以下。<br><b>C</b>：错误。起点是1日不是3日。<br><b>D</b>：错误。最多7日。',
+              t: '禁闭1~7天，停止职务10~60天。禁闭更短但更严厉。' },
+            { q: '下列哪项属于公安执法外部监督？', opts: ['A. 督察监督', 'B. 法制部门监督', 'C. 国家权力机关的监督', 'D. 行政复议'], correct: 2, type: 'single', quizIndex:17,
+              d: '<b>A</b>：错误。督察监督是内部监督。<br><b>B</b>：错误。法制部门监督是内部监督。<br><b>C</b>：正确。国家权力机关（人大）的监督是外部监督。<br><b>D</b>：错误。行政复议是内部监督。',
+              t: '外部=人大、检察院、法院、社会。内部=督察、法制、复议。' },
+            { q: '人民警察不得辞退的情形不包括？', opts: ['A. 因公致残丧失工作能力', 'B. 患病在规定医疗期内', 'C. 连续两年考核不称职', 'D. 女性在哺乳期内'], correct: 2, type: 'single', quizIndex:18,
+              d: '<b>A</b>：属于不得辞退情形。<br><b>B</b>：属于不得辞退情形。<br><b>C</b>：不属于。连续两年考核不称职是应当辞退的情形。<br><b>D</b>：属于不得辞退情形。',
+              t: '"残、病、孕"受保护不能辞退。"两年不称职"是应该辞退的。题目问"不得辞退"，C是应当辞退。' },
+            { q: '社会监督属于什么类型的监督？', opts: ['A. 直接监督', 'B. 间接监督', 'C. 内部监督', 'D. 事前监督'], correct: 1, type: 'single', quizIndex:19,
+              d: '<b>A</b>：错误。社会监督不能直接产生法律效力，是间接监督。<br><b>B</b>：正确。社会监督需要通过有关部门处理才能产生效力。<br><b>C</b>：错误。社会监督是外部监督。<br><b>D</b>：错误。社会监督可以事前、事中、事后，不是固定的时间分类。',
+              t: '老百姓提意见不能直接处理警察，要转给有关部门。所以是"间接"的。' },
+            { q: '下列哪项可以申请行政复议？', opts: ['A. 公安机关内部人事处理决定', 'B. 公安机关的刑事侦查行为', 'C. 公安机关的罚款处罚决定', 'D. 公安机关的行政指导行为'], correct: 2, type: 'single', quizIndex:20,
+              d: '<b>A</b>：错误。内部行为不能复议。<br><b>B</b>：错误。刑事侦查行为不能复议。<br><b>C</b>：正确。罚款是具体行政行为，可以复议。<br><b>D</b>：错误。行政指导不具有强制力，不能复议。',
+              t: '"抽国内不强刑"五类不能复议。罚款是具体行政处罚，可以复议。' }
+        ]
+    },
+    // ==================== 模块四：行政执法依据 ====================
+    {
+        id: 'mod4', iconClass: 'icon-yellow', iconEmoji: '📋',
+        title: '四、行政执法依据',
+        subtitle: '简易程序 · 快速办理 · 听证 · 拘留执行 · 办案期限',
+        items: [
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core',
+              title: '1. 治安管理处罚的种类（5+1种）',
+              content: '① <span class="kh kh-red">警告</span> ② <span class="kh kh-red">罚款</span> ③ <span class="kh kh-red">行政拘留</span> ④ <span class="kh kh-red">吊销公安机关发放的许可证</span><br>⑤ 对违反治安管理的<span class="kh kh-red">外国人</span>，可附加适用<span class="kh kh-red">限期出境或驱逐出境</span>',
+              extra: '📌 口诀："警罚拘吊，外加出境"。前四种对所有人适用，第五种只对外国人。' },
+            { type: 'ki', badge: '必考', badgeClass: 'badge-core',
+              title: '2. 简易程序（当场处罚）适用条件',
+              content: '🔹 治安/交通：处<span class="kh kh-red">200元以下</span>罚款或警告<br>🔹 出入境边防：处<span class="kh kh-red">500元以下</span>罚款或警告<br>🔹 <span class="kh kh-red">涉卖淫、嫖娼、赌博、毒品</span>案件<span class="kh kh-red">不适用</span>当场处罚<br>🔹 简易程序可由<span class="kh kh-red">一名民警</span>作出处罚决定<br>🔹 当场处罚后<span class="kh kh-red">24小时内</span>报备（交警<span class="kh kh-red">2日内</span>；交通不便地区返回后24小时内）',
+              extra: '💡 数字记忆："治安200、出境500、黄赌毒不简易；1人罚、24时报备"。' },
+            { type: 'ki', badge: '重点', badgeClass: 'badge-num',
+              title: '3. 快速办理程序（行政案件）',
+              content: '<span class="kh kh-red">不适用快速办理</span>：盲聋哑人、未成年人或疑似精神病人；应听证案件；可能10日以上拘留<br><span class="kh kh-red">快速办理流程</span>：① 书面告知+征得同意→② 认错认罚+关键证据印证→③ 专兼职法制员或办案部门负责人审核→④ <span class="kh kh-red">到案后48小时内</span>处理完毕<br>可用<span class="kh kh-red">录音录像代替询问笔录</span>；可用<span class="kh kh-red">口头方式履行告知</span>',
+              extra: '📌 关键词："同意→认错→审核→48小时"。不能快办的人：弱势群体+重案。' },
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core',
+              title: '4. 听证的条件（3种情形）',
+              content: '① <span class="kh kh-red">责令停产停业</span><br>② <span class="kh kh-red">吊销许可证或者执照</span><br>③ <span class="kh kh-red">较大数额罚款</span>：个人<span class="kh kh-red">2000元以上（治安4000）</span>、单位<span class="kh kh-red">1万元以上</span>、违反出入境管理个人<span class="kh kh-red">6000元以上</span>',
+              extra: '📌 数字："二千、一万、六千"——个人2000（治安案件4000）、单位10000、出入境个人6000。听证申请应在告知后3日内提出。' },
+            { type: 'ki', badge: '必考', badgeClass: 'badge-core',
+              title: '5. 拘留不执行的情形（4种人）',
+              content: '① 已满<span class="kh kh-red">14周岁不满16周岁</span><br>② 已满<span class="kh kh-red">16周岁不满18周岁且初次违反</span>（有犯罪记录除外）<br>③ <span class="kh kh-red">70周岁以上</span><br>④ <span class="kh kh-red">孕妇或正在哺乳自己婴儿的妇女</span>',
+              extra: '💡 口诀："小、初、老、孕"——未成年人、初次违法少年、老年人、孕妇。注意16-18岁必须是"初次"，14-16岁不管是不是初次都不执行。' },
+            { type: 'ki', badge: '重点', badgeClass: 'badge-num',
+              title: '6. 从重处罚的情形（5种）',
+              content: '① 有<span class="kh kh-red">较严重后果</span>的<br>② <span class="kh kh-red">教唆、胁迫、诱骗</span>他人实施违法行为<br>③ 对<span class="kh kh-red">报案人、控告人、举报人、证人</span>等打击报复<br>④ <span class="kh kh-red">6个月内</span>曾受治安处罚或<span class="kh kh-red">1年内同类违法2次以上</span><br>⑤ <span class="kh kh-red">刑罚执行完毕3年内</span>或缓刑期间违反治安管理',
+              extra: '📌 数字："6个月、1年2次、3年"——前科时限。' },
+            { type: 'ki', badge: '数字', badgeClass: 'badge-num',
+              title: '7. 治安案件办案期限',
+              content: '🔹 一般期限：自受理之日起<span class="kh kh-red">不超过30日</span><br>🔹 延长期限：案情重大复杂，经<span class="kh kh-red">上一级公安机关批准</span>可延长<span class="kh kh-red">30日</span><br>🔹 <span class="kh kh-red">鉴定期间不计入</span>办案期限<br>🔹 派出所承办的重大复杂案件→报<span class="kh kh-red">所属县级以上公安机关负责人</span>批准',
+              extra: '📌 30+30=最多60天。鉴定时间不算（因为鉴定不由公安控制）。' },
+            { type: 'ki', badge: '必考', badgeClass: 'badge-core',
+              title: '8. 行政拘留的合并执行与折抵',
+              content: '🔹 <span class="kh kh-red">合并执行</span>：一人有两种以上违法行为均处拘留，合并执行<span class="kh kh-red">最长不超过20日</span><br>🔹 <span class="kh kh-red">折抵</span>：处罚前被限制人身自由的，<span class="kh kh-red">1日折抵1日</span>。但<span class="kh kh-red">询问查证、继续盘问、约束措施</span>的时间<span class="kh kh-red">不予折抵</span>',
+              extra: '📌 20天是"天花板"，不管你犯多少事，拘留合起来最多20天。折抵是"关几天抵几天"，但被问话、被盘查的时间不算。' },
+            { type: 'ki', badge: '重点', badgeClass: 'badge-num',
+              title: '9. 行政拘留的暂缓执行',
+              content: '🔹 <span class="kh kh-red">条件</span>：被处罚人不服→申请复议或提起诉讼→向公安机关提出暂缓申请<br>🔹 <span class="kh kh-red">担保方式</span>：<span class="kh kh-red">保证人</span>或<span class="kh kh-red">保证金</span>（每日200元标准）<br>🔹 <span class="kh kh-red">保证人条件</span>：与本案无牵连、有政治权利、人身自由未受限、当地有常住户口和固定住所、有担保能力',
+              extra: '📌 简单说："告了就不用先蹲"，但要有保人（本地靠谱的人）或保金（每天200元）。' },
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core',
+              title: '10. 罚款当场收缴的情形',
+              content: '① 治安：<span class="kh kh-red">50元以下</span>无异议<br>② 交通（行人/乘车人/非机动车驾驶人）：<span class="kh kh-red">处罚款</span>无异议<br>③ 其他：<span class="kh kh-red">20元以下</span><br>④ <span class="kh kh-red">边远水上交通不便</span>地区，被处罚人提出+确有困难<br>⑤ 当地<span class="kh kh-red">无固定住所</span>，不当场收缴事后难以执行',
+              extra: '📌 当场收缴≠简易程序。当场收缴是收钱，简易程序是处罚方式。当场收缴的情形都可以当场收现金。' },
+            { type: 'ki', badge: '数字', badgeClass: 'badge-num',
+              title: '11. 询问查证时间',
+              content: '🔹 一般：<span class="kh kh-red">不超过8小时</span><br>🔹 延长：案情复杂、可能适用拘留→经批准可延长至<span class="kh kh-red">24小时</span>（不是48小时！）<br>🔹 <span class="kh kh-red">继续盘问</span>时间不同：一般12小时→可延至24小时→特殊情况（不讲真实姓名住址）可延至48小时',
+              extra: '📌 注意区分："询问查证"最长24小时，"继续盘问"最长48小时。两者不是一个概念！' },
+            { type: 'ki', badge: '重点', badgeClass: 'badge-case',
+              title: '12. 不适用调解的情形（7种）',
+              content: '① 雇凶伤害他人<br>② 结伙斗殴或其他寻衅滋事<br>③ 多次实施违反治安管理行为<br>④ 当事人明确表示不愿意调解<br>⑤ 调解过程中又对对方实施违反治安管理行为<br>⑥ 调解过程中违法嫌疑人逃跑<br>⑦ 其他不宜调解处理',
+              extra: '💡 口诀："雇凶结伙多次不，不愿再犯逃其他"。调解必须是轻微纠纷且双方自愿。' },
+            { type: 'ki', badge: '必考', badgeClass: 'badge-core',
+              title: '13. 行政案件与刑事案件证据的转化',
+              content: '🔹 <span class="kh kh-red">行政转刑事</span>：证人证言、被侵害人陈述、违法行为人供述<span class="kh kh-red">不可用</span>（需要重新收集）<br>🔹 <span class="kh kh-red">刑事转行政</span>：证据<span class="kh kh-red">都可以用</span>',
+              extra: '📌 "行转刑要重来，刑转行直接用"。刑事证据标准更严格，所以行政证据转刑事不达标。' },
+            { type: 'ki', badge: '口诀', badgeClass: 'badge-case',
+              title: '14. 一民警加一辅警可做的执法工作',
+              content: '接报案、受案登记、接受证据、信息采集、调解、送达文书——<span class="kh kh-red">可由一名民警带领辅警进行</span>，但应当<span class="kh kh-red">全程录音录像</span>。',
+              extra: '📌 限定范围："接、受、采、调、送"——这些辅助性工作可以带辅警，但强制措施、处罚决定不行。' }
+        ],
+        quizzes: [
+            { q: '简易程序中，对违反治安管理行为人处多少元以下罚款可以当场处罚？', opts: ['A. 50元', 'B. 100元', 'C. 200元', 'D. 500元'], correct: 2, type: 'single', quizIndex:21,
+              d: '<b>A</b>：错误。50元是当场收缴罚款的上限。<br><b>B</b>：错误。100元不是简易程序标准。<br><b>C</b>：正确。治安/交通简易程序：200元以下罚款或警告。<br><b>D</b>：错误。500元是出入境边防检查的简易标准。',
+              t: '当场罚（简易程序）：200元以下。当场收（当场收缴）：50元以下。两个"当场"不同！' },
+            { q: '快速办理行政案件，公安机关应当在违法嫌疑人到案后多久内作出处理决定？', opts: ['A. 24小时', 'B. 36小时', 'C. 48小时', 'D. 72小时'], correct: 2, type: 'single', quizIndex:22,
+              d: '<b>A</b>：错误。24小时是询问查证延长时间。<br><b>B</b>：错误。无此规定。<br><b>C</b>：正确。快速办理应在到案后48小时内处理完毕。<br><b>D</b>：错误。无此规定。',
+              t: '快速办理就是快——48小时搞定。普通程序30天。' },
+            { q: '下列哪项不执行行政拘留处罚？', opts: ['A. 已满14周岁不满16周岁的人', 'B. 已满18周岁的人', 'C. 65周岁以上的人', 'D. 没有怀孕的妇女'], correct: 0, type: 'single', quizIndex:23,
+              d: '<b>A</b>：正确。14-16岁不执行行政拘留。注意：是"不执行"不是"不适用"，但选项问不适用时可理解为不执行。<br><b>B</b>：错误。成年人正常执行。<br><b>C</b>：错误。70岁以上才不执行。<br><b>D</b>：错误。孕妇才不执行。',
+              t: '注意题干问法。14-16岁、16-18岁初次、70岁以上、孕妇——四类人不执行拘留。' },
+            { q: '行政拘留处罚合并执行的，最长不超过多少日？', opts: ['A. 15日', 'B. 20日', 'C. 30日', 'D. 60日'], correct: 1, type: 'single', quizIndex:24,
+              d: '<b>A</b>：错误。15日是单个拘留的常见期限。<br><b>B</b>：正确。合并执行最长不超过20日。<br><b>C</b>：错误。30日是治安办案一般期限。<br><b>D</b>：错误。60日是治安办案最长延长期限。',
+              t: '犯了多件事，拘留"打包价"最多20天。' },
+            { q: '治安案件的办案期限，自受理之日起一般不超过多少日？', opts: ['A. 15日', 'B. 20日', 'C. 30日', 'D. 60日'], correct: 2, type: 'single', quizIndex:25,
+              d: '<b>A</b>：错误。<br><b>B</b>：错误。<br><b>C</b>：正确。治安案件一般30日内办结，可延长30日。<br><b>D</b>：错误。60日是含延期的总时限。',
+              t: '30+30=60天封顶。鉴定时间不算在内。' },
+            { q: '关于行政拘留的暂缓执行，以下说法正确的是？', opts: ['A. 必须提供保证人', 'B. 必须缴纳保证金', 'C. 保证人或保证金二选一', 'D. 暂缓执行不需要申请'], correct: 2, type: 'single', quizIndex:26,
+              d: '<b>A</b>：错误。不一定，也可以交保证金。<br><b>B</b>：错误。不一定，也可以找保证人。<br><b>C</b>：正确。保证人或保证金二选一即可。<br><b>D</b>：错误。需要被处罚人提出申请。',
+              t: '担保方式二选一：找人保（保证人）或交钱保（每天200元）。' },
+            { q: '当场收缴的罚款，人民警察应当自收缴之日起几日内交至所属公安机关？', opts: ['A. 当日', 'B. 2日', 'C. 3日', 'D. 5日'], correct: 1, type: 'single', quizIndex:27,
+              d: '<b>A</b>：错误。非当日。<br><b>B</b>：正确。2日内交至所属公安机关。<br><b>C</b>：错误。<br><b>D</b>：错误。',
+              t: '收了钱2天内上交警局，水上从抵岸起算，列车上从返回起算。' }
+        ]
+    },
+
+,
+    // ==================== 模块五：综合练习 ====================
+    {
+        id: 'mod_final', iconClass: 'icon-red', iconEmoji: '🏆',
+        title: '综合练习 ',
+        subtitle: '覆盖：公安基础 | 职业素养 | 队伍建设 | 行政执法',
+        quizzes: [
+            // ===== 单选题25道 =====
+            { q: '公安机关的根本属性是什么？', opts: ['A. 武装性质', 'B. 治安行政力量', 'C. 人民民主专政的重要工具', 'D. 刑事司法力量'], correct: 2, type: 'single', quizIndex: 1,
+              d: '<b>A</b>：错误。武装性质是组织属性，不是根本属性。<br><b>B</b>：错误。治安行政力量是职能属性之一。<br><b>C</b>：正确。人民民主专政的重要工具是阶级属性，也是根本属性。<br><b>D</b>：错误。刑事司法力量是职能属性之一。',
+              t: '问根本属性就选"人民民主专政的重要工具"，这是公安机关的"灵魂"。' },
+            { q: '公安工作的根本原则是？', opts: ['A. 群众路线', 'B. 专群结合', 'C. 坚持党对公安工作的绝对领导', 'D. 全心全意为人民服务'], correct: 2, type: 'single', quizIndex: 2,
+              d: '<b>A</b>：错误。群众路线是根本路线。<br><b>B</b>：错误。专群结合是基本方针。<br><b>C</b>：正确。党对公安工作的绝对领导是根本原则。<br><b>D</b>：错误。这是宗旨。',
+              t: '原则=党领导；路线=群众路线；方针=专群结合。三概念不能混。' },
+            { q: '"一切为了群众"是公安工作的什么？', opts: ['A. 根本态度', 'B. 基本方法', 'C. 宗旨和出发点', 'D. 根本原则'], correct: 2, type: 'single', quizIndex: 3,
+              d: '<b>A</b>：错误。"一切依靠群众"才是根本态度。<br><b>B</b>：错误。"从群众中来，到群众中去"才是基本方法。<br><b>C</b>：正确。"一切为了群众"是宗旨和出发点。<br><b>D</b>：错误。根本原则是党的领导。',
+              t: '出发点=为谁做；态度=靠谁做；方法=怎么做。' },
+            { q: '公安机关的专政职能的对象是？', opts: ['A. 全体公民', 'B. 敌对势力和严重刑事犯罪分子', 'C. 违反治安管理的行为人', 'D. 所有违法犯罪人员'], correct: 1, type: 'single', quizIndex: 4,
+              d: '<b>A</b>：错误。专政对象是少数敌人，不是全体公民。<br><b>B</b>：正确。专政职能的对象是危害国家安全的敌对势力和严重刑事犯罪分子。<br><b>C</b>：错误。违反治安管理行为人是管理职能对象。<br><b>D</b>：错误。专政只针对严重犯罪分子。',
+              t: '专政打敌人，民主护人民，管理管社会。"敌人"是指危害国家安全和严重刑事犯罪的。' },
+            { q: '公安机关的管理体制是？', opts: ['A. 统一领导，分级管理，条块结合，以条为主', 'B. 统一领导，分级管理，条块结合，以块为主', 'C. 分级领导，统一管理，条块结合，以块为主', 'D. 统一领导，分级管理，条块分离，以块为主'], correct: 1, type: 'single', quizIndex: 5,
+              d: '<b>A</b>：错误。是"以块为主"不是"以条为主"。<br><b>B</b>：正确。统一领导、分级管理、条块结合、以块为主。<br><b>C</b>：错误。"统一领导"不是"分级领导"。<br><b>D</b>：错误。"条块结合"不是"条块分离"。',
+              t: '"以块为主"就是同级党委政府说了算，上级公安是辅助。' },
+            { q: '人民警察核心价值观中"根本要求"和"政治本色"指的是？', opts: ['A. 为民', 'B. 公正', 'C. 忠诚', 'D. 廉洁'], correct: 2, type: 'single', quizIndex: 6,
+              d: '<b>A</b>：错误。为民是宗旨、出发点、落脚点。<br><b>B</b>：错误。公正是法律精神、价值追求。<br><b>C</b>：正确。忠诚是根本要求、政治本色。<br><b>D</b>：错误。廉洁是内在要求、道德底线。',
+              t: '忠诚是"忠"字当头，警察第一要求。' },
+            { q: '新时代公安工作十六字方针是？', opts: ['A. 对党忠诚、服务人民、执法公正、纪律严明', 'B. 政治建警、改革强警、科技兴警、从严治警', 'C. 革命化、正规化、专业化、职业化', 'D. 铁一般的理想信念、责任担当、过硬本领、纪律作风'], correct: 1, type: 'single', quizIndex: 7,
+              d: '<b>A</b>：错误。这是治警建警总要求。<br><b>B</b>：正确。十六字方针=政治建警、改革强警、科技兴警、从严治警。<br><b>C</b>：错误。这是正规化建设目标。<br><b>D</b>：错误。这是"四个铁一般"。',
+              t: '十六字方针="政改科严"；总要求="对服执法"；四铁="信担本纪"。' },
+            { q: '民警违反三项纪律的（酗酒闹市、夜总会，见死不救不作为），应如何处理？', opts: ['A. 警告', 'B. 记过', 'C. 一律先予禁闭', 'D. 罚款'], correct: 2, type: 'single', quizIndex: 8,
+              d: '<b>A</b>：错误。警告是行政处分，不是初始处理。<br><b>B</b>：错误。记过也不是初始处理。<br><b>C</b>：正确。违反三项纪律一律先禁闭，再视情处分。<br><b>D</b>：错误。罚款不是纪律处分。',
+              t: '三项纪律是高压线，碰了先关起来（禁闭），严重直接开除。' },
+            { q: '我国最早的一支比较正规的人民警察队伍是？', opts: ['A. 湖南保卫局', 'B. 中央特科', 'C. 延安市警察队', 'D. 国家政治保卫局'], correct: 2, type: 'single', quizIndex: 9,
+              d: '<b>A</b>：错误。湖南保卫局是1898年最早专职警察机构。<br><b>B</b>：错误。中央特科是党最早保卫机构。<br><b>C</b>：正确。延安市警察队（1938年）是第一支正规人民警察队伍。<br><b>D</b>：错误。国家政治保卫局是最早人民政权公安保卫机关。',
+              t: '"最早"各有不同：湖南=专职；特科=党保卫；保卫局=人民政权；边警=正规队伍。' },
+            { q: '群体性事件处置中，以下哪项不属于"三个慎用"？', opts: ['A. 慎用警力', 'B. 慎用武器警械', 'C. 慎用强制措施', 'D. 慎用行政处罚'], correct: 3, type: 'single', quizIndex: 10,
+              d: '<b>A</b>：属于三个慎用之一。<br><b>B</b>：属于三个慎用之一。<br><b>C</b>：属于三个慎用之一。<br><b>D</b>：不属于。三慎用是"警力、武器警械、强制措施"。',
+              t: '三慎用口诀："人、枪、措施"都要慎。行政处罚是事后处理。' },
+            { q: '督察机构对人民警察采取禁闭措施的期限是？', opts: ['A. 1日以上3日以下', 'B. 1日以上7日以下', 'C. 3日以上7日以下', 'D. 7日以上15日以下'], correct: 1, type: 'single', quizIndex: 11,
+              d: '<b>A</b>：错误。期限太短。<br><b>B</b>：正确。禁闭1日以上7日以下。<br><b>C</b>：错误。起点是1日不是3日。<br><b>D</b>：错误。最多7日。',
+              t: '禁闭1~7天，停止职务10~60天。禁闭更短但更严厉。' },
+            { q: '下列哪项属于公安执法外部监督？', opts: ['A. 督察监督', 'B. 法制部门监督', 'C. 国家权力机关的监督', 'D. 行政复议'], correct: 2, type: 'single', quizIndex: 12,
+              d: '<b>A</b>：错误。督察是内部监督。<br><b>B</b>：错误。法制部门是内部监督。<br><b>C</b>：正确。人大监督是外部监督。<br><b>D</b>：错误。行政复议是内部监督。',
+              t: '外部=人大、检察院、法院、社会。内部=督察、法制、复议。' },
+            { q: '县级以上公安机关正职领导职务的提名，应当？', opts: ['A. 由同级政府直接任命', 'B. 事先征得上一级公安机关同意', 'C. 征求上一级公安机关意见', 'D. 由上级公安机关直接任命'], correct: 1, type: 'single', quizIndex: 13,
+              d: '<b>A</b>：错误。正职需征得上级公安同意。<br><b>B</b>：正确。正职=征得同意。<br><b>C</b>：错误。副职才是征求意见。<br><b>D</b>：错误。不是直接任命。',
+              t: '正职=征得同意（更强硬）；副职=征求意见（较温和）。' },
+            { q: '治安案件简易程序中，对违反治安管理行为人处多少元以下罚款可以当场处罚？', opts: ['A. 50元', 'B. 100元', 'C. 200元', 'D. 500元'], correct: 2, type: 'single', quizIndex: 14,
+              d: '<b>A</b>：错误。50元是当场收缴上限。<br><b>B</b>：错误。<br><b>C</b>：正确。治安简易程序：200元以下罚款或警告。<br><b>D</b>：错误。500元是出入境简易标准。',
+              t: '当场罚200元以下，当场收50元以下。两个"当场"数字不同。' },
+            { q: '快速办理行政案件，应在违法嫌疑人到案后多久内处理完毕？', opts: ['A. 24小时', 'B. 36小时', 'C. 48小时', 'D. 72小时'], correct: 2, type: 'single', quizIndex: 15,
+              d: '<b>A</b>：错误。24小时是询问查证延长时间。<br><b>B</b>：错误。<br><b>C</b>：正确。快速办理48小时内处理完毕。<br><b>D</b>：错误。',
+              t: '快速办理=48小时搞定。普通程序30天。' },
+            { q: '行政拘留处罚合并执行的，最长不超过多少日？', opts: ['A. 15日', 'B. 20日', 'C. 30日', 'D. 60日'], correct: 1, type: 'single', quizIndex: 16,
+              d: '<b>A</b>：错误。15日是单个拘留常见期限。<br><b>B</b>：正确。合并执行最长20日。<br><b>C</b>：错误。30日是治安办案一般期限。<br><b>D</b>：错误。60日是含延期总时限。',
+              t: '犯多件事，拘留"打包价"最多20天。' },
+            { q: '治安案件办案期限一般不超过多少日？', opts: ['A. 15日', 'B. 20日', 'C. 30日', 'D. 60日'], correct: 2, type: 'single', quizIndex: 17,
+              d: '<b>A</b>：错误。<br><b>B</b>：错误。<br><b>C</b>：正确。30日内办结，可延长30日。<br><b>D</b>：错误。60日是含延期总时限。',
+              t: '30+30=60天封顶。鉴定时间不算。' },
+            { q: '人民警察职业道德中"事实为据，秉持公正，惩恶扬善"属于哪项？', opts: ['A. 忠诚可靠', 'B. 秉公执法', 'C. 英勇善战', 'D. 严守纪律'], correct: 1, type: 'single', quizIndex: 18,
+              d: '<b>A</b>：错误。忠诚可靠="听党指挥，热爱人民，忠于法律"。<br><b>B</b>：正确。秉公执法="事实为据，秉持公正，惩恶扬善"。<br><b>C</b>：错误。英勇善战="坚韧不拔，机智果敢，崇尚荣誉"。<br><b>D</b>：错误。严守纪律="遵章守纪，保守秘密，令行禁止"。',
+              t: '看到"事实为据""公正"就知道是"秉公执法"。' },
+            { q: '"枫桥经验"中的"四防齐抓"指的是？', opts: ['A. 人防、物防、技防、消防', 'B. 人防、物防、技防、心防', 'C. 人防、物防、消防、心防', 'D. 人防、消防、技防、心防'], correct: 1, type: 'single', quizIndex: 19,
+              d: '<b>A</b>：错误。不是"消防"，是"心防"。<br><b>B</b>：正确。四防齐抓=人防、物防、技防、心防。<br><b>C</b>：错误。没有"消防"。<br><b>D</b>：错误。没有"消防"。',
+              t: '四防="人物技心"——人防（巡逻）、物防（防盗门）、技防（监控）、心防（心理疏导）。' },
+            { q: '下列哪项不适用行政拘留处罚？', opts: ['A. 已满14周岁不满16周岁的人', 'B. 已满18周岁的人', 'C. 已满16周岁不满18周岁且非初次违反', 'D. 70周岁以上的人'], correct: 0, type: 'single', quizIndex: 20,
+              d: '<b>A</b>：正确。14-16岁不执行行政拘留。<br><b>B</b>：错误。成年人正常执行。<br><b>C</b>：错误。16-18岁非初次可以执行。<br><b>D</b>：正确。70岁以上不执行。但A是唯一完全正确选项，C有条件限制。',
+              t: '四类人不执行：14-16岁、16-18岁初次、70岁以上、孕妇。注意16-18岁必须是"初次"。' },
+            { q: '行政拘留的暂缓执行，担保方式是什么？', opts: ['A. 必须提供保证人', 'B. 必须缴纳保证金', 'C. 保证人或保证金二选一', 'D. 必须同时提供保证人和保证金'], correct: 2, type: 'single', quizIndex: 21,
+              d: '<b>A</b>：错误。不必须，可以交保证金。<br><b>B</b>：错误。不必须，可以找保证人。<br><b>C</b>：正确。二选一即可。<br><b>D</b>：错误。不是同时。',
+              t: '担保方式二选一：找人保（保证人）或交钱保（每天200元）。' },
+            { q: '当场收缴的罚款，人民警察应自收缴之日起几日内交至所属公安机关？', opts: ['A. 当日', 'B. 2日', 'C. 3日', 'D. 5日'], correct: 1, type: 'single', quizIndex: 22,
+              d: '<b>A</b>：错误。<br><b>B</b>：正确。2日内交至所属公安机关。<br><b>C</b>：错误。<br><b>D</b>：错误。',
+              t: '收钱2天内上交警局。水上从抵岸起算，列车上从返回起算。' },
+            { q: '人民警察不得辞退的情形不包括？', opts: ['A. 因公致残丧失工作能力', 'B. 患病在规定医疗期内', 'C. 连续两年考核不称职', 'D. 女性在哺乳期内'], correct: 2, type: 'single', quizIndex: 23,
+              d: '<b>A</b>：属于不得辞退。<br><b>B</b>：属于不得辞退。<br><b>C</b>：不属于。连续两年考核不称职是应当辞退的。<br><b>D</b>：属于不得辞退。',
+              t: '"残、病、孕"受保护不辞退。"两年不称职"是应该辞退的。' },
+            { q: '关于严肃与谨慎相结合政策，总精神是什么？', opts: ['A. 执法必严', 'B. 重证据重调查研究', 'C. 不枉不纵', 'D. 宽严相济'], correct: 2, type: 'single', quizIndex: 24,
+              d: '<b>A</b>：错误。执法必严是严肃的内涵。<br><b>B</b>：错误。重证据是谨慎的内涵。<br><b>C</b>：正确。总精神=不枉不纵。<br><b>D</b>：错误。宽严相济是另一项政策。',
+              t: '严肃=严打，谨慎=别搞错。合起来=不冤枉好人，不放过坏人。' },
+            { q: '公安机关的基本职能包括哪两个？', opts: ['A. 管理职能和服务职能', 'B. 专政职能和民主职能', 'C. 治安职能和刑事职能', 'D. 预防职能和打击职能'], correct: 1, type: 'single', quizIndex: 25,
+              d: '<b>A</b>：错误。管理和服务不是基本职能。<br><b>B</b>：正确。专政和民主是两大基本职能。<br><b>C</b>：错误。治安和刑事是专业工作分类。<br><b>D</b>：错误。预防和打击是工作手段。',
+              t: '基本职能就两个：专政（对敌人）+ 民主（对人民）。' },
+
+            // ===== 判断题15道 =====
+            { q: '公安机关的根本属性是武装性质。', opts: ['✅ 正确', '❌ 错误'], correct: 1, type: 'single', isTF: true, tfId: 'tf1',
+              d: '<b>A"正确"</b>：错误。武装性质是组织属性，根本属性是人民民主专政的重要工具。<br><b>B"错误"</b>：正确。',
+              t: '根本属性=人民民主专政的重要工具（灵魂）；组织属性=武装性质（身体）。别搞混。' },
+            { q: '公安工作的根本原则是坚持党对公安工作的绝对领导。', opts: ['✅ 正确', '❌ 错误'], correct: 0, type: 'single', isTF: true, tfId: 'tf2',
+              d: '<b>A"正确"</b>：正确。<br><b>B"错误"</b>：错误。',
+              t: '根本原则=党领导，这是公安机关安身立命的根本。' },
+            { q: '"一切依靠群众"是公安工作的宗旨和出发点。', opts: ['✅ 正确', '❌ 错误'], correct: 1, type: 'single', isTF: true, tfId: 'tf3',
+              d: '<b>A"正确"</b>：错误。"一切为了群众"才是宗旨和出发点。<br><b>B"错误"</b>：正确。依靠群众是根本态度。',
+              t: '出发点=为了群众；态度=依靠群众；方法=从群众中来到群众中去。' },
+            { q: '群体性事件处置的"三个慎用"包括慎用警力、慎用武器警械、慎用强制措施。', opts: ['✅ 正确', '❌ 错误'], correct: 0, type: 'single', isTF: true, tfId: 'tf4',
+              d: '<b>A"正确"</b>：正确。<br><b>B"错误"</b>：错误。',
+              t: '三慎用="人、枪、措施"。行政处罚不在其中。' },
+            { q: '督察机构对民警采取禁闭措施的期限为1日以上7日以下。', opts: ['✅ 正确', '❌ 错误'], correct: 0, type: 'single', isTF: true, tfId: 'tf5',
+              d: '<b>A"正确"</b>：正确。禁闭1~7日。<br><b>B"错误"</b>：错误。',
+              t: '禁闭1~7天，停止职务10~60天。禁闭更短但更严厉。' },
+            { q: '社会监督属于直接监督，能直接产生法律效力。', opts: ['✅ 正确', '❌ 错误'], correct: 1, type: 'single', isTF: true, tfId: 'tf6',
+              d: '<b>A"正确"</b>：错误。社会监督是间接监督，需转有关部门处理。<br><b>B"错误"</b>：正确。',
+              t: '老百姓提意见不能直接处理警察，要转给有关部门。所以是"间接"监督。' },
+            { q: '县级以上公安机关正职领导职务的提名，应当事先征得上一级公安机关同意。', opts: ['✅ 正确', '❌ 错误'], correct: 0, type: 'single', isTF: true, tfId: 'tf7',
+              d: '<b>A"正确"</b>：正确。正职提名需征得上级同意。<br><b>B"错误"</b>：错误。',
+              t: '正职=征得同意（更强硬）；副职=征求意见（较温和）。' },
+            { q: '简易程序中，对违反治安管理行为人处100元以下罚款可以当场处罚。', opts: ['✅ 正确', '❌ 错误'], correct: 1, type: 'single', isTF: true, tfId: 'tf8',
+              d: '<b>A"正确"</b>：错误。是200元以下，不是100元。<br><b>B"错误"</b>：正确。',
+              t: '当场罚200元以下，当场收50元以下。两个数字不同。' },
+            { q: '行政拘留处罚合并执行的，最长不超过30日。', opts: ['✅ 正确', '❌ 错误'], correct: 1, type: 'single', isTF: true, tfId: 'tf9',
+              d: '<b>A"正确"</b>：错误。最长20日，不是30日。<br><b>B"错误"</b>：正确。',
+              t: '犯多件事拘留"打包价"最多20天。30天是治安办案期限。' },
+            { q: '询问查证的时间一般不超过8小时，可延长至24小时。', opts: ['✅ 正确', '❌ 错误'], correct: 0, type: 'single', isTF: true, tfId: 'tf10',
+              d: '<b>A"正确"</b>：正确。<br><b>B"错误"</b>：错误。',
+              t: '询问查证8+16=24小时封顶。继续盘问是12+12+24=48小时。两者不同。' },
+            { q: '行政案件转刑事案件，原行政案件中的证人证言可以直接使用。', opts: ['✅ 正确', '❌ 错误'], correct: 1, type: 'single', isTF: true, tfId: 'tf11',
+              d: '<b>A"正确"</b>：错误。行政转刑事，证人证言、被侵害人陈述、供述不可用。<br><b>B"错误"</b>：正确。',
+              t: '"行转刑要重来，刑转行直接用"。刑事证据标准更严格。' },
+            { q: '人民警察的核心价值观中，公正是法律精神、价值追求。', opts: ['✅ 正确', '❌ 错误'], correct: 0, type: 'single', isTF: true, tfId: 'tf12',
+              d: '<b>A"正确"</b>：正确。<br><b>B"错误"</b>：错误。',
+              t: '忠诚=政治本色；为民=宗旨；公正=价值追求；廉洁=道德底线。' },
+            { q: '治安案件办案期限自受理之日起一般不超过30日，可延长30日。', opts: ['✅ 正确', '❌ 错误'], correct: 0, type: 'single', isTF: true, tfId: 'tf13',
+              d: '<b>A"正确"</b>：正确。30+30=60天封顶。<br><b>B"错误"</b>：错误。',
+              t: '30天基础，重大复杂可再延30天。鉴定时间在外。' },
+            { q: '被行政拘留处罚的人不服，可申请暂缓执行，但必须提供保证人。', opts: ['✅ 正确', '❌ 错误'], correct: 1, type: 'single', isTF: true, tfId: 'tf14',
+              d: '<b>A"正确"</b>：错误。保证人或保证金二选一。<br><b>B"错误"</b>：正确。',
+              t: '担保方式二选一：找人保或交钱保（每天200元）。不是必须保证人。' },
+            { q: '公安机关是人民民主专政的重要工具，这是公安机关的阶级属性。', opts: ['✅ 正确', '❌ 错误'], correct: 0, type: 'single', isTF: true, tfId: 'tf15',
+              d: '<b>A"正确"</b>：正确。这是公安机关性质的核心内容。<br><b>B"错误"</b>：错误。',
+              t: '阶级属性=人民民主专政的重要工具。这是公安的"灵魂"所在。' },
+
+            // ===== 多选题15道 =====
+            { q: '公安机关的性质包含以下哪些方面？', opts: ['A. 人民民主专政的重要工具', 'B. 武装性质', 'C. 国家治安行政力量', 'D. 国家刑事司法力量', 'E. 国家武装力量'], correct: [0,1,2,3], type: 'multi', multi: true, quizIndex: '多1',
+              d: '<b>A</b>：正确。这是阶级属性。<br><b>B</b>：正确。这是组织属性。<br><b>C</b>：正确。治安行政力量是职能属性。<br><b>D</b>：正确。刑事司法力量是职能属性。<br><b>E</b>：错误。公安机关是具有武装性质的力量，但不是国家武装力量（武装力量由解放军、武警、民兵组成）。',
+              t: '四项全选，E不能选！公安局不是军队。' },
+            { q: '党对公安工作的领导包括哪些方面？', opts: ['A. 政治领导', 'B. 思想领导', 'C. 组织领导', 'D. 决策领导', 'E. 法制领导'], correct: [0,1,2,3,4], type: 'multi', multi: true, quizIndex: '多2',
+              d: '<b>A</b>：正确。政治领导=方向/路线/政策。<br><b>B</b>：正确。思想领导=马克思主义/习近平思想。<br><b>C</b>：正确。组织领导=健全组织、党管干部。<br><b>D</b>：正确。决策领导=宏观决策/重大问题指示。<br><b>E</b>：正确。法制领导=制定法规/监督执法。',
+              t: '五个领导缺一不可，全选！口诀："政思组决法"。' },
+            { q: '人民警察的职务序列包括哪些？', opts: ['A. 警官职务', 'B. 警员职务', 'C. 警务技术职务', 'D. 警长职务', 'E. 警监职务'], correct: [0,1,2], type: 'multi', multi: true, quizIndex: '多3',
+              d: '<b>A</b>：正确。警官职务=指挥岗（总队长、支队长等）。<br><b>B</b>：正确。警员职务=执行岗（警长、警员等）。<br><b>C</b>：正确。警务技术职务=专业岗（法医等）。<br><b>D</b>：错误。警长属于警员职务序列，不是独立的职务序列。<br><b>E</b>：错误。警监是警衔等级，不是职务序列。',
+              t: '职务序列就三类：警官、警员、技术。警长是警员里的一级，警监是警衔。' },
+            { q: '下列哪些情形下，行政拘留不予执行？', opts: ['A. 已满14周岁不满16周岁', 'B. 已满16周岁不满18周岁且初次违反', 'C. 70周岁以上', 'D. 孕妇', 'E. 正在哺乳自己婴儿的妇女'], correct: [0,1,2,3,4], type: 'multi', multi: true, quizIndex: '多4',
+              d: '<b>A</b>：正确。<br><b>B</b>：正确。注意必须是"初次"。<br><b>C</b>：正确。<br><b>D</b>：正确。<br><b>E</b>：正确。',
+              t: '五类人全选！口诀："小、初、老、孕、哺"。' },
+            { q: '下列哪些属于治安管理处罚的种类？', opts: ['A. 警告', 'B. 罚款', 'C. 行政拘留', 'D. 吊销公安机关发放的许可证', 'E. 拘役'], correct: [0,1,2,3], type: 'multi', multi: true, quizIndex: '多5',
+              d: '<b>A</b>：正确。<br><b>B</b>：正确。<br><b>C</b>：正确。<br><b>D</b>：正确。<br><b>E</b>：错误。拘役是刑罚，不是治安处罚。',
+              t: '治安处罚四种：警、罚、拘、吊。拘役是刑事处罚，别搞混。' },
+            { q: '下列哪些属于公安工作的基本政策？', opts: ['A. 严肃与谨慎相结合', 'B. 宽严相济', 'C. 教育与处罚相结合', 'D. 惩前毖后、治病救人', 'E. 尊重和保障人权'], correct: [0,1,2,4], type: 'multi', multi: true, quizIndex: '多6',
+              d: '<b>A</b>：正确。刑事领域政策。<br><b>B</b>：正确。刑事领域政策。<br><b>C</b>：正确。治安领域政策。<br><b>D</b>：错误。这是党纪政策，不是公安工作基本政策。<br><b>E</b>：正确。尊重保障人权是刑事、治安领域共同政策。',
+              t: '四项基本政策：严肃谨慎、宽严相济、教育处罚、保障人权。D是党纪。' },
+            { q: '下列哪些属于"四个铁一般"的内容？', opts: ['A. 铁一般的理想信念', 'B. 铁一般的责任担当', 'C. 铁一般的过硬本领', 'D. 铁一般的纪律作风', 'E. 铁一般的身体素质'], correct: [0,1,2,3], type: 'multi', multi: true, quizIndex: '多7',
+              d: '<b>A</b>：正确。<br><b>B</b>：正确。<br><b>C</b>：正确。<br><b>D</b>：正确。<br><b>E</b>：错误。没有"身体素质"。',
+              t: '四铁="信、担、本、纪"——信仰、担当、本领、纪律。没有身体素质。' },
+            { q: '下列哪些情形不能申请行政复议？', opts: ['A. 抽象行政行为', 'B. 国家行为', 'C. 内部行为', 'D. 行政罚款决定', 'E. 刑事侦查行为'], correct: [0,1,2,4], type: 'multi', multi: true, quizIndex: '多8',
+              d: '<b>A</b>：不能复议。<br><b>B</b>：不能复议。<br><b>C</b>：不能复议。<br><b>D</b>：可以复议。罚款是具体行政行为。<br><b>E</b>：不能复议。',
+              t: '"抽国内不强刑"五类不能复议。D是具体行政行为，可以复议。' },
+            { q: '下列哪些属于公安专业工作中的刑事司法工作？', opts: ['A. 国内安全保卫', 'B. 刑事侦查', 'C. 刑事强制工作', 'D. 羁押工作', 'E. 治安巡逻'], correct: [0,1,2,3], type: 'multi', multi: true, quizIndex: '多9',
+              d: '<b>A</b>：正确。<br><b>B</b>：正确。<br><b>C</b>：正确。刑事强制包括拘传、取保、监视居住、拘留、逮捕。<br><b>D</b>：正确。<br><b>E</b>：错误。治安巡逻属于治安行政管理工作。',
+              t: '刑事司法工作五项：国保、侦查、强制、羁押、执行刑罚。治安巡逻是行政工作。' },
+            { q: '下列哪些属于从重处罚的情形？', opts: ['A. 有较严重后果', 'B. 教唆他人实施违法行为', 'C. 主动投案如实供述', 'D. 6个月内曾受治安处罚', 'E. 对报案人打击报复'], correct: [0,1,3,4], type: 'multi', multi: true, quizIndex: '多10',
+              d: '<b>A</b>：正确。<br><b>B</b>：正确。教唆、胁迫、诱骗都是。<br><b>C</b>：错误。主动投案是从轻或减轻情形。<br><b>D</b>：正确。6个月内再犯。<br><b>E</b>：正确。打击报复从重。',
+              t: '从重=后果重、教唆、报复、有前科。C是自首，从轻不是从重。' },
+            { q: '下列哪些属于督察机构的权限？', opts: ['A. 责令执行法律、法规', 'B. 决定撤销或变更错误决定', 'C. 停止执行职务', 'D. 禁闭', 'E. 批准逮捕'], correct: [0,1,2,3], type: 'multi', multi: true, quizIndex: '多11',
+              d: '<b>A</b>：正确。<br><b>B</b>：正确。需报本级公安行政首长批准。<br><b>C</b>：正确。需报督察长批准。<br><b>D</b>：正确。需报督察长批准。<br><b>E</b>：错误。批准逮捕是检察院的权力。',
+              t: '督察四项权限：责令执行、撤销变更、停职、禁闭。批捕是检察院的事。' },
+            { q: '下列哪些适用当场收缴罚款？', opts: ['A. 治安50元以下无异议', 'B. 交通行人处罚款无异议', 'C. 其他20元以下', 'D. 边远水上交通不便地区被处罚人提出', 'E. 当地无固定住所事后难以执行'], correct: [0,1,2,3,4], type: 'multi', multi: true, quizIndex: '多12',
+              d: '<b>A</b>：正确。<br><b>B</b>：正确。<br><b>C</b>：正确。<br><b>D</b>：正确。<br><b>E</b>：正确。',
+              t: '五种当场收缴情形全选！口诀："五十无议、交通行人、二十以下、边远困难、无固定所"。' },
+            { q: '下列哪些属于人民警察职业道德规范？', opts: ['A. 忠诚可靠', 'B. 秉公执法', 'C. 热诚服务', 'D. 文明理性', 'E. 清正廉洁'], correct: [0,1,2,3,4], type: 'multi', multi: true, quizIndex: '多13',
+              d: '<b>A</b>：正确。<br><b>B</b>：正确。<br><b>C</b>：正确。<br><b>D</b>：正确。<br><b>E</b>：正确。',
+              t: '职业道德十项全选！口诀："忠秉英热文，严爱甘清团"。五项都在其中。' },
+            { q: '"枫桥经验"包含哪些内容？', opts: ['A. 三治融合：自治、法治、德治', 'B. 四化并举：社会化、法治化、智能化、专业化', 'C. 四防齐抓：人防、物防、技防、心防', 'D. 五个过硬', 'E. 矛盾不上交、平安不出事、服务不缺位'], correct: [0,1,2,4], type: 'multi', multi: true, quizIndex: '多14',
+              d: '<b>A</b>：正确。<br><b>B</b>：正确。<br><b>C</b>：正确。<br><b>D</b>：错误。"五个过硬"不是枫桥经验的内容。<br><b>E</b>：正确。这是枫桥经验的核心内涵。',
+              t: '枫桥经验=三治+四化+四防+三不（矛盾不上交、平安不出事、服务不缺位）。D无关。' },
+            { q: '下列哪些属于公安机关的根本宗旨和路线的内容？', opts: ['A. 全心全意为人民服务', 'B. 一切为了群众', 'C. 一切依靠群众', 'D. 从群众中来，到群众中去', 'E. 严格执法'], correct: [0,1,2,3], type: 'multi', multi: true, quizIndex: '多15',
+              d: '<b>A</b>：正确。全心全意为人民服务是宗旨。<br><b>B</b>：正确。出发点和宗旨。<br><b>C</b>：正确。根本态度。<br><b>D</b>：正确。基本方法。<br><b>E</b>：错误。严格执法是执法原则，不是宗旨路线。',
+              t: '宗旨+群众路线=全选ABCD。E不属于宗旨路线范畴。' }
+        ]
+    }
+
+
+// ⬇️ 第2次输出结束，最终闭合请在后续输出中完成
+
+];
+// ⬇️ 第1次输出结束，后续模块将在第2次输出中继续追加到 knowledgeData 数组中
+</script>
+<script>
+// ==================== 渲染引擎 ====================
+function renderAll(){var m=document.getElementById('mainContent');var h='';knowledgeData.forEach(function(mod){h+='<div class="card" id="'+mod.id+'"><div class="section-title"><div class="icon '+mod.iconClass+'">'+mod.iconEmoji+'</div>'+mod.title+'</div>';if(mod.subtitle)h+='<div class="subtitle">'+mod.subtitle+'</div>';if(mod.items&&mod.items.length>0){h+='<div class="ki-grid">';mod.items.forEach(function(item){if(item.type==='table')h+=item.html;else if(item.type==='ki')h+=renderKI(item);});h+='</div>';}if(mod.quizzes&&mod.quizzes.length>0){mod.quizzes.forEach(function(q,qi){h+=renderQuiz(q,mod.id+'-q'+qi);});}h+='</div>';});m.innerHTML=h;generateTOC();}
+function renderKI(item){var h='<div class="ki-item">';h+='<div class="ki-title-row">'+(item.badge?'<span class="badge '+(item.badgeClass||'badge-num')+'">'+item.badge+'</span> ':'')+item.title+'</div>';h+='<div class="ki-content">'+item.content+'</div>';if(item.extra)h+='<div style="margin-top:6px;color:#5c5347;font-size:0.88rem;">'+item.extra+'</div>';if(item.example){h+='<div class="example-block"><div class="ex-label">📖 生动案例</div><div class="ex-q">'+item.example.q+'</div><div class="ex-a">'+item.example.a+'</div></div>';}h+='</div>';return h;}
+function renderQuiz(q,qid){var qTypeLabel='【单选题】';var h='<div class="quiz-wrap" data-qid="'+qid+'">';if(q.quizIndex){h+='<div class="q-type">📝 '+qTypeLabel+' · 第'+q.quizIndex+'题</div>';}else if(q.tfId){h+='<div class="q-type">📝 '+qTypeLabel+' · '+q.tfId+'</div>';}else{h+='<div class="q-type">📝 '+qTypeLabel+'</div>';}h+='<div class="q-text">'+q.q+'</div><ul class="opt-list">';for(var i=0;i<q.opts.length;i++){h+='<li data-idx="'+i+'" onclick="selectOpt(this,\''+qid+'\','+i+','+(q.multi||false)+')">'+q.opts[i]+'</li>';}h+='</ul><div class="btn-row"><button class="btn btn-primary" onclick="submitQuiz(\''+qid+'\','+JSON.stringify(q.correct)+','+(q.multi||false)+')">✅ 提交答案</button><button class="btn btn-outline" onclick="resetQuiz(\''+qid+'\')">🔄 重做</button></div><div class="explain-card" id="ex-'+qid+'"><div class="ex-head"></div><div class="ex-body"></div>';if(q.d){var detailHtml=q.d;detailHtml=detailHtml.replace(/<b>([A-E])"正确"<\/b>：正确/g,'<span style="color:#145a32;">✅ $1选项</b>：正确</span>');detailHtml=detailHtml.replace(/<b>([A-E])"错误"<\/b>：错误/g,'<span style="color:#b22222;">❌ $1选项</b>：错误</span>');detailHtml=detailHtml.replace(/<b>([A-E])"正确"<\/b>：错误/g,'<span style="color:#b22222;">❌ $1选项</b>：错误</span>');detailHtml=detailHtml.replace(/<b>([A-E])"错误"<\/b>：正确/g,'<span style="color:#145a32;">✅ $1选项</b>：正确</span>');detailHtml=detailHtml.replace(/<b>([A-E])<\/b>：(正确)/g,'<span style="color:#145a32;">✅ $1选项</b>：$2</span>');detailHtml=detailHtml.replace(/<b>([A-E])<\/b>：(错误)/g,'<span style="color:#b22222;">❌ $1选项</b>：$2</span>');detailHtml=detailHtml.replace(/<b>([A-E])<\/b>：正确/g,'<span style="color:#145a32;">✅ $1选项</b>：正确</span>');detailHtml=detailHtml.replace(/<b>([A-E])<\/b>：错误/g,'<span style="color:#b22222;">❌ $1选项</b>：错误</span>');h+='<div class="ex-detail" style="margin-top:10px;padding:10px 14px;background:#fff;border-radius:6px;font-size:0.88rem;line-height:1.8;display:none;">📋 <b>逐项解析：</b><br>'+detailHtml+'</div>';}h+='<div class="ex-tip">💡 <b>大白话理解：</b>'+q.t+'</div></div></div>';return h;}
+function selectOpt(el,qid,idx,multi){var w=el.closest('.quiz-wrap');if(w.classList.contains('submitted'))return;var o=w.querySelectorAll('.opt-list li');if(multi){el.classList.toggle('selected');}else{o.forEach(function(x){x.classList.remove('selected');});el.classList.add('selected');}}
+function submitQuiz(qid,correct,multi){var w=document.querySelector('[data-qid="'+qid+'"]');if(w.classList.contains('submitted'))return;w.classList.add('submitted');var o=w.querySelectorAll('.opt-list li');var ca=Array.isArray(correct)?correct:[correct];var si=[];for(var i=0;i<o.length;i++){if(o[i].classList.contains('selected'))si.push(i);}var ic;if(multi){ic=si.length===ca.length;for(var j=0;j<si.length;j++){if(ca.indexOf(si[j])===-1){ic=false;break;}}}else{ic=si.length===1&&si[0]===ca[0];}for(var k=0;k<o.length;k++){o[k].classList.add('disabled');if(ca.indexOf(k)!==-1)o[k].classList.add('correct');}if(!ic){for(var m=0;m<si.length;m++){if(ca.indexOf(si[m])===-1)o[si[m]].classList.add('wrong');}}var ex=document.getElementById('ex-'+qid);ex.classList.add('show');if(ic){ex.classList.add('correct-ex');ex.classList.remove('wrong-ex');ex.querySelector('.ex-head').textContent='🎉 回答正确！';ex.querySelector('.ex-body').textContent='';var ed=ex.querySelector('.ex-detail');if(ed)ed.style.display='block';}else{ex.classList.add('wrong-ex');ex.classList.remove('correct-ex');ex.querySelector('.ex-head').textContent='😞 回答错误';var lt=['A','B','C','D','E'];var cl=ca.map(function(c){return lt[c];}).join('、');ex.querySelector('.ex-body').innerHTML='正确答案是：<b>'+cl+'</b>';var ed2=ex.querySelector('.ex-detail');if(ed2)ed2.style.display='block';}}
+function resetQuiz(qid){var w=document.querySelector('[data-qid="'+qid+'"]');w.classList.remove('submitted');w.querySelectorAll('.opt-list li').forEach(function(o){o.classList.remove('selected','correct','wrong','disabled');});var ex=document.getElementById('ex-'+qid);ex.classList.remove('show','correct-ex','wrong-ex');}
+function generateTOC(){var toc=document.getElementById('toc');if(!toc)return;var th='<div class="toc-title">📑 公安基础 · 知识目录</div>';var links='';knowledgeData.forEach(function(mod){links+='<a href="#'+mod.id+'">'+mod.title+'</a>';});toc.innerHTML=th+links;document.querySelectorAll('.toc a').forEach(function(link){link.addEventListener('click',function(){if(window.innerWidth<=768)closeToc();});});}
+function toggleToc(){document.getElementById('toc').classList.toggle('show');document.getElementById('tocOverlay').classList.toggle('show');}
+function closeToc(){document.getElementById('toc').classList.remove('show');document.getElementById('tocOverlay').classList.remove('show');}
+document.addEventListener('DOMContentLoaded',renderAll);
+</script>
+</body>
+</html>
