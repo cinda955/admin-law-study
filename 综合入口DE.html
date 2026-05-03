@@ -1,0 +1,1572 @@
+<html lang="zh-CN"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>知识库整合平台</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --primary-color: #667eea;
+            --primary-light: #f0f4ff;
+            --primary-dark: #5a6fd6;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg-gradient);
+            min-height: 100vh;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .notice-header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
+        .notice-bar {
+            flex: 1; background: #fff; border-radius: 12px; padding: 15px 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1); position: relative;
+        }
+        .notice-bar h3 { color: var(--primary-color); margin-bottom: 8px; font-size: 14px; display: flex; align-items: center; gap: 8px; }
+        .notice-content { color: #333; line-height: 1.6; font-size: 15px; word-break: break-word; }
+        .notice-edit-btn {
+            position: absolute; top: 10px; right: 10px; background: #f0f0f0; border: none;
+            padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; color: #666;
+            transition: all 0.3s;
+        }
+        .notice-edit-btn:hover { background: var(--primary-color); color: #fff; }
+        .notice-textarea {
+            width: 100%; min-height: 80px; border: 2px solid #e0e0e0; border-radius: 8px;
+            padding: 10px; font-size: 15px; resize: vertical; margin-top: 10px;
+        }
+        .notice-save-btn {
+            background: var(--primary-color); color: #fff; border: none; padding: 8px 20px;
+            border-radius: 6px; cursor: pointer; margin-top: 10px; font-size: 14px; transition: all 0.3s;
+        }
+        .notice-save-btn:hover { background: var(--primary-dark); }
+        .mode-switch-btn {
+            padding: 12px 16px; border-radius: 8px; border: none; font-weight: 600;
+            cursor: pointer; transition: all 0.3s; white-space: nowrap;
+        }
+        .visitor-mode { background: #6c757d; color: #fff; }
+        .admin-mode { background: #28a745; color: #fff; }
+        .theme-bar { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 20px; }
+        .theme-btn {
+            width: 30px; height: 30px; border-radius: 50%; border: 2px solid #fff;
+            cursor: pointer; transition: transform 0.2s;
+        }
+        .theme-btn:hover { transform: scale(1.2); }
+        .action-buttons { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center; }
+        .action-btn {
+            padding: 12px 20px; border: none; border-radius: 8px; cursor: pointer;
+            font-size: 14px; font-weight: 600; transition: all 0.3s;
+        }
+        .download-btn { background: #28a745; color: #fff; }
+        .download-btn:hover { background: #218838; transform: translateY(-2px); }
+        .data-btn { background: var(--primary-color); color: #fff; border: 1px solid rgba(255,255,255,0.3); }
+        .data-btn:hover { background: var(--primary-dark); }
+        .podcast-btn { background: #fd7e14; color: #fff; }
+        .podcast-btn:hover { background: #e06b0d; }
+        .main-content {
+            background: #fff; border-radius: 16px; padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            min-height: 400px;
+        }
+        .create-kb-btn {
+            background: var(--bg-gradient); color: #fff; border: none; padding: 15px 30px;
+            border-radius: 12px; cursor: pointer; font-size: 16px; font-weight: 600;
+            transition: all 0.3s; display: flex; align-items: center; gap: 10px; margin: 0 auto 30px;
+        }
+        .create-kb-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4); }
+        .kb-list { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 30px; }
+        .kb-tag {
+            background: #f5f5f5; border: 2px solid #e0e0e0; padding: 12px 20px;
+            border-radius: 10px; cursor: pointer; transition: all 0.3s; position: relative;
+            display: flex; align-items: center; gap: 8px; font-size: 15px; color: #333;
+        }
+        .kb-tag:hover { border-color: var(--primary-color); background: var(--primary-light); }
+        .kb-tag.active { background: var(--bg-gradient); color: #fff; border-color: transparent; }
+        .kb-tag .collapse-icon { font-size: 12px; transition: transform 0.3s; }
+        .kb-tag.collapsed .collapse-icon { transform: rotate(-90deg); }
+        .kb-tag .delete-kb {
+            position: absolute; top: -8px; right: -8px; background: #ff4757; color: #fff;
+            border: none; width: 20px; height: 20px; border-radius: 50%; cursor: pointer;
+            font-size: 12px; display: none; align-items: center; justify-content: center;
+        }
+        .kb-tag:hover .delete-kb { display: flex; }
+        .kb-content { display: none; border-top: 2px solid #f0f0f0; padding-top: 25px; animation: fadeIn 0.2s; }
+        .kb-content.show { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        .add-item-btn {
+            background: var(--primary-light); color: var(--primary-color);
+            border: 2px dashed var(--primary-color); padding: 12px 24px; border-radius: 10px;
+            cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.3s; margin-bottom: 20px;
+        }
+        .add-item-btn:hover { background: var(--primary-color); color: #fff; }
+        .items-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; }
+        .item-card {
+            background: #fafafa; border: 2px solid #f0f0f0; border-radius: 12px; padding: 18px;
+            transition: all 0.3s; position: relative; cursor: move;
+        }
+        .item-card.dragging { opacity: 0.5; transform: scale(1.02); border-color: var(--primary-color); }
+        .item-card:hover { border-color: var(--primary-color); box-shadow: 0 4px 15px rgba(102, 126, 234, 0.15); }
+        .item-icon { font-size: 32px; margin-bottom: 10px; }
+        .item-title { font-size: 16px; font-weight: 600; color: #333; margin-bottom: 8px; word-break: break-word; }
+        .item-type { font-size: 12px; color: #999; text-transform: uppercase; margin-bottom: 12px; }
+        .item-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+        .item-open-btn {
+            flex: 1; min-width: 50px; background: var(--primary-color); color: #fff;
+            border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 13px;
+        }
+        .item-open-btn:hover { background: var(--primary-dark); }
+        .item-edit-btn, .item-delete-btn {
+            flex: 1; min-width: 50px; background: #ff4757; color: #fff; border: none;
+            padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 13px;
+        }
+        .item-edit-btn{ background: #17a2b8; }
+        .item-edit-btn:hover { background: #138496; }
+        .item-delete-btn:hover { background: #ff3838; }
+
+        /* 播客模块样式 */
+        .podcast-container { display: none; }
+        .podcast-container.show { display: block; }
+        .knowledge-container { display: block; }
+        .knowledge-container.hide { display: none; }
+        .back-to-kb-btn {
+            background: #6c757d; color: #fff; border: none; padding: 10px 20px;
+            border-radius: 8px; cursor: pointer; margin-bottom: 20px; font-size: 14px; font-weight: 600;
+        }
+        .back-to-kb-btn:hover { background: #5a6268; }
+        .audio-player {
+            background: #f8f9fa; border-radius: 16px; padding: 20px;
+            margin-bottom: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .player-title {
+            font-size: 18px; font-weight: 600; color: #333; margin-bottom: 15px;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .player-audio { width: 100%; margin-bottom: 10px; }
+        .podcast-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 15px; margin-top: 20px;
+        }
+        .podcast-card {
+            background: #fafafa; border: 2px solid #e9ecef; border-radius: 12px;
+            padding: 16px; transition: all 0.3s;
+        }
+        .podcast-card:hover { border-color: var(--primary-color); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        .podcast-name { font-size: 16px; font-weight: 600; color: #333; margin-bottom: 12px; word-break: break-word; }
+        .podcast-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+        .podcast-play-btn {
+            flex: 2; min-width: 60px; background: var(--primary-color); color: #fff;
+            border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer;
+            font-size: 13px; font-weight: 500; transition: all 0.3s;
+        }
+        .podcast-play-btn:hover { background: var(--primary-dark); }
+        .podcast-edit-btn, .podcast-delete-btn {
+            flex: 1; min-width: 50px; background: #17a2b8; color: #fff;
+            border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 13px;
+        }
+        .podcast-delete-btn { background: #ff4757; }
+        .podcast-edit-btn:hover { background: #138496; }
+        .podcast-delete-btn:hover { background: #ff3838; }
+
+        /* 进度条样式 */
+        .progress-container {
+            margin-top: 8px;
+            width: 100%;
+            height: 4px;
+            background: #e9ecef;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: var(--primary-color);
+            transition: width 0.3s;
+        }
+        .cache-status {
+            font-size: 11px;
+            color: #28a745;
+            margin-top: 4px;
+        }
+
+        .modal {
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;
+            padding: 20px;
+        }
+        .modal.show { display: flex; }
+        .modal-content {
+            background: #fff; border-radius: 16px; padding: 30px; width: 100%;
+            max-width: 500px; max-height: 90vh; overflow-y: auto;
+        }
+        .modal-title { font-size: 22px; font-weight: 700; color: #333; margin-bottom: 25px; }
+        .form-group { margin-bottom: 20px; }
+        .form-label { display: block; font-size: 14px; font-weight: 600; color: #555; margin-bottom: 8px; }
+        .form-input, .form-file {
+            width: 100%; padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 10px;
+            font-size: 15px; transition: all 0.3s;
+        }
+        .form-input:focus { outline: none; border-color: var(--primary-color); }
+        .form-select {
+            width: 100%; padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 10px;
+            font-size: 15px; background: #fff; cursor: pointer;
+        }
+        .form-select:focus { outline: none; border-color: var(--primary-color); }
+        .modal-buttons { display: flex; gap: 12px; margin-top: 25px; }
+        .modal-btn {
+            flex: 1; padding: 12px 24px; border: none; border-radius: 10px; font-size: 15px;
+            font-weight: 600; cursor: pointer; transition: all 0.3s;
+        }
+        .modal-btn-cancel { background: #f0f0f0; color: #666; }
+        .modal-btn-cancel:hover { background: #e0e0e0; }
+        .modal-btn-confirm { background: var(--bg-gradient); color: #fff; }
+        .modal-btn-confirm:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4); }
+        .empty-state { text-align: center; padding: 60px 20px; color: #999; }
+        .empty-state-icon { font-size: 64px; margin-bottom: 20px; }
+        .empty-state-text { font-size: 16px; }
+        .hide-in-visitor { display: none !important; }
+
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            .notice-header { flex-direction: column; align-items: stretch; gap: 10px; }
+            .main-content { padding: 20px; }
+            .kb-tag { padding: 10px 16px; font-size: 14px; }
+            .items-list, .podcast-grid { grid-template-columns: 1fr; }
+            .modal-content { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="notice-header">
+        <div class="notice-bar">
+            <h3>📢 公告</h3>
+            <div class="notice-content" id="noticeContent">欢迎使用知识库整合平台！</div>
+            <button class="notice-edit-btn" onclick="editNotice()">编辑</button>
+            <div id="noticeEditArea" style="display: none;">
+                <textarea class="notice-textarea" id="noticeTextarea" placeholder="输入公告内容..."></textarea>
+                <button class="notice-save-btn" onclick="saveNotice()">保存公告</button>
+            </div>
+        </div>
+        <button class="mode-switch-btn admin-mode" id="modeBtn" onclick="toggleAdminMode()">🔓 退出管理员模式</button>
+    </div>
+
+    <div class="theme-bar" id="themeBar"><div class="theme-btn" style="background: linear-gradient(135deg, rgb(102, 126, 234) 0%, rgb(118, 75, 162) 100%);"></div><div class="theme-btn" style="background: linear-gradient(135deg, rgb(17, 153, 142) 0%, rgb(56, 239, 125) 100%);"></div><div class="theme-btn" style="background: linear-gradient(135deg, rgb(235, 51, 73) 0%, rgb(244, 92, 67) 100%);"></div><div class="theme-btn" style="background: linear-gradient(135deg, rgb(204, 43, 94) 0%, rgb(117, 58, 136) 100%);"></div><div class="theme-btn" style="background: linear-gradient(135deg, rgb(247, 151, 30) 0%, rgb(255, 210, 0) 100%);"></div><div class="theme-btn" style="background: linear-gradient(135deg, rgb(54, 209, 220) 0%, rgb(91, 134, 229) 100%);"></div><div class="theme-btn" style="background: linear-gradient(135deg, rgb(127, 83, 172) 0%, rgb(100, 125, 238) 100%);"></div><div class="theme-btn" style="background: linear-gradient(135deg, rgb(255, 236, 210) 0%, rgb(252, 182, 159) 100%);"></div><div class="theme-btn" style="background: linear-gradient(135deg, rgb(168, 237, 234) 0%, rgb(254, 214, 227) 100%);"></div><div class="theme-btn" style="background: linear-gradient(135deg, rgb(97, 97, 97) 0%, rgb(155, 197, 195) 100%);"></div></div>
+
+    <div class="action-buttons">
+        <button class="action-btn podcast-btn" onclick="showPodcastModule()">🎙️ 播客模块</button>
+        <button class="action-btn download-btn" onclick="downloadCurrentSite()">📥 下载当前数据版网站</button>
+        <button class="action-btn data-btn" onclick="exportData()">📤 导出JSON</button>
+        <button class="action-btn data-btn" onclick="document.getElementById('importFile').click()">📥 导入JSON</button>
+        <input type="file" id="importFile" style="display: none;" accept=".json" onchange="importData(event)">
+    </div>
+
+    <div class="main-content">
+        <div id="knowledgeContainer" class="knowledge-container">
+            <button class="create-kb-btn" onclick="showCreateKbModal()"><span>+</span> 新建知识库</button>
+            <div class="kb-list" id="kbList"><div class="kb-tag  "><span class="collapse-icon">▼</span><span>公安素质</span><span style="font-size:12px;opacity:0.7;">(12)</span>
+                <button class="delete-kb " onclick="deleteKb('1776061331418',event)">×</button></div><div class="kb-tag  active"><span class="collapse-icon">▼</span><span>综合练习题</span><span style="font-size:12px;opacity:0.7;">(9)</span>
+                <button class="delete-kb " onclick="deleteKb('1776156366682',event)">×</button></div><div class="kb-tag  "><span class="collapse-icon">▼</span><span>新_公安</span><span style="font-size:12px;opacity:0.7;">(9)</span>
+                <button class="delete-kb " onclick="deleteKb('1777366707202',event)">×</button></div><div class="kb-tag  "><span class="collapse-icon">▼</span><span>行测</span><span style="font-size:12px;opacity:0.7;">(2)</span>
+                <button class="delete-kb " onclick="deleteKb('1777689468110',event)">×</button></div></div>
+            <div id="kbContents"><div class="kb-content "><button class="add-item-btn " onclick="showAddItemModal('1776061331418')">+ 添加内容</button><div class="items-list"><div class="item-card" draggable="true" ondragstart="dragStart(0)" ondragend="dragEnd()" ondragover="dragOver(event)" ondrop="drop(0)">
+                        <div class="item-icon">🔗</div><div class="item-title">刑法基础</div><div class="item-type">网站链接</div>
+                        <div class="item-actions">
+                            <button class="item-open-btn" onclick="openItemById('1776061331418','1776061343414')">打开</button>
+                            <button class="item-edit-btn " onclick="showEditItemModal('1776061331418','1776061343414')">修改</button>
+                            <button class="item-delete-btn " onclick="deleteItem('1776061331418','1776061343414')">删除</button>
+                        </div>
+                    </div><div class="item-card" draggable="true" ondragstart="dragStart(1)" ondragend="dragEnd()" ondragover="dragOver(event)" ondrop="drop(1)">
+                        <div class="item-icon">🔗</div><div class="item-title">刑诉法</div><div class="item-type">网站链接</div>
+                        <div class="item-actions">
+                            <button class="item-open-btn" onclick="openItemById('1776061331418','1776061363747')">打开</button>
+                            <button class="item-edit-btn " onclick="showEditItemModal('1776061331418','1776061363747')">修改</button>
+                            <button class="item-delete-btn " onclick="deleteItem('1776061331418','1776061363747')">删除</button>
+                        </div>
+                    </div><div class="item-card" draggable="true" ondragstart="dragStart(2)" ondragend="dragEnd()" ondragover="dragOver(event)" ondrop="drop(2)">
+                        <div class="item-icon">🔗</div><div class="item-title">行政处罚法</div><div class="item-type">网站链接</div>
+                        <div class="item-actions">
+                            <button class="item-open-btn" onclick="openItemById('1776061331418','1776061376530')">打开</button>
+                            <button class="item-edit-btn " onclick="showEditItemModal('1776061331418','1776061376530')">修改</button>
+                            <button class="item-delete-btn " onclick="deleteItem('1776061331418','1776061376530')">删除</button>
+                        </div>
+                    </div><div class="item-card" draggable="true" ondragstart="dragStart(3)" ondragend="dragEnd()" ondragover="dragOver(event)" ondrop="drop(3)">
+                        <div class="item-icon">🔗</div><div class="item-title">行政许可</div><div class="item-type">网站链接</div>
+                        <div class="item-actions">
+                            <button class="item-open-btn" onclick="openItemById('1776061331418','1776061401104')">打开</button>
+                            <button class="item-edit-btn " onclick="showEditItemModal('1776061331418','1776061401104')">修改</button>
+                            <button class="item-delete-btn " onclick="deleteItem('1776061331418','1776061401104')">删除</button>
+                        </div>
+                    </div><div class="item-card" draggable="true" ondragstart="dragStart(4)" ondragend="dragEnd()" ondragover="dragOver(event)" ondrop="drop(4)">
+                        <div class="item-icon">🔗</div><div class="item-title">治安管理处罚法</div><div class="item-type">网站链接</div>
+                        <div class="item-actions">
+                            <button class="item-open-btn" onclick="openItemById('1776061331418','1776061414638')">打开</button>
+                            <button class="item-edit-btn " onclick="showEditItemModal('1776061331418','1776061414638')">修改</button>
+                            <button class="item-delete-btn " onclick="deleteItem('1776061331418','1776061414638')">删除</button>
+                        </div>
+                    </div><div class="item-card" draggable="true" ondragstart="dragStart(5)" ondragend="dragEnd()" ondragover="dragOver(event)" ondrop="drop(5)">
+                        <div class="item-icon">🔗</div><div class="item-title">行政强制法</div><div class="item-type">网站链接</div>
+                        <div class="item-actions">
+                            <button class="item-open-btn" onclick="openItemById('1776061331418','1776139051631')">打开</button>
+                            <button class="item-edit-btn " onclick="showEditItemModal('1776061331418','1776139051631')">修改</button>
+                            <button class="item-delete-btn " onclick="deleteItem('1776061331418','1776139051631')">删除</button>
+                        </div>
+                    </div><div class="item-card" draggable="true" ondragstart="dragStart(6)" ondragend="dragEnd()" ondragover="dragOver(event)" ondrop="drop(6)">
+                        <div class="item-icon">🔗</div><div class="item-title">行政复议法</div><div class="item-type">网站链接</div>
+                        <div class="item-actions">
+                            <button class="item-open-btn" onclick="openItemById('1776061331418','1776139086082')">打开</button>
+                            <button class="item-edit-btn " onclick="showEditItemModal('1776061331418','1776139086082')">修改</button>
+                            <button class="item-delete-btn " onclick="deleteItem('1776061331418','1776139086082')">删除</button>
+                        </div>
+                    </div><div class="item-card" draggable="true" ondragstart="dragStart(7)" ondragend="dragEnd()" ondragover="dragOver(event)" ondrop="drop(7)">
+                        <div class="item-icon">🔗</div><div class="item-title">行政诉讼法</div><div class="item-type">网站链接</div>
+                        <div class="item-actions">
+                            <button class="item-open-btn" onclick="openItemById('1776061331418','1776139107513')">打开</button>
+                            <button class="item-edit-btn " onclick="showEditItemModal('1776061331418','1776139107513')">修改</button>
+                            <button class="item-delete-btn " onclick="deleteItem('1776061331418','1776139107513')">删除</button>
+                        </div>
+                    </div><div class="item-card" draggable="true" ondragstart="dragStart(8)" ondragend="dragEnd()" ondragover="dragOver(event)" ondrop="drop(8)">
+                        <div class="item-icon">🔗</div><div class="item-title">国家赔偿法</div><div class="item-type">网站链接</div>
+                        <div class="item-actions">
+                            <button class="item-open-btn" onclick="openItemById('1776061331418','1776139126376')">打开</button>
+                            <button class="item-edit-btn " onclick="showEditItemModal('1776061331418','1776139126376')">修改</button>
+                            <button class="item-delete-btn " onclick="deleteItem('1776061331418','1776139126376')">删除</button>
+                        </div>
+                    </div><div class="item-card" draggable="true" ondragstart="dragStart(9)" ondragend="dragEnd()" ondragover="dragOver(event)" ondrop="drop(9)">
+                        <div class="item-icon">🔗</div><div class="item-title">警械武器条例</div><div class="item-type">网站链接</div>
+                        <div class="item-actions">
+                            <button class="item-open-btn" onclick="openItemById('1776061331418','1776156341272')">打开</button>
+                            <button class="item-edit-btn " onclick="showEditItemModal('1776061331418','1776156341272')">修改</button>
+                            <button class="item-delete-btn " onclick="deleteItem('1776061331418','1776156341272')">删除</button>
+                        </div>
+                    </div><div class="item-card" draggable="true" ondragstart="dragStart(10)" ondragend="dragEnd()" ondragover="dragOver(event)" ondrop="drop(10)">
+                        <div class="item-icon">🔗</div><div class="item-title">公安基础知识</div><div class="item-type">网站链接</div>
+                        <div class="item-actions">
+                            <button class="item-open-btn" onclick="openItemById('1776061331418','1776156497309')">打开</button>
+                            <button class="item-edit-btn " onclick="showEditItemModal('1776061331418','1776156497309')">修改</button>
+                            <button class="item-delete-btn " onclick="deleteItem('1776061331418','1776156497309')">删除</button>
+                        </div>
+                    </div><div class="item-card" draggable="true" ondragstart="dragStart(11)" ondragend="dragEnd()" ondragover="dragOver(event)" ondrop="drop(11)">
+                        <div class="item-icon">🔗</div><div class="item-title">日期背诵</div><div class="item-type">网站链接</div>
+                        <div class="item-actions">
+                            <button class="item-open-btn" onclick="openItemById('1776061331418','1776392516833')">打开</button>
+                            <button class="item-edit-btn " onclick="showEditItemModal('1776061331418','1776392516833')">修改</button>
+                            <button class="item-delete-btn " onclick="deleteItem('1776061331418','1776392516833')">删除</button>
+                        </div>
+                    </div></div></div><div class="kb-content show"><button class="add-item-btn " onclick="showAddItemModal('1776156366682')">+ 添加内容</button><div class="items-list"><div class="item-card" draggable="true" ondragstart="dragStart(0)" ondragend="dragEnd()" ondragover="dragOver(event)" ondrop="drop(0)">
+                        <div class="item-icon">🔗</div><div class="item-title">综合练习_01</div><div class="item-type">网站链接</div>
+                        <div class="item-actions">
+                            <button class="item-open-btn" onclick="openItemById('1776156366682','1776156403696')">打开</button>
+                            <button class="item-edit-btn " onclick="showEditItemModal('1776156366682','1776156403696')">修改</button>
+                            <button class="item-delete-btn " onclick="deleteItem('1776156366682','1776156403696')">删除</button>
+                        </div>
+                    </div><div class="item-card" draggable="true" ondragstart="dragStart(1)" ondragend="dragEnd()" ondragover="dragOver(event)" ondrop="drop(1)">
+                        <div class="item-icon">🔗</div><div class="item-title">综合练习_02</div><div class="item-type">网站链接</div>
+                        <div class="item-actions">
+                            <button class="item-open-btn" onclick="openItemById('1776156366682','1776156448866')">打开</button>
+                            <button class="item-edit-btn " onclick="showEditItemModal('1776156366682','1776156448866')">修改</button>
+                            <button class="item-delete-btn " onclick="deleteItem('1776156366682','1776156448866')">删除</button>
+                        </div>
+                    </div><div class="item-card" draggable="true" ondragstart="dragStart(2)" ondragend="dragEnd()" ondragover="dragOver(event)" ondrop="drop(2)">
+                        <div class="item-icon">🔗</div><div class="item-title">综合练习03</div><div class="item-type">网站链接</div>
+                        <div class="item-actions">
+                            <button class="item-open-btn" onclick="openItemById('1776156366682','1776392559722')">打开</button>
+                            <button class="item-edit-btn " onclick="showEditItemModal('1776156366682','1776392559722')">修改</button>
+                            <button class="item-delete-btn " onclick="deleteItem('1776156366682','1776392559722')">删除</button>
+                        </div>
+                    </div><div class="item-card" draggable="true" ondragstart="dragStart(3)" ondragend="dragEnd()" ondragover="dragOver(event)" ondrop="drop(3)">
+                        <div class="item-icon">🔗</div><div class="item-title">行政综合内容</div><div class="item-type">网站链接</div>
+                        <div class="item-actions">
+                            <button class="item-open-btn" onclick="openItemById('1776156366682','1776673937869')">打开</button>
+                            <button class="item-edit-btn " onclick="showEditItemModal('1776156366682','1776673937869')">修改</button>
+                            <button class="item-delete-btn " onclick="deleteItem('1776156366682','1776673937869')">删除</button>
+                        </div>
+                    </div><div class="item-card" draggable="true" ondragstart="dragStart(4)" ondragend="dragEnd()" ondragover="dragOver(event)" ondrop="drop(4)">
+                        <div class="item-icon">🔗</div><div class="item-title">警察公安赔偿综合习</div><div class="item-type">网站链接</div>
+                        <div class="item-actions">
+                            <button class="item-open-btn" onclick="openItemById('1776156366682','1776673991069')">打开</button>
+                            <button class="item-edit-btn " onclick="showEditItemModal('1776156366682','1776673991069')">修改</button>
+                            <button class="item-delete-btn " onclick="deleteItem('1776156366682','1776673991069')">删除</button>
+                        </div>
+                    </div><div class="item-card" draggable="true" ondragstart="dragStart(5)" ondragend="dragEnd()" ondragover="dragOver(event)" ondrop="drop(5)">
+                        <div class="item-icon">🔗</div><div class="item-title">刑法综合</div><div class="item-type">网站链接</div>
+                        <div class="item-actions">
+                            <button class="item-open-btn" onclick="openItemById('1776156366682','1776764375914')">打开</button>
+                            <button class="item-edit-btn " onclick="showEditItemModal('1776156366682','1776764375914')">修改</button>
+                            <button class="item-delete-btn " onclick="deleteItem('1776156366682','1776764375914')">删除</button>
+                        </div>
+                    </div><div class="item-card" draggable="true" ondragstart="dragStart(6)" ondragend="dragEnd()" ondragover="dragOver(event)" ondrop="drop(6)">
+                        <div class="item-icon">🔗</div><div class="item-title">行政综合练习Deep</div><div class="item-type">网站链接</div>
+                        <div class="item-actions">
+                            <button class="item-open-btn" onclick="openItemById('1776156366682','1777431681847')">打开</button>
+                            <button class="item-edit-btn " onclick="showEditItemModal('1776156366682','1777431681847')">修改</button>
+                            <button class="item-delete-btn " onclick="deleteItem('1776156366682','1777431681847')">删除</button>
+                        </div>
+                    </div><div class="item-card" draggable="true" ondragstart="dragStart(7)" ondragend="dragEnd()" ondragover="dragOver(event)" ondrop="drop(7)">
+                        <div class="item-icon">🔗</div><div class="item-title">行政刑法综合练习Deep</div><div class="item-type">网站链接</div>
+                        <div class="item-actions">
+                            <button class="item-open-btn" onclick="openItemById('1776156366682','1777689428481')">打开</button>
+                            <button class="item-edit-btn " onclick="showEditItemModal('1776156366682','1777689428481')">修改</button>
+                            <button class="item-delete-btn " onclick="deleteItem('1776156366682','1777689428481')">删除</button>
+                        </div>
+                    </div><div class="item-card" draggable="true" ondragstart="dragStart(8)" ondragend="dragEnd()" ondragover="dragOver(event)" ondrop="drop(8)">
+                        <div class="item-icon">🔗</div><div class="item-title">警察公安综合练习题Deep</div><div class="item-type">网站链接</div>
+                        <div class="item-actions">
+                            <button class="item-open-btn" onclick="openItemById('1776156366682','1777796142399')">打开</button>
+                            <button class="item-edit-btn " onclick="showEditItemModal('1776156366682','1777796142399')">修改</button>
+                            <button class="item-delete-btn " onclick="deleteItem('1776156366682','1777796142399')">删除</button>
+                        </div>
+                    </div></div></div><div class="kb-content "><button class="add-item-btn " onclick="showAddItemModal('1777366707202')">+ 添加内容</button><div class="items-list"><div class="item-card" draggable="true" ondragstart="dragStart(0)" ondragend="dragEnd()" ondragover="dragOver(event)" ondrop="drop(0)">
+                        <div class="item-icon">🔗</div><div class="item-title">行政复议</div><div class="item-type">网站链接</div>
+                        <div class="item-actions">
+                            <button class="item-open-btn" onclick="openItemById('1777366707202','1777366745077')">打开</button>
+                            <button class="item-edit-btn " onclick="showEditItemModal('1777366707202','1777366745077')">修改</button>
+                            <button class="item-delete-btn " onclick="deleteItem('1777366707202','1777366745077')">删除</button>
+                        </div>
+                    </div><div class="item-card" draggable="true" ondragstart="dragStart(1)" ondragend="dragEnd()" ondragover="dragOver(event)" ondrop="drop(1)">
+                        <div class="item-icon">🔗</div><div class="item-title">行政+治安处罚</div><div class="item-type">网站链接</div>
+                        <div class="item-actions">
+                            <button class="item-open-btn" onclick="openItemById('1777366707202','1777366836964')">打开</button>
+                            <button class="item-edit-btn " onclick="showEditItemModal('1777366707202','1777366836964')">修改</button>
+                            <button class="item-delete-btn " onclick="deleteItem('1777366707202','1777366836964')">删除</button>
+                        </div>
+                    </div><div class="item-card" draggable="true" ondragstart="dragStart(2)" ondragend="dragEnd()" ondragover="dragOver(event)" ondrop="drop(2)">
+                        <div class="item-icon">🔗</div><div class="item-title">行政强制</div><div class="item-type">网站链接</div>
+                        <div class="item-actions">
+                            <button class="item-open-btn" onclick="openItemById('1777366707202','1777366802490')">打开</button>
+                            <button class="item-edit-btn " onclick="showEditItemModal('1777366707202','1777366802490')">修改</button>
+                            <button class="item-delete-btn " onclick="deleteItem('1777366707202','1777366802490')">删除</button>
+                        </div>
+                    </div><div class="item-card" draggable="true" ondragstart="dragStart(3)" ondragend="dragEnd()" ondragover="dragOver(event)" ondrop="drop(3)">
+                        <div class="item-icon">🔗</div><div class="item-title">行政诉讼</div><div class="item-type">网站链接</div>
+                        <div class="item-actions">
+                            <button class="item-open-btn" onclick="openItemById('1777366707202','1777366813839')">打开</button>
+                            <button class="item-edit-btn " onclick="showEditItemModal('1777366707202','1777366813839')">修改</button>
+                            <button class="item-delete-btn " onclick="deleteItem('1777366707202','1777366813839')">删除</button>
+                        </div>
+                    </div><div class="item-card" draggable="true" ondragstart="dragStart(4)" ondragend="dragEnd()" ondragover="dragOver(event)" ondrop="drop(4)">
+                        <div class="item-icon">🔗</div><div class="item-title">刑法</div><div class="item-type">网站链接</div>
+                        <div class="item-actions">
+                            <button class="item-open-btn" onclick="openItemById('1777366707202','1777431615588')">打开</button>
+                            <button class="item-edit-btn " onclick="showEditItemModal('1777366707202','1777431615588')">修改</button>
+                            <button class="item-delete-btn " onclick="deleteItem('1777366707202','1777431615588')">删除</button>
+                        </div>
+                    </div><div class="item-card" draggable="true" ondragstart="dragStart(5)" ondragend="dragEnd()" ondragover="dragOver(event)" ondrop="drop(5)">
+                        <div class="item-icon">🔗</div><div class="item-title">刑诉法</div><div class="item-type">网站链接</div>
+                        <div class="item-actions">
+                            <button class="item-open-btn" onclick="openItemById('1777366707202','1777431639194')">打开</button>
+                            <button class="item-edit-btn " onclick="showEditItemModal('1777366707202','1777431639194')">修改</button>
+                            <button class="item-delete-btn " onclick="deleteItem('1777366707202','1777431639194')">删除</button>
+                        </div>
+                    </div><div class="item-card" draggable="true" ondragstart="dragStart(6)" ondragend="dragEnd()" ondragover="dragOver(event)" ondrop="drop(6)">
+                        <div class="item-icon">🔗</div><div class="item-title">行政许可_Deep</div><div class="item-type">网站链接</div>
+                        <div class="item-actions">
+                            <button class="item-open-btn" onclick="openItemById('1777366707202','1777431658995')">打开</button>
+                            <button class="item-edit-btn " onclick="showEditItemModal('1777366707202','1777431658995')">修改</button>
+                            <button class="item-delete-btn " onclick="deleteItem('1777366707202','1777431658995')">删除</button>
+                        </div>
+                    </div><div class="item-card" draggable="true" ondragstart="dragStart(7)" ondragend="dragEnd()" ondragover="dragOver(event)" ondrop="drop(7)">
+                        <div class="item-icon">🔗</div><div class="item-title">公安基础知识</div><div class="item-type">网站链接</div>
+                        <div class="item-actions">
+                            <button class="item-open-btn" onclick="openItemById('1777366707202','1777796059024')">打开</button>
+                            <button class="item-edit-btn " onclick="showEditItemModal('1777366707202','1777796059024')">修改</button>
+                            <button class="item-delete-btn " onclick="deleteItem('1777366707202','1777796059024')">删除</button>
+                        </div>
+                    </div><div class="item-card" draggable="true" ondragstart="dragStart(8)" ondragend="dragEnd()" ondragover="dragOver(event)" ondrop="drop(8)">
+                        <div class="item-icon">🔗</div><div class="item-title">警械警察法</div><div class="item-type">网站链接</div>
+                        <div class="item-actions">
+                            <button class="item-open-btn" onclick="openItemById('1777366707202','1777796068852')">打开</button>
+                            <button class="item-edit-btn " onclick="showEditItemModal('1777366707202','1777796068852')">修改</button>
+                            <button class="item-delete-btn " onclick="deleteItem('1777366707202','1777796068852')">删除</button>
+                        </div>
+                    </div></div></div><div class="kb-content "><button class="add-item-btn " onclick="showAddItemModal('1777689468110')">+ 添加内容</button><div class="items-list"><div class="item-card" draggable="true" ondragstart="dragStart(0)" ondragend="dragEnd()" ondragover="dragOver(event)" ondrop="drop(0)">
+                        <div class="item-icon">🔗</div><div class="item-title">语病修改</div><div class="item-type">网站链接</div>
+                        <div class="item-actions">
+                            <button class="item-open-btn" onclick="openItemById('1777689468110','1777689477701')">打开</button>
+                            <button class="item-edit-btn " onclick="showEditItemModal('1777689468110','1777689477701')">修改</button>
+                            <button class="item-delete-btn " onclick="deleteItem('1777689468110','1777689477701')">删除</button>
+                        </div>
+                    </div><div class="item-card" draggable="true" ondragstart="dragStart(1)" ondragend="dragEnd()" ondragover="dragOver(event)" ondrop="drop(1)">
+                        <div class="item-icon">🔗</div><div class="item-title">演绎推理</div><div class="item-type">网站链接</div>
+                        <div class="item-actions">
+                            <button class="item-open-btn" onclick="openItemById('1777689468110','1777689483527')">打开</button>
+                            <button class="item-edit-btn " onclick="showEditItemModal('1777689468110','1777689483527')">修改</button>
+                            <button class="item-delete-btn " onclick="deleteItem('1777689468110','1777689483527')">删除</button>
+                        </div>
+                    </div></div></div></div>
+        </div>
+
+        <div id="podcastContainer" class="podcast-container">
+            <button class="back-to-kb-btn" onclick="hidePodcastModule()">← 返回知识库</button>
+            <div class="audio-player">
+                <div class="player-title" id="currentPlayingTitle">正在播放（在线）：刑法基础</div>
+                <audio id="audioPlayer" class="player-audio" controls="" crossorigin="anonymous" src="https://cinda955.github.io/admin-law-study/刑法播客.mp3"></audio>
+            </div>
+            <button class="add-item-btn" id="addPodcastBtn" onclick="showAddPodcastModal()" style="display: block;">+ 添加播客</button>
+            <div id="podcastList"><div class="podcast-grid"><div class="podcast-card" id="podcast-1776072531806">
+                <div class="podcast-name">刑法基础</div><div class="podcast-actions">
+                    <button class="podcast-play-btn" onclick="playPodcast('1776072531806')">▶ 播放</button><button class="podcast-edit-btn" onclick="editPodcast('1776072531806')">修改</button>
+                         <button class="podcast-delete-btn" onclick="deletePodcast('1776072531806')">删除</button></div>
+                <div id="progress-1776072531806" class="progress-container" style="display:none;">
+                    <div class="progress-bar" id="progress-bar-1776072531806"></div>
+                </div>
+            </div><div class="podcast-card" id="podcast-1776072544654">
+                <div class="podcast-name">刑诉法</div><div class="podcast-actions">
+                    <button class="podcast-play-btn" onclick="playPodcast('1776072544654')">▶ 播放</button><button class="podcast-edit-btn" onclick="editPodcast('1776072544654')">修改</button>
+                         <button class="podcast-delete-btn" onclick="deletePodcast('1776072544654')">删除</button></div>
+                <div id="progress-1776072544654" class="progress-container" style="display:none;">
+                    <div class="progress-bar" id="progress-bar-1776072544654"></div>
+                </div>
+            </div><div class="podcast-card" id="podcast-1776072553190">
+                <div class="podcast-name">行政法基础</div><div class="podcast-actions">
+                    <button class="podcast-play-btn" onclick="playPodcast('1776072553190')">▶ 播放</button><button class="podcast-edit-btn" onclick="editPodcast('1776072553190')">修改</button>
+                         <button class="podcast-delete-btn" onclick="deletePodcast('1776072553190')">删除</button></div>
+                <div id="progress-1776072553190" class="progress-container" style="display:none;">
+                    <div class="progress-bar" id="progress-bar-1776072553190"></div>
+                </div>
+            </div><div class="podcast-card" id="podcast-1776138874367">
+                <div class="podcast-name">行政+治安处罚法</div><div class="podcast-actions">
+                    <button class="podcast-play-btn" onclick="playPodcast('1776138874367')">▶ 播放</button><button class="podcast-edit-btn" onclick="editPodcast('1776138874367')">修改</button>
+                         <button class="podcast-delete-btn" onclick="deletePodcast('1776138874367')">删除</button></div>
+                <div id="progress-1776138874367" class="progress-container" style="display:none;">
+                    <div class="progress-bar" id="progress-bar-1776138874367"></div>
+                </div>
+            </div><div class="podcast-card" id="podcast-1776138901946">
+                <div class="podcast-name">行政强制</div><div class="podcast-actions">
+                    <button class="podcast-play-btn" onclick="playPodcast('1776138901946')">▶ 播放</button><button class="podcast-edit-btn" onclick="editPodcast('1776138901946')">修改</button>
+                         <button class="podcast-delete-btn" onclick="deletePodcast('1776138901946')">删除</button></div>
+                <div id="progress-1776138901946" class="progress-container" style="display:none;">
+                    <div class="progress-bar" id="progress-bar-1776138901946"></div>
+                </div>
+            </div><div class="podcast-card" id="podcast-1776138929107">
+                <div class="podcast-name">行政诉讼</div><div class="podcast-actions">
+                    <button class="podcast-play-btn" onclick="playPodcast('1776138929107')">▶ 播放</button><button class="podcast-edit-btn" onclick="editPodcast('1776138929107')">修改</button>
+                         <button class="podcast-delete-btn" onclick="deletePodcast('1776138929107')">删除</button></div>
+                <div id="progress-1776138929107" class="progress-container" style="display:none;">
+                    <div class="progress-bar" id="progress-bar-1776138929107"></div>
+                </div>
+            </div><div class="podcast-card" id="podcast-1776138959603">
+                <div class="podcast-name">行政复议</div><div class="podcast-actions">
+                    <button class="podcast-play-btn" onclick="playPodcast('1776138959603')">▶ 播放</button><button class="podcast-edit-btn" onclick="editPodcast('1776138959603')">修改</button>
+                         <button class="podcast-delete-btn" onclick="deletePodcast('1776138959603')">删除</button></div>
+                <div id="progress-1776138959603" class="progress-container" style="display:none;">
+                    <div class="progress-bar" id="progress-bar-1776138959603"></div>
+                </div>
+            </div><div class="podcast-card" id="podcast-1776156539002">
+                <div class="podcast-name">行政许可</div><div class="podcast-actions">
+                    <button class="podcast-play-btn" onclick="playPodcast('1776156539002')">▶ 播放</button><button class="podcast-edit-btn" onclick="editPodcast('1776156539002')">修改</button>
+                         <button class="podcast-delete-btn" onclick="deletePodcast('1776156539002')">删除</button></div>
+                <div id="progress-1776156539002" class="progress-container" style="display:none;">
+                    <div class="progress-bar" id="progress-bar-1776156539002"></div>
+                </div>
+            </div><div class="podcast-card" id="podcast-1776156554489">
+                <div class="podcast-name">国家赔偿</div><div class="podcast-actions">
+                    <button class="podcast-play-btn" onclick="playPodcast('1776156554489')">▶ 播放</button><button class="podcast-edit-btn" onclick="editPodcast('1776156554489')">修改</button>
+                         <button class="podcast-delete-btn" onclick="deletePodcast('1776156554489')">删除</button></div>
+                <div id="progress-1776156554489" class="progress-container" style="display:none;">
+                    <div class="progress-bar" id="progress-bar-1776156554489"></div>
+                </div>
+            </div></div></div>
+        </div>
+    </div>
+</div>
+
+<!-- 模态框 -->
+<div class="modal" id="createKbModal">
+    <div class="modal-content">
+        <h2 class="modal-title">新建知识库</h2>
+        <div class="form-group"><label class="form-label">知识库名称</label><input type="text" class="form-input" id="kbNameInput" placeholder="例如：法律、医学、技术..."></div>
+        <div class="modal-buttons">
+            <button class="modal-btn modal-btn-cancel" onclick="hideCreateKbModal()">取消</button>
+            <button class="modal-btn modal-btn-confirm" onclick="createKb()">创建</button>
+        </div>
+    </div>
+</div>
+<div class="modal" id="addItemModal">
+    <div class="modal-content">
+        <h2 class="modal-title">添加内容</h2>
+        <div class="form-group"><label class="form-label">内容名称</label><input type="text" class="form-input" id="itemNameInput" placeholder="给内容起个名字..."></div>
+        <div class="form-group"><label class="form-label">内容类型</label>
+            <select class="form-select" id="itemTypeSelect" onchange="onTypeChange()">
+                <option value="url">🔗 网站链接</option><option value="pdf">📄 PDF文档</option><option value="txt">📝 TXT文档</option>
+                <option value="word">📘 Word文档</option><option value="html">🌐 HTML文件（上传）</option>
+            </select>
+        </div>
+        <div class="form-group" id="urlGroup" style="display: block;"><label class="form-label">网站地址</label><input type="url" class="form-input" id="itemUrlInput" placeholder="https://example.com"></div>
+        <div class="form-group" id="htmlGroup" style="display: none;"><label class="form-label">上传HTML文件</label><input type="file" class="form-file" id="itemHtmlInput" accept=".html, .htm"></div>
+        <div class="modal-buttons">
+            <button class="modal-btn modal-btn-cancel" onclick="hideAddItemModal()">取消</button>
+            <button class="modal-btn modal-btn-confirm" onclick="addItem()">添加</button>
+        </div>
+    </div>
+</div>
+<div class="modal" id="editItemModal">
+    <div class="modal-content">
+        <h2 class="modal-title">修改知识模块</h2>
+        <div class="form-group"><label class="form-label">模块名称</label><input type="text" class="form-input" id="editItemName" placeholder="输入新名称..."></div>
+        <div class="form-group"><label class="form-label">内容类型</label>
+            <select class="form-select" id="editItemType" disabled="">
+                <option value="url">🔗 网站链接</option><option value="pdf">📄 PDF文档</option><option value="txt">📝 TXT文档</option>
+                <option value="word">📘 Word文档</option><option value="html">🌐 HTML文件</option>
+            </select>
+        </div>
+        <div class="form-group" id="editUrlGroup" style="display: block;"><label class="form-label">网站地址</label><input type="url" class="form-input" id="editItemUrl" placeholder="输入新链接..."></div>
+        <div class="form-group" id="editHtmlGroup" style="display: none;"><label class="form-label">重新上传HTML文件（可选）</label><input type="file" class="form-file" id="editItemHtmlInput" accept=".html, .htm"></div>
+        <div class="modal-buttons">
+            <button class="modal-btn modal-btn-cancel" onclick="hideEditItemModal()">取消</button>
+            <button class="modal-btn modal-btn-confirm" onclick="editItem()">保存修改</button>
+        </div>
+    </div>
+</div>
+<div class="modal" id="podcastModal">
+    <div class="modal-content">
+        <h2 class="modal-title" id="podcastModalTitle">添加播客</h2>
+        <div class="form-group"><label class="form-label">播客名称</label><input type="text" class="form-input" id="podcastNameInput" placeholder="例如：科技早报"></div>
+        <div class="form-group"><label class="form-label">音频链接 (URL)</label><input type="url" class="form-input" id="podcastUrlInput" placeholder="https://example.com/audio.mp3"></div>
+        <div class="modal-buttons">
+            <button class="modal-btn modal-btn-cancel" onclick="hidePodcastModal()">取消</button>
+            <button class="modal-btn modal-btn-confirm" onclick="savePodcast()">保存</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 默认初始数据
+    let defaultData = {
+  "notice": "欢迎使用知识库整合平台！",
+  "knowledgeBases": [
+    {
+      "id": "1776061331418",
+      "name": "公安素质",
+      "collapsed": false,
+      "items": [
+        {
+          "id": "1776061343414",
+          "name": "刑法基础",
+          "type": "url",
+          "url": "https://cinda955.github.io/admin-law-study/刑法学习.html",
+          "htmlContent": ""
+        },
+        {
+          "id": "1776061363747",
+          "name": "刑诉法",
+          "type": "url",
+          "url": "https://cinda955.github.io/admin-law-study/刑诉法学习_新.html",
+          "htmlContent": ""
+        },
+        {
+          "id": "1776061376530",
+          "name": "行政处罚法",
+          "type": "url",
+          "url": "https://cinda955.github.io/admin-law-study/行政处罚法学习.html",
+          "htmlContent": ""
+        },
+        {
+          "id": "1776061401104",
+          "name": "行政许可",
+          "type": "url",
+          "url": "https://cinda955.github.io/admin-law-study/行政许可法学习.html",
+          "htmlContent": ""
+        },
+        {
+          "id": "1776061414638",
+          "name": "治安管理处罚法",
+          "type": "url",
+          "url": "https://cinda955.github.io/admin-law-study/治安管理处罚法学习 .html",
+          "htmlContent": ""
+        },
+        {
+          "id": "1776139051631",
+          "name": "行政强制法",
+          "type": "url",
+          "url": "https://cinda955.github.io/admin-law-study/行政强制法学习.html",
+          "htmlContent": ""
+        },
+        {
+          "id": "1776139086082",
+          "name": "行政复议法",
+          "type": "url",
+          "url": "https://cinda955.github.io/admin-law-study/行政复议法学习.html",
+          "htmlContent": ""
+        },
+        {
+          "id": "1776139107513",
+          "name": "行政诉讼法",
+          "type": "url",
+          "url": "https://cinda955.github.io/admin-law-study/行政诉讼法学习.html",
+          "htmlContent": ""
+        },
+        {
+          "id": "1776139126376",
+          "name": "国家赔偿法",
+          "type": "url",
+          "url": "https://cinda955.github.io/admin-law-study/国家赔偿法学习.html",
+          "htmlContent": ""
+        },
+        {
+          "id": "1776156341272",
+          "name": "警械武器条例",
+          "type": "url",
+          "url": "https://cinda955.github.io/admin-law-study/警械武器条例学习.html",
+          "htmlContent": ""
+        },
+        {
+          "id": "1776156497309",
+          "name": "公安基础知识",
+          "type": "url",
+          "url": "https://cinda955.github.io/admin-law-study/公安基础知识学习.html",
+          "htmlContent": ""
+        },
+        {
+          "id": "1776392516833",
+          "name": "日期背诵",
+          "type": "url",
+          "url": "https://cinda955.github.io/admin-law-study/日期背诵模块学习.html",
+          "htmlContent": ""
+        }
+      ]
+    },
+    {
+      "id": "1776156366682",
+      "name": "综合练习题",
+      "collapsed": false,
+      "items": [
+        {
+          "id": "1776156403696",
+          "name": "综合练习_01",
+          "type": "url",
+          "url": "https://cinda955.github.io/admin-law-study/综合练习学习.html",
+          "htmlContent": ""
+        },
+        {
+          "id": "1776156448866",
+          "name": "综合练习_02",
+          "type": "url",
+          "url": "https://cinda955.github.io/admin-law-study/综合练习2学习.html",
+          "htmlContent": ""
+        },
+        {
+          "id": "1776392559722",
+          "name": "综合练习03",
+          "type": "url",
+          "url": "https://cinda955.github.io/admin-law-study/综合练习3.html",
+          "htmlContent": ""
+        },
+        {
+          "id": "1776673937869",
+          "name": "行政综合内容",
+          "type": "url",
+          "url": "https://cinda955.github.io/admin-law-study/行政综合习题 - 辅警备考.html",
+          "htmlContent": ""
+        },
+        {
+          "id": "1776673991069",
+          "name": "警察公安赔偿综合习",
+          "type": "url",
+          "url": "https://cinda955.github.io/admin-law-study/警察公安赔偿综合习题学习.html",
+          "htmlContent": ""
+        },
+        {
+          "id": "1776764375914",
+          "name": "刑法综合",
+          "type": "url",
+          "url": "https://cinda955.github.io/admin-law-study/刑法刑诉综合.html",
+          "htmlContent": ""
+        },
+        {
+          "id": "1777431681847",
+          "name": "行政综合练习Deep",
+          "type": "url",
+          "url": "https://cinda955.github.io/admin-law-study/Deep综合练习题行政.html",
+          "htmlContent": ""
+        },
+        {
+          "id": "1777689428481",
+          "name": "行政刑法综合练习Deep",
+          "type": "url",
+          "url": "https://cinda955.github.io/admin-law-study/Deep综合练习行政刑法.html",
+          "htmlContent": ""
+        },
+        {
+          "id": "1777796142399",
+          "name": "警察公安综合练习题Deep",
+          "type": "url",
+          "url": "https://cinda955.github.io/admin-law-study/警察公安综合练习题Deep.html",
+          "htmlContent": ""
+        }
+      ]
+    },
+    {
+      "id": "1777366707202",
+      "name": "新_公安",
+      "collapsed": false,
+      "items": [
+        {
+          "id": "1777366745077",
+          "name": "行政复议",
+          "type": "url",
+          "url": "https://cinda955.github.io/admin-law-study/行政复议deep.html",
+          "htmlContent": ""
+        },
+        {
+          "id": "1777366836964",
+          "name": "行政+治安处罚",
+          "type": "url",
+          "url": "https://cinda955.github.io/admin-law-study/Deep治安+处罚.html",
+          "htmlContent": ""
+        },
+        {
+          "id": "1777366802490",
+          "name": "行政强制",
+          "type": "url",
+          "url": "https://cinda955.github.io/admin-law-study/行政强制Deep.html",
+          "htmlContent": ""
+        },
+        {
+          "id": "1777366813839",
+          "name": "行政诉讼",
+          "type": "url",
+          "url": "https://cinda955.github.io/admin-law-study/行政诉讼_Deep.html",
+          "htmlContent": ""
+        },
+        {
+          "id": "1777431615588",
+          "name": "刑法",
+          "type": "url",
+          "url": "https://cinda955.github.io/admin-law-study/刑法_Deep.html",
+          "htmlContent": ""
+        },
+        {
+          "id": "1777431639194",
+          "name": "刑诉法",
+          "type": "url",
+          "url": "https://cinda955.github.io/admin-law-study/刑诉讼法_Deep.html",
+          "htmlContent": ""
+        },
+        {
+          "id": "1777431658995",
+          "name": "行政许可_Deep",
+          "type": "url",
+          "url": "https://cinda955.github.io/admin-law-study/行政许可_Deep.html",
+          "htmlContent": ""
+        },
+        {
+          "id": "1777796059024",
+          "name": "公安基础知识",
+          "type": "url",
+          "url": "https://cinda955.github.io/admin-law-study/Deep公安基础知识.html",
+          "htmlContent": ""
+        },
+        {
+          "id": "1777796068852",
+          "name": "警械警察法",
+          "type": "url",
+          "url": "https://cinda955.github.io/admin-law-study/警械+警察法.html",
+          "htmlContent": ""
+        }
+      ]
+    },
+    {
+      "id": "1777689468110",
+      "name": "行测",
+      "collapsed": false,
+      "items": [
+        {
+          "id": "1777689477701",
+          "name": "语病修改",
+          "type": "url",
+          "url": "https://cinda955.github.io/admin-law-study/Deep行测_语病.html",
+          "htmlContent": ""
+        },
+        {
+          "id": "1777689483527",
+          "name": "演绎推理",
+          "type": "url",
+          "url": "https://cinda955.github.io/admin-law-study/Deep行测_演绎推理 .html",
+          "htmlContent": ""
+        }
+      ]
+    }
+  ],
+  "podcasts": [
+    {
+      "id": "1776072531806",
+      "name": "刑法基础",
+      "url": "https://cinda955.github.io/admin-law-study/刑法播客.mp3"
+    },
+    {
+      "id": "1776072544654",
+      "name": "刑诉法",
+      "url": "https://cinda955.github.io/admin-law-study/刑诉法.mp3"
+    },
+    {
+      "id": "1776072553190",
+      "name": "行政法基础",
+      "url": "https://cinda955.github.io/admin-law-study/行政法基础.mp3"
+    },
+    {
+      "id": "1776138874367",
+      "name": "行政+治安处罚法",
+      "url": "https://cinda955.github.io/admin-law-study/行政治安处罚.mp3"
+    },
+    {
+      "id": "1776138901946",
+      "name": "行政强制",
+      "url": "https://cinda955.github.io/admin-law-study/行政强制.mp3"
+    },
+    {
+      "id": "1776138929107",
+      "name": "行政诉讼",
+      "url": "https://cinda955.github.io/admin-law-study/行政诉讼.mp3"
+    },
+    {
+      "id": "1776138959603",
+      "name": "行政复议",
+      "url": "https://cinda955.github.io/admin-law-study/行政复议.mp3"
+    },
+    {
+      "id": "1776156539002",
+      "name": "行政许可",
+      "url": "https://cinda955.github.io/admin-law-study/行政许可.mp3"
+    },
+    {
+      "id": "1776156554489",
+      "name": "国家赔偿",
+      "url": "https://cinda955.github.io/admin-law-study/国家赔偿.mp3"
+    }
+  ]
+};
+
+    // 全局变量
+    let appData = null;
+    let currentKbId = null;
+    let currentAddKbId = null;
+    let currentEditKbId = null;
+    let currentEditItemId = null;
+    let isAdmin = false;
+    const ADMIN_PASSWORD = "13670742493";
+    let draggedItemIndex = -1;
+    let currentEditPodcastId = null;
+    let currentAudio = document.getElementById('audioPlayer');
+
+    // IndexedDB 相关
+    const DB_NAME = 'PodcastCacheDB';
+    const STORE_NAME = 'audioFiles';
+    let db = null;
+
+    const themes = [
+        { bg: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)", primary: "#667eea", dark: "#5a6fd6" },
+        { bg: "linear-gradient(135deg, #11998e 0%, #38ef7d 100%)", primary: "#11998e", dark: "#0e857c" },
+        { bg: "linear-gradient(135deg, #eb3349 0%, #f45c43 100%)", primary: "#eb3349", dark: "#d42a3f" },
+        { bg: "linear-gradient(135deg, #cc2b5e 0%, #753a88 100%)", primary: "#cc2b5e", dark: "#b52451" },
+        { bg: "linear-gradient(135deg, #f7971e 0%, #ffd200 100%)", primary: "#f7971e", dark: "#e0861a" },
+        { bg: "linear-gradient(135deg, #36d1dc 0%, #5b86e5 100%)", primary: "#36d1dc", dark: "#2bbac4" },
+        { bg: "linear-gradient(135deg, #7f53ac 0%, #647dee 100%)", primary: "#7f53ac", dark: "#6b4490" },
+        { bg: "linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)", primary: "#fcb69f", dark: "#e6a38e" },
+        { bg: "linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)", primary: "#a8edea", dark: "#8ed6d2" },
+        { bg: "linear-gradient(135deg, #616161 0%, #9bc5c3 100%)", primary: "#616161", dark: "#4d4d4d" }
+    ];
+
+    // 初始化 IndexedDB
+    function initDB() {
+        return new Promise((resolve) => {
+            if (!window.indexedDB) {
+                console.warn('浏览器不支持 IndexedDB，将使用普通网络播放');
+                resolve(null);
+                return;
+            }
+            const request = indexedDB.open(DB_NAME, 1);
+            request.onerror = () => { console.warn('IndexedDB 打开失败'); resolve(null); };
+            request.onsuccess = (event) => { db = event.target.result; resolve(db); };
+            request.onupgradeneeded = (event) => {
+                const db = event.target.result;
+                if (!db.objectStoreNames.contains(STORE_NAME)) {
+                    db.createObjectStore(STORE_NAME, { keyPath: 'url' });
+                }
+            };
+        });
+    }
+
+    // 从缓存获取音频
+    async function getCachedAudio(url) {
+        if (!db) return null;
+        return new Promise((resolve) => {
+            const transaction = db.transaction([STORE_NAME], 'readonly');
+            const store = transaction.objectStore(STORE_NAME);
+            const request = store.get(url);
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => resolve(null);
+        });
+    }
+
+    // 保存音频到缓存
+    async function cacheAudio(url, blob) {
+        if (!db) return;
+        return new Promise((resolve) => {
+            const transaction = db.transaction([STORE_NAME], 'readwrite');
+            const store = transaction.objectStore(STORE_NAME);
+            const request = store.put({ url, blob, timestamp: Date.now() });
+            request.onsuccess = () => resolve();
+            request.onerror = () => resolve();
+        });
+    }
+
+    // 下载并缓存音频（带进度回调）
+    async function fetchAndCacheAudio(url, onProgress) {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        
+        const contentLength = response.headers.get('content-length');
+        const total = contentLength ? parseInt(contentLength, 10) : 0;
+        
+        const reader = response.body.getReader();
+        const chunks = [];
+        let received = 0;
+        
+        while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            chunks.push(value);
+            received += value.length;
+            if (total && onProgress) {
+                onProgress(Math.round((received / total) * 100));
+            }
+        }
+        
+        const blob = new Blob(chunks, { type: response.headers.get('content-type') || 'audio/mpeg' });
+        await cacheAudio(url, blob);
+        return blob;
+    }
+
+    function init() {
+        initDB().then(() => {
+            appData = JSON.parse(JSON.stringify(defaultData));
+            if (appData.knowledgeBases.length > 0) {
+                currentKbId = appData.knowledgeBases[0].id;
+                appData.knowledgeBases[0].collapsed = false;
+            }
+            renderThemes();
+            render();
+            updateModeUI();
+            renderPodcasts();
+        });
+    }
+
+    function renderThemes() {
+        const container = document.getElementById('themeBar');
+        container.innerHTML = ''; // 清空避免重复
+        themes.forEach((theme, index) => {
+            const btn = document.createElement('div');
+            btn.className = 'theme-btn';
+            btn.style.background = theme.bg;
+            btn.onclick = () => switchTheme(index);
+            container.appendChild(btn);
+        });
+    }
+
+    function switchTheme(index) {
+        const theme = themes[index];
+        document.documentElement.style.setProperty('--bg-gradient', theme.bg);
+        document.documentElement.style.setProperty('--primary-color', theme.primary);
+        document.documentElement.style.setProperty('--primary-dark', theme.dark);
+    }
+
+    window.toggleAdminMode = function() {
+        if (isAdmin) {
+            isAdmin = false;
+            updateModeUI();
+            render();
+            renderPodcasts();
+            alert("已退出管理员模式，当前为游客模式！");
+            return;
+        }
+        const pwd = prompt("请输入管理员密码：");
+        if (pwd === ADMIN_PASSWORD) {
+            isAdmin = true;
+            updateModeUI();
+            render();
+            renderPodcasts();
+            alert("管理员模式解锁成功！");
+        } else if (pwd !== null) alert("密码错误！");
+    };
+
+    function updateModeUI() {
+        const btn = document.getElementById('modeBtn');
+        if (isAdmin) {
+            btn.className = 'mode-switch-btn admin-mode';
+            btn.textContent = '🔓 退出管理员模式';
+            document.querySelectorAll('.hide-in-visitor').forEach(el => el.classList.remove('hide-in-visitor'));
+        } else {
+            btn.className = 'mode-switch-btn visitor-mode';
+            btn.textContent = '🔐 切换管理员模式';
+            document.querySelectorAll('.hide-in-visitor').forEach(el => el.classList.add('hide-in-visitor'));
+        }
+        const addBtn = document.getElementById('addPodcastBtn');
+        if (addBtn) addBtn.style.display = isAdmin ? 'block' : 'none';
+    }
+
+    window.exportData = function() {
+        const dataStr = JSON.stringify(appData, null, 2);
+        const blob = new Blob([dataStr], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = '知识库数据.json';
+        a.click();
+        URL.revokeObjectURL(url);
+    };
+
+    window.importData = function(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = e => {
+            try {
+                if(confirm('确定导入？将覆盖当前数据！')){
+                    appData = JSON.parse(e.target.result);
+                    if (!appData.podcasts) appData.podcasts = [];
+                    currentKbId = appData.knowledgeBases.length ? appData.knowledgeBases[0].id : null;
+                    if(currentKbId) appData.knowledgeBases.find(k=>k.id===currentKbId).collapsed = false;
+                    render();
+                    renderPodcasts();
+                    alert('导入成功！');
+                }
+            } catch (err) { alert('数据格式错误！'); }
+        };
+        reader.readAsText(file);
+        event.target.value = '';
+    };
+
+    window.editNotice = function() {
+        document.getElementById('noticeContent').style.display = 'none';
+        document.getElementById('noticeEditArea').style.display = 'block';
+        document.getElementById('noticeTextarea').value = appData.notice;
+    };
+    window.saveNotice = function() {
+        appData.notice = document.getElementById('noticeTextarea').value;
+        document.getElementById('noticeContent').textContent = appData.notice;
+        document.getElementById('noticeContent').style.display = 'block';
+        document.getElementById('noticeEditArea').style.display = 'none';
+    };
+
+    window.showCreateKbModal = function() {
+        document.getElementById('createKbModal').classList.add('show');
+        document.getElementById('kbNameInput').value = '';
+        document.getElementById('kbNameInput').focus();
+    };
+    window.hideCreateKbModal = () => document.getElementById('createKbModal').classList.remove('show');
+    window.createKb = function() {
+        const name = document.getElementById('kbNameInput').value.trim();
+        if(!name) return alert('请输入名称！');
+        const kb = { id: Date.now().toString(), name, collapsed: false, items: [] };
+        appData.knowledgeBases.push(kb);
+        currentKbId = kb.id;
+        hideCreateKbModal();
+        render();
+    };
+    window.deleteKb = function(kbId, e) {
+        e.stopPropagation();
+        if(!confirm('确定删除该知识库？')) return;
+        appData.knowledgeBases = appData.knowledgeBases.filter(k => k.id !== kbId);
+        currentKbId = appData.knowledgeBases.length ? appData.knowledgeBases[0].id : null;
+        if(currentKbId) appData.knowledgeBases.find(k=>k.id===currentKbId).collapsed = false;
+        render();
+    };
+
+    function toggleKb(kbId) {
+        const target = appData.knowledgeBases.find(k => k.id === kbId);
+        if (!target) return;
+        if (currentKbId !== kbId) { currentKbId = kbId; target.collapsed = false; }
+        else target.collapsed = !target.collapsed;
+        render();
+    }
+
+    window.showAddItemModal = function(kbId) {
+        currentAddKbId = kbId;
+        document.getElementById('addItemModal').classList.add('show');
+        document.getElementById('itemNameInput').value = '';
+        document.getElementById('itemUrlInput').value = '';
+        document.getElementById('itemHtmlInput').value = '';
+        document.getElementById('itemTypeSelect').value = 'url';
+        onTypeChange();
+        document.getElementById('itemNameInput').focus();
+    };
+    window.hideAddItemModal = () => document.getElementById('addItemModal').classList.remove('show');
+    window.onTypeChange = function() {
+        const type = document.getElementById('itemTypeSelect').value;
+        document.getElementById('urlGroup').style.display = type === 'html' ? 'none' : 'block';
+        document.getElementById('htmlGroup').style.display = type === 'html' ? 'block' : 'none';
+        if (type !== 'html') {
+            const label = document.querySelector('#urlGroup .form-label');
+            label.textContent = type === 'url' ? '网站地址' : '文档链接';
+        }
+    };
+    window.addItem = function() {
+        const name = document.getElementById('itemNameInput').value.trim();
+        const type = document.getElementById('itemTypeSelect').value;
+        if(!name) return alert('请输入名称！');
+        const kb = appData.knowledgeBases.find(k=>k.id===currentAddKbId);
+        const item = { id: Date.now().toString(), name, type, url: '', htmlContent: '' };
+        if (type === 'html') {
+            const fileInput = document.getElementById('itemHtmlInput');
+            if (fileInput.files.length === 0) return alert('请选择HTML/HTM格式文件！');
+            const file = fileInput.files[0];
+            if(!file.name.match(/\.(html|htm)$/i)) return alert('仅支持上传HTML/HTM格式文件！');
+            const reader = new FileReader();
+            reader.onload = e => { item.htmlContent = e.target.result; kb.items.push(item); hideAddItemModal(); render(); };
+            reader.readAsText(file);
+            return;
+        }
+        item.url = document.getElementById('itemUrlInput').value.trim();
+        kb.items.push(item);
+        hideAddItemModal();
+        render();
+    };
+    window.showEditItemModal = function(kbId, itemId) {
+        currentEditKbId = kbId; currentEditItemId = itemId;
+        const item = appData.knowledgeBases.find(k=>k.id===kbId).items.find(i=>i.id===itemId);
+        document.getElementById('editItemName').value = item.name;
+        document.getElementById('editItemType').value = item.type;
+        document.getElementById('editItemUrl').value = item.url || '';
+        document.getElementById('editItemHtmlInput').value = '';
+        const urlGroup = document.getElementById('editUrlGroup');
+        const htmlGroup = document.getElementById('editHtmlGroup');
+        if (item.type === 'html') { urlGroup.style.display = 'none'; htmlGroup.style.display = 'block'; }
+        else { urlGroup.style.display = 'block'; htmlGroup.style.display = 'none'; urlGroup.querySelector('.form-label').textContent = item.type==='url'?'网站地址':'文档链接'; }
+        document.getElementById('editItemModal').classList.add('show');
+    };
+    window.hideEditItemModal = () => document.getElementById('editItemModal').classList.remove('show');
+    window.editItem = function() {
+        const newName = document.getElementById('editItemName').value.trim();
+        if(!newName) return alert('请输入名称！');
+        const kb = appData.knowledgeBases.find(k=>k.id===currentEditKbId);
+        const item = kb.items.find(i=>i.id===currentEditItemId);
+        item.name = newName;
+        if (item.type === 'html') {
+            const fileInput = document.getElementById('editItemHtmlInput');
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                if(!file.name.match(/\.(html|htm)$/i)) return alert('仅支持上传HTML/HTM格式文件！');
+                const reader = new FileReader();
+                reader.onload = e => { item.htmlContent = e.target.result; hideEditItemModal(); render(); };
+                reader.readAsText(file);
+                return;
+            }
+        } else {
+            item.url = document.getElementById('editItemUrl').value.trim();
+        }
+        hideEditItemModal(); render();
+    };
+    window.deleteItem = function(kbId, itemId) {
+        if(!confirm('确定删除该内容？')) return;
+        const kb = appData.knowledgeBases.find(k=>k.id===kbId);
+        kb.items = kb.items.filter(i=>i.id!==itemId);
+        render();
+    };
+
+    function openItem(item) {
+        try {
+            if (item.type === 'html' && item.htmlContent) {
+                const blob = new Blob([item.htmlContent], { type: 'text/html;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.target = '_blank';
+                a.rel = 'noopener noreferrer';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                setTimeout(() => URL.revokeObjectURL(url), 3000);
+                return;
+            }
+            if (item.url) {
+                window.open(item.url, '_blank');
+                return;
+            }
+            alert('未检测到有效内容！');
+        } catch (e) { alert('打开失败：'+ e.message); }
+    }
+
+    window.openItemById = function(kbId, itemId) {
+        const kb = appData.knowledgeBases.find(k => k.id === kbId);
+        if (!kb) return;
+        const item = kb.items.find(i => i.id === itemId);
+        if (!item) return;
+        openItem(item);
+    };
+
+    window.dragStart = i => draggedItemIndex = i;
+    window.dragEnd = () => draggedItemIndex = -1;
+    window.dragOver = e => e.preventDefault();
+    window.drop = function(targetIndex) {
+        if(draggedItemIndex===-1 || draggedItemIndex===targetIndex) return;
+        const kb = appData.knowledgeBases.find(k=>k.id===currentKbId);
+        const draggedItem = kb.items[draggedItemIndex];
+        kb.items.splice(draggedItemIndex, 1);
+        kb.items.splice(targetIndex, 0, draggedItem);
+        render();
+    };
+
+    function getTypeIcon(t){ return {url:'🔗',pdf:'📄',txt:'📝',word:'📘',html:'🌐'}[t]||'📁'; }
+    function getTypeName(t){ return {url:'网站链接',pdf:'PDF文档',txt:'TXT文档',word:'Word文档',html:'HTML文件'}[t]||'其他'; }
+    function escapeHtml(s){ const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+
+    function render() {
+        document.getElementById('noticeContent').textContent = appData.notice;
+        const kbList = document.getElementById('kbList'), kbContents = document.getElementById('kbContents');
+        kbList.innerHTML = ''; kbContents.innerHTML = '';
+        if(!appData.knowledgeBases.length){
+            kbList.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📚</div><div class="empty-state-text">暂无知识库，点击上方按钮创建！</div></div>';
+            return;
+        }
+        appData.knowledgeBases.forEach(kb => {
+            const tag = document.createElement('div');
+            tag.className = `kb-tag ${kb.collapsed ? 'collapsed' : ''} ${currentKbId===kb.id ? 'active' : ''}`;
+            tag.onclick = () => toggleKb(kb.id);
+            tag.innerHTML = `<span class="collapse-icon">▼</span><span>${escapeHtml(kb.name)}</span><span style="font-size:12px;opacity:0.7;">(${kb.items.length})</span>
+                <button class="delete-kb ${!isAdmin?'hide-in-visitor':''}" onclick="deleteKb('${kb.id}',event)">×</button>`;
+            kbList.appendChild(tag);
+            const contentDiv = document.createElement('div');
+            contentDiv.className = `kb-content ${(currentKbId===kb.id && !kb.collapsed) ? 'show' : ''}`;
+            let itemsHtml = '';
+            if (!kb.items.length) itemsHtml = '<div class="empty-state"><div class="empty-state-icon">📭</div><div class="empty-state-text">暂无内容，点击添加！</div></div>';
+            else {
+                itemsHtml = '<div class="items-list">';
+                kb.items.forEach((item, idx) => {
+                    itemsHtml += `<div class="item-card" draggable="true" ondragstart="dragStart(${idx})" ondragend="dragEnd()" ondragover="dragOver(event)" ondrop="drop(${idx})">
+                        <div class="item-icon">${getTypeIcon(item.type)}</div><div class="item-title">${escapeHtml(item.name)}</div><div class="item-type">${getTypeName(item.type)}</div>
+                        <div class="item-actions">
+                            <button class="item-open-btn" onclick="openItemById('${kb.id}','${item.id}')">打开</button>
+                            <button class="item-edit-btn ${!isAdmin?'hide-in-visitor':''}" onclick="showEditItemModal('${kb.id}','${item.id}')">修改</button>
+                            <button class="item-delete-btn ${!isAdmin?'hide-in-visitor':''}" onclick="deleteItem('${kb.id}','${item.id}')">删除</button>
+                        </div>
+                    </div>`;
+                });
+                itemsHtml += '</div>';
+            }
+            contentDiv.innerHTML = `<button class="add-item-btn ${!isAdmin?'hide-in-visitor':''}" onclick="showAddItemModal('${kb.id}')">+ 添加内容</button>${itemsHtml}`;
+            kbContents.appendChild(contentDiv);
+        });
+    }
+
+    // ========== 播客模块 ==========
+    window.showPodcastModule = function() {
+        document.getElementById('knowledgeContainer').classList.add('hide');
+        document.getElementById('podcastContainer').classList.add('show');
+        renderPodcasts();
+    };
+    window.hidePodcastModule = function() {
+        document.getElementById('knowledgeContainer').classList.remove('hide');
+        document.getElementById('podcastContainer').classList.remove('show');
+        render();
+    };
+
+    async function renderPodcasts() {
+        const container = document.getElementById('podcastList');
+        if (!container) return;
+        const podcasts = appData.podcasts || [];
+        if (podcasts.length === 0) {
+            container.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🎙️</div><div class="empty-state-text">暂无播客，点击添加</div></div>';
+            return;
+        }
+        
+        const cacheStatuses = await Promise.all(podcasts.map(async p => {
+            if (!db) return false;
+            const cached = await getCachedAudio(p.url);
+            return !!cached;
+        }));
+        
+        let html = '<div class="podcast-grid">';
+        podcasts.forEach((p, idx) => {
+            const isCached = cacheStatuses[idx];
+            html += `<div class="podcast-card" id="podcast-${p.id}">
+                <div class="podcast-name">${escapeHtml(p.name)}</div>`;
+            if (isCached) {
+                html += `<div class="cache-status">✅ 已缓存</div>`;
+            }
+            html += `<div class="podcast-actions">
+                    <button class="podcast-play-btn" onclick="playPodcast('${p.id}')">▶ 播放</button>`;
+            if (isAdmin) {
+                html += `<button class="podcast-edit-btn" onclick="editPodcast('${p.id}')">修改</button>
+                         <button class="podcast-delete-btn" onclick="deletePodcast('${p.id}')">删除</button>`;
+            }
+            html += `</div>
+                <div id="progress-${p.id}" class="progress-container" style="display:none;">
+                    <div class="progress-bar" id="progress-bar-${p.id}"></div>
+                </div>
+            </div>`;
+        });
+        html += '</div>';
+        container.innerHTML = html;
+        
+        const addBtn = document.getElementById('addPodcastBtn');
+        if (addBtn) addBtn.style.display = isAdmin ? 'block' : 'none';
+    }
+
+    // ✅ 增强版播放：边播边缓存
+    window.playPodcast = async function(id) {
+        const podcast = appData.podcasts.find(p => p.id === id);
+        if (!podcast || !podcast.url) return alert('无效的播客链接');
+        
+        const titleEl = document.getElementById('currentPlayingTitle');
+        titleEl.textContent = '正在加载：' + podcast.name;
+        
+        const progressContainer = document.getElementById(`progress-${id}`);
+        const progressBar = document.getElementById(`progress-bar-${id}`);
+        
+        try {
+            // 1. 尝试从缓存获取
+            let blobUrl = null;
+            if (db) {
+                const cached = await getCachedAudio(podcast.url);
+                if (cached) {
+                    blobUrl = URL.createObjectURL(cached.blob);
+                    titleEl.textContent = '正在播放（已缓存）：' + podcast.name;
+                }
+            }
+            
+            // 2. 若无缓存，立即用网络URL播放，同时后台下载
+            if (!blobUrl) {
+                // 立即播放网络流
+                currentAudio.crossOrigin = "anonymous";
+                currentAudio.src = podcast.url;
+                currentAudio.load();
+                const playPromise = currentAudio.play();
+                titleEl.textContent = '正在播放（在线）：' + podcast.name;
+                
+                // 显示进度条
+                if (progressContainer) progressContainer.style.display = 'block';
+                if (progressBar) progressBar.style.width = '0%';
+                
+                // 后台下载并缓存
+                fetchAndCacheAudio(podcast.url, (percent) => {
+                    if (progressBar) progressBar.style.width = percent + '%';
+                }).then(async (blob) => {
+                    // 下载完成，刷新缓存状态
+                    if (progressContainer) progressContainer.style.display = 'none';
+                    // 重新渲染该卡片以显示“已缓存”
+                    await renderPodcasts();
+                    console.log(`✅ 缓存完成: ${podcast.name}`);
+                }).catch(err => {
+                    console.warn('后台缓存失败，但不影响播放:', err);
+                    if (progressContainer) progressContainer.style.display = 'none';
+                });
+                
+                // 等待播放启动
+                await playPromise.catch(e => {
+                    titleEl.textContent = '播放失败';
+                    alert('播放失败：' + e.message);
+                    if (progressContainer) progressContainer.style.display = 'none';
+                });
+                
+                return; // 已处理网络播放，不再继续
+            }
+            
+            // 3. 使用缓存播放
+            currentAudio.src = blobUrl;
+            currentAudio.load();
+            await currentAudio.play();
+            if (progressContainer) progressContainer.style.display = 'none';
+            
+        } catch (e) {
+            titleEl.textContent = '播放失败';
+            alert('播放失败：' + e.message);
+            if (progressContainer) progressContainer.style.display = 'none';
+        }
+    };
+
+    window.showAddPodcastModal = function() {
+        currentEditPodcastId = null;
+        document.getElementById('podcastModalTitle').textContent = '添加播客';
+        document.getElementById('podcastNameInput').value = '';
+        document.getElementById('podcastUrlInput').value = '';
+        document.getElementById('podcastModal').classList.add('show');
+    };
+    window.hidePodcastModal = () => document.getElementById('podcastModal').classList.remove('show');
+    window.savePodcast = function() {
+        const name = document.getElementById('podcastNameInput').value.trim();
+        const url = document.getElementById('podcastUrlInput').value.trim();
+        if (!name || !url) return alert('请填写完整信息');
+        if (currentEditPodcastId) {
+            const podcast = appData.podcasts.find(p => p.id === currentEditPodcastId);
+            if (podcast) { podcast.name = name; podcast.url = url; }
+        } else {
+            appData.podcasts.push({ id: Date.now().toString(), name, url });
+        }
+        hidePodcastModal();
+        renderPodcasts();
+    };
+    window.editPodcast = function(id) {
+        const podcast = appData.podcasts.find(p => p.id === id);
+        if (!podcast) return;
+        currentEditPodcastId = id;
+        document.getElementById('podcastModalTitle').textContent = '修改播客';
+        document.getElementById('podcastNameInput').value = podcast.name;
+        document.getElementById('podcastUrlInput').value = podcast.url;
+        document.getElementById('podcastModal').classList.add('show');
+    };
+    window.deletePodcast = async function(id) {
+        if (!confirm('确定删除？')) return;
+        const podcast = appData.podcasts.find(p => p.id === id);
+        if (podcast && db) {
+            const transaction = db.transaction([STORE_NAME], 'readwrite');
+            const store = transaction.objectStore(STORE_NAME);
+            store.delete(podcast.url);
+        }
+        appData.podcasts = appData.podcasts.filter(p => p.id !== id);
+        if (currentAudio.src) {
+            const stillExists = appData.podcasts.some(p => currentAudio.src.includes(p.url));
+            if (!stillExists) {
+                currentAudio.src = '';
+                document.getElementById('currentPlayingTitle').textContent = '未播放';
+            }
+        }
+        renderPodcasts();
+    };
+
+    // 下载函数
+    window.downloadCurrentSite = function() {
+        const safeData = JSON.parse(JSON.stringify(appData));
+        safeData.knowledgeBases.forEach(kb => {
+            kb.items.forEach(item => {
+                if (item.type === 'html' && item.htmlContent) {
+                    item.htmlContent = item.htmlContent
+                        .replace(/<\/script>/gi, '<\\/script>')
+                        .replace(/<script/gi, '<\\script');
+                }
+            });
+        });
+        const dataJson = JSON.stringify(safeData, null, 2);
+        let html = document.documentElement.outerHTML;
+        const dataRegex = /(let defaultData\s*=\s*)[\s\S]*?;/;
+        const match = html.match(dataRegex);
+        if (match) {
+            html = html.replace(match[0], `let defaultData = ${dataJson};`);
+        } else {
+            const injectScript = `<script>window.defaultData = ${dataJson}; if(typeof init==='function') init();<\/script>`;
+            html = html.replace('</body>', injectScript + '</body>');
+        }
+        const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `知识库_${new Date().toLocaleDateString().replace(/\//g, '-')}.html`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        alert('✅ 下载成功！新文件包含完整数据。');
+    };
+
+    // 事件绑定
+    document.getElementById('createKbModal').addEventListener('click', e => e.target===e.currentTarget && hideCreateKbModal());
+    document.getElementById('addItemModal').addEventListener('click', e => e.target===e.currentTarget && hideAddItemModal());
+    document.getElementById('editItemModal').addEventListener('click', e => e.target===e.currentTarget && hideEditItemModal());
+    document.getElementById('podcastModal').addEventListener('click', e => e.target===e.currentTarget && hidePodcastModal());
+    document.getElementById('kbNameInput').addEventListener('keypress', e => e.key==='Enter' && createKb());
+    document.getElementById('itemNameInput').addEventListener('keypress', e => e.key==='Enter' && addItem());
+    document.getElementById('editItemName').addEventListener('keypress', e => e.key==='Enter' && editItem());
+
+    init();
+</script>
+
+</body></html>
