@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>国家赔偿法 · 从零到做题</title>
+    <style>
+        :root {
+            --bg: #fdf8f3; --card-bg: #ffffff; --text: #2c2416; --text-light: #5c5347;
+            --accent: #b22222; --highlight: #fff3cd; --highlight-border: #f0c040;
+            --example-bg: #f0faf5; --example-border: #a3e4bc;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05); --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+            --radius: 14px; --radius-sm: 10px;
+            --font: 'PingFang SC','Microsoft YaHei','Hiragino Sans GB','Noto Sans SC',system-ui,-apple-system,sans-serif;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior: smooth; scroll-padding-top: 20px; }
+        body { font-family: var(--font); background: var(--bg); color: var(--text); line-height: 1.75; padding: 12px; font-size: 16px; -webkit-font-smoothing: antialiased; }
+        a { color: var(--accent); text-decoration: none; }
+        .toc-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.35); z-index:98; }
+        .toc-overlay.show { display:block; }
+        .toc { position:fixed; top:16px; left:16px; width:230px; max-height:calc(100vh - 32px); background:var(--card-bg); border-radius:var(--radius); box-shadow:0 8px 30px rgba(0,0,0,0.12); padding:18px 14px; overflow-y:auto; z-index:100; font-size:0.84rem; transition:transform 0.3s; }
+        .toc.hidden { transform:translateX(-260px); }
+        .toc-title { font-weight:700; margin-bottom:10px; color:var(--accent); font-size:1rem; display:flex; align-items:center; gap:6px; position:sticky; top:0; background:var(--card-bg); padding-bottom:8px; border-bottom:1px solid #f0ebe0; }
+        .toc a { display:block; padding:7px 10px; border-radius:6px; margin:2px 0; color:var(--text-light); transition:all 0.2s; font-size:0.82rem; }
+        .toc a:hover,.toc a.active { background:#fdedec; color:var(--accent); font-weight:600; }
+        .toc-toggle { position:fixed; top:16px; left:16px; width:42px; height:42px; border-radius:50%; background:var(--accent); color:#fff; border:none; font-size:1.3rem; cursor:pointer; z-index:101; display:none; box-shadow:0 4px 14px rgba(178,34,34,0.3); align-items:center; justify-content:center; }
+        .main { max-width:820px; margin:0 auto 0 270px; display:flex; flex-direction:column; gap:20px; padding-bottom:40px; }
+        .card { background:var(--card-bg); border-radius:var(--radius); padding:22px 26px; box-shadow:var(--shadow-md); border:1px solid #f0ebe0; }
+        .section-title { font-size:1.45rem; font-weight:700; margin-bottom:4px; display:flex; align-items:center; gap:10px; }
+        .section-title .icon { width:34px; height:34px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; flex-shrink:0; }
+        .icon-red { background:#fdedec; color:#b22222; } .icon-blue { background:#eaf2f8; color:#1a5276; }
+        .icon-green { background:#eafaf1; color:#145a32; } .icon-yellow { background:#fef9e7; color:#b7950b; }
+        .subtitle { color:var(--text-light); font-size:0.9rem; margin-bottom:18px; padding-left:44px; }
+        .ki-grid { display:flex; flex-direction:column; gap:14px; }
+        .ki-item { border:1px solid #f0ebe0; border-radius:var(--radius-sm); padding:14px 18px; background:#fefefe; }
+        .ki-title-row { font-weight:700; font-size:1rem; margin-bottom:6px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+        .badge { font-size:0.7rem; padding:3px 10px; border-radius:14px; font-weight:600; letter-spacing:0.3px; white-space:nowrap; }
+        .badge-core { background:#fdedec; color:#b22222; } .badge-num { background:#eaf2f8; color:#1a5276; } .badge-case { background:#eafaf1; color:#145a32; } .badge-trap { background:#fef9e7; color:#b7950b; }
+        .ki-content { color:var(--text-light); font-size:0.92rem; }
+        .kh { display:inline-block; background:var(--highlight); border:1px solid var(--highlight-border); padding:2px 8px; border-radius:4px; font-weight:600; color:#7d6608; margin:0 2px; font-size:0.9rem; }
+        .kh-red { background:#fdedec; border-color:#f5b7b1; color:#922b21; } .kh-blue { background:#eaf2f8; border-color:#aed6f1; color:#1a5276; } .kh-green { background:#eafaf1; border-color:#a3e4bc; color:#145a32; }
+        .example-block { background:var(--example-bg); border-left:3px solid var(--example-border); border-radius:0 var(--radius-sm) var(--radius-sm) 0; padding:12px 16px; margin-top:10px; font-size:0.9rem; color:#1e5a3a; }
+        .example-block .ex-label { font-weight:700; font-size:0.75rem; text-transform:uppercase; letter-spacing:0.5px; color:#1e8449; margin-bottom:4px; }
+        .example-block .ex-q { font-weight:600; color:#145a32; margin-bottom:3px; }
+        .example-block .ex-a { color:#2d6a4f; }
+        .info-table { width:100%; border-collapse:collapse; margin:8px 0; font-size:0.88rem; }
+        .info-table th { background:#fef9e7; text-align:left; padding:10px 14px; font-weight:700; border-bottom:2px solid #f0c040; color:#7d6608; }
+        .info-table td { padding:10px 14px; border-bottom:1px solid #f0ebe0; vertical-align:top; }
+        .info-table tr:hover td { background:#fefdf9; }
+        .quiz-wrap { border:2px solid #f0ebe0; border-radius:var(--radius-sm); padding:18px 20px; margin-top:12px; background:#fefefe; }
+        .quiz-wrap .q-type { font-size:0.78rem; font-weight:700; color:var(--accent); margin-bottom:4px; }
+        .quiz-wrap .q-text { font-weight:600; margin-bottom:12px; font-size:0.98rem; }
+        .opt-list { list-style:none; display:flex; flex-direction:column; gap:7px; }
+        .opt-list li { padding:10px 14px; border-radius:var(--radius-sm); cursor:pointer; border:2px solid #e9e4db; transition:all 0.2s; background:#fdfdfc; font-size:0.9rem; user-select:none; }
+        .opt-list li:hover { border-color:#c0b090; background:#fefdf9; }
+        .opt-list li.selected { border-color:#1a5276; background:#eaf2f8; font-weight:600; }
+        .opt-list li.correct { border-color:#1e8449 !important; background:#eafaf1 !important; color:#145a32 !important; }
+        .opt-list li.wrong { border-color:#b22222 !important; background:#fdedec !important; color:#922b21 !important; }
+        .opt-list li.disabled { pointer-events:none; opacity:0.85; }
+        .btn-row { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
+        .btn { display:inline-block; padding:10px 22px; border-radius:25px; font-weight:600; cursor:pointer; border:none; font-size:0.88rem; }
+        .btn-primary { background:var(--accent); color:#fff; } .btn-primary:hover { background:#8b1a1a; }
+        .btn-outline { background:#fff; color:var(--accent); border:2px solid var(--accent); } .btn-outline:hover { background:#fdedec; }
+        .explain-card { margin-top:12px; padding:14px 18px; border-radius:var(--radius-sm); display:none; font-size:0.9rem; line-height:1.7; }
+        .explain-card.show { display:block; }
+        .explain-card.correct-ex { background:#eafaf1; border:1px solid #a3e4bc; color:#145a32; }
+        .explain-card.wrong-ex { background:#fdedec; border:1px solid #f5b7b1; color:#922b21; }
+        .explain-card .ex-head { font-weight:700; margin-bottom:6px; font-size:0.95rem; }
+        @media (max-width:768px) {
+            .toc { transform:translateX(-260px); } .toc.show { transform:translateX(0); }
+            .toc-toggle { display:flex; } .main { max-width:100%; margin:0 auto; } .card { padding:18px 14px; }
+        }
+    </style>
+</head>
+<body>
+<button class="toc-toggle" id="tocToggle" aria-label="目录" onclick="toggleToc()">☰</button>
+<div class="toc-overlay" id="tocOverlay" onclick="closeToc()"></div>
+<nav class="toc" id="toc"><div class="toc-title">📑 国家赔偿法 · 知识目录</div></nav>
+<div class="main" id="mainContent"></div>
+<script>
+const knowledgeData = [
+    // ==================== 模块一：国家赔偿法概述 ====================
+    {
+        id: 'mod1', iconClass: 'icon-red', iconEmoji: '📕',
+        title: '一、国家赔偿法概述',
+        subtitle: '概念 · 构成要件 · 行政赔偿与司法赔偿 · 职务行为判断',
+        items: [
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core',
+              title: '1. 什么是国家赔偿？（一句话理解）',
+              content: '国家机关及其工作人员<span class="kh kh-red">违法行使职权</span>，给公民、法人或其他组织的<span class="kh kh-red">人身权或财产权</span>造成损害，依法应给予的赔偿。',
+              extra: '📌 钱从哪来？国家赔偿金来源于<span class="kh kh-red">国家财政（纳税人税款）</span>。虽然具体行为由工作人员实施，但赔偿主体是国家。赔偿包含<span class="kh kh-red">行政赔偿</span>和<span class="kh kh-red">司法赔偿</span>两大类。' },
+            { type: 'ki', badge: '必考', badgeClass: 'badge-core',
+              title: '2. 国家赔偿的四大构成要件',
+              content: '① <span class="kh kh-red">主体要件</span>：国家机关及其工作人员（含授权组织、受委托组织中的工作人员）<br>② <span class="kh kh-red">行为要件</span>：必须是<span class="kh kh-red">职务行为</span>（即使违法，如滥用职权、超越职权也属于职务行为）<br>③ <span class="kh kh-red">结果要件</span>：造成人身权或财产权的<span class="kh kh-red">实际损害</span>（没损害不赔）<br>④ <span class="kh kh-red">因果关系要件</span>：损害结果与职务行为之间有<span class="kh kh-red">直接因果关系</span>',
+              extra: '💡 四者缺一不可。常考陷阱：个人行为（与职权无关）不符合行为要件；自伤自残（自己造成的损害）不符合因果关系要件。',
+              example: { q: '林某是执法人员，在执法过程中发现情敌卖红薯，遂将其打伤。国家赔不赔？', a: '赔。因为林某是在执法过程中（职务行为）造成损害，属于行政赔偿范围。但国家赔偿后可以向林某追偿。如果林某是下班后路上遇到情敌将其打伤，则属于个人行为，国家不赔。' } },
+            { type: 'ki', badge: '重点', badgeClass: 'badge-num',
+              title: '3. 行政赔偿 vs 司法赔偿——两大类型的区分',
+              content: '<table class="info-table"><tr><th>类型</th><th>侵权主体</th><th>行为性质</th><th>举例</th></tr><tr><td><span class="kh kh-red">行政赔偿</span></td><td>行政机关及工作人员</td><td>行政职权行为</td><td>违法罚款、违法拘留、违法扣押</td></tr><tr><td><span class="kh kh-blue">司法赔偿</span></td><td>司法机关及工作人员</td><td>司法职权行为</td><td>错判、错捕、刑讯逼供</td></tr></table>',
+              extra: '📌 公安机关既可行政赔偿也可司法赔偿，关键看行为性质：治安管理=行政，刑事侦查=司法。' },
+            { type: 'ki', badge: '必考', badgeClass: 'badge-core',
+              title: '4. 职务行为的判断标准——"四个标准"',
+              content: '① <span class="kh kh-red">职权标准</span>：是否在履行职责或行使职权（即使违法也是职务行为）<br>② <span class="kh kh-red">时空标准</span>：是否在工作时间、工作地点<br>③ <span class="kh kh-red">名义标准</span>：是否以国家机关名义（穿制服、出示证件等）<br>④ <span class="kh kh-red">目的标准</span>：是否为了公共利益',
+              extra: '📌 综合判断，不能只看单一标准。核心是<span class="kh kh-red">"是否在行使公权力"</span>。' }
+        ],
+        quizzes: [
+            { q: '国家赔偿的实质赔偿主体是谁？', opts: ['A. 具体实施侵权行为的工作人员', 'B. 国家', 'C. 侵权行为所在机关', 'D. 财政部门'], correct: 1, type: 'single', quizIndex: 1,
+              d: '<b>A</b>：错误。工作人员只是具体行为实施者，赔偿责任主体是国家。<br><b>B</b>：正确。国家赔偿的实质主体是国家，赔偿金来自国家财政。<br><b>C</b>：错误。机关是赔偿义务机关，是代替国家履行赔偿义务。<br><b>D</b>：错误。财政部门只是支付机构。',
+              t: '国家赔偿=国家出钱。虽然你找的是具体机关，但最终是国家财政买单。' },
+            { q: '下列哪种行为属于职务行为，国家可能承担赔偿责任？', opts: ['A. 警察下班后与邻居打架致人受伤', 'B. 税务人员在执法过程中殴打纳税人', 'C. 市场监督局工作人员在休假时与人发生争执伤人', 'D. 狱警在家与朋友发生纠纷将朋友打伤'], correct: 1, type: 'single', quizIndex: 2,
+              d: '<b>A</b>：错误。下班后与邻居打架是个人行为，与职权无关。<br><b>B</b>：正确。执法过程中殴打纳税人属于职务行为（违法行使职权）。<br><b>C</b>：错误。休假时发生的争执与职权无关。<br><b>D</b>：错误。在家与朋友纠纷属于个人行为。',
+              t: '是否在执行公务、是否在工作时间地点、是否以国家机关名义——这三个标准综合判断。' }
+        ]
+    },
+    // ==================== 模块二：赔偿范围（行政+刑事） ====================
+    {
+        id: 'mod2', iconClass: 'icon-blue', iconEmoji: '⚖️',
+        title: '二、赔偿范围 · 什么赔什么不赔',
+        subtitle: '行政赔偿范围 · 刑事赔偿范围 · 不予赔偿的情形',
+        items: [
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core',
+              title: '1. 行政赔偿范围——记住关键词"违法"',
+              content: '<span class="kh kh-red">侵犯人身权</span>（5种）：违法拘留、非法拘禁、殴打/虐待/放纵殴打、违法使用武器警械、其他违法行为。<br><span class="kh kh-red">侵犯财产权</span>（4种）：违法罚款/吊销/没收、违法查封扣押冻结、违法征收征用、其他违法行为。<br><span class="kh kh-red">核心前提</span>：必须"<span class="kh kh-red">违法</span>"！合法行为造成的损失叫"补偿"不叫"赔偿"。',
+              extra: '📌 口诀："违法拘留拘禁打，违法武器财产罚"——都是"违法"开头。' },
+            { type: 'ki', badge: '必考', badgeClass: 'badge-core',
+              title: '2. 行政赔偿·不予赔偿的三种情形',
+              content: '① <span class="kh kh-red">个人行为</span>：行政机关工作人员与行使职权<span class="kh kh-red">无关</span>的个人行为<br>② <span class="kh kh-red">自己行为</span>：因公民、法人、其他组织<span class="kh kh-red">自己的行为</span>致使损害发生（如自伤自残）<br>③ <span class="kh kh-red">其他法定情形</span>（如不可抗力、意外事件）',
+              extra: '💡 判断口诀："个人行为自己扛，自己作死不赔偿"。' },
+            { type: 'ki', badge: '必考', badgeClass: 'badge-core',
+              title: '3. 刑事赔偿范围——侵犯人身权（重点！）',
+              content: '① 违法<span class="kh kh-red">拘留</span>；或者合法拘留但<span class="kh kh-red">超期羁押</span>+撤案/不起诉/无罪<br>② 采取<span class="kh kh-red">逮捕</span>措施后，撤案/不起诉/宣告无罪（<span class="kh kh-red">"没罪关了就要赔"</span>）<br>③ <span class="kh kh-red">再审改判无罪</span>，原判刑罚<span class="kh kh-red">已经执行</span><br>④ 刑讯逼供、殴打虐待或放纵殴打虐待<br>⑤ 违法使用武器、警械',
+              extra: '📌 拘留分两种情况：①违法拘留→赔；②合法拘留但超期+无罪→赔超期部分。逮捕：只要最终无罪就赔。注意：<span class="kh kh-red">取保候审、监视居住</span>不赔（未剥夺自由）。' },
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core',
+              title: '4. 刑事赔偿·不予赔偿的六种情形',
+              content: '① 公民<span class="kh kh-red">自己故意作虚伪供述</span>或伪造有罪证据被羁押的<br>② <span class="kh kh-red">不负刑事责任</span>的人被羁押（未满12岁、精神病人等）<br>③ <span class="kh kh-red">不追究刑事责任</span>的人被羁押（情节轻微、过时效等）<br>④ 工作人员与职权无关的个人行为<br>⑤ 公民<span class="kh kh-red">自伤自残</span>等故意行为<br>⑥ 法律规定的其他情形',
+              extra: '📌 关键理解：②③虽然最终不追究，但他们<span class="kh kh-red">确实有违法犯罪行为</span>，只是依法不追究而已，所以羁押是合法的，不赔。口诀："虚伪自陷不赔钱，没到年龄也不冤"。' },
+            { type: 'ki', badge: '陷阱', badgeClass: 'badge-trap',
+              title: '5. 举证责任——特殊情况倒置',
+              content: '<span class="kh kh-red">一般原则</span>：谁主张谁举证。<br><span class="kh kh-red">特殊例外</span>：在<span class="kh kh-red">限制人身自由期间</span>，被限制的人<span class="kh kh-red">死亡或丧失行为能力</span>的，因果关系的举证责任<span class="kh kh-red">倒置</span>——由<span class="kh kh-red">赔偿义务机关</span>证明其行为与结果之间<span class="kh kh-red">不存在因果关系</span>。',
+              extra: '📌 为什么倒置？因为人关在里面，家属不知道发生了什么，让家属举证不合理。监控、记录都在机关手里，机关更容易举证。' }
+        ],
+        quizzes: [
+            { q: '根据国家赔偿法，行政机关工作人员与行使职权无关的个人行为造成损害的，国家是否赔偿？', opts: ['A. 应当赔偿', 'B. 不予赔偿', 'C. 可以赔偿', 'D. 视情况而定'], correct: 1, type: 'single', quizIndex: 3,
+              d: '<b>A</b>：错误。个人行为国家不赔。<br><b>B</b>：正确。与行使职权无关的个人行为，由个人承担责任。<br><b>C</b>：错误。<br><b>D</b>：错误。',
+              t: '下班后打架=个人行为，自己赔。上班执法时打人=职务行为，国家赔。' },
+            { q: '在刑事赔偿中，公民被逮捕后，最终决定不起诉，能否获得赔偿？', opts: ['A. 不能，因为逮捕是合法的', 'B. 能，因为最终无罪', 'C. 不能，因为逮捕不是刑罚', 'D. 需要看逮捕是否违法'], correct: 1, type: 'single', quizIndex: 4,
+              d: '<b>A</b>：错误。逮捕后不起诉=没罪关了就要赔。<br><b>B</b>：正确。"没罪关了就要赔"是逮捕赔偿的核心规则。<br><b>C</b>：错误。逮捕虽然是强制措施不是刑罚，但剥夺了人身自由。<br><b>D</b>：错误。是否赔偿不看逮捕是否违法，只看最终是否无罪。',
+              t: '逮捕后不起诉=你不是罪犯却被关了，国家得赔你。' },
+            { q: '被限制人身自由的人在羁押期间死亡，因果关系的举证责任由谁承担？', opts: ['A. 死者家属', 'B. 赔偿义务机关', 'C. 法院', 'D. 检察院'], correct: 1, type: 'single', quizIndex: 5,
+              d: '<b>A</b>：错误。特殊情况由机关举证。<br><b>B</b>：正确。限制人身自由期间死亡或丧失行为能力，举证责任倒置，由赔偿义务机关承担。<br><b>C</b>：错误。<br><b>D</b>：错误。',
+              t: '人关在里面死了，让家属举证不公平。机关有监控，机关来证明自己没责任。' },
+            { q: '下列哪种情形国家不予刑事赔偿？', opts: ['A. 再审改判无罪，原判徒刑已执行5年', 'B. 公民自己故意作虚假供述导致被羁押', 'C. 逮捕后决定不起诉', 'D. 刑讯逼供造成身体伤害'], correct: 1, type: 'single', quizIndex: 6,
+              d: '<b>A</b>：属于赔偿范围。原判已执行，再审无罪=要赔。<br><b>B</b>：不属于。自己作虚伪供述=自己导致的，不赔。<br><b>C</b>：属于赔偿范围。逮捕后不起诉=无罪被关。<br><b>D</b>：属于赔偿范围。刑讯逼供违法。',
+              t: '自己作死（虚伪供述、伪造证据）导致的羁押，国家不背锅。' }
+        ]
+    },
+,
+    // ==================== 模块三：赔偿请求人与赔偿义务机关 ====================
+    {
+        id: 'mod3', iconClass: 'icon-green', iconEmoji: '🎯',
+        title: '三、赔偿请求人与赔偿义务机关',
+        subtitle: '谁来申请赔偿 · 找谁赔 · 特殊规则',
+        items: [
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core',
+              title: '1. 赔偿请求人——"谁有资格要钱？"',
+              content: '<span class="kh kh-red">一般情况</span>：受害的公民、法人或其他组织。<br><span class="kh kh-red">资格转移</span>（受害人死亡/组织终止）：<br>· 公民死亡→<span class="kh kh-red">继承人</span>或<span class="kh kh-red">有扶养关系的亲属</span>（注意：不是"近亲属"！行政复议和行政诉讼才是近亲属）<br>· 法人/组织终止→<span class="kh kh-red">权利承受人</span><br><span class="kh kh-red">外国人</span>：在中国境内受侵害，同样适用国家赔偿法。',
+              extra: '📌 国家赔偿的请求人资格转移用的是"继承人+有扶养关系的亲属"，范围比行政复议/诉讼的"近亲属"更广。民法典继承编：配偶、子女、父母为第一顺序，兄弟姐妹、祖父母外祖父母为第二顺序。' },
+            { type: 'ki', badge: '必考', badgeClass: 'badge-core',
+              title: '2. 行政赔偿义务机关——"找谁赔？"（与行政诉讼被告类似）',
+              content: '<table class="info-table"><tr><th>情形</th><th>赔偿义务机关</th></tr><tr><td>一般情况</td><td><span class="kh kh-red">谁侵权谁赔</span></td></tr><tr><td>共同侵权</td><td>共同赔偿义务机关（可向任一机关申请）</td></tr><tr><td>授权组织</td><td>被授权组织自己</td></tr><tr><td><span class="kh kh-red">委托组织/个人</span></td><td><span class="kh kh-red">委托的行政机关</span></td></tr><tr><td>机关被撤销</td><td>继续行使其职权的机关；无则撤销机关</td></tr><tr><td><span class="kh kh-red">经复议</span></td><td>原机关；<span class="kh kh-red">复议加重→加重部分由复议机关赔</span></td></tr></table>',
+              extra: '📌 特别注意派出所：派出所不能作为赔偿义务机关（没有独立财政），由所属公安局赔偿。与行政诉讼不同——派出所可以当被告，但不能当赔偿义务机关。' },
+            { type: 'ki', badge: '必考', badgeClass: 'badge-core',
+              title: '3. 刑事赔偿义务机关——"后置原则"',
+              content: '🔹 <span class="kh kh-red">一般原则</span>：谁侵权谁赔。<br>🔹 <span class="kh kh-red">拘留</span>：作出拘留决定的机关（公安/检察院/法院）为赔偿义务机关。<br>🔹 <span class="kh kh-red">逮捕</span>：作出逮捕决定的机会（检察院/法院）——<span class="kh kh-red">谁决定谁赔</span>，不是谁执行谁赔。<br>🔹 <span class="kh kh-red">再审改判无罪</span>：作出<span class="kh kh-red">原生效判决</span>的法院。<br>🔹 <span class="kh kh-red">二审改判无罪/发回重审后无罪</span>：<span class="kh kh-red">一审法院</span>。<br>🔹 <span class="kh kh-red">"赔偿后置"</span>：有多个机关先后作出有罪决定的，<span class="kh kh-red">最后作出有罪决定的机关</span>为赔偿义务机关。',
+              extra: '📌 逮捕决定机关可以是检察院（批准逮捕）或法院（决定逮捕），执行机关是公安机关。决定机关赔，不是执行机关赔。',
+              example: { q: '县公安局拘留李某，县检察院批准逮捕，县法院判5年。二审中院改判无罪。谁赔？', a: '县法院赔。因为二审改判无罪，一审法院为赔偿义务机关。' } }
+        ],
+        quizzes: [
+            { q: '经行政复议的案件，复议机关加重损害的，赔偿义务机关如何确定？', opts: ['A. 由原行政机关承担全部责任', 'B. 由复议机关承担全部责任', 'C. 原行政机关承担，复议机关对加重部分承担', 'D. 双方连带承担'], correct: 2, type: 'single', quizIndex: 7,
+              d: '<b>A</b>：错误。复议加重部分应由复议机关赔偿。<br><b>B</b>：错误。原机关对原损害部分仍要负责。<br><b>C</b>：正确。原机关对原损害负责，复议机关仅对加重部分负责。<br><b>D</b>：错误。不是连带责任。',
+              t: '复议加重=复议机关只赔"加重的那一部分"，原来的损害还是找原机关。' },
+            { q: '派出所民警违法执法造成公民损害的，赔偿义务机关是谁？', opts: ['A. 派出所', 'B. 所属公安局', 'C. 民警个人', 'D. 上级公安机关'], correct: 1, type: 'single', quizIndex: 8,
+              d: '<b>A</b>：错误。派出机构无独立财政，不能作为赔偿义务机关。<br><b>B</b>：正确。由设立该派出所的公安局承担赔偿责任。<br><b>C</b>：错误。职务行为由机关赔。<br><b>D</b>：错误。',
+              t: '派出所可以当被告，但不能当赔偿义务机关——因为赔钱要财政掏，派出所没有独立财政。' },
+            { q: '二审改判无罪，且二审发回重审后作无罪处理的，赔偿义务机关是谁？', opts: ['A. 二审法院', 'B. 一审法院', 'C. 作出拘留决定的机关', 'D. 作出逮捕决定的机关'], correct: 1, type: 'single', quizIndex: 9,
+              d: '<b>A</b>：错误。二审发回重审后无罪，说明一审有问题。<br><b>B</b>：正确。二审改判无罪或发回重审后无罪处理，一审法院为赔偿义务机关。<br><b>C</b>：错误。这是拘留的赔偿规则。<br><b>D</b>：错误。这是逮捕的赔偿规则。',
+              t: '二审说一审判错了→一审法院赔。再审说原判错了→作出原生效判决的法院赔。' }
+        ]
+    },
+    // ==================== 模块四：赔偿程序 ====================
+    {
+        id: 'mod4', iconClass: 'icon-yellow', iconEmoji: '📋',
+        title: '四、赔偿程序',
+        subtitle: '行政赔偿程序 · 刑事赔偿程序 · 时效 · 申请书 · 支付流程',
+        items: [
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core',
+              title: '1. 行政赔偿程序——"先找机关，不服再告"',
+              content: '<span class="kh kh-red">标准流程</span>：① 两年内向赔偿义务机关提出申请→② 机关<span class="kh kh-red">两个月内</span>作出决定→③ 决定赔偿：<span class="kh kh-red">10日内</span>送达决定书；决定不赔：书面通知+说明理由→④ 不服（不赔/数额方式项目有异议/逾期不决定）→<span class="kh kh-red">三个月内</span>向法院提起行政赔偿诉讼。<br><span class="kh kh-red">也可以</span>：在申请<span class="kh kh-red">行政复议</span>或<span class="kh kh-red">提起行政诉讼</span>时<span class="kh kh-red">一并提出</span>赔偿请求。',
+              extra: '📌 时间链条：申请时效2年→机关决定2个月→不服起诉3个月。注意：被羁押期间不计入2年时效。' },
+            { type: 'ki', badge: '必考', badgeClass: 'badge-core',
+              title: '2. 刑事赔偿程序——"非法院"vs"法院"两条路',
+              content: '<span class="kh kh-red">赔偿义务机关非法院</span>（公安/检察院等）：① 两年内申请→② 机关两个月内决定→③ 不服→<span class="kh kh-red">30日内</span>向上一级机关<span class="kh kh-red">复议</span>→④ 复议机关两个月内决定→⑤ 仍不服→<span class="kh kh-red">30日内</span>向复议机关所在地<span class="kh kh-red">同级法院赔偿委员会</span>申请决定。<br><span class="kh kh-red">赔偿义务机关是法院</span>：① 两年内申请→② 法院两个月内决定→③ 不服→直接向<span class="kh kh-red">上一级法院赔偿委员会</span>申请决定（无复议环节）。<br><span class="kh kh-red">赔偿委员会决定</span>：3个月内（可延3个月），决定为最终决定，必须执行。',
+              extra: '📌 关键区别：非法院→先复议再找赔偿委员会；法院→直接找上一级赔偿委员会。赔偿委员会决定是最终决定，不服只能申诉。' },
+            { type: 'ki', badge: '重点', badgeClass: 'badge-num',
+              title: '3. 申请书 + 补正 + 支付流程',
+              content: '🔹 <span class="kh kh-red">申请书内容</span>：受害人信息+具体请求（方式/项目/数额）+事实理由+年月日。可同时提出数项赔偿请求。<br>🔹 <span class="kh kh-red">材料不全</span>：当场或<span class="kh kh-red">5日内</span>一次性告知补正。<br>🔹 <span class="kh kh-red">支付流程</span>：凭生效文书（赔偿决定书/判决书/复议决定书/调解书）申请支付→赔偿义务机关<span class="kh kh-red">7日内</span>向财政部门申请→财政部门<span class="kh kh-red">15日内</span>支付。<br>🔹 <span class="kh kh-red">不收费不征税</span>：申请赔偿不收费，赔偿金不征税。',
+              extra: '📌 可协商的范围：赔偿<span class="kh kh-red">方式、项目、数额</span>可以协商。是否赔偿不能协商（由机关决定）。期限和标准不能协商（法定）。' },
+            { type: 'ki', badge: '陷阱', badgeClass: 'badge-trap',
+              title: '4. 赔偿委员会 + 申诉 + 检察院监督',
+              content: '🔹 <span class="kh kh-red">赔偿委员会</span>：<span class="kh kh-red">中级以上</span>法院设立，由<span class="kh kh-red">3名以上</span>审判员（单数）组成，<span class="kh kh-red">少数服从多数</span>。<br>🔹 <span class="kh kh-red">申诉</span>：请求人或义务机关认为决定错误→向<span class="kh kh-red">上一级</span>法院赔偿委员会申诉。<br>🔹 <span class="kh kh-red">重新审查</span>：本院院长/上级法院指令→<span class="kh kh-red">两个月内</span>重新审查。<br>🔹 <span class="kh kh-red">检察院监督</span>：上级检察院对下级法院赔偿委员会决定可向<span class="kh kh-red">同级</span>法院赔偿委员会提出意见→两个月内重新审查。',
+              extra: '📌 赔偿委员会是"最终裁决者"，其决定具有法律效力，必须执行。' }
+        ],
+        quizzes: [
+            { q: '赔偿请求人请求国家赔偿的时效是多久？', opts: ['A. 6个月', 'B. 1年', 'C. 2年', 'D. 3年'], correct: 2, type: 'single', quizIndex: 10,
+              d: '<b>A</b>：错误。6个月是行政诉讼直接起诉期限。<br><b>B</b>：错误。<br><b>C</b>：正确。国家赔偿请求时效为2年，自知道或应当知道权利被侵害之日起算。<br><b>D</b>：错误。',
+              t: '国家赔偿时效2年，比复议（60天）和诉讼（6个月）长得多。被关押的时间不算在内。' },
+            { q: '赔偿义务机关决定不予赔偿的，应当自作出决定之日起几日内书面通知赔偿请求人？', opts: ['A. 5日', 'B. 7日', 'C. 10日', 'D. 15日'], correct: 2, type: 'single', quizIndex: 11,
+              d: '<b>A</b>：错误。5日是补正材料的期限。<br><b>B</b>：错误。7日是向财政部门申请的期限。<br><b>C</b>：正确。决定后10日内送达或通知。<br><b>D</b>：错误。15日是财政部门支付期限。',
+              t: '不管赔不赔，决定后10天内必须给你书面答复。不赔还要说明理由。' },
+            { q: '非法院作为刑事赔偿义务机关时，赔偿请求人不服赔偿决定的，应如何处理？', opts: ['A. 直接向法院起诉', 'B. 向上一级机关申请复议', 'C. 向同级法院赔偿委员会申请', 'D. 向检察院申诉'], correct: 1, type: 'single', quizIndex: 12,
+              d: '<b>A</b>：错误。非法院的刑事赔偿不能直接起诉。<br><b>B</b>：正确。先向上一级机关复议。<br><b>C</b>：错误。对复议决定不服才找赔偿委员会。<br><b>D</b>：错误。',
+              t: '非法院机关（公安/检察院）→先复议→再找赔偿委员会。两步骤。' }
+        ]
+    },
+    // ==================== 模块五：赔偿方式与计算标准 ====================
+    {
+        id: 'mod5', iconClass: 'icon-red', iconEmoji: '💰',
+        title: '五、赔偿方式与计算标准',
+        subtitle: '怎么赔 · 赔多少 · 精神损害赔偿 · 追偿',
+        items: [
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core',
+              title: '1. 国家赔偿的主要方式',
+              content: '<span class="kh kh-red">主要方式</span>：<span class="kh kh-red">支付赔偿金</span>。<br><span class="kh kh-red">补充方式</span>：<span class="kh kh-red">返还财产</span>（能返还的返还）、<span class="kh kh-red">恢复原状</span>（能修的修）。<br><span class="kh kh-red">原则</span>：能恢复就恢复，不能恢复就赔钱。<br><span class="kh kh-red">精神损害</span>：消除影响、恢复名誉、赔礼道歉；<span class="kh kh-red">造成严重后果</span>的→支付<span class="kh kh-red">精神抚慰金</span>。',
+              extra: '📌 注意区分：一般精神损害=消除影响+恢复名誉+赔礼道歉；严重精神损害=上述+精神抚慰金。' },
+            { type: 'ki', badge: '必考', badgeClass: 'badge-core',
+              title: '2. 人身权损害赔偿标准',
+              content: '<table class="info-table"><tr><th>损害类型</th><th>赔偿内容</th><th>上限/标准</th></tr><tr><td><span class="kh kh-red">人身自由</span></td><td>每日赔偿金</td><td>国家上年度职工<span class="kh kh-red">日平均工资</span></td></tr><tr><td>身体伤害</td><td>医疗费+护理费+误工费</td><td>误工费最高<span class="kh kh-red">年平均工资5倍</span></td></tr><tr><td>丧失劳动能力</td><td>医疗+护理+残疾辅助+康复+残疾赔偿金</td><td>残疾赔偿金最高<span class="kh kh-red">年平均工资20倍</span></td></tr><tr><td><span class="kh kh-red">死亡</span></td><td>死亡赔偿金+丧葬费</td><td>总额=年平均工资<span class="kh kh-red">20倍</span></td></tr></table>',
+              extra: '📌 死亡赔偿金是固定20倍，不按年龄算。丧失劳动能力的20倍是上限，不是固定。另外还需支付被扶养人生活费（按当地低保标准）。' },
+            { type: 'ki', badge: '重点', badgeClass: 'badge-num',
+              title: '3. 财产权损害赔偿标准',
+              content: '🔹 罚款/罚金/没收/追缴→<span class="kh kh-red">返还</span>+支付<span class="kh kh-red">同期银行利息</span><br>🔹 查封/扣押/冻结→解除；损坏=恢复原状或赔偿；灭失=赔偿<br>🔹 已拍卖→给付<span class="kh kh-red">拍卖价款</span>；变卖价明显低于价值→支付<span class="kh kh-red">相应赔偿金</span><br>🔹 责令停产停业→赔偿<span class="kh kh-red">必要的经常性费用</span>（租金/水电/工资，<span class="kh kh-red">不含利润</span>）<br>🔹 其他→按<span class="kh kh-red">直接损失</span>赔偿',
+              extra: '📌 停产停业只赔"活命钱"（租金水电工资），不赔"预期利润"。拍卖价=市场价（公开透明），变卖可能被压价（可暗箱操作）。' },
+            { type: 'ki', badge: '必考', badgeClass: 'badge-core',
+              title: '4. 追偿——"国家赔完了找工作人员要"',
+              content: '<span class="kh kh-red">行政追偿</span>：工作人员<span class="kh kh-red">故意或重大过失</span>→国家赔偿后可追偿部分或全部费用+处分+构成犯罪追究刑事责任。<br><span class="kh kh-red">刑事追偿</span>：具体三种情形→①刑讯逼供/殴打虐待；②违法使用武器警械；③贪污受贿/徇私舞弊/枉法裁判。<br><span class="kh kh-red">追偿金额</span>：不超过国家实际支付的赔偿金，不含办案支出费用。',
+              extra: '📌 行政追偿=抽象标准（故意/重大过失）；刑事追偿=具体列举（三种情形）。追偿≠免责，该处分还处分，该判刑还判刑。' }
+        ],
+        quizzes: [
+            { q: '国家赔偿以什么为主要方式？', opts: ['A. 返还财产', 'B. 恢复原状', 'C. 支付赔偿金', 'D. 赔礼道歉'], correct: 2, type: 'single', quizIndex: 13,
+              d: '<b>A</b>：错误。返还财产是补充方式。<br><b>B</b>：错误。恢复原状是补充方式。<br><b>C</b>：正确。支付赔偿金是主要方式。<br><b>D</b>：错误。赔礼道歉是精神损害赔偿的方式。',
+              t: '国家赔偿=主要是给钱。能还东西就还，能修就修，不行就赔钱。' },
+            { q: '造成公民死亡的，死亡赔偿金和丧葬费的总额为国家上年度职工年平均工资的多少倍？', opts: ['A. 5倍', 'B. 10倍', 'C. 15倍', 'D. 20倍'], correct: 3, type: 'single', quizIndex: 14,
+              d: '<b>A</b>：错误。5倍是误工费最高额。<br><b>B</b>：错误。<br><b>C</b>：错误。<br><b>D</b>：正确。死亡赔偿金+丧葬费=上年职工年平均工资的20倍，这是固定标准。',
+              t: '死亡赔20倍是固定的；丧失劳动能力赔20倍是上限（不一定赔满）。' },
+            { q: '责令停产停业期间，赔偿范围包括？', opts: ['A. 停业期间的预期利润', 'B. 必要的经常性费用开支', 'C. 全部经营损失', 'D. 包括利润和费用'], correct: 1, type: 'single', quizIndex: 15,
+              d: '<b>A</b>：错误。预期利润不属于直接损失，不赔。<br><b>B</b>：正确。只赔偿必要的经常性费用（租金、水电、工资等）。<br><b>C</b>：错误。<br><b>D</b>：错误。利润不赔。',
+              t: '停产停业只赔"活命钱"（房租水电工资），不赔"你本来能赚多少"——那叫预期利润，不赔。' },
+            { q: '行政追偿中，国家向工作人员追偿的条件是什么？', opts: ['A. 工作人员有任何过失', 'B. 工作人员有故意或重大过失', 'C. 工作人员拒绝赔偿', 'D. 工作人员辞职'], correct: 1, type: 'single', quizIndex: 16,
+              d: '<b>A</b>：错误。一般过失不追偿。<br><b>B</b>：正确。行政追偿条件=故意或重大过失。<br><b>C</b>：错误。<br><b>D</b>：错误。辞职不影响追偿。',
+              t: '不是所有错都要追偿，只有"故意"或"重大过失"才被追。一般的小失误不追。' }
+        ]
+    },
+
+,
+    // ==================== 综合练习（单选20+判断15+多选10） ====================
+    {
+        id: 'mod_final', iconClass: 'icon-red', iconEmoji: '🏆',
+        title: '综合练习',
+        subtitle: '覆盖国家赔偿法全部核心考点',
+        quizzes: [
+            // ===== 单选题20道 =====
+            { q: '国家赔偿的实质赔偿主体是谁？', opts: ['A. 具体实施侵权的工作人员', 'B. 国家', 'C. 赔偿义务机关', 'D. 财政部门'], correct: 1, type: 'single', quizIndex: 1,
+              d: '<b>A</b>：错误。工作人员只是行为实施者，赔偿责任属于国家。<br><b>B</b>：正确。国家赔偿的实质主体是国家，赔偿金来自国家财政（纳税人税款）。<br><b>C</b>：错误。赔偿义务机关是代替国家履行赔偿义务的具体机关。<br><b>D</b>：错误。财政部门只是支付机构。',
+              t: '国家赔偿=国家出钱。虽然你找的是具体机关，但最终买单的是国家财政。' },
+            { q: '下列哪项不属于国家赔偿的构成要件？', opts: ['A. 主体为国家机关及其工作人员', 'B. 行为必须是职务行为', 'C. 行为人必须有主观故意', 'D. 造成了实际损害'], correct: 2, type: 'single', quizIndex: 2,
+              d: '<b>A</b>：属于。主体要件是构成要件之一。<br><b>B</b>：属于。行为必须是职务行为。<br><b>C</b>：不属于。国家赔偿不要求主观故意，违法行使职权即使无故意也可能要赔。<br><b>D</b>：属于。无损害不赔偿。',
+              t: '国家赔偿看的是"违法+损害"，不要求一定是故意的。过失违法造成损害也要赔。' },
+            { q: '警察下班后与邻居发生纠纷并将其打伤，下列说法正确的是？', opts: ['A. 国家应赔偿，因为行为人是警察', 'B. 国家应赔偿，因为警察全天候履职', 'C. 国家不赔偿，属于个人行为', 'D. 国家赔偿后可向警察追偿'], correct: 2, type: 'single', quizIndex: 3,
+              d: '<b>A</b>：错误。不能仅凭身份判断。<br><b>B</b>：错误。警察并非全天候都在执行职务。<br><b>C</b>：正确。下班后与邻居纠纷不属于职务行为，是个人行为，国家不赔。<br><b>D</b>：错误。国家都不赔，谈不上追偿。',
+              t: '下班打架=个人行为，自己赔。上班执法时打人=职务行为，国家赔。' },
+            { q: '行政机关工作人员与行使职权无关的个人行为造成损害的，国家是否赔偿？', opts: ['A. 应当赔偿', 'B. 不予赔偿', 'C. 可以赔偿', 'D. 视损害程度而定'], correct: 1, type: 'single', quizIndex: 4,
+              d: '<b>A</b>：错误。个人行为国家不承担赔偿责任。<br><b>B</b>：正确。与职权无关的个人行为，由个人承担责任。<br><b>C</b>：错误。<br><b>D</b>：错误。与损害程度无关。',
+              t: '国家只赔"公事"不赔"私事"。个人行为自己扛。' },
+            { q: '在刑事赔偿中，公民被逮捕后检察机关决定不起诉，能否获得赔偿？', opts: ['A. 不能，逮捕是合法的强制措施', 'B. 能，因为最终未被定罪', 'C. 不能，需看逮捕是否违法', 'D. 能，但需证明逮捕违法'], correct: 1, type: 'single', quizIndex: 5,
+              d: '<b>A</b>：错误。逮捕后不起诉=没罪关了就要赔。<br><b>B</b>：正确。逮捕赔偿的核心规则是"没罪关了就要赔"。<br><b>C</b>：错误。不看逮捕是否违法，看最终是否无罪。<br><b>D</b>：错误。不需要证明逮捕违法。',
+              t: '只要最终没定罪，之前被关的日子就要赔。这就是"没罪关了就要赔"。' },
+            { q: '根据国家赔偿法，下列哪种情形国家不予刑事赔偿？', opts: ['A. 再审改判无罪，原判已执行3年', 'B. 刑讯逼供致人轻伤', 'C. 公民故意作虚伪供述被羁押', 'D. 违法使用武器致人死亡'], correct: 2, type: 'single', quizIndex: 6,
+              d: '<b>A</b>：属于赔偿范围。再审无罪+已执行=要赔。<br><b>B</b>：属于赔偿范围。刑讯逼供违法。<br><b>C</b>：不属于。自己作虚伪供述导致被羁押，国家不赔。<br><b>D</b>：属于赔偿范围。违法使用武器。',
+              t: '自己作死（虚伪供述、伪造证据）导致的羁押，国家不背锅。' },
+            { q: '被限制人身自由的人在羁押期间死亡，因果关系的举证责任由谁承担？', opts: ['A. 死者家属', 'B. 赔偿义务机关', 'C. 法院', 'D. 检察院'], correct: 1, type: 'single', quizIndex: 7,
+              d: '<b>A</b>：错误。特殊情况下举证责任倒置。<br><b>B</b>：正确。限制人身自由期间死亡或丧失行为能力，由赔偿义务机关举证。<br><b>C</b>：错误。<br><b>D</b>：错误。',
+              t: '人关在里面死了，监控和记录都在机关手里，让机关证明自己有没有责任。' },
+            { q: '二审法院改判无罪，赔偿义务机关是谁？', opts: ['A. 二审法院', 'B. 一审法院', 'C. 作出逮捕决定的机关', 'D. 作出拘留决定的机关'], correct: 1, type: 'single', quizIndex: 8,
+              d: '<b>A</b>：错误。二审改判无罪说明一审有错。<br><b>B</b>：正确。二审改判无罪或发回重审后无罪处理，一审法院为赔偿义务机关。<br><b>C</b>：错误。这是逮捕的赔偿规则。<br><b>D</b>：错误。这是拘留的赔偿规则。',
+              t: '二审说一审判错了→一审法院赔。"谁最后做错决定，谁负责"。' },
+            { q: '行政赔偿义务机关应在收到赔偿申请之日起多久内作出是否赔偿的决定？', opts: ['A. 1个月', 'B. 2个月', 'C. 3个月', 'D. 6个月'], correct: 1, type: 'single', quizIndex: 9,
+              d: '<b>A</b>：错误。<br><b>B</b>：正确。赔偿义务机关应在收到申请之日起2个月内作出决定。<br><b>C</b>：错误。3个月是赔偿委员会的决定期限。<br><b>D</b>：错误。',
+              t: '机关2个月内必须给答复——赔还是不赔，给个痛快。' },
+            { q: '赔偿请求人请求国家赔偿的时效是多久？', opts: ['A. 6个月', 'B. 1年', 'C. 2年', 'D. 3年'], correct: 2, type: 'single', quizIndex: 10,
+              d: '<b>A</b>：错误。6个月是行政诉讼直接起诉期限。<br><b>B</b>：错误。<br><b>C</b>：正确。国家赔偿请求时效为2年，自知道或应当知道权利被侵害之日起算。<br><b>D</b>：错误。',
+              t: '国家赔偿时效2年，比复议（60天）和诉讼（6个月）长得多。被关押时间不算在内。' },
+            { q: '赔偿义务机关决定不予赔偿的，应在几日内书面通知赔偿请求人？', opts: ['A. 5日', 'B. 7日', 'C. 10日', 'D. 15日'], correct: 2, type: 'single', quizIndex: 11,
+              d: '<b>A</b>：错误。5日是补正材料的期限。<br><b>B</b>：错误。7日是向财政部门申请的期限。<br><b>C</b>：正确。决定后10日内送达或通知。<br><b>D</b>：错误。15日是财政部门支付期限。',
+              t: '不管赔不赔，决定后10天内必须书面答复。不赔还得说明理由。' },
+            { q: '赔偿请求人对赔偿义务机关不予赔偿的决定不服，可在多久内向法院起诉？', opts: ['A. 1个月', 'B. 2个月', 'C. 3个月', 'D. 6个月'], correct: 2, type: 'single', quizIndex: 12,
+              d: '<b>A</b>：错误。<br><b>B</b>：错误。2个月是机关决定的期限。<br><b>C</b>：正确。不服决定或逾期不决定，可在3个月内向法院起诉。<br><b>D</b>：错误。',
+              t: '机关不理你或不赔→3个月内去法院告他。' },
+            { q: '国家赔偿的主要方式是什么？', opts: ['A. 返还财产', 'B. 恢复原状', 'C. 支付赔偿金', 'D. 赔礼道歉'], correct: 2, type: 'single', quizIndex: 13,
+              d: '<b>A</b>：错误。返还财产是补充方式。<br><b>B</b>：错误。恢复原状是补充方式。<br><b>C</b>：正确。支付赔偿金是主要方式。<br><b>D</b>：错误。赔礼道歉是精神损害赔偿方式。',
+              t: '国家赔偿=主要是给钱。能还东西就还，能修就修，不行就赔钱。' },
+            { q: '造成公民死亡的，死亡赔偿金和丧葬费总额为上年职工年平均工资的多少倍？', opts: ['A. 5倍', 'B. 10倍', 'C. 15倍', 'D. 20倍'], correct: 3, type: 'single', quizIndex: 14,
+              d: '<b>A</b>：错误。5倍是误工费最高额。<br><b>B</b>：错误。<br><b>C</b>：错误。<br><b>D</b>：正确。死亡赔偿金+丧葬费=上年职工年平均工资的20倍，这是固定标准。',
+              t: '死亡赔20倍是固定的；丧失劳动能力赔20倍是上限（不一定赔满）。' },
+            { q: '责令停产停业期间，国家赔偿的范围是？', opts: ['A. 停业期间的预期利润', 'B. 必要的经常性费用开支', 'C. 全部经营损失', 'D. 员工的精神损失'], correct: 1, type: 'single', quizIndex: 15,
+              d: '<b>A</b>：错误。预期利润不赔。<br><b>B</b>：正确。只赔必要的经常性费用（租金、水电、工资）。<br><b>C</b>：错误。<br><b>D</b>：错误。停产停业不涉及精神损失。',
+              t: '停产停业只赔"活命钱"（房租水电工资），不赔"你本来能赚多少"。' },
+            { q: '赔偿请求人凭生效文书申请支付赔偿金，赔偿义务机关应在几日内向财政部门提出支付申请？', opts: ['A. 3日', 'B. 5日', 'C. 7日', 'D. 10日'], correct: 2, type: 'single', quizIndex: 16,
+              d: '<b>A</b>：错误。<br><b>B</b>：错误。<br><b>C</b>：正确。赔偿义务机关应在7日内向财政部门提出支付申请。<br><b>D</b>：错误。10日是送达期限。',
+              t: '拿到赔偿决定书后，机关7天内向财政要钱，财政15天内打款。' },
+            { q: '关于申请国家赔偿的费用，下列说法正确的是？', opts: ['A. 需缴纳申请费', 'B. 赔偿金需缴纳个人所得税', 'C. 不收费也不征税', 'D. 收费但免税'], correct: 2, type: 'single', quizIndex: 17,
+              d: '<b>A</b>：错误。申请国家赔偿不收费。<br><b>B</b>：错误。赔偿金不征税。<br><b>C</b>：正确。申请不收费，赔偿金不征税。<br><b>D</b>：错误。',
+              t: '申请赔偿不要钱，拿到的赔偿金也不用交税。' },
+            { q: '人民法院赔偿委员会由几名以上审判员组成？', opts: ['A. 1名', 'B. 2名', 'C. 3名', 'D. 5名'], correct: 2, type: 'single', quizIndex: 18,
+              d: '<b>A</b>：错误。<br><b>B</b>：错误。必须是单数。<br><b>C</b>：正确。赔偿委员会由3名以上审判员组成，人数为单数。<br><b>D</b>：错误。',
+              t: '赔偿委员会=3人以上，单数，少数服从多数。' },
+            { q: '行政追偿中，赔偿义务机关向工作人员追偿的条件是什么？', opts: ['A. 工作人员有任何过失', 'B. 工作人员有故意或重大过失', 'C. 工作人员拒绝赔偿', 'D. 工作人员经济条件允许'], correct: 1, type: 'single', quizIndex: 19,
+              d: '<b>A</b>：错误。一般过失不追偿。<br><b>B</b>：正确。行政追偿条件=故意或重大过失。<br><b>C</b>：错误。<br><b>D</b>：错误。不过经济条件会影响追偿金额。',
+              t: '不是所有错都要被追偿，只有"故意"或"重大过失"才追。一般小错不追。' },
+            { q: '赔偿请求人不是受害人本人的，应当怎么做？', opts: ['A. 无需说明关系', 'B. 说明与受害人关系并提供证明', 'C. 只需口头说明', 'D. 由法院主动审查'], correct: 1, type: 'single', quizIndex: 20,
+              d: '<b>A</b>：错误。必须说明关系。<br><b>B</b>：正确。应说明关系并提供相应证明（如结婚证、户口本等）。<br><b>C</b>：错误。需要书面证明。<br><b>D</b>：错误。',
+              t: '替别人要赔偿，得拿出证据证明你是继承人或有抚养关系的亲属。' },
+
+            // ===== 判断题15道 =====
+            { q: '国家赔偿的实质主体是赔偿义务机关。', opts: ['✅ 正确', '❌ 错误'], correct: 1, type: 'single', isTF: true, tfId: 'tf1',
+              d: '<b>A"正确"</b>：错误。实质主体是国家，赔偿义务机关只是代替国家履行赔偿义务。<br><b>B"错误"</b>：正确。',
+              t: '赔偿义务机关是"经手人"，国家才是"出钱的人"。' },
+            { q: '行政机关工作人员与行使职权无关的个人行为造成损害的，国家不予赔偿。', opts: ['✅ 正确', '❌ 错误'], correct: 0, type: 'single', isTF: true, tfId: 'tf2',
+              d: '<b>A"正确"</b>：正确。个人行为由个人承担责任。<br><b>B"错误"</b>：错误。',
+              t: '国家只赔"公事"不赔"私事"。' },
+            { q: '取保候审期间被限制部分自由的，可以申请国家赔偿。', opts: ['✅ 正确', '❌ 错误'], correct: 1, type: 'single', isTF: true, tfId: 'tf3',
+              d: '<b>A"正确"</b>：错误。取保候审是非羁押措施，未剥夺人身自由，不构成赔偿。<br><b>B"错误"</b>：正确。',
+              t: '取保候审在外面，没有被关，所以不赔。只有拘留和逮捕（关起来的）才可能赔。' },
+            { q: '公民故意作虚伪供述导致被羁押的，国家应当给予赔偿。', opts: ['✅ 正确', '❌ 错误'], correct: 1, type: 'single', isTF: true, tfId: 'tf4',
+              d: '<b>A"正确"</b>：错误。自己作虚伪供述=自己导致的，国家不赔。<br><b>B"错误"</b>：正确。',
+              t: '自己作死（虚伪供述）被关，国家不背锅。' },
+            { q: '赔偿请求时效为两年，被羁押期间不计入时效。', opts: ['✅ 正确', '❌ 错误'], correct: 0, type: 'single', isTF: true, tfId: 'tf5',
+              d: '<b>A"正确"</b>：正确。时效2年，被限制人身自由的时间不计算在内。<br><b>B"错误"</b>：错误。',
+              t: '被关着的日子不算，放出来才开始算2年时效。' },
+            { q: '赔偿义务机关决定赔偿的，应自作出决定之日起15日内送达赔偿决定书。', opts: ['✅ 正确', '❌ 错误'], correct: 1, type: 'single', isTF: true, tfId: 'tf6',
+              d: '<b>A"正确"</b>：错误。送达期限为10日，不是15日。<br><b>B"错误"</b>：正确。',
+              t: '决定后10天内必须把决定书送到你手上。' },
+            { q: '申请国家赔偿需要缴纳申请费用。', opts: ['✅ 正确', '❌ 错误'], correct: 1, type: 'single', isTF: true, tfId: 'tf7',
+              d: '<b>A"正确"</b>：错误。申请国家赔偿不收费。<br><b>B"错误"</b>：正确。',
+              t: '申请赔偿不要钱！收到赔偿金也不用交税。' },
+            { q: '人民法院赔偿委员会实行少数服从多数的原则。', opts: ['✅ 正确', '❌ 错误'], correct: 0, type: 'single', isTF: true, tfId: 'tf8',
+              d: '<b>A"正确"</b>：正确。赔偿委员会由单数审判员组成，少数服从多数。<br><b>B"错误"</b>：错误。',
+              t: '赔偿委员会=3人以上单数，少数服从多数，和法院合议庭一样。' },
+            { q: '赔偿请求人受到不同损害的，可以同时提出数项赔偿请求。', opts: ['✅ 正确', '❌ 错误'], correct: 0, type: 'single', isTF: true, tfId: 'tf9',
+              d: '<b>A"正确"</b>：正确。可在一份申请书中提出多项赔偿请求。<br><b>B"错误"</b>：错误。',
+              t: '被打伤了可以同时要医疗费、误工费、精神抚慰金——一份申请全搞定。' },
+            { q: '中级以上人民法院设立赔偿委员会，基层人民法院也设立赔偿委员会。', opts: ['✅ 正确', '❌ 错误'], correct: 1, type: 'single', isTF: true, tfId: 'tf10',
+              d: '<b>A"正确"</b>：错误。只有中级以上法院才设立赔偿委员会，基层法院没有。<br><b>B"错误"</b>：正确。',
+              t: '基层法院没有赔偿委员会。中级以上才有。' },
+            { q: '赔偿请求人获得的国家赔偿金需要缴纳个人所得税。', opts: ['✅ 正确', '❌ 错误'], correct: 1, type: 'single', isTF: true, tfId: 'tf11',
+              d: '<b>A"正确"</b>：错误。赔偿金不征税。<br><b>B"错误"</b>：正确。',
+              t: '赔偿金免税！' },
+            { q: '责令停产停业期间，国家赔偿范围包括必要的经常性费用开支和预期利润。', opts: ['✅ 正确', '❌ 错误'], correct: 1, type: 'single', isTF: true, tfId: 'tf12',
+              d: '<b>A"正确"</b>：错误。预期利润不赔，只赔必要的经常性费用。<br><b>B"错误"</b>：正确。',
+              t: '停产只赔"活命钱"，不赔"你本来能赚多少"。' },
+            { q: '行政追偿的条件是工作人员有故意或重大过失。', opts: ['✅ 正确', '❌ 错误'], correct: 0, type: 'single', isTF: true, tfId: 'tf13',
+              d: '<b>A"正确"</b>：正确。行政追偿的条件就是故意或重大过失。<br><b>B"错误"</b>：错误。',
+              t: '行政追偿=故意或重大过失才追。一般小失误不追。' },
+            { q: '经复议的案件，复议机关的复议决定加重损害的，复议机关对全部损害承担赔偿责任。', opts: ['✅ 正确', '❌ 错误'], correct: 1, type: 'single', isTF: true, tfId: 'tf14',
+              d: '<b>A"正确"</b>：错误。复议机关仅对加重部分承担赔偿义务，原损害仍由原机关承担。<br><b>B"错误"</b>：正确。',
+              t: '复议加重=复议机关只赔"加重的那一部分"。' },
+            { q: '限制人身自由期间，被限制的人死亡或丧失行为能力的，由赔偿请求人承担因果关系举证责任。', opts: ['✅ 正确', '❌ 错误'], correct: 1, type: 'single', isTF: true, tfId: 'tf15',
+              d: '<b>A"正确"</b>：错误。这种情况举证责任倒置，由赔偿义务机关承担。<br><b>B"错误"</b>：正确。',
+              t: '人被关在里面死了，家属不知道发生了什么，让机关来证明。' },
+
+            // ===== 多选题10道 =====
+            { q: '国家赔偿的构成要件包括哪些？', opts: ['A. 主体为国家机关及其工作人员', 'B. 职务行为', 'C. 造成实际损害', 'D. 行为与损害有因果关系', 'E. 行为人必须有主观故意'], correct: [0,1,2,3], type: 'multi', multi: true, quizIndex: '多1',
+              d: '<b>A</b>：正确。主体要件。<br><b>B</b>：正确。行为必须是职务行为。<br><b>C</b>：正确。无损害不赔偿。<br><b>D</b>：正确。因果关系要件。<br><b>E</b>：错误。国家赔偿不以主观故意为要件，违法即可。',
+              t: '四要件：主体+职务行为+损害+因果关系。不要求主观故意。' },
+            { q: '下列哪些属于行政赔偿范围？', opts: ['A. 违法拘留', 'B. 违法罚款', 'C. 违法查封财产', 'D. 违法使用武器造成伤害', 'E. 合法征收财产'], correct: [0,1,2,3], type: 'multi', multi: true, quizIndex: '多2',
+              d: '<b>A</b>：正确。侵犯人身权。<br><b>B</b>：正确。侵犯财产权。<br><b>C</b>：正确。侵犯财产权。<br><b>D</b>：正确。侵犯人身权。<br><b>E</b>：错误。合法征收是补偿不是赔偿。',
+              t: '行政赔偿=违法才赔。合法征收是补偿，一字之差。' },
+            { q: '刑事赔偿中，下列哪些情形国家不予赔偿？', opts: ['A. 公民故意作虚伪供述被羁押', 'B. 不满14周岁的人被羁押', 'C. 情节显著轻微不认为是犯罪被羁押', 'D. 再审改判无罪且原判已执行', 'E. 工作人员与职权无关的个人行为'], correct: [0,1,2,4], type: 'multi', multi: true, quizIndex: '多3',
+              d: '<b>A</b>：正确。自己虚伪供述=不赔。<br><b>B</b>：正确。不负刑事责任=不赔。<br><b>C</b>：正确。不追究刑事责任=不赔。<br><b>D</b>：错误。再审无罪+已执行=要赔。<br><b>E</b>：正确。个人行为=不赔。',
+              t: '虚伪供述、不够年龄、情节轻微、个人行为=不赔。再审无罪已执行=要赔。' },
+            { q: '关于赔偿义务机关，下列说法正确的有？', opts: ['A. 经复议的案件，复议加重损害的，复议机关对加重部分承担', 'B. 委托组织侵权，委托机关为赔偿义务机关', 'C. 派出所侵权，派出所为赔偿义务机关', 'D. 共同侵权，可向任一机关申请赔偿', 'E. 再审改判无罪，作出原生效判决的法院为赔偿义务机关'], correct: [0,1,3,4], type: 'multi', multi: true, quizIndex: '多4',
+              d: '<b>A</b>：正确。<br><b>B</b>：正确。委托机关赔。<br><b>C</b>：错误。派出所无独立财政，由所属公安局赔。<br><b>D</b>：正确。<br><b>E</b>：正确。',
+              t: '派出所不能当赔偿义务机关——没钱赔。其他四项都对。' },
+            { q: '赔偿义务机关作出赔偿决定前，可以就哪些事项与请求人协商？', opts: ['A. 赔偿方式', 'B. 赔偿项目', 'C. 赔偿数额', 'D. 是否赔偿', 'E. 赔偿期限'], correct: [0,1,2], type: 'multi', multi: true, quizIndex: '多5',
+              d: '<b>A</b>：正确。方式可协商。<br><b>B</b>：正确。项目可协商。<br><b>C</b>：正确。数额可协商。<br><b>D</b>：错误。是否赔偿由机关决定，不可协商。<br><b>E</b>：错误。期限法定，不可协商。',
+              t: '可协商=方式+项目+数额。是否赔、赔多久=法定，没得商量。' },
+            { q: '下列哪些属于国家赔偿的方式？', opts: ['A. 支付赔偿金', 'B. 返还财产', 'C. 恢复原状', 'D. 消除影响恢复名誉', 'E. 吊销许可证'], correct: [0,1,2,3], type: 'multi', multi: true, quizIndex: '多6',
+              d: '<b>A</b>：正确。主要方式。<br><b>B</b>：正确。补充方式。<br><b>C</b>：正确。补充方式。<br><b>D</b>：正确。精神损害赔偿方式。<br><b>E</b>：错误。吊销许可证是行政处罚，不是赔偿方式。',
+              t: '赔钱、还东西、修东西、道歉——都是赔偿方式。吊销许可证是处罚，不是赔偿。' },
+            { q: '关于刑事赔偿义务机关，下列说法正确的有？', opts: ['A. 作出拘留决定的机关为赔偿义务机关', 'B. 作出逮捕决定的机关为赔偿义务机关', 'C. 执行逮捕的机关为赔偿义务机关', 'D. 再审改判无罪，作出原生效判决的法院为赔偿义务机关', 'E. 二审改判无罪，一审法院为赔偿义务机关'], correct: [0,1,3,4], type: 'multi', multi: true, quizIndex: '多7',
+              d: '<b>A</b>：正确。<br><b>B</b>：正确。谁决定谁赔。<br><b>C</b>：错误。执行机关不一定是决定机关，由决定机关赔。<br><b>D</b>：正确。<br><b>E</b>：正确。',
+              t: '谁决定谁赔，不是谁执行谁赔。逮捕由检察院/法院决定，公安执行，决定机关赔。' },
+            { q: '刑事赔偿中，赔偿义务机关为非法院时，程序包括哪些？', opts: ['A. 向赔偿义务机关申请', 'B. 不服可向上一级机关复议', 'C. 对复议不服可向法院赔偿委员会申请', 'D. 赔偿委员会决定为最终决定', 'E. 可直接向法院起诉'], correct: [0,1,2,3], type: 'multi', multi: true, quizIndex: '多8',
+              d: '<b>A</b>：正确。第一步。<br><b>B</b>：正确。第二步复议。<br><b>C</b>：正确。第三步赔委会。<br><b>D</b>：正确。最终决定。<br><b>E</b>：错误。不能直接起诉，必须先申请→复议→赔委会。',
+              t: '非法院=三步走：申请→复议→赔委会。不能直接起诉。' },
+            { q: '造成公民死亡的，赔偿范围包括哪些？', opts: ['A. 死亡赔偿金', 'B. 丧葬费', 'C. 死者生前扶养的无劳动能力人生活费', 'D. 死者生前债务', 'E. 精神抚慰金'], correct: [0,1,2,4], type: 'multi', multi: true, quizIndex: '多9',
+              d: '<b>A</b>：正确。+丧葬费总额=20倍。<br><b>B</b>：正确。<br><b>C</b>：正确。按低保标准支付。<br><b>D</b>：错误。死者债务不属于国家赔偿范围。<br><b>E</b>：正确。造成严重后果的应支付。',
+              t: '死亡赔四项：死亡赔偿金+丧葬费+被扶养人生活费+精神抚慰金。债务不管。' },
+            { q: '行政赔偿义务机关逾期不作出赔偿决定的，赔偿请求人可以采取哪些救济途径？', opts: ['A. 向法院提起行政赔偿诉讼', 'B. 向上一级机关申请复议', 'C. 向检察院申诉', 'D. 向法院赔偿委员会申请', 'E. 继续等待'], correct: [0,1], type: 'multi', multi: true, quizIndex: '多10',
+              d: '<b>A</b>：正确。期限内不起诉权利丧失。<br><b>B</b>：正确。可申请复议或直接起诉。<br><b>C</b>：错误。检察院不直接处理行政赔偿。<br><b>D</b>：错误。赔偿委员会是刑事赔偿程序。<br><b>E</b>：错误。',
+              t: '行政赔偿=起诉或复议。赔偿委员会是刑事赔偿的，不适用于行政赔偿。' }
+        ]
+    }
+];
+</script>
+</body>
+</html>
+
+// ⬇️ 第2次输出结束，第3次将追加综合练习（单选20+判断15+多选10）并完成闭合
+
+
+// ⬇️ 第1次输出结束，后续模块将在第2次输出中继续追加
+</script>
+<script>
+// ==================== 渲染引擎 ====================
+function renderAll(){var m=document.getElementById('mainContent');var h='';knowledgeData.forEach(function(mod){h+='<div class="card" id="'+mod.id+'"><div class="section-title"><div class="icon '+mod.iconClass+'">'+mod.iconEmoji+'</div>'+mod.title+'</div>';if(mod.subtitle)h+='<div class="subtitle">'+mod.subtitle+'</div>';if(mod.items&&mod.items.length>0){h+='<div class="ki-grid">';mod.items.forEach(function(item){if(item.type==='table')h+=item.html;else if(item.type==='ki')h+=renderKI(item);});h+='</div>';}if(mod.quizzes&&mod.quizzes.length>0){mod.quizzes.forEach(function(q,qi){h+=renderQuiz(q,mod.id+'-q'+qi);});}h+='</div>';});m.innerHTML=h;generateTOC();}
+function renderKI(item){var h='<div class="ki-item">';h+='<div class="ki-title-row">'+(item.badge?'<span class="badge '+(item.badgeClass||'badge-num')+'">'+item.badge+'</span> ':'')+item.title+'</div>';h+='<div class="ki-content">'+item.content+'</div>';if(item.extra)h+='<div style="margin-top:6px;color:#5c5347;font-size:0.88rem;">'+item.extra+'</div>';if(item.example){h+='<div class="example-block"><div class="ex-label">📖 生动案例</div><div class="ex-q">'+item.example.q+'</div><div class="ex-a">'+item.example.a+'</div></div>';}h+='</div>';return h;}
+function renderQuiz(q,qid){var qTypeLabel=q.multi?'【多选题】':'【单选题】';var h='<div class="quiz-wrap" data-qid="'+qid+'">';if(q.quizIndex){h+='<div class="q-type">📝 '+qTypeLabel+' · 第'+q.quizIndex+'题</div>';}else if(q.tfId){h+='<div class="q-type">📝 '+qTypeLabel+' · '+q.tfId+'</div>';}else{h+='<div class="q-type">📝 '+qTypeLabel+'</div>';}h+='<div class="q-text">'+q.q+'</div><ul class="opt-list">';for(var i=0;i<q.opts.length;i++){h+='<li data-idx="'+i+'" onclick="selectOpt(this,\''+qid+'\','+i+','+(q.multi||false)+')">'+q.opts[i]+'</li>';}h+='</ul><div class="btn-row"><button class="btn btn-primary" onclick="submitQuiz(\''+qid+'\','+JSON.stringify(q.correct)+','+(q.multi||false)+')">✅ 提交答案</button><button class="btn btn-outline" onclick="resetQuiz(\''+qid+'\')">🔄 重做</button></div><div class="explain-card" id="ex-'+qid+'"><div class="ex-head"></div><div class="ex-body"></div>';if(q.d){var detailHtml=q.d;detailHtml=detailHtml.replace(/<b>([A-E])"正确"<\/b>：正确/g,'<span style="color:#145a32;">✅ $1选项</b>：正确</span>');detailHtml=detailHtml.replace(/<b>([A-E])"错误"<\/b>：错误/g,'<span style="color:#b22222;">❌ $1选项</b>：错误</span>');detailHtml=detailHtml.replace(/<b>([A-E])<\/b>：(正确)/g,'<span style="color:#145a32;">✅ $1选项</b>：$2</span>');detailHtml=detailHtml.replace(/<b>([A-E])<\/b>：(错误)/g,'<span style="color:#b22222;">❌ $1选项</b>：$2</span>');detailHtml=detailHtml.replace(/<b>([A-E])<\/b>：正确/g,'<span style="color:#145a32;">✅ $1选项</b>：正确</span>');detailHtml=detailHtml.replace(/<b>([A-E])<\/b>：错误/g,'<span style="color:#b22222;">❌ $1选项</b>：错误</span>');h+='<div class="ex-detail" style="margin-top:10px;padding:10px 14px;background:#fff;border-radius:6px;font-size:0.88rem;line-height:1.8;display:none;">📋 <b>逐项解析：</b><br>'+detailHtml+'</div>';}h+='<div class="ex-tip">💡 <b>大白话理解：</b>'+q.t+'</div></div></div>';return h;}
+function selectOpt(el,qid,idx,multi){var w=el.closest('.quiz-wrap');if(w.classList.contains('submitted'))return;var o=w.querySelectorAll('.opt-list li');if(multi){el.classList.toggle('selected');}else{o.forEach(function(x){x.classList.remove('selected');});el.classList.add('selected');}}
+function submitQuiz(qid,correct,multi){var w=document.querySelector('[data-qid="'+qid+'"]');if(w.classList.contains('submitted'))return;w.classList.add('submitted');var o=w.querySelectorAll('.opt-list li');var ca=Array.isArray(correct)?correct:[correct];var si=[];for(var i=0;i<o.length;i++){if(o[i].classList.contains('selected'))si.push(i);}var ic;if(multi){ic=si.length===ca.length;for(var j=0;j<si.length;j++){if(ca.indexOf(si[j])===-1){ic=false;break;}}}else{ic=si.length===1&&si[0]===ca[0];}for(var k=0;k<o.length;k++){o[k].classList.add('disabled');if(ca.indexOf(k)!==-1)o[k].classList.add('correct');}if(!ic){for(var m=0;m<si.length;m++){if(ca.indexOf(si[m])===-1)o[si[m]].classList.add('wrong');}}var ex=document.getElementById('ex-'+qid);ex.classList.add('show');if(ic){ex.classList.add('correct-ex');ex.classList.remove('wrong-ex');ex.querySelector('.ex-head').textContent='🎉 回答正确！';ex.querySelector('.ex-body').textContent='';var ed=ex.querySelector('.ex-detail');if(ed)ed.style.display='block';}else{ex.classList.add('wrong-ex');ex.classList.remove('correct-ex');ex.querySelector('.ex-head').textContent='😞 回答错误';var lt=['A','B','C','D','E'];var cl=ca.map(function(c){return lt[c];}).join('、');ex.querySelector('.ex-body').innerHTML='正确答案是：<b>'+cl+'</b>';var ed2=ex.querySelector('.ex-detail');if(ed2)ed2.style.display='block';}}
+function resetQuiz(qid){var w=document.querySelector('[data-qid="'+qid+'"]');w.classList.remove('submitted');w.querySelectorAll('.opt-list li').forEach(function(o){o.classList.remove('selected','correct','wrong','disabled');});var ex=document.getElementById('ex-'+qid);ex.classList.remove('show','correct-ex','wrong-ex');}
+function generateTOC(){var toc=document.getElementById('toc');if(!toc)return;var th='<div class="toc-title">📑 国家赔偿法 · 知识目录</div>';var links='';knowledgeData.forEach(function(mod){links+='<a href="#'+mod.id+'">'+mod.title+'</a>';});toc.innerHTML=th+links;document.querySelectorAll('.toc a').forEach(function(link){link.addEventListener('click',function(){if(window.innerWidth<=768)closeToc();});});}
+function toggleToc(){document.getElementById('toc').classList.toggle('show');document.getElementById('tocOverlay').classList.toggle('show');}
+function closeToc(){document.getElementById('toc').classList.remove('show');document.getElementById('tocOverlay').classList.remove('show');}
+document.addEventListener('DOMContentLoaded',renderAll);
+</script>
+</body>
+</html>
