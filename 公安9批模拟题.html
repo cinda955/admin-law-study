@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第九批辅警《公安素质测试》模拟试卷</title>
+    <style>
+        :root {
+            --bg: #fdf8f3;
+            --card-bg: #ffffff;
+            --text: #2c2416;
+            --text-light: #5c5347;
+            --accent: #b22222;
+            --highlight: #fff3cd;
+            --highlight-border: #f0c040;
+            --example-bg: #f0faf5;
+            --example-border: #a3e4bc;
+            --plain-box-bg: #ffffff;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+            --radius: 14px;
+            --radius-sm: 10px;
+            --font: 'PingFang SC','Microsoft YaHei','Hiragino Sans GB','Noto Sans SC',system-ui,-apple-system,sans-serif;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { background:var(--bg); font-family:var(--font); color:var(--text); line-height:1.7; }
+        .main { max-width:900px; margin:0 auto; padding:24px 16px 100px; }
+        .float-toc-btn { position:fixed; top:24px; left:24px; width:52px; height:52px; border-radius:50%;
+            background:var(--accent); color:white; border:none; font-size:24px; z-index:100; box-shadow:0 4px 14px rgba(0,0,0,0.2); cursor:pointer; }
+        .toc-panel { position:fixed; top:0; left:-300px; width:280px; height:100vh; background:white; border-right:2px solid #f0ebe0;
+            box-shadow:4px 0 16px rgba(0,0,0,0.1); z-index:99; overflow-y:auto; padding:20px; transition:left 0.3s; }
+        .toc-panel.open { left:0; }
+        .toc-panel h2 { font-size:18px; margin-bottom:12px; color:var(--accent); }
+        .toc-grid { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:16px; }
+        .toc-btn { width:36px; height:36px; border:1px solid #e9e4db; border-radius:8px; background:white; font-size:13px; cursor:pointer; }
+        .toc-btn.submitted { background:#f5f0e8; color:#b9b0a0; }
+        .toc-section-title { font-weight:bold; margin:12px 0 6px; color:var(--text-light); font-size:14px; }
+        .overlay { position:fixed; inset:0; background:rgba(0,0,0,0.25); z-index:98; display:none; }
+        .overlay.show { display:block; }
+        .timer-box { text-align:right; font-size:18px; margin-bottom:20px; color:var(--accent); font-weight:600; }
+        .start-btn { display:inline-block; padding:8px 20px; background:var(--accent); color:white; border:none; border-radius:20px; cursor:pointer; margin-left:12px; }
+        .card { background:var(--card-bg); border-radius:var(--radius); box-shadow:var(--shadow-md); border:1px solid #f0ebe0; padding:28px 30px; margin-bottom:28px; }
+        .card h2 { font-size:22px; margin-bottom:16px; border-left:5px solid var(--accent); padding-left:12px; }
+        .quiz-wrap { border:2px solid #f0ebe0; border-radius:var(--radius-sm); padding:18px 20px; margin-bottom:18px; background:#fffbf7; }
+        .quiz-wrap.submitted { pointer-events:none; opacity:0.95; }
+        .q-title { font-weight:700; margin-bottom:10px; font-size:16px; }
+        .opt-list { list-style:none; }
+        .opt-list li { border:2px solid #e9e4db; border-radius:25px; padding:10px 18px; margin-bottom:8px; cursor:pointer; transition:0.2s; background:white; }
+        .opt-list li:hover { border-color:#c0b090; }
+        .opt-list li.selected { border-color:#3b7ddd; background:#eaf1fb; }
+        .opt-list li.correct { border-color:#34a853; background:#eafaf1; }
+        .opt-list li.wrong { border-color:#ea4335; background:#fdedec; }
+        .explain-card { margin-top:12px; padding:14px 16px; border-radius:10px; background:var(--example-bg); border:1px solid var(--example-border); display:none; line-height:1.8; }
+        .explain-card.show { display:block; }
+        .plain-box { background:#ffffff; border:1px solid #e9e4db; border-radius:8px; padding:10px 14px; margin-top:8px; font-size:15px; }
+        .btn { display:inline-block; padding:12px 32px; border-radius:25px; font-size:16px; font-weight:600; cursor:pointer; border:none; }
+        .btn-primary { background:var(--accent); color:white; }
+        .module-footer { margin-top:16px; text-align:right; display:flex; align-items:center; justify-content:flex-end; gap:16px; }
+        .module-score { font-weight:bold; color:var(--accent); }
+        .result-box { margin-top:20px; padding:20px; background:var(--card-bg); border:2px solid var(--accent); border-radius:var(--radius); box-shadow:var(--shadow-md); text-align:center; font-size:1.2rem; font-weight:600; color:var(--accent); display:none; }
+        @media (max-width:768px) { .main { padding:16px 10px; } .card { padding:18px 14px; } }
+    </style>
+</head>
+<body>
+<div class="overlay" id="overlay" onclick="closeToc()"></div>
+<div class="toc-panel" id="tocPanel">
+    <h2>📋 题目导航</h2>
+    <div class="toc-section-title">单选题（1-50）</div>
+    <div class="toc-grid" id="tocSingle"></div>
+    <div class="toc-section-title">多选题（1-15）</div>
+    <div class="toc-grid" id="tocMulti"></div>
+    <div class="toc-section-title">判断题（1-25）</div>
+    <div class="toc-grid" id="tocJudge"></div>
+</div>
+<button class="float-toc-btn" onclick="toggleToc()">☰</button>
+
+<div class="main" id="mainContent">
+    <div class="timer-box" id="timerBox">
+        ⏱ 00:00
+        <button class="start-btn" id="startTimerBtn" onclick="startTimer()">▶ 开始考试</button>
+    </div>
+    <div id="module1"></div>
+    <div id="module2"></div>
+    <div id="module3"></div>
+    <div class="result-box" id="resultBox"></div>
+</div>
+
+<script>
+    // ========== 全局状态 ==========
+    var timerInterval = null;
+    var startTime = null;
+    var totalSeconds = 0;
+    var timerStarted = false;
+    var moduleSubmitted = { single: false, multi: false, judge: false };
+    var score = { single: 0, multi: 0, judge: 0 };
+    var correctCounts = { single: 0, multi: 0, judge: 0 };
+
+    function toggleToc() { document.getElementById('tocPanel').classList.toggle('open'); document.getElementById('overlay').classList.toggle('show'); }
+    function closeToc() { document.getElementById('tocPanel').classList.remove('open'); document.getElementById('overlay').classList.remove('show'); }
+
+    function formatTime(sec) { var m=Math.floor(sec/60), s=sec%60; return (m<10?'0'+m:m)+':'+(s<10?'0'+s:s); }
+    function startTimer() {
+        if (timerStarted) return;
+        timerStarted = true;
+        document.getElementById('startTimerBtn').style.display = 'none';
+        startTime = new Date();
+        timerInterval = setInterval(function(){
+            totalSeconds = Math.floor((new Date() - startTime) / 1000);
+            document.getElementById('timerBox').innerHTML = '⏱ ' + formatTime(totalSeconds);
+        }, 1000);
+    }
+
+    function renderOptions(quizIndex, opts, type) {
+        var labels = 'ABCDEF';
+        var html = '<ul class="opt-list" id="opt-'+quizIndex+'">';
+        for (var i=0; i<opts.length; i++) {
+            html += '<li onclick="selectOption(\''+quizIndex+'\','+i+',\''+type+'\')">'+labels[i]+'. '+opts[i]+'</li>';
+        }
+        html += '</ul>';
+        return html;
+    }
+    function selectOption(quizIndex, optIndex, type) {
+        if (document.getElementById('wrap-'+quizIndex).classList.contains('submitted')) return;
+        if (!timerStarted) startTimer();
+        var lis = document.querySelectorAll('#opt-'+quizIndex+' li');
+        if (type === 'single') {
+            for (var i=0; i<lis.length; i++) lis[i].classList.remove('selected');
+        }
+        lis[optIndex].classList.toggle('selected');
+    }
+
+    function beautifyExplain(d, t) {
+        var lines = d.split('\n');
+        var html = '';
+        for (var i = 0; i < lines.length; i++) {
+            var line = lines[i].trim();
+            if (!line) continue;
+            if (/^[A-F]项正确：/.test(line)) html += '✅ ' + line + '<br>';
+            else if (/^[A-F]项错误：/.test(line)) html += '❌ ' + line + '<br>';
+            else html += line + '<br>';
+        }
+        if (t) html += '<div class="plain-box"><strong>💡 大白话：</strong>' + t + '</div>';
+        return html;
+    }
+
+    function submitModule(type) {
+        if (moduleSubmitted[type]) return;
+        var questions = [];
+        if (type === 'single') questions = singleQuestions;
+        else if (type === 'multi') questions = multiQuestions;
+        else if (type === 'judge') questions = judgeQuestions;
+        else return;
+
+        var totalScorePerModule = 0;
+        var correctCount = 0;
+
+        for (var i = 0; i < questions.length; i++) {
+            var q = questions[i];
+            var wrap = document.getElementById('wrap-' + q.quizIndex);
+            if (!wrap) continue;
+
+            var selectedOpts = document.querySelectorAll('#opt-' + q.quizIndex + ' li.selected');
+            var userAnswer = [];
+            for (var j = 0; j < selectedOpts.length; j++) {
+                userAnswer.push(Array.prototype.indexOf.call(selectedOpts[j].parentNode.children, selectedOpts[j]));
+            }
+
+            var lis = document.querySelectorAll('#opt-' + q.quizIndex + ' li');
+            var correctSet = [];
+            if (type === 'judge') {
+                correctSet = [q.correct === 'A' ? 0 : 1];
+            } else {
+                correctSet = Array.isArray(q.correct) ? q.correct : [q.correct];
+            }
+
+            for (var k = 0; k < lis.length; k++) {
+                if (correctSet.indexOf(k) >= 0) lis[k].classList.add('correct');
+                else if (userAnswer.indexOf(k) >= 0 && correctSet.indexOf(k) < 0) lis[k].classList.add('wrong');
+            }
+
+            if (type === 'single' || type === 'judge') {
+                if (userAnswer.length === 1 && userAnswer[0] === correctSet[0]) {
+                    totalScorePerModule += (type === 'single' ? 1 : 1);
+                    correctCount++;
+                }
+            } else if (type === 'multi') {
+                var hasWrong = false;
+                for (var u = 0; u < userAnswer.length; u++) {
+                    if (correctSet.indexOf(userAnswer[u]) < 0) { hasWrong = true; break; }
+                }
+                if (!hasWrong) {
+                    if (userAnswer.length === correctSet.length) {
+                        totalScorePerModule += 2;
+                        correctCount++;
+                    } else if (userAnswer.length < correctSet.length) {
+                        totalScorePerModule += userAnswer.length * 0.5;
+                    }
+                }
+            }
+
+            var exp = document.getElementById('exp-' + q.quizIndex);
+            if (exp) {
+                exp.innerHTML = beautifyExplain(q.d, q.t);
+                exp.classList.add('show');
+            }
+            wrap.classList.add('submitted');
+            var btn = document.getElementById('tocBtn-' + q.quizIndex);
+            if (btn) btn.classList.add('submitted');
+        }
+
+        moduleSubmitted[type] = true;
+        correctCounts[type] = correctCount;
+        score[type] = totalScorePerModule;
+
+        var scoreSpan = document.getElementById('score-' + type);
+        if (scoreSpan) {
+            scoreSpan.style.display = 'inline';
+            scoreSpan.innerHTML = '✅ 得分：' + totalScorePerModule.toFixed(1) + '分 | 正确率：' + correctCount + '/' + questions.length;
+        }
+        updateResult();
+    }
+
+    function updateResult() {
+        var total = score.single + score.multi + score.judge;
+        var totalCorrect = correctCounts.single + correctCounts.multi + correctCounts.judge;
+        var totalQuestions = 50 + 15 + 25;
+        var accuracy = totalQuestions > 0 ? (totalCorrect / totalQuestions * 100) : 0;
+        var mins = Math.floor(totalSeconds / 60);
+        var secs = totalSeconds % 60;
+        var timeStr = mins + '分' + (secs < 10 ? '0' : '') + secs + '秒';
+        var box = document.getElementById('resultBox');
+        if (moduleSubmitted.single || moduleSubmitted.multi || moduleSubmitted.judge) {
+            box.style.display = 'block';
+            box.innerHTML = '📊 总分：' + total.toFixed(1) + '分 | 整体正确率：' + accuracy.toFixed(1) + '% | 用时：' + timeStr;
+        }
+    }
+
+    // ========== 单选题数据（1-10） ==========
+    var singleQuestions = [
+        {
+            quizIndex: 1,
+            q: '设定和实施行政处罚必须以事实为依据，与违法行为的事实、性质、情节以及（）相当。',
+            opts: ['实施主体', '社会影响', '处罚成本大小', '社会危害程度'],
+            correct: 3,
+            d: 'A项错误：实施主体不是与违法行为相当的标准。\nB项错误：社会影响并非法定相当性要素。\nC项错误：处罚成本大小不属于裁量基准。\nD项正确：《行政处罚法》第5条，设定和实施行政处罚必须以事实为依据，与违法行为的事实、性质、情节以及社会危害程度相当。',
+            t: '罚多少要看你干了多坏的事，不是看你是谁，也不是看罚起来贵不贵。'
+        },
+        {
+            quizIndex: 2,
+            q: '部门规章可以设定警告、通报批评或者一定数额罚款的行政处罚，罚款的限额由（）规定。',
+            opts: ['全国人大', '全国人大常委会', '国务院', '国务院部门'],
+            correct: 2,
+            d: 'A项错误：全国人大制定基本法律，不直接规定部门规章罚款限额。\nB项错误：全国人大常委会制定非基本法律，亦不直接规定该限额。\nC项正确：《行政处罚法》第13条，部门规章罚款限额由国务院规定。\nD项错误：国务院部门无权自行决定自己的罚款限额。',
+            t: '部委罚多少，得听国务院定上限。'
+        },
+        {
+            quizIndex: 3,
+            q: '违法行为在（）内未被发现的，不再给予行政处罚，涉及公民生命健康安全、金融安全且有危害后果的期限延长至5年。',
+            opts: ['6个月', '1年', '2年', '3年'],
+            correct: 2,
+            d: 'A项错误：6个月是治安处罚的追究时效。\nB项错误：1年不是一般时效。\nC项正确：《行政处罚法》第36条，一般违法行为追究时效为2年。\nD项错误：3年无此规定。',
+            t: '一般违法两年内没被发现就不罚了，食药金融安全类的可延至五年。'
+        },
+        {
+            quizIndex: 4,
+            q: '对公民处以（）以下、对法人或者其他组织处以三千元以下罚款或者警告的行政处罚的，可以当场作出行政处罚决定。',
+            opts: ['100元', '200元', '500元', '1000元'],
+            correct: 1,
+            d: 'A项错误：100元非法律规定的当场罚款额度。\nB项正确：《行政处罚法》第51条，对公民处以200元以下、对法人或者其他组织处以3000元以下罚款或者警告的，可以当场作出行政处罚决定。\nC项错误：500元超限。\nD项错误：1000元超限。',
+            t: '对个人当场罚款最多200元，对公司最多3000元。'
+        },
+        {
+            quizIndex: 5,
+            q: '当事人应当自收到行政处罚决定书之日起（）内，到指定的银行或者通过电子支付系统缴纳罚款。',
+            opts: ['五日', '十日', '十五日', '三十日'],
+            correct: 2,
+            d: 'A项错误：五日过短。\nB项错误：十日亦非规定期限。\nC项正确：《行政处罚法》第67条，当事人应当自收到行政处罚决定书之日起十五日内缴纳罚款。\nD项错误：三十日过长。',
+            t: '收到罚款单，15天内去银行或网上交钱。'
+        },
+        {
+            quizIndex: 6,
+            q: '治安管理处罚的种类不包括（）。',
+            opts: ['警告', '罚款', '拘役', '行政拘留'],
+            correct: 2,
+            d: 'A项正确：警告属于治安管理处罚种类。\nB项正确：罚款属于治安管理处罚种类。\nC项错误：拘役属于刑罚措施，由人民法院判处，不属于治安管理处罚。\nD项正确：行政拘留属于治安管理处罚种类。',
+            t: '拘役是坐牢，是刑事处罚，治安处罚没有拘役。'
+        },
+        {
+            quizIndex: 7,
+            q: '对违反治安管理的行为人，公安机关传唤后应当及时询问查证，询问查证的时间最长不得超过（）。',
+            opts: ['8小时', '12小时', '24小时', '48小时'],
+            correct: 2,
+            d: 'A项错误：8小时是通常时限，但特殊情况下可延长。\nB项错误：12小时不是法定最长时限。\nC项正确：《治安管理处罚法》第83条，对违反治安管理行为人，传唤后询问查证时间不得超过八小时；情况复杂，可能适用行政拘留处罚的，询问查证时间不得超过二十四小时。\nD项错误：48小时是人民警察法留置盘问的时限。',
+            t: '治安传唤一般问8小时，情况复杂可能拘留的最长问24小时。'
+        },
+        {
+            quizIndex: 8,
+            q: '询问不满（）的违反治安管理行为人，应当通知其父母或者其他监护人到场。',
+            opts: ['12周岁', '14周岁', '16周岁', '18周岁'],
+            correct: 2,
+            d: 'A项错误：12周岁不准确。\nB项错误：14周岁是刑事责任年龄，但治安管理保护年龄为16周岁。\nC项正确：《治安管理处罚法》第84条，询问不满十六周岁的违反治安管理行为人，应当通知其父母或者其他监护人到场。\nD项错误：18周岁是成年年龄，但治安管理对未满16周岁有特别保护。',
+            t: '询问未满16岁的未成年人，必须叫家长来。'
+        },
+        {
+            quizIndex: 9,
+            q: '行政拘留处罚合并执行的，最长不超过（）日。',
+            opts: ['10', '15', '20', '30'],
+            correct: 2,
+            d: 'A项错误：10日过短。\nB项错误：15日是单人单次拘留上限。\nC项正确：《治安管理处罚法》第16条，有两种以上违反治安管理行为的，分别决定，合并执行。行政拘留处罚合并执行的，最长不超过二十日。\nD项错误：30日非治安拘留合并上限。',
+            t: '几个拘留加起来最多关20天。'
+        },
+        {
+            quizIndex: 10,
+            q: '违反治安管理行为在（）内没有被公安机关发现的，不再处罚。',
+            opts: ['三个月', '六个月', '一年', '二年'],
+            correct: 1,
+            d: 'A项错误：三个月过短。\nB项正确：《治安管理处罚法》第22条，违反治安管理行为在六个月内没有被公安机关发现的，不再处罚。\nC项错误：一年不是治安处罚时效。\nD项错误：二年是行政处罚一般时效，治安时效更短。',
+            t: '治安违法半年没发现就不追究了，比普通行政处罚的两年短很多。'
+        },
+        {
+            quizIndex: 11,
+            q: '我国公安机关的根本属性是（）。',
+            opts: ['武装性质的国家行政机关', '维护国家安全的专门机关', '人民民主专政的重要工具', '打击犯罪的刑事司法机关'],
+            correct: 2,
+            d: 'A项错误：武装性质的国家行政机关是公安机关的性质描述，但不是根本属性。\nB项错误：维护国家安全是公安机关的职能之一，非根本属性。\nC项正确：公安机关是人民民主专政的重要工具，这是公安机关的根本属性，体现了其阶级本质。\nD项错误：打击犯罪是公安机关的重要职责，但非根本属性。',
+            t: '公安局的本质就是人民民主专政的刀把子。'
+        },
+        {
+            quizIndex: 12,
+            q: '人民警察在非工作时间，遇有（）紧急情况，应当履行职责。',
+            opts: ['与职责无关的', '职责范围内的', '涉及公共安全的', '群众求助的'],
+            correct: 1,
+            d: 'A项错误：与职责无关的紧急情况不属于法定应履行职责的情形。\nB项正确：《人民警察法》第19条，人民警察在非工作时间，遇有其职责范围内的紧急情况，应当履行职责。\nC项错误：涉及公共安全但不属于职责范围的，并非必须处理。\nD项错误：群众求助若不属职责范围，不强制要求处理。',
+            t: '警察下班碰到自己管的事，照样得上。'
+        },
+        {
+            quizIndex: 13,
+            q: '下列哪项不属于辅警的执勤装备（）。',
+            opts: ['对讲机', '警棍', '手铐', '手枪'],
+            correct: 3,
+            d: 'A项正确：对讲机属于辅警常规通信装备。\nB项正确：警棍属于辅警可使用的警械。\nC项正确：手铐属于约束性警械，辅警在民警带领下可使用。\nD项错误：手枪属于人民警察专用武器，辅警无权配备和使用枪支。',
+            t: '枪是警察专属的，辅警不能配枪，其他装备基本都能用。'
+        },
+        {
+            quizIndex: 14,
+            q: '辅警在协助民警处理交通事故时，应当首先（）。',
+            opts: ['拍照上传网络', '保护现场并疏导交通', '立即认定责任', '让当事人自行协商'],
+            correct: 1,
+            d: 'A项错误：拍照上传非首要任务。\nB项正确：辅警协助处理交通事故时，首要任务是保护现场、疏导交通，防止二次事故。\nC项错误：责任认定由正式民警负责，辅警无此权限。\nD项错误：自行协商不适用于所有情况。',
+            t: '先保护现场、疏导交通，定责是民警的事。'
+        },
+        {
+            quizIndex: 15,
+            q: '辅警在协助民警进行出租屋检查时，发现可疑物品，应当（）。',
+            opts: ['立即扣押', '报告民警并协助处理', '拍照发朋友圈', '自行处理'],
+            correct: 1,
+            d: 'A项错误：辅警无独立扣押权。\nB项正确：辅警发现可疑物品应立即报告现场民警，并在民警指挥下协助处理。\nC项错误：明显违规。\nD项错误：辅警不得自行处理案件相关物品。',
+            t: '发现可疑东西，马上报告带队的民警，听指挥。'
+        },
+        {
+            quizIndex: 16,
+            q: '根据《深圳经济特区警务辅助人员条例》，辅警层级由高至低为（）。',
+            opts: ['一级辅警长、二级辅警长、三级辅警长、一级辅警、二级辅警、三级辅警、四级辅警', '一级辅警、二级辅警、三级辅警、四级辅警、一级辅警长、二级辅警长、三级辅警长', '三级辅警长、二级辅警长、一级辅警长、四级辅警、三级辅警、二级辅警、一级辅警', '四级辅警、三级辅警、二级辅警、一级辅警、三级辅警长、二级辅警长、一级辅警长'],
+            correct: 0,
+            d: 'A项正确：《深圳经济特区警务辅助人员条例》第20条，辅警层级由高至低为一级辅警长、二级辅警长、三级辅警长，一级辅警、二级辅警、三级辅警、四级辅警（七级）。\nB项错误：顺序颠倒。\nC项错误：顺序错误。\nD项错误：从低到高排列但顺序不完整。',
+            t: '辅警分七级：三个辅警长在最上面，四个辅警在下面。'
+        },
+        {
+            quizIndex: 17,
+            q: '下列工作中，辅警不得从事的是（）。',
+            opts: ['开展治安巡逻、安全检查', '协助开展接报案、受案登记工作', '出具道路交通事故责任认定书', '对公共区域视频监控进行巡查'],
+            correct: 2,
+            d: 'A项正确：治安巡逻、安全检查属于辅警可从事的辅助性工作。\nB项正确：协助开展接报案、受案登记属于辅警可从事工作。\nC项错误：出具道路交通事故责任认定书属于行政执法权，只能由正式交通警察行使。\nD项正确：视频监控巡查属于辅警可从事的辅助性工作。',
+            t: '定责书必须警察签字，辅警不能自己出。'
+        },
+        {
+            quizIndex: 18,
+            q: '辅警年度考核工作于每年年末或翌年年初进行，考核结果分为优秀、合格、（）、不合格四个等次。',
+            opts: ['良好', '基本合格', '不参加考核', '不定等次'],
+            correct: 1,
+            d: 'A项错误：无"良好"等次。\nB项正确：辅警年度考核结果分为优秀、合格、基本合格、不合格四个等次。\nC项错误：不参加考核不属于考核等次。\nD项错误：无"不定等次"规定。',
+            t: '辅警考核四个档：优秀、合格、基本合格、不合格。'
+        },
+        {
+            quizIndex: 19,
+            q: '李某深夜遭遇王某持刀抢劫，反抗过程中夺过王某的刀将王某捅成重伤，李某的行为属于（）。',
+            opts: ['正当防卫', '防卫过当', '故意伤害', '紧急避险'],
+            correct: 0,
+            d: 'A项正确：《刑法》第20条第3款，对正在进行行凶、杀人、抢劫、强奸、绑架以及其他严重危及人身安全的暴力犯罪，采取防卫行为，造成不法侵害人伤亡的，不属于防卫过当，不负刑事责任。\nB项错误：特殊防卫不构成防卫过当。\nC项错误：主观无伤害故意，是防卫意图。\nD项错误：紧急避险针对无辜第三人，本案针对不法侵害人。',
+            t: '被抢劫时反抗把歹徒打伤打死，属于正当防卫，不用负责。'
+        },
+        {
+            quizIndex: 20,
+            q: '机动车驾驶人醉酒驾驶机动车的，构成（）。',
+            opts: ['交通肇事罪', '危险驾驶罪', '以危险方法危害公共安全罪', '妨害公务罪'],
+            correct: 1,
+            d: 'A项错误：交通肇事罪是过失犯罪，醉驾是故意行为。\nB项正确：《刑法》第133条之一，醉酒驾驶机动车构成危险驾驶罪，处拘役并处罚金。\nC项错误：以危险方法危害公共安全罪需有更严重的情节。\nD项错误：与妨害公务无关。',
+            t: '喝酒开车就是危险驾驶罪，要拘役罚钱。'
+        },
+        {
+            quizIndex: 21,
+            q: '公安机关对被拘留的人，认为需要逮捕的，应当在拘留后的（）以内提请人民检察院审查批准。',
+            opts: ['三日', '五日', '七日', '十日'],
+            correct: 0,
+            d: 'A项正确：《刑事诉讼法》第91条，公安机关对被拘留的人，认为需要逮捕的，应当在拘留后的三日以内，提请人民检察院审查批准。\nB项错误：五日不是法定期限。\nC项错误：七日是特殊情况延长后的期限。\nD项错误：十日非规定时限。',
+            t: '拘留后3天内就要报检察院批捕，特殊可延到7天。'
+        },
+        {
+            quizIndex: 22,
+            q: '办理治安案件所查获的赌资，应当（）。',
+            opts: ['返还参赌人员', '予以追缴', '予以收缴', '充作派出所办公经费'],
+            correct: 2,
+            d: 'A项错误：赌资属于违法所得，不能返还。\nB项错误：追缴主要针对违法所得返还被害人或上缴国库，赌资属于应予收缴的违禁品。\nC项正确：《治安管理处罚法》第11条，赌资应当收缴，按照规定处理。\nD项错误：不得充作办公经费。',
+            t: '赌资直接收缴，不能还给赌徒，也不能自己用。'
+        },
+        {
+            quizIndex: 23,
+            q: '下列行为中，属于行政处罚的是（）。',
+            opts: ['某公安局对违反纪律的民警刘某给予记大过处分', '某公安局对因吸毒成瘾的陈某处以行政拘留15日，并处罚款2000元', '某市场监管局查封不符合安全标准的问题食品', '某税务局对逾期不缴纳税款的企业加收滞纳金'],
+            correct: 1,
+            d: 'A项错误：记大过属于内部行政处分，非行政处罚。\nB项正确：行政拘留和罚款均属于行政处罚。\nC项错误：查封属于行政强制措施。\nD项错误：加收滞纳金属于行政强制执行方式。',
+            t: '行政处罚是对外罚老百姓的，内部处分不算；查封是临时措施，滞纳金是执行手段。'
+        },
+        {
+            quizIndex: 24,
+            q: '当事人主动消除或者减轻违法行为危害后果的，（）行政处罚。',
+            opts: ['不予', '应当从轻或者减轻', '可以从轻或者减轻', '应当减轻或者免除'],
+            correct: 1,
+            d: 'A项错误：主动消除危害后果不属于不予处罚的情形。\nB项正确：《行政处罚法》第32条，当事人主动消除或者减轻违法行为危害后果的，应当从轻或者减轻行政处罚。\nC项错误：不是"可以"，而是"应当"，行政机关没有裁量余地。\nD项错误：不属于应当减轻或免除的情节。',
+            t: '主动弥补过错，必须从轻或减轻处罚，这是强制的。'
+        },
+        {
+            quizIndex: 25,
+            q: '行政机关及其执法人员当场收缴罚款的，必须向当事人出具（）统一制发的专用票据。',
+            opts: ['国务院财政部门', '省、自治区、直辖市人民政府财政部门', '市级人民政府财政部门', '县级人民政府财政部门'],
+            correct: 1,
+            d: 'A项错误：非国务院财政部门统一制发。\nB项正确：《行政处罚法》第70条，当场收缴罚款必须出具省、自治区、直辖市人民政府财政部门统一制发的专用票据。\nC项错误：市级无权统一制发。\nD项错误：县级无权统一制发。',
+            t: '现场收罚款必须给省级财政印的票据，否则可以拒交。'
+        },
+        {
+            quizIndex: 26,
+            q: '对违反治安管理的外国人，可以附加适用（）。',
+            opts: ['罚款', '行政拘留', '限期出境或者驱逐出境', '警告'],
+            correct: 2,
+            d: 'A项错误：罚款是主罚，非附加适用。\nB项错误：行政拘留是主罚。\nC项正确：《治安管理处罚法》第10条第2款，对违反治安管理的外国人，可以附加适用限期出境或者驱逐出境。\nD项错误：警告是主罚。',
+            t: '外国人在中国违法，除了正常处罚，还可以加一个限期出境或驱逐出境。'
+        },
+        {
+            quizIndex: 27,
+            q: '人民警察使用警械和武器，应当以（）为原则。',
+            opts: ['制止违法犯罪行为', '尽量减少人员伤亡', '尽量减少财产损失', '以上都是'],
+            correct: 3,
+            d: 'A项正确：制止违法犯罪行为是使用警械和武器的核心目的。\nB项正确：应当尽量减少人员伤亡。\nC项正确：应当尽量减少财产损失。\nD项正确：《人民警察使用警械和武器条例》第4条规定，以上三项均为使用原则。',
+            t: '能用警械不用武器，能制止就行，少伤人少毁东西。'
+        },
+        {
+            quizIndex: 28,
+            q: '辅警在执勤过程中，遇到暴力抗法行为，应当（）。',
+            opts: ['立即还击', '报告民警并协助控制', '逃离现场', '拍照取证后离开'],
+            correct: 1,
+            d: 'A项错误：辅警无独立执法权，不得擅自还击。\nB项正确：遇到暴力抗法应立即报告现场民警，并在民警指挥下协助控制。\nC项错误：执勤中不得擅自离岗。\nD项错误：必须报告民警处理。',
+            t: '有人暴力抗法，马上报告民警，听指挥协助。'
+        },
+        {
+            quizIndex: 29,
+            q: '下列哪项属于辅警的职业道德要求（）。',
+            opts: ['忠诚可靠', '服从命令', '文明执勤', '以上都是'],
+            correct: 3,
+            d: 'A项正确：忠诚可靠是职业道德。\nB项正确：服从命令是职业道德。\nC项正确：文明执勤是职业道德。\nD项正确：辅警职业道德要求包括忠诚可靠、服从命令、文明执勤、爱岗敬业、清正廉洁、服务群众等。',
+            t: '辅警职业道德：忠诚、服从、文明，全都得做到。'
+        },
+        {
+            quizIndex: 30,
+            q: '公安机关办理行政案件，对与案件有关的需要作为证据的物品，（）。',
+            opts: ['可以扣押', '应当扣押', '不得扣押', '随意处置'],
+            correct: 0,
+            d: 'A项正确：《公安机关办理行政案件程序规定》第107条，对与案件有关的需要作为证据的物品，可以扣押；对与案件无关的物品，不得扣押。\nB项错误：并非应当扣押，有裁量空间。\nC项错误：与案件有关的可以扣押。\nD项错误：不得随意处置。',
+            t: '办案需要作证物的东西可以扣，无关的不能扣。'
+        },
+        // ============ 补题31-50（根据考点创作）============
+        {
+            quizIndex: 31,
+            q: '根据《行政处罚法》，行政机关在作出行政处罚决定之前，应当告知当事人拟作出的行政处罚内容及事实、理由、依据，并告知当事人依法享有的（）。',
+            opts: ['陈述权、申辩权', '上诉权', '起诉权', '申诉权'],
+            correct: 0,
+            d: 'A项正确：《行政处罚法》第44条，行政机关在作出行政处罚决定之前，应当告知当事人拟作出的行政处罚内容及事实、理由、依据，并告知当事人依法享有的陈述、申辩、要求听证等权利。\nB项错误：上诉是诉讼程序中的权利。\nC项错误：起诉权是事后救济权利，不是处罚前告知的内容。\nD项错误：申诉非此处法条用语。',
+            t: '处罚前必须让你有机会说话（陈述申辩），这是法定权利。'
+        },
+        {
+            quizIndex: 32,
+            q: '公安机关作出治安管理处罚决定前，应当告知违反治安管理行为人作出治安管理处罚的事实、理由及依据，并告知违反治安管理行为人依法享有的权利。公安机关不得因违反治安管理行为人的陈述、申辩而（）。',
+            opts: ['加重处罚', '减轻处罚', '免除处罚', '改变处罚'],
+            correct: 0,
+            d: 'A项正确：《治安管理处罚法》第94条第3款规定，公安机关不得因违反治安管理行为人的陈述、申辩而加重处罚。\nB项错误：陈述申辩可能成立导致减轻，但不得因此加重。\nC项错误：同前。\nD项错误：不得因申辩本身改变处罚。',
+            t: '你为自己辩解，公安局不能因为这个把处罚加重了。'
+        },
+        {
+            quizIndex: 33,
+            q: '根据《行政许可法》，行政机关应当将法律、法规、规章规定的有关行政许可的事项、依据、条件、数量、程序、期限以及需要提交的全部材料的目录和申请书示范文本等在（）公示。',
+            opts: ['办公场所', '政府网站', '办公场所或政府网站', '办公场所和政府网站'],
+            correct: 0,
+            d: 'A项正确：《行政许可法》第30条，行政机关应当将有关行政许可的事项等在办公场所公示。\nB项错误：政府网站非本条款规定。\nC项错误：法条明确要求在办公场所公示。\nD项错误：未要求同时在网站公示。',
+            t: '办证的材料清单和流程要在办事大厅里贴出来。'
+        },
+        {
+            quizIndex: 34,
+            q: '根据《人民警察法》，人民警察对超越法律、法规规定的人民警察职责范围的指令，（）。',
+            opts: ['必须执行', '可以变通执行', '有权拒绝执行', '向上级报告后执行'],
+            correct: 2,
+            d: 'A项错误：对违法指令不能执行。\nB项错误：不能变通执行。\nC项正确：《人民警察法》第33条，人民警察对超越法律、法规规定的人民警察职责范围的指令，有权拒绝执行，并同时向上级机关报告。\nD项错误：无需报告后执行，直接拒绝。',
+            t: '违法的命令可以硬气地拒绝，还要向上级报告。'
+        },
+        {
+            quizIndex: 35,
+            q: '根据《治安管理处罚法》，检查妇女的身体，应当由（）进行。',
+            opts: ['女性工作人员', '女性民警', '女性医师', '女性辅警'],
+            correct: 0,
+            d: 'A项正确：《治安管理处罚法》第87条第2款规定，检查妇女的身体，应当由女性工作人员进行。\nB项错误：不限于女性民警，女性辅警也可。\nC项错误：不要求必须是医师。\nD项错误：辅警属于工作人员，但法条未限定为辅警，正确选项更全面。',
+            t: '检查女性身体，必须由女性工作人员来，民警辅警都可以。'
+        },
+        {
+            quizIndex: 36,
+            q: '行政机关在作出（）的行政处罚决定之前，应当告知当事人有要求举行听证的权利。',
+            opts: ['警告', '罚款200元', '较大数额罚款', '通报批评'],
+            correct: 2,
+            d: 'A项错误：警告不适用听证程序。\nB项错误：小额罚款不适用听证。\nC项正确：《行政处罚法》第63条，较大数额罚款属于应当告知听证权利的情形。\nD项错误：通报批评一般不需要听证。',
+            t: '罚款数额大、吊销证照、责令停产这些重的处罚才需要听证。'
+        },
+        {
+            quizIndex: 37,
+            q: '辅警的制服臂章字样为（）。',
+            opts: ['警察', '公安', '辅警', '治安'],
+            correct: 2,
+            d: 'A项错误：臂章字样为"警察"的是人民警察。\nB项错误：无"公安"字样臂章。\nC项正确：辅警的制服臂章字样为"辅警"，与人民警察的臂章有明显区别。\nD项错误：无"治安"字样臂章。',
+            t: '辅警臂章写的是"辅警"，不是"警察"。'
+        },
+        {
+            quizIndex: 38,
+            q: '根据《深圳经济特区警务辅助人员条例》，辅警在履行职责过程中，对侵犯自身合法权益的行为，可以（）。',
+            opts: ['自行维权', '依法提出申诉、控告', '立即辞职', '直接向法院起诉'],
+            correct: 1,
+            d: 'A项错误：应依法维权，非自行维权。\nB项正确：《深圳经济特区警务辅助人员条例》第33条，辅警在履行职责过程中，对侵犯自身合法权益的行为，可以依法提出申诉、控告。\nC项错误：非处理方式。\nD项错误：非直接起诉，应先内部申诉控告。',
+            t: '辅警被打被侵犯，可以申诉控告，法律保护。'
+        },
+        {
+            quizIndex: 39,
+            q: '关于人民警察的回避制度，下列说法正确的是（）。',
+            opts: ['人民警察在任何情况下都应当回避', '人民警察只有在当事人申请时才能回避', '人民警察在办理治安案件时，遇有近亲属关系应当回避', '人民警察可以自行决定是否回避'],
+            correct: 2,
+            d: 'A项错误：并非任何情况都回避。\nB项错误：警察也可自行回避。\nC项正确：《治安管理处罚法》第81条，人民警察在办理治安案件过程中，遇有近亲属情形的应当回避。\nD项错误：不能自行决定。',
+            t: '办案遇到自己亲戚，必须回避，不能自己说了算。'
+        },
+        {
+            quizIndex: 40,
+            q: '下列属于行政强制措施的是（）。',
+            opts: ['罚款', '吊销许可证', '查封场所', '责令停产停业'],
+            correct: 2,
+            d: 'A项错误：罚款是行政处罚。\nB项错误：吊销许可证是行政处罚。\nC项正确：查封场所属于行政强制措施，是暂时性控制。\nD项错误：责令停产停业是行政处罚。',
+            t: '查封扣押是临时控制，叫强制措施；罚款吊销是最终处罚。'
+        },
+        {
+            quizIndex: 41,
+            q: '治安管理处罚由（）决定。',
+            opts: ['公安派出所', '县级以上人民政府公安机关', '乡镇人民政府', '街道办事处'],
+            correct: 1,
+            d: 'A项错误：派出所只能决定警告和500元以下罚款。\nB项正确：《治安管理处罚法》第91条，治安管理处罚由县级以上人民政府公安机关决定。\nC项错误：乡镇政府无治安处罚权。\nD项错误：街道办事处无治安处罚权。',
+            t: '治安处罚必须县级以上公安局决定，派出所只能罚小额的。'
+        },
+        {
+            quizIndex: 42,
+            q: '警械和武器的使用，下列说法正确的是（）。',
+            opts: ['辅警在任何情况下都不能使用警械', '辅警在民警带领下可以使用警械', '辅警可以单独使用武器', '辅警使用警械无需报告'],
+            correct: 1,
+            d: 'A项错误：辅警在民警带领下可使用警械。\nB项正确：辅警在人民警察的带领和监督下，可以使用必要的警械。\nC项错误：辅警无权单独使用武器。\nD项错误：使用警械需按规定报告。',
+            t: '辅警跟着民警能用警棍手铐，不能单独用枪。'
+        },
+        {
+            quizIndex: 43,
+            q: '根据《行政处罚法》，行政处罚没有依据或者实施主体不具有行政主体资格的，行政处罚（）。',
+            opts: ['有效', '无效', '可以撤销', '效力待定'],
+            correct: 1,
+            d: 'A项错误：无依据或无主体资格，处罚无效。\nB项正确：《行政处罚法》第38条，行政处罚没有依据或者实施主体不具有行政主体资格的，行政处罚无效。\nC项错误：不是可撤销，是无效。\nD项错误：非效力待定。',
+            t: '处罚没法律依据或者机关没权力，这个处罚就是废纸一张。'
+        },
+        {
+            quizIndex: 44,
+            q: '犯罪的时候不满十八周岁的人和审判的时候怀孕的妇女，（）。',
+            opts: ['不适用死刑', '可以适用死刑', '应当适用死刑', '适用死刑缓期执行'],
+            correct: 0,
+            d: 'A项正确：《刑法》第49条，犯罪的时候不满十八周岁的人和审判的时候怀孕的妇女，不适用死刑。\nB项错误：法律明文禁止。\nC项错误：违法。\nD项错误：死缓也是死刑的一种，不适用。',
+            t: '未成年人和孕妇一律不判死刑。'
+        },
+        {
+            quizIndex: 45,
+            q: '醉酒的人犯罪，（）。',
+            opts: ['不负刑事责任', '可以免除刑事责任', '应当负刑事责任', '从轻或减轻处罚'],
+            correct: 2,
+            d: 'A项错误：醉酒不免责。\nB项错误：不能免除。\nC项正确：《刑法》第18条第4款，醉酒的人犯罪，应当负刑事责任。\nD项错误：不属于从轻减轻情节。',
+            t: '喝酒犯罪照样判，喝醉了不是借口。'
+        },
+        {
+            quizIndex: 46,
+            q: '又聋又哑的人或者盲人犯罪，（）。',
+            opts: ['不负刑事责任', '可以从轻、减轻或者免除处罚', '应当从轻处罚', '与普通人同等处罚'],
+            correct: 1,
+            d: 'A项错误：不是不负责任。\nB项正确：《刑法》第19条，又聋又哑的人或者盲人犯罪，可以从轻、减轻或者免除处罚。\nC项错误：不是"应当"，是"可以"。\nD项错误：法律有特殊规定。',
+            t: '聋哑人和盲人犯罪，法官可以适当从轻或免罚。'
+        },
+        {
+            quizIndex: 47,
+            q: '当事人要求听证的，应当在行政机关告知后（）内提出。',
+            opts: ['三日', '五日', '七日', '十日'],
+            correct: 1,
+            d: 'A项错误：三日是旧法规定。\nB项正确：《行政处罚法》第64条，当事人要求听证的，应当在行政机关告知后五日内提出。\nC项错误：七日不是规定时限。\nD项错误：十日亦非规定时限。',
+            t: '收到告知后5天内要提出听证申请，过期视为放弃。'
+        },
+        {
+            quizIndex: 48,
+            q: '限制人身自由的行政处罚，只能由（）设定。',
+            opts: ['法律', '行政法规', '地方性法规', '规章'],
+            correct: 0,
+            d: 'A项正确：《行政处罚法》第10条，限制人身自由的行政处罚只能由法律设定。\nB项错误：行政法规无权设定。\nC项错误：地方性法规无权设定。\nD项错误：规章无权设定。',
+            t: '限制人身自由的处罚（如拘留），只有全国人大制定的法律才能规定。'
+        },
+        {
+            quizIndex: 49,
+            q: '行政机关实施行政强制措施，应当由（）以上行政执法人员实施。',
+            opts: ['一名', '两名', '三名', '五名'],
+            correct: 1,
+            d: 'A项错误：一名不合法。\nB项正确：《行政强制法》第18条，行政机关实施行政强制措施应当由两名以上行政执法人员实施。\nC项错误：三名非强制要求。\nD项错误：五名亦非强制要求。',
+            t: '扣东西查封至少两个执法人员，不能一个人说了算。'
+        },
+        {
+            quizIndex: 50,
+            q: '公安机关对与违反治安管理行为有关的场所、物品、人身进行检查时，人民警察不得少于（）。',
+            opts: ['一人', '二人', '三人', '五人'],
+            correct: 1,
+            d: 'A项错误：一人不合法。\nB项正确：《治安管理处罚法》第87条，检查时人民警察不得少于二人，并应当出示工作证件和检查证明文件。\nC项错误：非强制三人。\nD项错误：无要求。',
+            t: '治安检查至少两个警察，还得亮证。'
+        }
+
+    ];
+// ========== 多项选择题数据（51-65题）==========
+var multiQuestions = [
+    {
+        quizIndex: 51,
+        q: '行政处罚的种类包括（）。',
+        opts: ['警告、通报批评', '罚款、没收违法所得、没收非法财物', '暂扣许可证件、降低资质等级、吊销许可证件', '限制开展生产经营活动、责令停产停业、责令关闭、限制从业', '行政拘留'],
+        correct: [0, 1, 2, 3, 4],
+        d: '全选：《行政处罚法》第9条明确规定了上述所有行政处罚种类。',
+        t: '新法把处罚种类列全了，警告通报批评罚款没收暂扣吊销降级限产停产关闭拘留。'
+    },
+    {
+        quizIndex: 52,
+        q: '治安案件调查结束后，公安机关应当如何处理？（）',
+        opts: ['确有依法应当给予治安管理处罚的违法行为的，根据情节轻重及具体情况，作出处罚决定', '违法事实不能成立的，作出不予处罚决定', '违法行为已涉嫌犯罪的，移送主管机关依法追究刑事责任', '发现违反治安管理行为人有其他违法行为的，在对违反治安管理行为作出处罚决定的同时，通知有关行政主管部门处理'],
+        correct: [0, 1, 2, 3],
+        d: '全选：《治安管理处罚法》第95条规定了治安案件调查结束后的上述四种处理方式。',
+        t: '调查完四种结果：该罚就罚，不成立不罚，犯罪移送，有其他违法通知相关部门。'
+    },
+    {
+        quizIndex: 53,
+        q: '辅警在协助审讯女性嫌疑人时，应当（）。',
+        opts: ['由女性工作人员进行人身检查', '全程录音录像', '单独审讯', '保障饮食休息'],
+        correct: [0, 1, 3],
+        d: 'A项正确：检查妇女身体应由女性工作人员进行。\nB项正确：审讯应全程录音录像。\nC项错误：单独审讯违法，须有两名以上工作人员在场。\nD项正确：应保障被审讯人基本的饮食和休息权利。',
+        t: '审讯女性必须有女工作人员检查，全程录像，不能单独审，还要保障吃喝休息。'
+    },
+    {
+        quizIndex: 54,
+        q: '辅警在协助押解途中，必须使用的安全工具有（）。',
+        opts: ['手铐', '警绳', '枪支', '约束带'],
+        correct: [0, 1, 3],
+        d: 'A项正确：手铐是常用约束性警械。\nB项正确：警绳用于押解。\nC项错误：辅警无权携带枪支。\nD项正确：约束带可用于防止嫌疑人自伤或脱逃。',
+        t: '押解用手铐、警绳、约束带，不能用枪。'
+    },
+    {
+        quizIndex: 55,
+        q: '辅警在协助反诈宣传时，应重点提醒群众（）。',
+        opts: ['陌生链接不点击', '验证码不给他人', '公检法电话要求转账是诈骗', '高收益理财稳赚不赔'],
+        correct: [0, 1, 2],
+        d: 'A项正确：陌生链接可能含有病毒或诈骗网站。\nB项正确：验证码是资金安全的重要防线。\nC项正确：公检法不会通过电话要求转账。\nD项错误："高收益理财稳赚不赔"是诈骗常用话术，应提醒群众警惕，而非宣传。',
+        t: '反诈三不：不信陌生链接、不给验证码、不转账给假公检法。'
+    },
+    {
+        quizIndex: 56,
+        q: '下列属于公安机关治安行政管理权的有（）。',
+        opts: ['治安行政处置权', '治安行政处罚权', '治安监督检查权', '治安行政强制权'],
+        correct: [0, 1, 2, 3],
+        d: '全选：公安机关的治安行政管理权包括上述四项权力。',
+        t: '公安机关治安管理四大权：处置、处罚、监督、强制。'
+    },
+    {
+        quizIndex: 57,
+        q: '人民警察应当履行的义务有（）。',
+        opts: ['秉公执法，办事公道', '模范遵守社会公德', '礼貌待人，文明执勤', '尊重人民群众的风俗习惯'],
+        correct: [0, 1, 2, 3],
+        d: '全选：《人民警察法》第20条规定了人民警察应当履行的上述义务。',
+        t: '警察要公平执法、讲公德、文明礼貌、尊重风俗。'
+    },
+    {
+        quizIndex: 58,
+        q: '下列情形中，人民警察可以使用制服性警械的有（）。',
+        opts: ['结伙斗殴、殴打他人、寻衅滋事、侮辱妇女或者进行其他流氓活动的', '聚众扰乱车站、码头、民用航空站、运动场等公共场所秩序的', '非法举行集会、游行、示威的', '以暴力方法抗拒或者阻碍人民警察依法履行职责的'],
+        correct: [0, 1, 2, 3],
+        d: '全选：《人民警察使用警械和武器条例》第7条规定了人民警察可以使用制服性警械的上述情形。',
+        t: '打架斗殴、聚众闹事、非法游行、暴力抗法这几种情况都能用警棍催泪弹。'
+    },
+    {
+        quizIndex: 59,
+        q: '根据《深圳经济特区警务辅助人员条例》，辅警不得有下列哪些行为？（）',
+        opts: ['泄露国家秘密、工作秘密或者因履行职责知悉的商业秘密、公民个人隐私', '组织或者参加非法组织、非法集会、游行、示威等活动', '从事或者参与与履行职责相关的营利性活动', '体罚、虐待、侮辱违法犯罪嫌疑人或者其他人员'],
+        correct: [0, 1, 2, 3],
+        d: '全选：《深圳经济特区警务辅助人员条例》第28条规定了辅警不得有的上述行为。',
+        t: '辅警四个不能：不能泄密、不能参加非法组织、不能经商、不能打骂嫌疑人。'
+    },
+    {
+        quizIndex: 60,
+        q: '下列关于正当防卫的说法，正确的有（）。',
+        opts: ['正当防卫不能明显超过必要限度造成重大损害', '对正在进行行凶、杀人、抢劫、强奸、绑架以及其他严重危及人身安全的暴力犯罪，采取防卫行为，造成不法侵害人伤亡的，不属于防卫过当', '防卫过当应当负刑事责任，但是应当减轻或者免除处罚', '正当防卫明显超过必要限度造成重大损害的，应当负刑事责任'],
+        correct: [0, 1, 2, 3],
+        d: '全选：《刑法》第20条规定了正当防卫的上述内容。',
+        t: '正当防卫不能过分；对严重暴力犯罪无限防卫；防卫过当要负责但可减免。'
+    },
+    {
+        quizIndex: 61,
+        q: '下列属于行政强制措施的有（）。',
+        opts: ['限制公民人身自由', '查封场所、设施或者财物', '扣押财物', '冻结存款、汇款'],
+        correct: [0, 1, 2, 3],
+        d: '全选：《行政强制法》第9条规定了上述行政强制措施种类。',
+        t: '限制人、查封、扣押、冻结，都是暂时控制的强制措施。'
+    },
+    {
+        quizIndex: 62,
+        q: '当事人逾期不履行行政处罚决定的，作出行政处罚决定的行政机关可以采取下列哪些措施？（）',
+        opts: ['到期不缴纳罚款的，每日按罚款数额的百分之三加处罚款', '根据法律规定，将查封、扣押的财物拍卖、依法处理或者将冻结的存款、汇款划拨抵缴罚款', '根据法律规定，采取其他行政强制执行方式', '依照《中华人民共和国行政强制法》的规定申请人民法院强制执行'],
+        correct: [0, 1, 2, 3],
+        d: '全选：《行政处罚法》第72条规定了当事人逾期不履行时行政机关可以采取的上述措施。',
+        t: '不交罚款：每天加3%、拍卖扣押物、强制执行、申请法院，全部能用。'
+    },
+    {
+        quizIndex: 63,
+        q: '下列关于治安管理处罚的说法，正确的有（）。',
+        opts: ['治安管理处罚由县级以上人民政府公安机关决定', '警告、五百元以下的罚款可以由公安派出所决定', '对决定给予行政拘留处罚的人，在处罚前已经采取强制措施限制人身自由的时间，应当折抵', '违反治安管理行为事实清楚，证据确凿，处警告或者二百元以下罚款的，可以当场作出治安管理处罚决定'],
+        correct: [0, 1, 2, 3],
+        d: '全选：《治安管理处罚法》第91条、第92条、第100条规定了上述内容。',
+        t: '县以上公安定处罚，派出所可罚500以下；拘留前关押天数折抵；200以下可当场罚。'
+    },
+    {
+        quizIndex: 64,
+        q: '辅警在执勤中发现可疑人员，应如何处置？（）',
+        opts: ['立即上前盘问', '报告现场民警', '保持安全距离', '记录人员特征'],
+        correct: [1, 2, 3],
+        d: 'A项错误：辅警无独立盘问权，不得擅自上前盘问。\nB项正确：应立即报告现场民警。\nC项正确：应保持安全距离以自我保护。\nD项正确：应记录人员特征以供民警判断。',
+        t: '发现可疑先报告民警，保持距离，记下特征，别自己冲上去。'
+    },
+    {
+        quizIndex: 65,
+        q: '关于灭火器使用，正确的步骤是（）。',
+        opts: ['提灭火器', '拔保险销', '对准火焰根部', '左右扫射灭火'],
+        correct: [0, 1, 2, 3],
+        d: '全选：灭火器使用的正确步骤是"提、拔、握、压"，即提灭火器、拔保险销、握住喷管、对准火焰根部左右扫射灭火。',
+        t: '灭火器四步：提、拔、握、压，对着火根左右扫。'
+    }
+];
+// ========== 判断题数据（66-90题）==========
+var judgeQuestions = [
+    {
+        quizIndex: 66,
+        q: '辅警可以在民警带领下使用警用催泪喷射器。（）',
+        correct: 'A',
+        d: 'A项正确：根据《人民警察使用警械和武器条例》，催泪喷射器属于警械，辅警在人民警察带领下可以使用必要的警械。\nB项错误：题干表述正确。',
+        t: '辅警跟着民警可以用催泪喷射器。'
+    },
+    {
+        quizIndex: 67,
+        q: '辅警的制服臂章字样为“警察”。（）',
+        correct: 'B',
+        d: 'A项错误：辅警制服的臂章字样为“辅警”，与人民警察的“警察”臂章有明显区别。\nB项正确：题干表述错误。',
+        t: '辅警臂章写的是“辅警”，不是“警察”。'
+    },
+    {
+        quizIndex: 68,
+        q: '辅警在执勤时遇到记者采访，可擅自代表公安机关表态。（）',
+        correct: 'B',
+        d: 'A项错误：辅警不得擅自代表公安机关表态，遇到记者采访应立即报告现场民警。\nB项正确：题干表述错误。',
+        t: '辅警不能代表公安发言，要报告民警处理。'
+    },
+    {
+        quizIndex: 69,
+        q: '辅警在协助抓捕时负伤，可享受工伤保险待遇。（）',
+        correct: 'A',
+        d: 'A项正确：辅警依法享有工伤保险待遇，在执行任务中负伤的，按照国家有关工伤保险的规定执行。\nB项错误：题干表述正确。',
+        t: '辅警因公负伤，享受工伤保险。'
+    },
+    {
+        quizIndex: 70,
+        q: '行政处罚遵循公正、公开的原则。（）',
+        correct: 'A',
+        d: 'A项正确：《行政处罚法》第5条明确规定了行政处罚遵循公正、公开的原则。\nB项错误：题干表述正确。',
+        t: '行政处罚必须公正公开，这是基本原则。'
+    },
+    {
+        quizIndex: 71,
+        q: '对当事人的同一个违法行为，不得给予两次以上罚款的行政处罚。（）',
+        correct: 'A',
+        d: 'A项正确：《行政处罚法》第29条规定了“一事不再罚”原则，对当事人的同一个违法行为，不得给予两次以上罚款的行政处罚。\nB项错误：题干表述正确。',
+        t: '一件事只能罚一次款，不能反复罚。'
+    },
+    {
+        quizIndex: 72,
+        q: '不满十四周岁的人有违法行为的，不予行政处罚，责令监护人加以管教。（）',
+        correct: 'A',
+        d: 'A项正确：《行政处罚法》第30条，不满十四周岁的未成年人有违法行为的，不予行政处罚，责令监护人加以管教。\nB项错误：题干表述正确。',
+        t: '14岁以下违法不罚，让家长管教。'
+    },
+    {
+        quizIndex: 73,
+        q: '精神病人在不能辨认或者不能控制自己行为时有违法行为的，不予行政处罚，但应当责令其监护人严加看管和治疗。（）',
+        correct: 'A',
+        d: 'A项正确：《行政处罚法》第31条，精神病人在不能辨认或者不能控制自己行为时有违法行为的，不予行政处罚，但应当责令其监护人严加看管和治疗。\nB项错误：题干表述正确。',
+        t: '精神病发作时违法不罚，家人要管好。'
+    },
+    {
+        quizIndex: 74,
+        q: '公安机关对报案、控告、举报或者违反治安管理行为人主动投案，以及其他行政主管部门、司法机关移送的违反治安管理案件，应当及时受理，并进行登记。（）',
+        correct: 'A',
+        d: 'A项正确：《治安管理处罚法》第77条规定了这一内容。\nB项错误：题干表述正确。',
+        t: '报案控告举报投案，公安必须及时受理登记。'
+    },
+    {
+        quizIndex: 75,
+        q: '公安机关对与违反治安管理行为有关的场所、物品、人身可以进行检查。检查时，人民警察不得少于二人，并应当出示工作证件和县级以上人民政府公安机关开具的检查证明文件。（）',
+        correct: 'A',
+        d: 'A项正确：《治安管理处罚法》第87条规定了这一内容。\nB项错误：题干表述正确。',
+        t: '治安检查至少两警察，亮证亮检查文件。'
+    },
+    {
+        quizIndex: 76,
+        q: '检查妇女的身体，应当由女性工作人员进行。（）',
+        correct: 'A',
+        d: 'A项正确：《治安管理处罚法》第87条第2款规定了这一内容。\nB项错误：题干表述正确。',
+        t: '检查女性身体，必须女性工作人员来。'
+    },
+    {
+        quizIndex: 77,
+        q: '公安机关作出治安管理处罚决定前，应当告知违反治安管理行为人作出治安管理处罚的事实、理由及依据，并告知违反治安管理行为人依法享有的权利。（）',
+        correct: 'A',
+        d: 'A项正确：《治安管理处罚法》第94条规定了这一内容。\nB项错误：题干表述正确。',
+        t: '处罚前必须告诉你为什么罚，你有什么权利。'
+    },
+    {
+        quizIndex: 78,
+        q: '违反治安管理行为人有权陈述和申辩。公安机关必须充分听取违反治安管理行为人的意见，对违反治安管理行为人提出的事实、理由和证据，应当进行复核；违反治安管理行为人提出的事实、理由或者证据成立的，公安机关应当采纳。（）',
+        correct: 'A',
+        d: 'A项正确：《治安管理处罚法》第94条第2款规定了这一内容。\nB项错误：题干表述正确。',
+        t: '当事人说的话警察必须听，有理的要采纳。'
+    },
+    {
+        quizIndex: 79,
+        q: '公安机关不得因违反治安管理行为人的陈述、申辩而加重处罚。（）',
+        correct: 'A',
+        d: 'A项正确：《治安管理处罚法》第94条第3款规定了这一内容。\nB项错误：题干表述正确。',
+        t: '不能因为当事人辩解了就把处罚加重。'
+    },
+    {
+        quizIndex: 80,
+        q: '人民警察遇到公民人身、财产安全受到侵犯或者处于其他危难情形，应当立即救助。（）',
+        correct: 'A',
+        d: 'A项正确：《人民警察法》第21条规定了这一内容。\nB项错误：题干表述正确。',
+        t: '警察看到有人遇险，必须立刻救人。'
+    },
+    {
+        quizIndex: 81,
+        q: '人民警察对公民的报警案件，应当及时查处。（）',
+        correct: 'A',
+        d: 'A项正确：《人民警察法》第21条规定了这一内容。\nB项错误：题干表述正确。',
+        t: '有人报警，警察必须及时查。'
+    },
+    {
+        quizIndex: 82,
+        q: '人民警察不得散布有损国家声誉的言论，参加非法组织，参加旨在反对国家的集会、游行、示威等活动，参加罢工。（）',
+        correct: 'A',
+        d: 'A项正确：《人民警察法》第22条规定了这一内容。\nB项错误：题干表述正确。',
+        t: '警察不能乱说话、不能参加非法组织、不能参加反对国家的活动、不能罢工。'
+    },
+    {
+        quizIndex: 83,
+        q: '辅警可以单独执法。（）',
+        correct: 'B',
+        d: 'A项错误：辅警无独立执法权，必须在人民警察的带领和监督下开展工作。\nB项正确：题干表述错误。',
+        t: '辅警不能单独执法，必须有民警带着。'
+    },
+    {
+        quizIndex: 84,
+        q: '辅警可以从事案件调查取证、出具鉴定报告、交通事故责任认定等工作。（）',
+        correct: 'B',
+        d: 'A项错误：上述工作属于行政执法权，只能由正式人民警察行使，辅警不得从事。\nB项正确：题干表述错误。',
+        t: '调查取证、出鉴定报告、定责这些事辅警不能干，必须民警来。'
+    },
+    {
+        quizIndex: 85,
+        q: '辅警在履行职责过程中，对侵犯自身合法权益的行为，可以依法提出申诉、控告。（）',
+        correct: 'A',
+        d: 'A项正确：《深圳经济特区警务辅助人员条例》第33条规定了辅警的这一权利。\nB项错误：题干表述正确。',
+        t: '辅警被欺负了，可以申诉控告。'
+    },
+    {
+        quizIndex: 86,
+        q: '犯罪的时候不满十八周岁的人和审判的时候怀孕的妇女，不适用死刑。（）',
+        correct: 'A',
+        d: 'A项正确：《刑法》第49条规定了这一内容。\nB项错误：题干表述正确。',
+        t: '未成年人和孕妇一律不判死刑。'
+    },
+    {
+        quizIndex: 87,
+        q: '醉酒的人犯罪，应当负刑事责任。（）',
+        correct: 'A',
+        d: 'A项正确：《刑法》第18条第4款规定了这一内容。\nB项错误：题干表述正确。',
+        t: '喝醉了犯罪照样判。'
+    },
+    {
+        quizIndex: 88,
+        q: '又聋又哑的人或者盲人犯罪，可以从轻、减轻或者免除处罚。（）',
+        correct: 'A',
+        d: 'A项正确：《刑法》第19条规定了这一内容。\nB项错误：题干表述正确。',
+        t: '聋哑人盲人犯罪，可以从轻或免罚。'
+    },
+    {
+        quizIndex: 89,
+        q: '行政机关在作出行政处罚决定之前，应当告知当事人拟作出的行政处罚内容及事实、理由、依据，并告知当事人依法享有的陈述、申辩、要求听证等权利。（）',
+        correct: 'A',
+        d: 'A项正确：《行政处罚法》第44条规定了这一内容。\nB项错误：题干表述正确。',
+        t: '处罚前必须告知内容和权利，让当事人有机会说话。'
+    },
+    {
+        quizIndex: 90,
+        q: '当事人要求听证的，应当在行政机关告知后五日内提出；行政机关应当在举行听证的七日前，通知当事人及有关人员听证的时间、地点。（）',
+        correct: 'A',
+        d: 'A项正确：《行政处罚法》第64条规定了这一内容。\nB项错误：题干表述正确。',
+        t: '要求听证在5天内提出，行政机关提前7天通知。'
+    }
+];
+
+    function renderModule1() {
+        var html = '<div class="card"><h2>一、单选题（1-50题，每题1分，共50分）</h2>';
+        for (var i = 0; i < singleQuestions.length; i++) {
+            var q = singleQuestions[i];
+            html += '<div class="quiz-wrap" id="wrap-' + q.quizIndex + '">';
+            html += '<div class="q-title">' + q.quizIndex + '. ' + q.q + '</div>';
+            html += renderOptions(q.quizIndex, q.opts, 'single');
+            html += '<div class="explain-card" id="exp-' + q.quizIndex + '"></div>';
+            html += '</div>';
+        }
+        html += '<div class="module-footer">';
+        html += '<span class="module-score" id="score-single" style="display:none;"></span>';
+        html += '<button class="btn btn-primary" onclick="submitModule(\'single\')">✅ 提交本模块</button>';
+        html += '</div></div>';
+        document.getElementById('module1').innerHTML = html;
+        var tocHtml = '';
+        for (var j = 1; j <= 50; j++) {
+            tocHtml += '<button class="toc-btn" onclick="scrollToQuiz(' + j + ');closeToc();" id="tocBtn-' + j + '">' + j + '</button>';
+        }
+        document.getElementById('tocSingle').innerHTML = tocHtml;
+    }
+
+// ========== 渲染多选题模块 ==========
+function renderModule2() {
+    var html = '<div class="card"><h2>二、多选题（51-65题，每题2分，共30分）</h2>';
+    html += '<p style="color:var(--text-light);font-size:0.9rem;margin-bottom:12px;">📌 得分规则：全对得2分；少选且无错选，每个正确选项得0.5分；错选不得分。</p>';
+    for (var i = 0; i < multiQuestions.length; i++) {
+        var q = multiQuestions[i];
+        html += '<div class="quiz-wrap" id="wrap-' + q.quizIndex + '">';
+        html += '<div class="q-title">' + q.quizIndex + '. ' + q.q + ' <span style="color:#b7950b;font-size:0.8rem;">（多选）</span></div>';
+        html += renderOptions(q.quizIndex, q.opts, 'multi');
+        html += '<div class="explain-card" id="exp-' + q.quizIndex + '"></div>';
+        html += '</div>';
+    }
+    html += '<div class="module-footer">';
+    html += '<span class="module-score" id="score-multi" style="display:none;"></span>';
+    html += '<button class="btn btn-primary" onclick="submitModule(\'multi\')">✅ 提交本模块</button>';
+    html += '</div></div>';
+    document.getElementById('module2').innerHTML = html;
+
+    // 填充多题目录按钮（51-65）
+    var tocHtml = '';
+    for (var j = 51; j <= 65; j++) {
+        tocHtml += '<button class="toc-btn" onclick="scrollToQuiz(' + j + ');closeToc();" id="tocBtn-' + j + '">' + j + '</button>';
+    }
+    document.getElementById('tocMulti').innerHTML = tocHtml;
+}
+
+// ========== 渲染判断题模块 ==========
+function renderModule3() {
+    var html = '<div class="card"><h2>三、判断题（66-90题，每题1分，共25分）</h2>';
+    for (var i = 0; i < judgeQuestions.length; i++) {
+        var q = judgeQuestions[i];
+        html += '<div class="quiz-wrap" id="wrap-' + q.quizIndex + '">';
+        html += '<div class="q-title">' + q.quizIndex + '. ' + q.q + '</div>';
+        html += renderOptions(q.quizIndex, ['✅ 正确', '❌ 错误'], 'single');
+        html += '<div class="explain-card" id="exp-' + q.quizIndex + '"></div>';
+        html += '</div>';
+    }
+    html += '<div class="module-footer">';
+    html += '<span class="module-score" id="score-judge" style="display:none;"></span>';
+    html += '<button class="btn btn-primary" onclick="submitModule(\'judge\')">✅ 提交本模块</button>';
+    html += '</div></div>';
+    document.getElementById('module3').innerHTML = html;
+
+    // 填充判断题目录按钮（66-90）
+    var tocHtml = '';
+    for (var j = 66; j <= 90; j++) {
+        tocHtml += '<button class="toc-btn" onclick="scrollToQuiz(' + j + ');closeToc();" id="tocBtn-' + j + '">' + j + '</button>';
+    }
+    document.getElementById('tocJudge').innerHTML = tocHtml;
+}
+
+    function scrollToQuiz(idx) {
+        var el = document.getElementById('wrap-' + idx);
+        if (el) el.scrollIntoView({ behavior:'smooth', block:'center' });
+    }
+
+
+    renderModule1();
+renderModule2();
+renderModule3();
+</script>
+</body>
+</html>

@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>公安素质测试 · 单选1-25题</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #f4f7fc; font-family: 'Segoe UI', 'Roboto', 'Noto Sans', system-ui, sans-serif; line-height: 1.55; color: #1f2a3a; padding: 1rem; }
+        .container { max-width: 1000px; margin: 0 auto; background: white; border-radius: 28px; box-shadow: 0 20px 35px rgba(0,0,0,0.06); padding: 2rem 1.8rem; position: relative; }
+        .nav-float { position: fixed; top: 20px; right: 20px; z-index: 999; background: white; border-radius: 32px; box-shadow: 0 8px 22px rgba(0,0,0,0.12); display: flex; align-items: center; padding: 0.6rem 1.2rem; cursor: pointer; font-weight: 600; color: #1e5fbb; font-size: 0.95rem; }
+        .nav-panel { position: fixed; top: 70px; right: 20px; background: white; border-radius: 24px; box-shadow: 0 12px 28px rgba(0,0,0,0.15); padding: 1rem; width: 220px; display: none; z-index: 1000; }
+        .nav-panel a { display: block; padding: 0.6rem 1rem; border-radius: 14px; text-decoration: none; color: #1e3b5c; font-weight: 500; margin: 0.2rem 0; }
+        .nav-panel a:hover { background: #eaf1fb; }
+        h1 { font-size: 2rem; font-weight: 600; color: #0a2c42; border-left: 7px solid #1e5fbb; padding-left: 1.3rem; margin-bottom: 0.2rem; }
+        .subtitle { color: #536379; margin-bottom: 1.8rem; padding-left: 1.8rem; font-size: 1rem; }
+        .timer-panel { background: #edf3fd; border-radius: 22px; padding: 1rem 1.8rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; margin-bottom: 2rem; }
+        .timer-display { font-size: 2rem; font-weight: 650; background: white; padding: 0.3rem 1.8rem; border-radius: 48px; color: #0d2d4e; }
+        .btn { border: none; background: #1e5fbb; color: white; font-weight: 600; padding: 0.75rem 2rem; border-radius: 36px; cursor: pointer; font-size: 1rem; transition: 0.2s; box-shadow: 0 6px 14px rgba(30,95,187,0.3); border: 1px solid rgba(255,255,255,0.2); }
+        .btn:active { transform: translateY(2px); }
+        .btn:disabled { opacity: 0.6; box-shadow: none; transform: none; }
+        .module-header { font-size: 1.5rem; font-weight: 600; margin: 1.8rem 0 1.2rem; }
+        .question-card { background: #fafcff; border-radius: 20px; padding: 1.4rem 1.5rem; margin-bottom: 1.5rem; border: 1px solid #e2eaf2; }
+        .q-title { font-weight: 700; font-size: 1.1rem; display: flex; gap: 0.5rem; align-items: baseline; }
+        .q-num { background: #dbe6f5; border-radius: 24px; padding: 0.15rem 0.9rem; font-size: 0.9rem; white-space: nowrap; }
+        .option { margin: 0.6rem 0; display: flex; align-items: center; padding: 0.3rem 0.5rem; border-radius: 8px; }
+        input[type="radio"] { accent-color: #1e5fbb; width: 1.1rem; height: 1.1rem; margin-right: 0.5rem; flex-shrink: 0; }
+        .feedback-area { margin-top: 1rem; background: #fffef5; border-radius: 16px; padding: 0.9rem 1.2rem; border-left: 4px solid #e6b422; font-size: 0.95rem; }
+        .exp-line { margin: 0.25rem 0; }
+        .correct-text { color: #0a6b2b; font-weight: 500; }
+        .wrong-text { color: #b22222; font-weight: 500; }
+        .user-wrong-opt { background: #ffcfcf; border-radius: 6px; }
+        .correct-answer-highlight { background: #d4edda; border-radius: 8px; font-weight: 500; }
+        .t-explanation { margin-top: 0.7rem; font-style: italic; color: #3d4f61; background: #f2f5f8; border-radius: 12px; padding: 0.5rem 1rem; }
+        @media (max-width: 600px) { body { padding: 0.5rem; } .container { padding: 1.2rem 1rem; } .timer-display { font-size: 1.5rem; padding: 0.3rem 1rem; } }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>📘 深圳市公安局第十二批辅警考试《公安素质测试》</h1>
+    <div class="subtitle">一、单项选择题（1‑50题，每题1分，共50分）</div>
+    <div class="timer-panel">
+        <div><span style="font-weight:600;">⏱️ 考试用时</span> <span class="timer-display" id="timerDisplay">00:00:00</span></div>
+        <button class="btn" id="startTimerBtn">▶ 开始计时</button>
+    </div>
+    <div class="nav-float" id="navToggle">📋 目录</div>
+
+      <div class="nav-panel" id="navPanel">
+        <a href="#module1">📌 一、单项选择题（1‑50）</a>
+        <a href="#moduleMulti">📙 二、多项选择题（51‑70）</a>
+        <a href="#moduleJudge">📕 三、判断题（71‑90）</a>
+
+    </div>
+
+
+        <!-- ===== 模块一：单项选择题 ===== -->
+    <div class="module-header" id="module1">📌 一、单项选择题（1‑50题，每题1分）</div>
+    <div id="singleChoiceContainer"></div>
+    <div id="singleChoiceContainer2"></div>
+    <div style="text-align:center; margin:2rem 0;" id="submitArea">
+        <button class="btn" id="submitModule1Btn" style="font-size:1.1rem; padding:0.8rem 3rem;">✅ 提交单项选择题</button>
+    </div>
+    <div id="singleStats" style="background:#eaf0f8; border-radius:20px; padding:1.2rem; margin:2rem 0; font-weight:500; text-align:center; display:none;"></div>
+
+    <!-- ===== 模块二：多项选择题 ===== -->
+    <div class="module-header" id="moduleMulti">📌 二、多项选择题（51‑70题，每题1.5分）</div>
+    <div id="multiChoiceContainer"></div>
+    <div style="text-align:center; margin:2rem 0;" id="multiSubmitArea">
+        <button class="btn" id="submitMultiBtn" style="font-size:1.1rem; padding:0.8rem 3rem;">✅ 提交多项选择题</button>
+    </div>
+    <div id="multiStats" style="background:#eaf0f8; border-radius:20px; padding:1.2rem; margin:2rem 0; font-weight:500; text-align:center; display:none;"></div>
+  <!-- ===== 模块三：判断题 ===== -->
+    <div class="module-header" id="moduleJudge">📌 三、判断题（71‑90题，每题1分）</div>
+    <div id="judgeChoiceContainer"></div>
+    <div style="text-align:center; margin:2rem 0;" id="judgeSubmitArea">
+        <button class="btn" id="submitJudgeBtn" style="font-size:1.1rem; padding:0.8rem 3rem;">✅ 提交判断题</button>
+    </div>
+    <div id="judgeStats" style="background:#eaf0f8; border-radius:20px; padding:1.2rem; margin:2rem 0; font-weight:500; text-align:center; display:none;"></div>
+    <!-- ===== 总分显示 ===== -->
+    <div id="totalScoreArea" style="text-align:center; margin:2rem 0; background:#eaf4f6; border-radius:24px; padding:1.2rem; font-size:1.2rem; font-weight:700; display:none;">
+        🧮 试卷总分：<span id="totalScoreText">0 分（满分 100 分）</span><br>📈 正确率：<span id="accuracyText">-</span> &nbsp;|&nbsp; <span id="timeUsed">⌛️ -</span>
+    </div>
+
+<script>
+(function() {
+       let singleTotal = null;
+    let multiTotal  = null;
+    let judgeTotal  = null;
+    let singleCorrectCnt = null;
+    let multiCorrectCnt  = null;
+    let judgeCorrectCnt  = null;
+
+    function updateTotalScore() {
+        const totalArea = document.getElementById('totalScoreArea');
+        const totalText = document.getElementById('totalScoreText');
+        if (!totalArea || !totalText) return;
+        let total = 0, count = 0;
+        if (singleTotal !== null) { total += singleTotal; count++; }
+        if (multiTotal  !== null) { total += multiTotal;  count++; }
+        if (judgeTotal  !== null) { total += judgeTotal;  count++; }
+        if (count > 0) {
+            totalArea.style.display = 'block';
+            totalText.textContent = total.toFixed(1) + ' 分（满分 100 分，已提交' + count + '个模块）';
+            const timeSpan = document.getElementById('timeUsed');
+            if (timeSpan) {
+                let elapsedSec = 0;
+                const savedStart = sessionStorage.getItem('exam_timer_1');
+                if (savedStart) {
+                    elapsedSec = Math.floor((Date.now() - parseInt(savedStart)) / 1000);
+                }
+                const h = Math.floor(elapsedSec / 3600);
+                const m = Math.floor((elapsedSec % 3600) / 60);
+                timeSpan.textContent = `⌛️：${h}小时${m.toString().padStart(2,'0')}分钟`;
+            }
+            const accSpan = document.getElementById('accuracyText');
+            if (accSpan) {
+                let totalCorrect = 0, totalQ = 0;
+                if (singleCorrectCnt !== null) { totalCorrect += singleCorrectCnt; totalQ += 50; }
+                if (multiCorrectCnt  !== null) { totalCorrect += multiCorrectCnt;  totalQ += 20; }
+                if (judgeCorrectCnt  !== null) { totalCorrect += judgeCorrectCnt;  totalQ += 20; }
+                if (totalQ > 0) {
+                    accSpan.textContent = (totalCorrect / totalQ * 100).toFixed(1) + '%';
+                }
+            }
+        }
+    }
+    // ---------- 试卷原题数据（单选1-25题，解析均为标准格式）----------
+    const questions = [
+        {
+            id: 1,
+            text: "设定和实施行政处罚必须以事实为依据，与违法行为的事实、性质、情节以及（）相当。",
+            options: {
+                A: "实施主体",
+                B: "社会影响",
+                C: "处罚成本大小",
+                D: "社会危害程度"
+            },
+            answer: "D",
+            exp: "A项错误：实施主体不是与违法行为相当的标准，而是行政责任承担者。\n" +
+                 "B项错误：社会影响不是法定处罚相当性要素，处罚应与危害程度相当。\n" +
+                 "C项错误：处罚成本大小不属于裁量基准，不得以此决定处罚轻重。\n" +
+                 "D项正确：根据《行政处罚法》第五条，设定和实施行政处罚必须以事实为依据，与违法行为的事实、性质、情节以及社会危害程度相当。",
+            t: "罚多少要看你干了多坏的事，不是看你是谁，也不是看罚起来贵不贵。"
+        },
+        {
+            id: 2,
+            text: "部门规章可以设定警告、通报批评或者一定数额罚款的行政处罚，罚款的限额由（）规定。",
+            options: {
+                A: "全国人大",
+                B: "全国人大常委会",
+                C: "国务院",
+                D: "国务院部门"
+            },
+            answer: "C",
+            exp: "A项错误：全国人大制定基本法律，但不直接规定部门规章罚款限额。\n" +
+                 "B项错误：全国人大常委会制定非基本法律，亦不直接规定该限额。\n" +
+                 "C项正确：根据《行政处罚法》第十三条，部门规章设定罚款的限额由国务院规定。\n" +
+                 "D项错误：国务院部门无权自行决定自己的罚款限额，须由国务院统一限定。",
+            t: "部委自己罚多少钱，得听国务院的。"
+        },
+        {
+            id: 3,
+            text: "出租车司机周某在非停靠点停车载客，被警察抓获。根据该市公安局局内印发的《关于整顿停车秩序的紧急通知》，周某被强令参加“学习班”一周，学习期间费用自理，且不得离开指定的学习场所。关于该案件，以下说法错误的是（）。",
+            options: {
+                A: "该“学习班”本质上是一种限制人身自由的行政处罚",
+                B: "《关于整顿停车秩序的紧急通知》不属于行政规范性文件",
+                C: "《关于整顿停车秩序的紧急通知》无权作出上述处罚规定",
+                D: "强令参加“学习班”是一种教育方法，而非行政处罚"
+            },
+            answer: "B",
+            exp: "A项正确：强制集中学习、不得离开，实质上构成限制人身自由，属于行政处罚。\n" +
+                 "B项错误：《紧急通知》属于其他规范性文件（俗称红头文件），但并非行政规范性文件的标准用语；本题要求选错误说法，B的表述易引发混淆，但根据官方答案选B。\n" +
+                 "C项正确：限制人身自由的行政处罚只能由法律设定，通知无权设定。\n" +
+                 "D项正确：以学习班为名实为变相限制自由，不能仅视为教育方法。",
+            t: "这个通知就是红头文件，不能用来关人学习。"
+        },
+        {
+            id: 4,
+            text: "苏某为甲地人，常住乙地，于丙地盗得自行车一辆并在丙地售出，买主为丁地人。对苏某的违法行为，由（）具有行政处罚权的行政机关管辖。",
+            options: {
+                A: "甲地",
+                B: "乙地",
+                C: "丙地",
+                D: "丁地"
+            },
+            answer: "C",
+            exp: "A项错误：甲地为户籍地，但违法行为发生地不在甲地。\n" +
+                 "B项错误：乙地为经常居住地，同样不是违法行为地。\n" +
+                 "C项正确：根据地域管辖，行政处罚由违法行为发生地的行政机关管辖。盗窃和销赃均在丙地，故丙地管辖。\n" +
+                 "D项错误：丁地为买主所在地，但并非管辖连接点。",
+            t: "在哪儿干坏事，就归哪儿管。"
+        },
+        {
+            id: 5,
+            text: "公民、法人或者其他组织违反行政管理秩序的行为，依法应当给予行政处罚的，行政机关必须查明事实。对于违法事实不清的行为，行政机关（）。",
+            options: {
+                A: "可以从轻或者减轻行政处罚",
+                B: "应当请示上级部门作出是否给予行政处罚的决定",
+                C: "可单独就违法事实不清部分听取行政相对人申辩后再作出是否给予行政处罚的决定",
+                D: "不得给予行政处罚"
+            },
+            answer: "D",
+            exp: "A项错误：从轻减轻仅适用于已查清事实、符合法定情节的情形。\n" +
+                 "B项错误：请示非必要程序，事实不清的核心处理是不得处罚。\n" +
+                 "C项错误：听取申辩不能取代查明事实，事实不清不可罚。\n" +
+                 "D项正确：根据《行政处罚法》第四十条，违法事实不清的，不得给予行政处罚。",
+            t: "没搞清楚就不能罚，这是铁规矩。"
+        },
+        {
+            id: 6,
+            text: "X省政府为了整治污染，促进当地经济持续健康发展，对在本行政区域内开展商业活动的企业设定了以下四项行政许可事项，其中合法的是（）。",
+            options: {
+                A: "企业必须使用本地某太阳能发电厂的供电",
+                B: "钢材生产企业须取得X省钢材生产协会的产品质量认证",
+                C: "出租车公司须采购X省本土企业自主研发生产的电动车",
+                D: "对增量不达标的汽车制造商不予通过相关行政许可"
+            },
+            answer: "D",
+            exp: "A项错误：指定供电企业涉嫌地方保护，违反市场统一和公平竞争。\n" +
+                 "B项错误：协会认证不得作为行政许可，认证应自愿。\n" +
+                 "C项错误：指定采购本土品牌构成地区封锁，不合法。\n" +
+                 "D项正确：对增量不达标（如环保、产业政策要求）不予许可，属于合法设定条件。",
+            t: "政府可以设环保门槛，但不能强买强卖本地货。"
+        },
+        {
+            id: 7,
+            text: "省、自治区、直辖市人民政府规章设定的临时性的行政许可，（）需要继续实施的，应当提请本级人民代表大会及其常务委员会制定地方性法规。",
+            options: {
+                A: "设定满一年",
+                B: "实施满一年",
+                C: "设定满两年",
+                D: "实施满两年"
+            },
+            answer: "B",
+            exp: "A项错误：设定满一年不是法定期限条件，起算点为实施。\n" +
+                 "B项正确：根据《行政许可法》第十五条，临时性许可实施满一年需要继续实施的，应提请制定地方性法规。\n" +
+                 "C项错误：设定满两年无此规定。\n" +
+                 "D项错误：实施满两年错误，应为一年。",
+            t: "临时许可用了一年如果还要继续，就必须升级成法规。"
+        },
+        {
+            id: 8,
+            text: "关于行政机关对行政许可决定的公开，下列说法正确的是（）。",
+            options: {
+                A: "应当公开准予许可的行政决定",
+                B: "应当公开不予许可的行政决定",
+                C: "公众不可以申请查阅",
+                D: "仅公、检、法部门有权查阅"
+            },
+            answer: "A",
+            exp: "A项正确：根据《行政许可法》第四十条，行政机关作出的准予行政许可决定，应当予以公开，公众有权查阅。\n" +
+                 "B项错误：不予许可决定通常不要求主动公开，但需告知申请人理由。\n" +
+                 "C项错误：公众可以申请查阅准予许可决定。\n" +
+                 "D项错误：查阅权不限于公检法，公众均可查阅。",
+            t: "批了的事情要晒太阳，没批的不用公开。"
+        },
+        {
+            id: 9,
+            text: "除法律、行政法规另有规定外，有数量限制的行政许可，两个或者两个以上申请人的申请均符合法定条件、标准的，行政机关应当根据（）作出准予行政许可的决定。",
+            options: {
+                A: "申请人的条件或资质高低顺序",
+                B: "申请人提出行政许可申请的先后顺序",
+                C: "受理行政许可申请的先后顺序",
+                D: "招标、拍卖等公平竞争的方式"
+            },
+            answer: "C",
+            exp: "A项错误：资质高低不是法定排序标准，除非有特殊规定。\n" +
+                 "B项错误：以提出申请先后为准不准确，法律明确规定受理先后。\n" +
+                 "C项正确：《行政许可法》第五十七条规定，按受理行政许可申请的先后顺序作出准予决定，但法律、行政法规另有规定的除外。\n" +
+                 "D项错误：招标拍卖适用于特许事项，并非所有数量限制许可。",
+            t: "大家都符合条件时，先受理的先得。"
+        },
+        {
+            id: 10,
+            text: "《中华人民共和国行政诉讼法》规定，行政处罚明显不当的，人民法院可以判（）。",
+            options: {
+                A: "确认违法",
+                B: "确认无效",
+                C: "变更",
+                D: "加重处罚"
+            },
+            answer: "C",
+            exp: "A项错误：确认违法适用于程序轻微违法但不撤销等情形。\n" +
+                 "B项错误：确认无效适用于重大且明显违法情形。\n" +
+                 "C项正确：《行政诉讼法》第七十七条，行政处罚明显不当的，人民法院可以判决变更。\n" +
+                 "D项错误：法院变更不得加重原告义务或减损权益。",
+            t: "罚得太离谱，法院可以直接改数字。"
+        },
+        {
+            id: 11,
+            text: "公民对行政机关作出的侵犯其已经依法取得的海域使用权的决定不服，下列说法正确的是（）。",
+            options: {
+                A: "可以直接提起行政诉讼",
+                B: "应当先申请行政复议，复议决定为终局裁决",
+                C: "只能提起行政诉讼，不能申请行政复议",
+                D: "应当先申请行政复议；对复议决定不服的，可以依法提起行政诉讼"
+            },
+            answer: "D",
+            exp: "A项错误：侵犯海域使用权等自然资源权属，通常复议前置。\n" +
+                 "B项错误：复议决定非终局，仍可诉讼。\n" +
+                 "C项错误：可以申请复议，且依法应前置。\n" +
+                 "D项正确：根据《行政复议法》第三十条，认为行政机关的具体行政行为侵犯其已依法取得的自然资源所有权或使用权的，应当先申请行政复议；对复议决定不服的，可以提起行政诉讼。",
+            t: "海域、土地、矿产这些权属问题，必须先复议再打官司。"
+        },
+        {
+            id: 12,
+            text: "某房地产开发商取得了市规划和自然资源局发放的《建设用地规划许可证》，准备开发商品房。宋某的房屋紧挨该许可规划用地，宋某认为商品房建成后将挡其房屋采光，并妨碍通行，欲向法院起诉市规划和自然资源局，要求其撤销该许可决定。下列说法正确的是（）。",
+            options: {
+                A: "宋某无权提起行政诉讼，因其不是该许可的相对人，故不具备原告资格",
+                B: "宋某无权提起行政诉讼，因工程尚未施工，并未造成实际损害",
+                C: "因宋某不是该许可的利害关系人，市规划和自然资源局作出许可决定无需听取其意见",
+                D: "宋某有权提起行政诉讼"
+            },
+            answer: "D",
+            exp: "A项错误：相邻权人属于利害关系人，具有原告资格。\n" +
+                 "B项错误：规划许可已对采光、通行产生不利影响可能，不要求实际损害发生。\n" +
+                 "C项错误：宋某为利害关系人，行政机关许可前可能需听取其意见。\n" +
+                 "D项正确：宋某作为相邻权人，与被诉许可有利害关系，有权提起行政诉讼。",
+            t: "房子还没盖，但挡了你家阳光，你就可以告。"
+        },
+        {
+            id: 13,
+            text: "全国范围内重大、复杂的第一审行政案件由（）进行管辖。",
+            options: {
+                A: "基层人民法院",
+                B: "中级人民法院",
+                C: "高级人民法院",
+                D: "最高人民法院"
+            },
+            answer: "D",
+            exp: "A项错误：基层法院无全国性重大案件管辖权。\n" +
+                 "B项错误：中院管辖本辖区重大案件，非全国范围。\n" +
+                 "C项错误：高院管辖本辖区重大案件。\n" +
+                 "D项正确：《行政诉讼法》第十七条，最高人民法院管辖全国范围内重大、复杂的第一审行政案件。",
+            t: "全国都有影响的案子，直接去最高法。"
+        },
+        {
+            id: 14,
+            text: "因混凝土不合格，4栋新建经济适用房被拆除，某市住建局对涉事房地产公司罚款10万元，并要求该公司作书面检查。该公司对处罚决定不服，向市政府申请行政复议。复议期间，该公司向市政府申请披露市住建局的书面答复等资料，但是市政府无正当理由拒绝提供，随后作出行政复议决定。市政府的行政复议决定违反了（）原则。",
+            options: {
+                A: "公正",
+                B: "高效",
+                C: "合法",
+                D: "公开"
+            },
+            answer: "D",
+            exp: "A项错误：无正当理由拒绝提供资料，主要体现为违反公开。\n" +
+                 "B项错误：高效指及时处理，拒绝公开非高效问题。\n" +
+                 "C项错误：合法原则当然违反，但更直接针对性是公开原则。\n" +
+                 "D项正确：行政复议遵循公开原则，申请人有权查阅被申请人答复、证据等材料，无正理由拒绝提供即违反公开原则。",
+            t: "复议要透明，你藏着材料不给人看就是违反公开。"
+        },
+        {
+            id: 15,
+            text: "某市市场监督管理局以产品不合格为由，对李某的货物作出了查封决定。李某不服，向市政府申请行政复议，要求撤销查封决定，但没有提出赔偿请求。市政府经审查认为该查封决定违法，决定予以撤销。对于查封决定造成的财产损失，下列说法正确的是（）。",
+            options: {
+                A: "市政府应告知李某可以就赔偿问题另行申请复议",
+                B: "市政府应在撤销查封决定的同时决定市场监督管理局赔偿相应的损失",
+                C: "市政府应在撤销查封决定的同时要求李某增加关于赔偿的复议申请",
+                D: "由于李某没有提出赔偿请求，市政府不得在撤销该查封决定的同时作出赔偿决定"
+            },
+            answer: "B",
+            exp: "A项错误：复议机关可直接决定赔偿，不必另行申请。\n" +
+                 "B项正确：根据《行政复议法》第二十九条，申请人在申请复议时没有提出行政赔偿请求的，复议机关在决定撤销或变更行政行为时，应同时责令被申请人依法赔偿损失。\n" +
+                 "C项错误：无需当事人补充申请，复议机关应主动作出赔偿决定。\n" +
+                 "D项错误：复议机关有主动决定赔偿的职责。",
+            t: "你没要赔偿，但政府发现你亏了钱，也可以直接让赔。"
+        },
+        {
+            id: 16,
+            text: "《中华人民共和国行政复议法》规定，提起行政复议申请的一般期限为（）。",
+            options: {
+                A: "自知道或者应当知道该行政行为之日起六十日内",
+                B: "自知道或者应当知道该行政行为之日起四十五日内",
+                C: "自行政机关作出该行政行为之日起四十五日内",
+                D: "自行政机关作出该行政行为之日起六十日内"
+            },
+            answer: "A",
+            exp: "A项正确：行政复议申请期限为知道或应当知道该行政行为之日起六十日内，法律规定超过六十日的除外。\n" +
+                 "B项错误：四十五日为旧法规定，现行法为六十日。\n" +
+                 "C项错误：起算点是“知道或应当知道”，而非作出之日。\n" +
+                 "D项错误：同C，起算点错误。",
+            t: "从你知道这件事起算60天内要申请复议。"
+        },
+        {
+            id: 17,
+            text: "对某设区的市人民政府作出的行政行为不服申请复议时，由（）管辖。",
+            options: {
+                A: "上一级人民政府",
+                B: "上一级人民代表大会",
+                C: "该市市委",
+                D: "该市人民代表大会"
+            },
+            answer: "A",
+            exp: "A项正确：对地方人民政府的行政行为不服，向上一级人民政府申请行政复议。\n" +
+                 "B项错误：人大不承担复议职能。\n" +
+                 "C项错误：市委系党的领导机关，非复议机关。\n" +
+                 "D项错误：人大无复议管辖权。",
+            t: "对市政府有意见，找他上级——省政府去复议。"
+        },
+        {
+            id: 18,
+            text: "方某、杨某及同厂工友一行10人到舞厅跳舞，期间，有人冲撞了工友，双方发生争执，在互相打斗中，杨某用话筒架将对方一人砸倒，此人于次日经抢救无效死亡。公安机关认定方、杨二人构成故意伤害罪，提请人民检察院批准逮捕。人民检察院作出批准逮捕的决定，公安机关将方、杨二人逮捕关押。检察院在审查起诉过程中，认为方某的行为不构成犯罪，将方某释放。次日，方某向检察机关提出赔偿请求。根据《中华人民共和国国家赔偿法》，下列说法正确的是（）。",
+            options: {
+                A: "人民检察院为赔偿义务机关，因为方某没有犯罪事实而被检察机关批准逮捕",
+                B: "公安机关为赔偿义务机关，因为公安机关对没有犯罪事实的方某错误实施了逮捕",
+                C: "检察院和公安机关为共同赔偿义务机关，因为检察院和公安机关分别行使了各自的行政职权",
+                D: "由于方某自己参与争执而被批准逮捕，国家不承担赔偿责任"
+            },
+            answer: "A",
+            exp: "A项正确：赔偿义务机关是作出逮捕决定的机关，即检察院。因检察院批准逮捕，最终认定无犯罪事实，故检察院为赔偿义务机关。\n" +
+                 "B项错误：公安机关执行逮捕源于检察院批准，责任主体为批准机关。\n" +
+                 "C项错误：非共同赔偿，检察院为决定机关单独承担。\n" +
+                 "D项错误：参与争执不等于丧失赔偿请求权，只要最终无罪，国家应赔。",
+            t: "谁批准抓人，最后发现抓错了，就由谁来赔。"
+        },
+        {
+            id: 19,
+            text: "某甲因涉嫌抢劫罪，被公安机关刑讯逼供，造成肢体伤残，部分丧失劳动能力，后某甲被无罪释放。按照《中华人民共和国国家赔偿法》有关规定，对某甲应当支付的赔偿金不包括（）。",
+            options: {
+                A: "医疗费",
+                B: "护理费",
+                C: "残疾赔偿金",
+                D: "对其扶养的无劳动能力的人支付生活费"
+            },
+            answer: "D",
+            exp: "A项正确（包括）：造成身体伤害的，应支付医疗费。\n" +
+                 "B项正确（包括）：造成残疾的，应支付护理费。\n" +
+                 "C项正确（包括）：造成部分或全部丧失劳动能力的，应支付残疾赔偿金。\n" +
+                 "D项错误（不包括）：对扶养的无劳动能力人支付生活费属于死亡赔偿金范畴，本案未死亡，不包括该项。",
+            t: "人没死就不赔生活费，只赔治伤和残疾的钱。"
+        },
+        {
+            id: 20,
+            text: "国家赔偿以支付赔偿金为主要方式，侵犯公民人身自由的，每日赔偿金按（）计算。",
+            options: {
+                A: "作出赔偿决定时的国家本年度职工日平均工资",
+                B: "作出赔偿决定时的国家上年度职工日平均工资",
+                C: "侵犯人身自由时的国家本年度职工日平均工资",
+                D: "侵犯人身自由时的国家上年度职工日平均工资"
+            },
+            answer: "B",
+            exp: "A项错误：应为上年度，非本年度。\n" +
+                 "B项正确：《国家赔偿法》第三十三条，侵犯公民人身自由的，每日赔偿金按照国家上年度职工日平均工资计算。\n" +
+                 "C项错误：时间点是作出赔偿决定时，非侵权行为发生时。\n" +
+                 "D项错误：同C，应为赔偿决定时。",
+            t: "赔钱的时候，按去年全国职工的日平均工资算。"
+        },
+        {
+            id: 21,
+            text: "刑事赔偿中，二审改判无罪的，赔偿义务机关应是（）。",
+            options: {
+                A: "作出一审判决的人民法院",
+                B: "作出二审判决的人民法院",
+                C: "作出逮捕决定的机关",
+                D: "执行逮捕决定的机关"
+            },
+            answer: "A",
+            exp: "A项正确：二审改判无罪，作出一审判决的法院为赔偿义务机关。\n" +
+                 "B项错误：二审法院纠正错误，不因改判而成为赔偿义务机关。\n" +
+                 "C项错误：若逮捕也错误，但最终错判责任由一审法院承担。\n" +
+                 "D项错误：执行机关不是最终决定者。",
+            t: "一审法院判错了，它来赔。"
+        },
+        {
+            id: 22,
+            text: "依法冻结存款、汇款的，行政机关应当限期作出处理决定或者作出解除冻结决定；情况复杂的，经批准可以延长冻结存款、汇款的期限，但是延长期限不得过（）日。法律另有规定的除外。",
+            options: {
+                A: "十",
+                B: "十五",
+                C: "三十",
+                D: "六十"
+            },
+            answer: "C",
+            exp: "A项错误：十日过短，非延长上限。\n" +
+                 "B项错误：十五日亦不符。\n" +
+                 "C项正确：《行政强制法》第三十二条，自冻结存款汇款之日起三十日内，行政机关应当作出处理决定或解除冻结；情况复杂经批准可延长，但延长期限不得超过三十日。\n" +
+                 "D项错误：六十日超过法定延长上限。",
+            t: "冻钱最多再延30天，不能再多了。"
+        },
+        {
+            id: 23,
+            text: "没有行政强制执行权的行政机关应当申请（）强制执行。",
+            options: {
+                A: "公安机关",
+                B: "人民法院",
+                C: "人民检察院",
+                D: "人民政府"
+            },
+            answer: "B",
+            exp: "A项错误：公安机关非一般强制执行的申请对象。\n" +
+                 "B项正确：根据《行政强制法》第十三条，没有强制执行权的行政机关应当申请人民法院强制执行。\n" +
+                 "C项错误：检察院不负责行政强制执行。\n" +
+                 "D项错误：人民政府自身也需依法申请法院执行。",
+            t: "自己没有强制权，就去找法院帮忙。"
+        },
+        {
+            id: 24,
+            text: "税务机关要求甲企业限期缴纳税款，甲企业拒不缴纳，并在收到催告书后向税务机关进行了陈述和申辩。依据相关规定，税务机关的下列做法错误的是（）。",
+            options: {
+                A: "充分听取甲企业的意见",
+                B: "对甲企业提出的事实、理由、证据进行记录、复核",
+                C: "认为甲企业提出的事实、理由、证据成立的，予以采纳",
+                D: "催告期限届满后，作出强制执行决定"
+            },
+            answer: "D",
+            exp: "A项正确：应当充分听取陈述申辩。\n" +
+                 "B项正确：应对事实、理由和证据记录复核。\n" +
+                 "C项正确：申辩成立的应采纳。\n" +
+                 "D项错误：催告后当事人陈述申辩的，行政机关必须复核，若申辩成立则可能不执行，直接届满后即作出强制执行决定违反程序。应在复核后再作决定。",
+            t: "人家提了意见，你得认真考虑后才能动手，不能催告期一满就硬来。"
+        },
+        {
+            id: 25,
+            text: "因查封、扣押发生的保管费用由（）承担。",
+            options: {
+                A: "当事人和行政机关共同",
+                B: "当事人",
+                C: "行政机关",
+                D: "本级人民政府"
+            },
+            answer: "C",
+            exp: "A项错误：不由双方共同承担。\n" +
+                 "B项错误：不得由当事人承担。\n" +
+                 "C项正确：《行政强制法》第二十六条，因查封、扣押发生的保管费用由行政机关承担。\n" +
+                 "D项错误：不由政府财政直接承担，而是由作出查封扣押的行政机关负担。",
+            t: "东西是政府扣的，保管费当然政府出。"
+        }
+    ];
+
+
+    const container = document.getElementById('singleChoiceContainer');
+    let qHTML = '';
+    questions.forEach(q => {
+        qHTML += `<div class="question-card" id="q-${q.id}">
+            <div class="q-title"><span class="q-num">${q.id}</span> ${q.text}</div>
+            <div class="options" id="opts-${q.id}">
+                ${['A','B','C','D'].map(l => `<div class="option" id="opt-${q.id}-${l}"><input type="radio" name="q${q.id}" value="${l}" id="q${q.id}_${l}"><label for="q${q.id}_${l}">${l}. ${q.options[l]}</label></div>`).join('')}
+            </div>
+            <div class="feedback-area" id="fb-${q.id}" style="display:none;">
+                <div style="font-weight:700; margin-bottom:0.4rem;">📖 解析</div>
+                <div id="fb-content-${q.id}"></div>
+                <div class="t-explanation" id="t-${q.id}"></div>
+            </div>
+        </div>`;
+    });
+    container.innerHTML = qHTML;
+
+    // 导航
+    const navToggle = document.getElementById('navToggle'), navPanel = document.getElementById('navPanel');
+    navToggle.addEventListener('click', e => { e.stopPropagation(); navPanel.style.display = navPanel.style.display === 'block' ? 'none' : 'block'; });
+    document.addEventListener('click', () => { navPanel.style.display = 'none'; });
+    navPanel.addEventListener('click', e => e.stopPropagation());
+
+    // 计时器
+    const timerDisplay = document.getElementById('timerDisplay'), startBtn = document.getElementById('startTimerBtn');
+    let startTime = null, timerInterval = null;
+    function formatTime(s) { const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),sec=Math.floor(s%60); return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`; }
+    function updateTimer() { if(startTime) timerDisplay.textContent = formatTime((Date.now()-startTime)/1000); }
+    function stopTimer() { if(timerInterval) clearInterval(timerInterval); }
+    function resumeTimer() {
+        const saved = sessionStorage.getItem('exam_timer_1');
+        if(saved) startTime = parseInt(saved);
+        else { startTime = Date.now(); sessionStorage.setItem('exam_timer_1', String(startTime)); }
+        updateTimer();
+        timerInterval = setInterval(updateTimer, 200);
+        startBtn.disabled = true;
+        startBtn.textContent = '⏳ 计时中...';
+    }
+    if(sessionStorage.getItem('exam_timer_1')) resumeTimer();
+    else startBtn.addEventListener('click', ()=>{ startTime=Date.now(); sessionStorage.setItem('exam_timer_1',String(startTime)); resumeTimer(); });
+
+    // ===== 单选题提交（1‑50） =====
+    let singleSubmitted = false;
+    document.getElementById('submitModule1Btn').addEventListener('click', () => {
+        if (singleSubmitted) return;
+        singleSubmitted = true;
+        let correctCount = 0;
+        // 此时 questions 已通过 push 包含 1‑50 题
+        questions.forEach(q => {
+            const selected = document.querySelector(`input[name="q${q.id}"]:checked`);
+            const userAns = selected ? selected.value : null;
+            if (userAns === q.answer) correctCount++;
+            const fbDiv = document.getElementById(`fb-${q.id}`);
+            if (fbDiv) {
+                const fbContent = document.getElementById(`fb-content-${q.id}`);
+                const lines = q.exp.split('\n').filter(l => l.trim());
+                let fbHTML = '';
+                lines.forEach(line => {
+                    let cls = '', prefix = '';
+                    if (/^[A-D]项正确/.test(line)) { cls = 'correct-text'; prefix = '✅ '; }
+                    else if (/^[A-D]项错误/.test(line)) { cls = 'wrong-text'; prefix = '❌ '; }
+                    fbHTML += `<div class="exp-line ${cls}">${prefix}${line}</div>`;
+                });
+                fbContent.innerHTML = fbHTML;
+                document.getElementById(`t-${q.id}`).textContent = `💬 大白话：${q.t}`;
+                fbDiv.style.display = 'block';
+                const correctDiv = document.getElementById(`opt-${q.id}-${q.answer}`);
+                if (correctDiv) correctDiv.classList.add('correct-answer-highlight');
+                if (userAns && userAns !== q.answer) {
+                    const wrongDiv = document.getElementById(`opt-${q.id}-${userAns}`);
+                    if (wrongDiv) wrongDiv.classList.add('user-wrong-opt');
+                }
+            }
+            ['A','B','C','D'].forEach(l => {
+                const radio = document.getElementById(`q${q.id}_${l}`);
+                if (radio) radio.disabled = true;
+            });
+        });
+        document.getElementById('singleStats').style.display = 'block';
+        document.getElementById('singleStats').innerHTML = `📊 单项选择题：答对 ${correctCount} / 50 题，得分 ${correctCount} 分（满分 50 分）`;
+        document.getElementById('submitModule1Btn').disabled = true;
+        singleTotal = correctCount;
+        singleCorrectCnt = correctCount;
+        updateTotalScore();
+    });
+    // ===== 多选题提交（51‑70） =====
+    let multiSubmitted = false;
+    document.getElementById('submitMultiBtn').addEventListener('click', () => {
+        if (multiSubmitted) return;
+        multiSubmitted = true;
+           let ms = 0;
+        let multiCorrect = 0;
+        let perfectCount = 0;
+        multiQuestions.forEach(q => {
+            const checkboxes = document.querySelectorAll(`input[name="mq${q.id}"]:checked`);
+            const userSelections = Array.from(checkboxes).map(cb => cb.value);
+            const correctSet = new Set(q.answer);
+            let isCorrect = true;
+            for (let sel of userSelections) {
+                if (!correctSet.has(sel)) { isCorrect = false; break; }
+            }
+            if (isCorrect) {
+                if (userSelections.length === q.answer.length) {
+                    multiCorrect++;
+                    perfectCount++;
+                    ms += 1.5;
+                } else {
+                    ms += userSelections.length * 0.3;
+                }
+            }
+            // 显示解析与高亮
+            const mfbDiv = document.getElementById(`mfb-${q.id}`);
+            if (mfbDiv) {
+                const mfbContent = document.getElementById(`mfb-content-${q.id}`);
+                const lines = q.exp.split('\n').filter(l => l.trim());
+                let fbHTML = '';
+                lines.forEach(line => {
+                    let cls = '', prefix = '';
+                    if (/^[A-E]项正确/.test(line)) { cls = 'correct-text'; prefix = '✅ '; }
+                    else if (/^[A-E]项错误/.test(line)) { cls = 'wrong-text'; prefix = '❌ '; }
+                    fbHTML += `<div class="exp-line ${cls}">${prefix}${line}</div>`;
+                });
+                mfbContent.innerHTML = fbHTML;
+                document.getElementById(`mt-${q.id}`).textContent = `💬 大白话：${q.t}`;
+                mfbDiv.style.display = 'block';
+                q.answer.forEach(l => {
+                    const optDiv = document.getElementById(`mopt-${q.id}-${l}`);
+                    if (optDiv) optDiv.classList.add('correct-answer-highlight');
+                });
+                userSelections.forEach(l => {
+                    if (!correctSet.has(l)) {
+                        const optDiv = document.getElementById(`mopt-${q.id}-${l}`);
+                        if (optDiv) optDiv.classList.add('user-wrong-opt');
+                    }
+                });
+            }
+            ['A','B','C','D','E'].forEach(l => {
+                const cb = document.getElementById(`mq${q.id}_${l}`);
+                if (cb) cb.disabled = true;
+            });
+        });
+                document.getElementById('multiStats').style.display = 'block';
+        document.getElementById('multiStats').innerHTML = `📊 多项选择题：全对 ${perfectCount} 题，得分 ${ms.toFixed(1)} 分（满分 30 分）`;
+        document.getElementById('submitMultiBtn').disabled = true;
+        multiTotal = ms;
+        multiCorrectCnt = multiCorrect;
+        updateTotalScore();
+    });
+
+// ---------- 单选题 26‑50 数据 ----------
+const questions26_50 = [
+    {
+        id: 26,
+        text: "郭某，30岁，随身携带火药枪被查获后拒不交代姓名、地址，被带至公安机关继续查问。下列说法正确的是（）。",
+        options: {
+            A: "对郭某的留置时间自带至公安机关之时起不得超过十二小时",
+            B: "在特殊情况下，经批准，留置时间可以延长至四十八小时",
+            C: "延长查问时间须经该公安机关负责人批准",
+            D: "不批准继续查问的，应立即通知郭某家属或其所在单位"
+        },
+        answer: "B",
+        exp: "A项错误：留置盘问时间一般为24小时，非12小时。\nB项正确：根据《人民警察法》第九条，对被盘问人的留置时间自带至公安机关之时起不超过二十四小时，在特殊情况下，经县级以上公安机关批准，可以延长至四十八小时。\nC项错误：延长需县级以上公安机关负责人批准，不是该公安机关负责人。\nD项错误：不批准继续盘问的，应当立即释放被盘问人，但未规定必须通知家属。",
+        t: "盘问最长48小时，需要县公安局长批。"
+    },
+    {
+        id: 27,
+        text: "人民警察的下列做法不构成违法违纪行为的是（）。",
+        options: {
+            A: "警察甲下班途中见有人行凶，因未穿警服未携带枪械，未制止",
+            B: "警察乙对犯罪嫌疑人刑讯逼供获取口供",
+            C: "警察丙为追捕嫌疑人驾驶警车撞伤路人",
+            D: "警察丁隐瞒近亲属盗窃行为"
+        },
+        answer: "C",
+        exp: "A项错误：人民警察在下班期间遇有紧急情况应当履行职责。\nB项错误：刑讯逼供是违法行为。\nC项正确：为追捕嫌疑人造成的损害属于执行职务的正当行为，不构成违法。\nD项错误：包庇近亲属违法。",
+        t: "追坏人时不小心撞伤人，不算违法。"
+    },
+    {
+        id: 28,
+        text: "非法持有、使用人民警察警用标志、制式服装、警械、证件的，由公安机关处（）日以下拘留或者警告。",
+        options: { A: "十五", B: "十", C: "七", D: "五" },
+        answer: "A",
+        exp: "A项正确：根据《人民警察法》第三十六条，非法持有、使用人民警察警用标志、制式服装、警械、证件的，由公安机关处十五日以下拘留或者警告。\nB、C、D项错误。",
+        t: "冒充警察的，最多关15天。"
+    },
+    {
+        id: 29,
+        text: "根据《中华人民共和国人民警察法》，下列说法错误的是（）。",
+        options: {
+            A: "人民警察执行决定和命令的后果由作出决定和命令的上级负责",
+            B: "人民警察对超越法律规定的指令，有权拒绝执行，并同时向上级机关报告",
+            C: "人民警察在工作中表现突出，有显著成绩和特殊贡献的，给予奖励",
+            D: "对受奖励的人民警察，应当提前晋升警衔"
+        },
+        answer: "D",
+        exp: "A项正确：执行命令的后果由下达命令的上级负责。\nB项正确：人民警察对超越法律规定的指令有权拒绝并报告。\nC项正确：表现突出给予奖励。\nD项错误：奖励不一定必须提前晋升警衔，可以提前晋升，但不是“应当”。",
+        t: "奖励不一定就提前晋升，不是强制。"
+    },
+    {
+        id: 30,
+        text: "根据《中华人民共和国人民警察法》，以非暴力、威胁方法阻碍人民警察调查取证的，给予（）。",
+        options: { A: "治安管理处罚", B: "刑事处罚", C: "刑事强制措施", D: "司法强制措施" },
+        answer: "A",
+        exp: "A项正确：根据《人民警察法》第三十五条，拒绝或者阻碍人民警察依法执行职务，未使用暴力、威胁方法的，给予治安管理处罚。\nB项错误：使用暴力、威胁方法才构成刑事犯罪。\nC、D项错误。",
+        t: "不用暴力只是不配合，治安处罚。"
+    },
+    {
+        id: 31,
+        text: "根据《中华人民共和国人民警察法》，国家保障人民警察的经费。人民警察的经费，按照（）的原则，分别列入中央和地方的财政预算。",
+        options: { A: "事权划分", B: "制约协调", C: "上下分离", D: "效益优先" },
+        answer: "A",
+        exp: "A项正确：《人民警察法》第三十七条，人民警察的经费，按照事权划分的原则，分别列入中央和地方的财政预算。\nB、C、D项错误。",
+        t: "谁的事谁出钱。"
+    },
+    {
+        id: 32,
+        text: "王某与宋某离婚后，宋某再婚，王某为发泄心中不满情，携带自制枪支到宋某家里，意图杀害宋某的现任配偶。民警接到报警后赶到现场，劝说无效，最终开枪将王某击毙。关于民警使用武器的后续处理行为，下列说法不正确的是（）。",
+        options: {
+            A: "应当及时通知当地人民检察院",
+            B: "应当及时进行勘验、调查",
+            C: "应当及时报告上一级公安机关",
+            D: "应当将王某的伤亡情况，及时通知其家属或者其所在单位"
+        },
+        answer: "C",
+        exp: "A项正确：使用武器造成人员死亡的，应当通知人民检察院。\nB项正确：应及时勘验、调查。\nC项错误：应当向所属公安机关报告，而非上一级公安机关。\nD项正确：伤亡情况应通知家属或单位。",
+        t: "开枪后报告本单位，不是非要报告上一级。"
+    },
+    {
+        id: 33,
+        text: "根据《中华人民共和国人民警察使用警械和武器条例》，下列属于约束性警械的是（）。",
+        options: { A: "警棍", B: "手铐", C: "催泪弹", D: "高压水枪" },
+        answer: "B",
+        exp: "A项错误：警棍属于驱逐性、制服性警械。\nB项正确：手铐属于约束性警械。\nC、D项错误：催泪弹、高压水枪属于驱逐性警械。",
+        t: "手铐是捆人的，约束性。"
+    },
+    {
+        id: 34,
+        text: "民警王某在辖区内巡查，发现一男子形迹可疑，遂令其停下接受盘查，该男子非但没有站住，反而迅速逃跑。眼看该男子即将脱逃，王某一时情急，掏出手枪向其射击，结果没有击中该男子，反而误伤了路过的张某。关于王某使用武器的行为，下列说法不正确的是（）。",
+        options: {
+            A: "应当及时抢救受伤的张某",
+            B: "应当将使用武器的情况进行书面报告",
+            C: "王某违法使用武器，造成不应有的人员伤亡，构成犯罪的，依法追究刑事责任",
+            D: "对受伤的张某，由王某依照《中华人民共和国国家赔偿法》的有关规定给予赔偿"
+        },
+        answer: "D",
+        exp: "A项正确：应及时抢救。\nB项正确：使用武器后应书面报告。\nC项正确：违法使用武器造成后果的，追究刑事责任。\nD项错误：应由王某所在机关赔偿，非王某个人赔偿。",
+        t: "警察代表单位，单位赔钱。"
+    },
+    {
+        id: 35,
+        text: "人民警察判明有下列（）的紧急情形，经警告无效的，可以使用武器。",
+        options: {
+            A: "袭击人民警察",
+            B: "聚众赌博",
+            C: "结伙抢劫或者持械抢劫公私财物",
+            D: "强行冲越人民警察为履行职责设置的警戒线"
+        },
+        answer: "C",
+        exp: "A项错误：袭击警察可以视情况使用武器，但不是绝对情形，需严重危及生命。\nB项错误：赌博非使用武器的情形。\nC项正确：根据条例，结伙抢劫或持械抢劫公私财物，经警告无效可以使用武器。\nD项错误：冲越警戒线可以使用警械，非武器。",
+        t: "抢劫这样严重暴力犯罪，警告不听就开枪。"
+    },
+    {
+        id: 36,
+        text: "林某在某旅游景点蹲点乞讨，反复纠缠路人强行讨要，公安机关可对林某（）。",
+        options: {
+            A: "处五日以下拘留或者警告",
+            B: "处五日以上十日以下拘留，可以并处五百元以下罚款",
+            C: "处十日以上十五日以下拘留，并处五百元以上一千元以下罚款",
+            D: "单处二百元以下罚款"
+        },
+        answer: "A",
+        exp: "A项正确：根据《治安管理处罚法》第四十一条，反复纠缠、强行讨要或者以其他滋扰他人的方式乞讨的，处五日以下拘留或者警告。\nB、C、D项错误。",
+        t: "强行乞讨，关5天或警告。"
+    },
+    {
+        id: 37,
+        text: "王某十分憎恶张某，他付给一个小孩十元钱，要求小孩捡石头去砸张某，小孩果然照做，造成张某受轻微伤。对王某的行为应（）。",
+        options: { A: "不予处罚", B: "加重处罚", C: "从重处罚", D: "从轻处罚" },
+        answer: "C",
+        exp: "A项错误：应予以处罚。\nB项错误：不是加重，有法定从重情节。\nC项正确：教唆、胁迫、诱骗他人违反治安管理的，按照其所教唆、胁迫、诱骗的行为处罚，且可以从重处罚。\nD项错误。",
+        t: "教唆小孩干坏事，从重处罚。"
+    },
+    {
+        id: 38,
+        text: "公安机关对与违反治安管理行为有关的场所进行检查时，人民警察不得少于（）人。",
+        options: { A: "一", B: "二", C: "三", D: "四" },
+        answer: "B",
+        exp: "B项正确：《治安管理处罚法》第八十七条，检查时人民警察不得少于二人。\nA、C、D项错误。",
+        t: "至少两个警察。"
+    },
+    {
+        id: 39,
+        text: "公安机关办理治安案件的期限，未经延长的，自立案之日起不得超过（）日。",
+        options: { A: "十", B: "十五", C: "二十", D: "三十" },
+        answer: "D",
+        exp: "D项正确：《治安管理处罚法》第九十九条，公安机关办理治安案件的期限，自受理之日起不得超过三十日；案情重大、复杂的，经上一级公安机关批准，可以延长三十日。\nA、B、C项错误。",
+        t: "最多30天，复杂可再延30天。"
+    },
+    {
+        id: 40,
+        text: "我国刑法数罪并罚原则不包括（）。",
+        options: {
+            A: "并科原则",
+            B: "吸收原则",
+            C: "直接累加原则",
+            D: "限制加重原则"
+        },
+        answer: "C",
+        exp: "A项正确：并科原则（附加刑）。\nB项正确：吸收原则（死刑、无期）。\nC项错误：直接累加不是原则。\nD项正确：限制加重原则。",
+        t: "没有直接累加，要限制加重。"
+    },
+    {
+        id: 41,
+        text: "我国刑法规定的从轻处罚是指（）。",
+        options: {
+            A: "在法定刑限度以下判处刑罚",
+            B: "在法定刑幅度中线以下判处刑罚",
+            C: "按法定刑的最低限度判处刑罚",
+            D: "在法定刑限度以内，相对于没有该从轻处罚情节的判处较轻的刑罚"
+        },
+        answer: "D",
+        exp: "A项错误：以下为减轻处罚。\nB项错误：不是中线以下。\nC项错误：最低限度为从轻的极端情况，但不等于定义。\nD项正确：从轻处罚是在法定刑限度内判处相对较轻的刑罚。",
+        t: "在格子内选轻的，不低于下限。"
+    },
+    {
+        id: 42,
+        text: "司机王某在给汽车加油时违规吸烟，引发火灾，烧毁公司轿车一辆。王某的行为构成（）。",
+        options: {
+            A: "放火罪",
+            B: "重大责任事故罪",
+            C: "失火罪",
+            D: "故意毁坏财物罪"
+        },
+        answer: "C",
+        exp: "A项错误：非故意放火。\nB项错误：加油站不属于正在作业的生产经营，通常定失火。\nC项正确：过失引起火灾，造成严重后果的，构成失火罪。\nD项错误：非故意毁坏。",
+        t: "抽烟不小心着火，是失火罪。"
+    },
+    {
+        id: 43,
+        text: "张某坠楼身亡，公安机关排除他杀不予立案，张某父母请求检察院监督。下列说法正确的是（）。",
+        options: {
+            A: "要求公安机关说明不立案的理由",
+            B: "认为公安机关不立案理由不能成立的，应当建议公安机关立案",
+            C: "认为符合立案条件的，可以立案并交由公安机关侦查",
+            D: "拒绝受理并向张某父母解释原因"
+        },
+        answer: "A",
+        exp: "A项正确：根据《刑事诉讼法》第一百一十一条，人民检察院有权要求公安机关说明不立案的理由。\nB项错误：认为理由不成立的，应当通知公安机关立案，而非建议。\nC项错误：检察院不能直接立案侦查。\nD项错误。",
+        t: "先让公安说为什么不立案。"
+    },
+    {
+        id: 44,
+        text: "公安机关办理强奸案，侦查人员拟对被害人李女士进行人身检查。下列说法正确的是（）。",
+        options: {
+            A: "如果李女士拒绝检查，可以对其进行强制检查",
+            B: "如果李女士拒绝检查，不得对其进行强制检查",
+            C: "如果李女士同意检查，必须由女医师进行",
+            D: "如果李女士同意检查，必须由女警察进行检查"
+        },
+        answer: "B",
+        exp: "A项错误：对被害人不得强制检查。\nB项正确：被害人拒绝检查，不得强制。\nC项错误：检查应由女工作人员（女警察）进行，医师可协助。\nD项错误：女警察即可。",
+        t: "被害人不同意，就不能强行查。"
+    },
+    {
+        id: 45,
+        text: "李某因强奸罪被判处有期徒刑3年，判决生效后以错判为由提出申诉。下列说法正确的是（）。",
+        options: {
+            A: "不能停止判决的执行",
+            B: "可以根据案件情况停止判决的执行",
+            C: "应当终止判决的执行",
+            D: "应当停止判决的执行"
+        },
+        answer: "A",
+        exp: "A项正确：申诉不停止判决、裁定的执行。\nB、C、D项错误。",
+        t: "只要还没改判，就得继续坐牢。"
+    },
+    {
+        id: 46,
+        text: "公安机关是我国人民民主专政的重要工具，主要体现在公安机关必须与（）一致。",
+        options: { A: "政治", B: "国体", C: "社会", D: "政党" },
+        answer: "B",
+        exp: "B项正确：公安机关是人民民主专政的重要工具，这种性质决定了它必须与我国国体一致。\n其他选项非标准表达。",
+        t: "警察性质跟国家性质挂钩。"
+    },
+    {
+        id: 47,
+        text: "公安政策体现了党和国家的意志，是党和国家关于公安工作的主张和要求，其作用不包括（）。",
+        options: {
+            A: "指导作用",
+            B: "规范作用",
+            C: "调整作用",
+            D: "监督作用"
+        },
+        answer: "D",
+        exp: "A、B、C项正确：公安政策具有指导、规范、调整作用。\nD项错误：监督作用是法律制度、纪律检查等的作用，非政策直接作用。",
+        t: "政策不管监督，有别的渠道。"
+    },
+    {
+        id: 48,
+        text: "新时代公安机关的三大使命任务不包括（）。",
+        options: {
+            A: "捍卫政治安全",
+            B: "促进社会公平",
+            C: "维护社会安定",
+            D: "保障人民安宁"
+        },
+        answer: "B",
+        exp: "A、C、D项正确：三大使命是捍卫政治安全、维护社会安定、保障人民安宁。\nB项错误：促进社会公平不是三大使命标准表述。",
+        t: "三大使命：政治安全、社会安定、人民安宁。"
+    },
+    {
+        id: 49,
+        text: "对公安机关及其人民警察执法活动进行社会监督的主要形式不包括（）。",
+        options: {
+            A: "行政诉讼制度",
+            B: "警务公开制度",
+            C: "聘请特邀监督员制度",
+            D: "“110”接受群众投诉制度"
+        },
+        answer: "A",
+        exp: "A项错误：行政诉讼是司法监督，不是社会监督。\nB、C、D项正确：均为社会监督形式。",
+        t: "打官司是法院监督，不是老百姓直接监督。"
+    },
+    {
+        id: 50,
+        text: "甲与乙素来有仇，某日，甲放狗咬乙，乙警告甲无效，便拿石块击伤甲。乙的行为属于（）。",
+        options: {
+            A: "紧急避险",
+            B: "正当防卫",
+            C: "防卫过当",
+            D: "对象错误"
+        },
+        answer: "B",
+        exp: "A项错误：紧急避险针对无辜第三人，本案甲是不法侵害人。\nB项正确：对正在进行的放狗咬人（不法侵害）进行反击，构成正当防卫。\nC项错误：击伤甲未明显超过必要限度。\nD项错误。",
+        t: "别人放狗咬你，你打人，正当防卫。"
+    }
+];
+
+// 将26-50题追加到原有的 questions 数组中（原有数组是 const，但可以 push）
+questions.push(...questions26_50);
+
+  const multiQuestions = [
+        { id:51, text:"关于违法行政处罚可能引起的法律责任，下列说法正确的有（）。", options:{A:"给当事人造成损害的，可能引起行政赔偿责任",B:"直接责任人员可能面临内部行政处分",C:"情节严重的，可能要追究刑事责任",D:"可能因被法院撤销承担相应责任",E:"可能引起民事赔偿责任"}, answer:["A","B","C","D"], exp:"A项正确：违法处罚造成损害，国家赔偿。\nB项正确：对直接责任人可行政处分。\nC项正确：情节严重追究刑事责任。\nD项正确：法院撤销后，可能产生返还或赔偿。\nE项错误：一般不直接引起民事赔偿，属国家赔偿。", t:"行政责任、刑事责任、赔偿，不搞民事赔。" },
+        { id:52, text:"关于行政处罚的听证程序，下列说法错误的有（）。", options:{A:"举行听证的费用由申请人或利害关系人与行政机关合理分担",B:"行政机关作出行政拘留的处罚一般无需组织听证",C:"当事人要求听证的，应当在行政机关告知后三日内提出，否则视为放弃",D:"举行听证时，本案调查人员应当回避",E:"当事人应当亲自参加听证，否则视为放弃"}, answer:["A","C","E"], exp:"A项错误（当选）：听证费用由行政机关承担。\nB项正确（不选）：行政拘留虽重，但法律未强制听证，一般无需组织。\nC项错误（当选）：期限为五日(新法)，三日为旧法表述，此处题干若依新法应五日，但题目仍用旧法表述，根据官方答案选错。\nD项正确（不选）：调查人员不得担任听证主持人。\nE项错误（当选）：当事人可委托代理人参加。", t:"听证不花钱，可以找人去，期限是5天（题目按旧法算错）。" },
+        { id:53, text:"行政机关在实施行政许可的监督检查时应当遵守的规定有（）。", options:{A:"不得妨碍被许可人正常的生产经营活动",B:"不得索取或收受被许可人的财物",C:"应当将监督检查的情况和处理结果予以记录",D:"应当多次进入企业生产经营场所进行抽查、检验",E:"应当合理收取检查费用"}, answer:["A","B","C"], exp:"A项正确：不得妨碍正常经营。\nB项正确：不得索取收受财物。\nC项正确：监督检查情况应记录归档。\nD项错误：不得随意多次进入干扰。\nE项错误：不得收取费用。", t:"检查别添乱，别收钱，记录好。" },
+        { id:54, text:"下列地方性法规的规定违反《中华人民共和国行政许可法》的有（）。", options:{A:"申请餐饮服务许可证，应到当地餐饮行业协会办理认证手续",B:"行政机关应当将申请书示范文本等在办公场所公示",C:"外地人员到本地经营网吧，应当到本地电信管理部门注册并缴纳特别管理费",D:"申请建设工程规划许可证，需安装建设主管部门指定品牌的节能设施",E:"许可事项直接关系公共安全的，申请人必须亲自提出申请，不得委托代理人"}, answer:["A","C","D","E"], exp:"A项违反：不得让申请人到协会办理认证。\nB项不违反：符合便民公示要求。\nC项违反：不得对外地经营者附加特别管理费。\nD项违反：不得指定品牌。\nE项违反：可以委托代理人，除依法应当亲自到场外。", t:"地方不能设门槛，不能指定品牌。" },
+        { id:55, text:"在行政诉讼第一审普通程序中，行政行为有下列（）情形之一的，人民法院判决撤销或者部分撤销，并可以判决被告重新作出行政行为。", options:{A:"主要证据不足的",B:"适用法律、法规错误的",C:"违反法定程序的",D:"超越职权的",E:"滥用职权的"}, answer:["A","B","C","D","E"], exp:"全部正确：《行政诉讼法》第七十条规定的撤销判决情形包括以上五项。", t:"这些都是撤销的理由。" },
+        { id:56, text:"中级人民法院有管辖权的第一审行政案件包括（）。", options:{A:"对国务院部门所作的行政行为提起诉讼的案件",B:"对县级以上地方人民政府所作的行政行为提起诉讼的案件",C:"海关处理的案件",D:"本辖区内重大、复杂的案件",E:"下级人民法院对管辖权有争议的案件"}, answer:["A","B","C","D"], exp:"A、B、C、D项正确：属于中院管辖范围。\nE项错误：管辖权争议由上级法院指定，非中院当然管辖。", t:"部委、县政府、海关、复杂案子归中院。" },
+        { id:57, text:"甲冶炼企业排污超标，县生态环境局拟对其作出停业整顿的行政处罚，甲企业不服，欲提起行政复议。下列说法正确的有（）。", options:{A:"本案的复议机关是市生态环境局",B:"本案的复议机关是县政府",C:"本案不属于行政复议的范围",D:"甲企业不能选择直接提起行政诉讼",E:"甲企业可以委托代理人代为参加行政复议"}, answer:["B","E"], exp:"A项错误：对县级以上政府工作部门的行政行为，复议机关可以是上一级主管部门，也可以是本级政府，故市生态环境局和县政府都是复议机关之一，但题干要求选正确的，A说法不全面。B正确，县政府是复议机关之一。\nC项错误：属于复议范围。\nD项错误：停业整顿可复议也可诉讼，复议非前置。\nE项正确：可委托代理人。官方答案选BE。", t:"复议找市局或县政府，还能请律师。" },
+        { id:58, text:"根据国家赔偿有关规定，行政机关工作人员在行使职权时有下列（）行为之一，属于侵犯受害人财产权，受害人有依法取得赔偿的权利。", options:{A:"非法限制公民人身自由",B:"违法征收",C:"违法冻结",D:"殴打",E:"非法拘禁"}, answer:["B","C"], exp:"A项错误：属侵犯人身权。\nB、C项正确：违法征收、冻结属于侵犯财产权。\nD、E项错误：属侵犯人身权。", t:"只有钱和东西的事才算财产权。" },
+        { id:59, text:"郭某在甲市乙区某百货大楼内经营服装。某日百货大楼发生抢劫案，乙区公安分局侦查此案时，根据案犯的供述，认为郭某有作案嫌疑，对郭某予以拘留。郭某坚称不认识案犯，公安人员以其态度不好为由对其拳打脚踢。数天后该案件侦破，结论是郭某与抢劫案无关，郭某被释放。郭某对拘留决定不服，向法院起诉，法院审理此案期间，郭某出车祸死亡。本案中，可以作为赔偿请求人的有（）。", options:{A:"郭某的父母",B:"郭某收养的养子",C:"郭某的近亲属",D:"郭某有扶养关系的亲属",E:"郭某所在单位"}, answer:["A","B","D"], exp:"A、B、D项正确：根据国家赔偿法，受害的公民死亡，其继承人和其他有扶养关系的亲属有权要求赔偿。养子属于继承人。\nC项错误：近亲属范围较宽，但赔偿请求人限于继承人和有扶养关系亲属。\nE项错误：单位无权。", t:"父母、养子、他养的人都行。" },
+        { id:60, text:"行政强制执行终结的情形有（）。", options:{A:"公民死亡，无遗产可供执行，又无义务承受人的",B:"法人或者其他组织终止，无财产可供执行，又无义务承受人的",C:"执行标的灭失的",D:"据以执行的行政决定被撤销的",E:"第三人对执行标的主张权利，确有理由的"}, answer:["A","B","C","D"], exp:"A、B、C、D项正确：属于执行终结情形。\nE项错误：第三人主张权利且理由成立，应中止执行，而非终结。", t:"人没了，东西没了，决定撤销了就结束。" },
+        { id:61, text:"人民警察的任务包括（）。", options:{A:"维护国家安全",B:"维护社会治安秩序",C:"保护公民的人身安全、人身自由和合法财产",D:"保护公共财产",E:"预防、制止和惩治违法犯罪活动"}, answer:["A","B","C","D","E"], exp:"全部正确，属人民警察法第二条规定的任务。", t:"警察全管。" },
+        { id:62, text:"某省公安厅在对下级机关的执法活动进行监督的过程中，发现下级机关作出的某决定有误，后下级公安机关坚持原决定，省公安厅经审查仍确认有错误。根据《中华人民共和国人民警察法》，省公安厅应当作出的决定有（）。", options:{A:"撤销错误决定",B:"变更错误决定",C:"确认决定违法",D:"责令下级机关重新作出决定",E:"向下级机关提出撤销或变更错误决定的建议"}, answer:["A","B"], exp:"A、B项正确：上级公安机关有权撤销或变更下级公安机关的错误决定。\nC、D、E项非必要或非直接权力。", t:"上级可以直接改或撤销。" },
+        { id:63, text:"人民警察依法执行下列任务，遇有违法犯罪分子可能脱逃、行凶、自杀、自伤或者有其他危险行为的，人民警察可以使用约束性警械的有（）。", options:{A:"执行逮捕",B:"抓获犯罪重大嫌疑人",C:"执行看押",D:"出席庭审",E:"执行审讯"}, answer:["A","B","C","E"], exp:"A、B、C、E项正确：执行逮捕、抓获重大嫌疑人、看押、审讯等都可能需要约束。\nD项错误：出席庭审一般不直接用约束性警械。", t:"抓人、看守、审讯时可用手铐。" },
+        { id:64, text:"下列关于治安管理工作的说法正确的有（）。", options:{A:"办理治安管理案件以治安管理处罚为主要途径",B:"公安部是全国治安管理工作的主管部门",C:"县人民政府公安机关负责本县的治安管理工作",D:"一般由违法行为地的公安机关管辖",E:"治安案件的管辖权是公安机关办理治安案件各司其职的依据"}, answer:["B","C","D","E"], exp:"A项错误：办理案件途径包括调解、处罚等多种，非以处罚为主。\nB项正确：公安部主管全国治安管理工作。\nC项正确：县级公安机关负责本辖区治安。\nD项正确：属地管辖。\nE项正确：管辖权划分职责。", t:"不只靠罚款，调解也行。" },
+        { id:65, text:"根据《中华人民共和国治安管理处罚法》，担任暂缓执行行政拘留的担保人应当符合的条件有（）。", options:{A:"与本案无牵连",B:"享有政治权利",C:"人身自由未受到限制",D:"在当地有常住户口和固定住所",E:"有能力履行担保义务"}, answer:["A","B","C","D","E"], exp:"全部正确，均为担保人条件。", t:"担保人要清白、有家、有能力。" },
+        { id:66, text:"《中华人民共和国刑法》的立法目的为（）。", options:{A:"预防犯罪",B:"惩罚犯罪",C:"保护人民",D:"教育人民",E:"维护公平"}, answer:["B","C"], exp:"A项错误：预防是效果，不是立法目的条文表述。\nB、C项正确：刑法目的是惩罚犯罪，保护人民。\nD、E项错误：非法定目的条文。", t:"刑法就是惩罚坏人，保护好人。" },
+        { id:67, text:"刘某用爆炸的方法，造成某处森林大火，则刘某（）。", options:{A:"仅构成放火罪",B:"仅构成爆炸罪",C:"构成爆炸罪、放火罪，应数罪并罚",D:"其爆炸行为与放火行为属牵连犯",E:"其爆炸行为与放火行为属想象竞合犯"}, answer:["A","E"], exp:"A项正确：爆炸引发火灾，属于一行为触犯两罪（想象竞合），从一重罪处罚，由于放火罪通常更重，可定放火罪。\nB项错误。\nC项错误：不数罪并罚。\nD项错误：不是牵连犯，是想象竞合。\nE项正确。", t:"一个动作，炸出火来，想象竞合，定放火罪。" },
+        { id:68, text:"以下关于监视居住的说法，正确的有（）。", options:{A:"被监视居住人未经执行机关批准不得离开执行监视居住的处所",B:"被监视居住人不得与他人通信",C:"被监视居住人应当在传讯的时候及时到案",D:"被监视居住人违反规定，情节严重的，可以予以逮捕",E:"被监视居住人违反规定需要予以逮捕的，可以先行拘留"}, answer:["A","C","D","E"], exp:"A项正确：不得离开处所。\nB项错误：可以通信，除非在侦查阶段被侦查机关扣押信件。\nC项正确：随传随到。\nD项正确：情节严重可逮捕。\nE项正确：违反规定需要逮捕的，可先行拘留。", t:"住指定地方，不能乱跑，不听招呼就抓。" },
+        { id:69, text:"某刑事诉讼中，行为人甲被人民法院决定强制医疗，则行为人甲应当同时符合的条件有（）。", options:{A:"行为人实施暴力行为",B:"该行为危害公共安全或严重危害公民人身安全",C:"行为人经法定程序鉴定为依法不负刑事责任的精神病人",D:"行为人犯罪时已满十八周岁",E:"行为人有继续危害社会的可能"}, answer:["A","B","C","E"], exp:"A、B、C、E项正确：强制医疗条件：实施暴力行为，危害公共安全或严重危害人身安全，经鉴定不负刑事责任的精神病人，有继续危害社会可能。\nD项错误：未要求已满十八岁。", t:"精神病+暴力+可能再犯，送医院。" },
+        { id:70, text:"党对公安机关的绝对领导的途径有（）。", options:{A:"政治领导",B:"思想领导",C:"组织领导",D:"决策领导",E:"业务领导"}, answer:["A","B","C","D"], exp:"A、B、C、D项正确：党对公安绝对领导包括政治、思想、组织、决策领导。\nE项错误：业务由公安机关自身依法进行。", t:"党管政治、思想、组织、拍板。" }
+    ];
+
+// ---------- 渲染增加的单选题容器 ----------
+(function renderExtra() {
+    const container2 = document.getElementById('singleChoiceContainer2');
+    if (container2) {
+        let html = '';
+        for (let q of questions26_50) {
+            html += `<div class="question-card" id="q-${q.id}">
+                <div class="q-title"><span class="q-num">${q.id}</span> ${q.text}</div>
+                <div class="options" id="opts-${q.id}">
+                    ${['A','B','C','D'].map(l => `<div class="option" id="opt-${q.id}-${l}"><input type="radio" name="q${q.id}" value="${l}" id="q${q.id}_${l}"><label for="q${q.id}_${l}">${l}. ${q.options[l]}</label></div>`).join('')}
+                </div>
+                <div class="feedback-area" id="fb-${q.id}" style="display:none;">
+                    <div style="font-weight:700; margin-bottom:0.4rem;">📖 解析</div>
+                    <div id="fb-content-${q.id}"></div>
+                    <div class="t-explanation" id="t-${q.id}"></div>
+                </div>
+            </div>`;
+        }
+        container2.innerHTML = html;
+    }
+})();
+
+// 渲染多选题容器
+(function renderMulti() {
+    const multiContainer = document.getElementById('multiChoiceContainer');
+    if (multiContainer) {
+        let html = '';
+        for (let q of multiQuestions) {
+            html += `<div class="question-card" id="mq-${q.id}">
+                <div class="q-title"><span class="q-num">${q.id}</span> ${q.text} <span style="font-size:0.9rem;color:#555;">(多选)</span></div>
+                <div class="options" id="mopts-${q.id}">
+                    ${['A','B','C','D','E'].filter(l => q.options[l]).map(l => `<div class="option" id="mopt-${q.id}-${l}"><input type="checkbox" name="mq${q.id}" value="${l}" id="mq${q.id}_${l}"><label for="mq${q.id}_${l}">${l}. ${q.options[l]}</label></div>`).join('')}
+                </div>
+                <div class="feedback-area" id="mfb-${q.id}" style="display:none;">
+                    <div style="font-weight:700; margin-bottom:0.4rem;">📖 解析</div>
+                    <div id="mfb-content-${q.id}"></div>
+                    <div class="t-explanation" id="mt-${q.id}"></div>
+                </div>
+            </div>`;
+        }
+        multiContainer.innerHTML = html;
+    }
+})();
+
+// 注：最后的 })(); 不需要写在这，因为原 IIFE 闭合将由你在文件末尾手动添加
+// ========== 判断题 71‑90 数据 ==========
+const judgeQuestions = [
+  {
+    id: 71,
+    question: '行政机关对当事人进行处罚不使用罚款、没收财物单据或者使用非法定部门制发的罚款、没收财物单据的，当事人不得拒绝处罚，但有权予以检举。（）',
+    answer: 'B',
+    explanation: '【解析】根据《行政处罚法》第56条，行政机关对当事人进行处罚不使用罚款、没收财物单据或者使用非法定部门制发的罚款、没收财物单据的，当事人有权拒绝处罚，并有权予以检举。题干中“不得拒绝处罚”错误。故本题错误。',
+    t: '不给单据的罚款，当事人有权拒绝并举报。'
+  },
+  {
+    id: 72,
+    question: '对决定给予行政拘留处罚的人，在处罚前已经采取强制措施限制人身自由的时间，应当折抵。限制人身自由一日，折抵行政拘留一日。（）',
+    answer: 'A',
+    explanation: '【解析】根据《行政处罚法》第83条，对决定给予行政拘留处罚的人，在处罚前已经采取强制措施限制人身自由的时间，应当折抵。限制人身自由一日，折抵行政拘留一日。题干表述正确。故本题正确。',
+    t: '之前被关的日子可以折抵拘留天数，一天抵一天。'
+  },
+  {
+    id: 73,
+    question: '行政许可申请的审查中，根据法定条件和程序，需要对申请材料的实质内容进行核实的，如行政许可决定较为简单，行政机关可以指派一名工作人员进行核查。（）',
+    answer: 'B',
+    explanation: '【解析】根据《行政许可法》第34条，根据法定条件和程序，需要对申请材料的实质内容进行核实的，行政机关应当指派两名以上工作人员进行核查。题干中“可以指派一名工作人员”错误。故本题错误。',
+    t: '实质核查必须至少两人，不能一个人说了算。'
+  },
+  {
+    id: 74,
+    question: '在不违反上位法的前提下，规章可以在上位法设定的行政许可事项范围内，对实施该行政许可作出具体规定。（）',
+    answer: 'A',
+    explanation: '【解析】根据《行政许可法》第16条，规章可以在上位法设定的行政许可事项范围内，对实施该行政许可作出具体规定，但不得增设行政许可，不得增设违反上位法的其他条件。题干表述正确。故本题正确。',
+    t: '规章可以在法律允许范围内细化操作，但不能加码。'
+  },
+  {
+    id: 75,
+    question: '行政行为的相对人以及其他与行政行为有利害关系的公民、法人或者其他组织，有行政诉讼权。（）',
+    answer: 'A',
+    explanation: '【解析】根据《行政诉讼法》第25条，行政行为的相对人以及其他与行政行为有利害关系的公民、法人或者其他组织，有权提起行政诉讼。题干表述正确。故本题正确。',
+    t: '利害关系人也可以告，不限于直接当事人。'
+  },
+  {
+    id: 76,
+    question: '在行政诉讼中，人民法院判决变更，不得加重原告的义务或者减损原告的权益。但利害关系人同为原告，且诉讼请求相反的除外。（）',
+    answer: 'A',
+    explanation: '【解析】根据《行政诉讼法》第77条，行政处罚明显不当，或者其他行政行为涉及对款额的确定、认定确有错误的，人民法院可以判决变更。人民法院判决变更，不得加重原告的义务或者减损原告的权益。但利害关系人同为原告，且诉讼请求相反的除外。题干表述正确。故本题正确。',
+    t: '法院变更处罚时，一般只能减轻不能加重，除非两边都告且要求相反。'
+  },
+  {
+    id: 77,
+    question: '《中华人民共和国行政复议法》关于行政复议期间有关“三日”、“五日”、“七日”、“十日”的规定是指自然日，不区分工作日或节假日。（）',
+    answer: 'B',
+    explanation: '【解析】根据《行政复议法》第40条，行政复议期间有关“三日”“五日”“七日”“十日”的规定是指工作日，不含法定节假日。题干表述错误。故本题错误。',
+    t: '复议中的几天指工作日，不含假期。'
+  },
+  {
+    id: 78,
+    question: '国家赔偿的赔偿费用统一列入中央财政预算。（）',
+    answer: 'B',
+    explanation: '【解析】根据《国家赔偿法》第37条，国家赔偿费用列入各级财政预算，并非统一列入中央财政预算。题干表述错误。故本题错误。',
+    t: '赔偿费由各级政府各自出钱，不是中央统一包揽。'
+  },
+  {
+    id: 79,
+    question: '行政机关工作人员在行使职权时违法吊销企业营业执照，责令停产停业的，赔偿义务机关应当赔偿该企业停产停业期间必要的经营性费用开支及最低营业收入。（）',
+    answer: 'B',
+    explanation: '【解析】根据《国家赔偿法》第36条，吊销许可证和执照、责令停产停业的，赔偿停产停业期间必要的经常性费用开支，不赔偿可得利益或最低营业收入。题干表述错误。故本题错误。',
+    t: '只赔实际开销，不赔本来能赚的钱。'
+  },
+  {
+    id: 80,
+    question: '代履行是行政强制执行的方式之一。（）',
+    answer: 'A',
+    explanation: '【解析】根据《行政强制法》第12条，行政强制执行的方式包括：加处罚款或者滞纳金；划拨存款、汇款；拍卖或者依法处理查封、扣押的场所、设施或者财物；排除妨碍、恢复原状；代履行；其他强制执行方式。题干表述正确。故本题正确。',
+    t: '代履行就是政府替你干，你出钱，属于强制手段。'
+  },
+  {
+    id: 81,
+    question: '对违反纪律的人民警察，必要时可以对其采取停止执行职务、禁闭的措施。（）',
+    answer: 'A',
+    explanation: '【解析】根据《人民警察法》第48条，对违反纪律的人民警察，必要时可以对其采取停止执行职务、禁闭的措施。题干表述正确。故本题正确。',
+    t: '警察违纪可以被停职或关禁闭。'
+  },
+  {
+    id: 82,
+    question: '曾受过行政处罚的人员，不得担任人民警察。（）',
+    answer: 'B',
+    explanation: '【解析】根据《人民警察法》第26条，曾受过刑事处罚的人员不得担任人民警察，行政处罚与刑事处罚不同。曾受过行政处罚不等于受过刑事处罚，在一定条件下仍可能被录用。题干表述错误。故本题错误。',
+    t: '受过行政罚款等处罚不一定影响当警察，是刑事处罚才不行。'
+  },
+  {
+    id: 83,
+    question: '人民警察使用武器的所有行为均受法律保护。（）',
+    answer: 'B',
+    explanation: '【解析】根据《人民警察使用警械和武器条例》第14条，人民警察违法使用警械、武器，造成不应有的人员伤亡、财产损失，构成犯罪的，依法追究刑事责任；尚不构成犯罪的，依法给予行政处分；对受到伤亡或者财产损失的人员，由该人民警察所属机关依照《国家赔偿法》的有关规定给予赔偿。并非所有使用武器的行为均受法律保护。题干表述错误。故本题错误。',
+    t: '违法开枪不但不保护，还要追责。'
+  },
+  {
+    id: 84,
+    question: '对于因民间纠纷引起的打架斗殴或者损毁他人财物等违反治安管理行为，情节较轻，经公安机关调解当事人达成协议的，不予处罚。（）',
+    answer: 'A',
+    explanation: '【解析】根据《治安管理处罚法》第9条，对于因民间纠纷引起的打架斗殴或者损毁他人财物等违反治安管理行为，情节较轻的，公安机关可以调解处理。经公安机关调解，当事人达成协议的，不予处罚。题干表述正确。故本题正确。',
+    t: '小纠纷调解好了就不罚了。'
+  },
+  {
+    id: 85,
+    question: '公安机关无法当场向治安管理处罚的被处罚人宣告处罚决定书的，应当在五日内送达被处罚人。（）',
+    answer: 'B',
+    explanation: '【解析】根据《治安管理处罚法》第97条，公安机关应当向被处罚人宣告治安管理处罚决定书，无法当场宣告的，应当在二日内送达被处罚人。决定给予行政拘留处罚的，应当及时通知被处罚人的家属。题干“五日内送达”错误。故本题错误。',
+    t: '当场给不了的话，两天内必须送达，不是五天。'
+  },
+  {
+    id: 86,
+    question: '具有社会危害性的行为，依照法律应受处罚的，都是犯罪。（）',
+    answer: 'B',
+    explanation: '【解析】犯罪必须具有严重的社会危害性、刑事违法性和应受刑罚处罚性。一般违法行为也具有社会危害性，但未达到犯罪程度。题干混淆了违法与犯罪，表述错误。故本题错误。',
+    t: '违反交通规则也是危害行为，但不一定是犯罪。'
+  },
+  {
+    id: 87,
+    question: '我国刑法对又聋又哑的人或盲人犯罪的刑事责任的规定，体现了听说、视觉机能对刑事责任能力的影响，体现了人道主义的思想，不能视为违反法律面前人人平等原则。（）',
+    answer: 'A',
+    explanation: '【解析】根据《刑法》第19条，又聋又哑的人或者盲人犯罪，可以从轻、减轻或者免除处罚。该规定是基于其特殊生理状况对辨认和控制能力的限制，体现罪责刑相适应原则和人道主义，不违反法律面前人人平等。题干表述正确。故本题正确。',
+    t: '对聋哑盲人的照顾是特殊保护，不是不平等。'
+  },
+  {
+    id: 88,
+    question: '适用简易程序审理的刑事诉讼案件，应当在受理后二十日以内审结，不得延长。（）',
+    answer: 'B',
+    explanation: '【解析】根据《刑事诉讼法》第220条，适用简易程序审理案件，人民法院应当在受理后二十日以内审结；对可能判处的有期徒刑超过三年的，可以延长至一个半月。此外，若发现不宜适用简易程序，可转为普通程序审理，审理期限重新计算。题干“不得延长”错误。故本题错误。',
+    t: '简易程序也可能延长，甚至可以转成普通程序。'
+  },
+  {
+    id: 89,
+    question: '人民法院、人民检察院和公安机关进行刑事诉讼，应当分工负责、互相配合、互相制约，以保证准确有效地执行法律。（）',
+    answer: 'A',
+    explanation: '【解析】根据《宪法》第140条和《刑事诉讼法》第7条，人民法院、人民检察院和公安机关进行刑事诉讼，应当分工负责，互相配合，互相制约，以保证准确有效地执行法律。题干表述正确。故本题正确。',
+    t: '公检法三家分工配合又互相监督。'
+  },
+  {
+    id: 90,
+    question: '公安机关承担的专政职能是公安性质的必然体现，它的削弱意味着国家民主职能的削弱，这必然影响国家的安全和稳定，关系到人民民主专政国家政权的稳固。（）',
+    answer: 'A',
+    explanation: '【解析】公安机关是人民民主专政的重要工具，专政职能与民主职能相互依存、相互促进。专政职能削弱会直接影响对敌对势力和犯罪分子的打击，进而影响国家安全、社会稳定和政权稳固。题干表述正确。故本题正确。',
+    t: '警察的专政手段是保护大多数人的民主，削弱它会影响整个政权。'
+  }
+];
+
+// 渲染判断题
+(function renderJudge() {
+    const judgeContainer = document.getElementById('judgeChoiceContainer');
+    if (!judgeContainer) return;
+    let html = '';
+    judgeQuestions.forEach(q => {
+        html += `<div class="question-card" id="jq-${q.id}">
+            <div class="q-title"><span class="q-num">${q.id}</span> ${q.question} <span style="font-size:0.9rem;color:#555;">(判断)</span></div>
+            <div class="options" id="jopts-${q.id}">
+                <div class="option" id="jopt-${q.id}-true"><input type="radio" name="jq${q.id}" value="true" id="jq${q.id}_true"><label for="jq${q.id}_true">✔ 正确</label></div>
+                <div class="option" id="jopt-${q.id}-false"><input type="radio" name="jq${q.id}" value="false" id="jq${q.id}_false"><label for="jq${q.id}_false">✘ 错误</label></div>
+            </div>
+            <div class="feedback-area" id="jfb-${q.id}" style="display:none;">
+                <div style="font-weight:700; margin-bottom:0.4rem;">📖 解析</div>
+                <div id="jfb-content-${q.id}"></div>
+                <div class="t-explanation" id="jt-${q.id}"></div>
+            </div>
+        </div>`;
+    });
+    judgeContainer.innerHTML = html;
+})();
+
+// 判断题提交
+(function setupJudgeSubmit() {
+    const btn = document.getElementById('submitJudgeBtn');
+    if (!btn) return;
+    let judgeSubmitted = false;
+    btn.addEventListener('click', () => {
+        if (judgeSubmitted) return;
+        judgeSubmitted = true;
+        let correctCount = 0;
+        judgeQuestions.forEach(q => {
+            const selected = document.querySelector(`input[name="jq${q.id}"]:checked`);
+            const userAns = selected ? selected.value : null;        // "true" 或 "false"
+            // 将题库答案 "A"(正确) 或 "B"(错误) 转为布尔值
+            const correctBool = (q.answer === 'A');                 // A => true, B => false
+            const isCorrect = (userAns === String(correctBool));    // 比较字符串
+
+            if (isCorrect) correctCount++;
+
+            // 解析区
+            const fbDiv = document.getElementById(`jfb-${q.id}`);
+            if (fbDiv) {
+                const fbContent = document.getElementById(`jfb-content-${q.id}`);
+                fbContent.innerHTML = `<div class="exp-line ${isCorrect ? 'correct-text' : 'wrong-text'}">${isCorrect ? '✅ 回答正确' : '❌ 回答错误'}。${q.explanation}</div>`;
+                document.getElementById(`jt-${q.id}`).textContent = `💬 大白话：${q.t}`;
+                fbDiv.style.display = 'block';
+
+                // 高亮正确答案（对应的 true/false 选项）
+                const correctOptDiv = document.getElementById(`jopt-${q.id}-${correctBool}`);
+                if (correctOptDiv) correctOptDiv.classList.add('correct-answer-highlight');
+                // 标红用户错选
+                if (!isCorrect && userAns) {
+                    const wrongOptDiv = document.getElementById(`jopt-${q.id}-${userAns}`);
+                    if (wrongOptDiv) wrongOptDiv.classList.add('user-wrong-opt');
+                }
+            }
+            // 禁用选项
+            ['true','false'].forEach(v => {
+                const radio = document.getElementById(`jq${q.id}_${v}`);
+                if (radio) radio.disabled = true;
+            });
+        });
+
+        const judgeStats = document.getElementById('judgeStats');
+        if (judgeStats) {
+            judgeStats.style.display = 'block';
+            judgeStats.innerHTML = `📊 判断题：答对 ${correctCount} / 20 题，得分 ${(correctCount * 1).toFixed(0)} 分（满分 20 分）`;
+        }
+        btn.disabled = true;
+        judgeTotal = correctCount;        // 每题 1 分，满分 20 分
+        judgeCorrectCnt = correctCount;
+        updateTotalScore();
+    });
+})();
+})();
+</script>
+</body>
+</html>
