@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数字记忆专项 · 行政法数字一网打尽</title>
+    <style>
+        :root {
+            --bg: #fdf8f3; --card-bg: #ffffff; --text: #2c2416; --text-light: #5c5347;
+            --accent: #b22222; --highlight: #fff3cd; --highlight-border: #f0c040;
+            --example-bg: #f0faf5; --example-border: #a3e4bc;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05); --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+            --radius: 14px; --radius-sm: 10px;
+            --font: 'PingFang SC','Microsoft YaHei','Hiragino Sans GB','Noto Sans SC',system-ui,-apple-system,sans-serif;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior: smooth; scroll-padding-top: 20px; }
+        body { font-family: var(--font); background: var(--bg); color: var(--text); line-height: 1.75; padding: 12px; font-size: 16px; -webkit-font-smoothing: antialiased; }
+        a { color: var(--accent); text-decoration: none; }
+        .toc-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.35); z-index:98; }
+        .toc-overlay.show { display:block; }
+        .toc { position:fixed; top:16px; left:16px; width:230px; max-height:calc(100vh - 32px); background:var(--card-bg); border-radius:var(--radius); box-shadow:0 8px 30px rgba(0,0,0,0.12); padding:18px 14px; overflow-y:auto; z-index:100; font-size:0.84rem; transition:transform 0.3s; }
+        .toc.hidden { transform:translateX(-260px); }
+        .toc-title { font-weight:700; margin-bottom:10px; color:var(--accent); font-size:1rem; display:flex; align-items:center; gap:6px; position:sticky; top:0; background:var(--card-bg); padding-bottom:8px; border-bottom:1px solid #f0ebe0; }
+        .toc a { display:block; padding:7px 10px; border-radius:6px; margin:2px 0; color:var(--text-light); transition:all 0.2s; font-size:0.82rem; }
+        .toc a:hover,.toc a.active { background:#fdedec; color:var(--accent); font-weight:600; }
+        .toc-toggle { position:fixed; top:16px; left:16px; width:42px; height:42px; border-radius:50%; background:var(--accent); color:#fff; border:none; font-size:1.3rem; cursor:pointer; z-index:101; display:none; box-shadow:0 4px 14px rgba(178,34,34,0.3); align-items:center; justify-content:center; }
+        .main { max-width:820px; margin:0 auto 0 270px; display:flex; flex-direction:column; gap:20px; padding-bottom:40px; }
+        .card { background:var(--card-bg); border-radius:var(--radius); padding:22px 26px; box-shadow:var(--shadow-md); border:1px solid #f0ebe0; }
+        .section-title { font-size:1.45rem; font-weight:700; margin-bottom:4px; display:flex; align-items:center; gap:10px; }
+        .section-title .icon { width:34px; height:34px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; flex-shrink:0; }
+        .icon-red { background:#fdedec; color:#b22222; } .icon-blue { background:#eaf2f8; color:#1a5276; }
+        .icon-green { background:#eafaf1; color:#145a32; } .icon-yellow { background:#fef9e7; color:#b7950b; }
+        .subtitle { color:var(--text-light); font-size:0.9rem; margin-bottom:18px; padding-left:44px; }
+        .ki-grid { display:flex; flex-direction:column; gap:14px; }
+        .ki-item { border:1px solid #f0ebe0; border-radius:var(--radius-sm); padding:14px 18px; background:#fefefe; }
+        .ki-title-row { font-weight:700; font-size:1rem; margin-bottom:6px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+        .badge { font-size:0.7rem; padding:3px 10px; border-radius:14px; font-weight:600; letter-spacing:0.3px; white-space:nowrap; }
+        .badge-core { background:#fdedec; color:#b22222; } .badge-num { background:#eaf2f8; color:#1a5276; } .badge-case { background:#eafaf1; color:#145a32; } .badge-trap { background:#fef9e7; color:#b7950b; }
+        .ki-content { color:var(--text-light); font-size:0.92rem; }
+        .kh { display:inline-block; background:var(--highlight); border:1px solid var(--highlight-border); padding:2px 8px; border-radius:4px; font-weight:600; color:#7d6608; margin:0 2px; font-size:0.9rem; }
+        .kh-red { background:#fdedec; border-color:#f5b7b1; color:#922b21; } .kh-blue { background:#eaf2f8; border-color:#aed6f1; color:#1a5276; } .kh-green { background:#eafaf1; border-color:#a3e4bc; color:#145a32; }
+        .example-block { background:var(--example-bg); border-left:3px solid var(--example-border); border-radius:0 var(--radius-sm) var(--radius-sm) 0; padding:12px 16px; margin-top:10px; font-size:0.9rem; color:#1e5a3a; }
+        .example-block .ex-label { font-weight:700; font-size:0.75rem; text-transform:uppercase; letter-spacing:0.5px; color:#1e8449; margin-bottom:4px; }
+        .example-block .ex-q { font-weight:600; color:#145a32; margin-bottom:3px; }
+        .example-block .ex-a { color:#2d6a4f; }
+        .info-table { width:100%; border-collapse:collapse; margin:8px 0; font-size:0.88rem; }
+        .info-table th { background:#fef9e7; text-align:left; padding:10px 14px; font-weight:700; border-bottom:2px solid #f0c040; color:#7d6608; }
+        .info-table td { padding:10px 14px; border-bottom:1px solid #f0ebe0; vertical-align:top; }
+        .info-table tr:hover td { background:#fefdf9; }
+        .quiz-wrap { border:2px solid #f0ebe0; border-radius:var(--radius-sm); padding:18px 20px; margin-top:12px; background:#fefefe; }
+        .quiz-wrap .q-type { font-size:0.78rem; font-weight:700; color:var(--accent); margin-bottom:4px; }
+        .quiz-wrap .q-text { font-weight:600; margin-bottom:12px; font-size:0.98rem; }
+        .opt-list { list-style:none; display:flex; flex-direction:column; gap:7px; }
+        .opt-list li { padding:10px 14px; border-radius:var(--radius-sm); cursor:pointer; border:2px solid #e9e4db; transition:all 0.2s; background:#fdfdfc; font-size:0.9rem; user-select:none; }
+        .opt-list li:hover { border-color:#c0b090; background:#fefdf9; }
+        .opt-list li.selected { border-color:#1a5276; background:#eaf2f8; font-weight:600; }
+        .opt-list li.correct { border-color:#1e8449 !important; background:#eafaf1 !important; color:#145a32 !important; }
+        .opt-list li.wrong { border-color:#b22222 !important; background:#fdedec !important; color:#922b21 !important; }
+        .opt-list li.disabled { pointer-events:none; opacity:0.85; }
+        .btn-row { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
+        .btn { display:inline-block; padding:10px 22px; border-radius:25px; font-weight:600; cursor:pointer; border:none; font-size:0.88rem; }
+        .btn-primary { background:var(--accent); color:#fff; } .btn-primary:hover { background:#8b1a1a; }
+        .btn-outline { background:#fff; color:var(--accent); border:2px solid var(--accent); } .btn-outline:hover { background:#fdedec; }
+        .explain-card { margin-top:12px; padding:14px 18px; border-radius:var(--radius-sm); display:none; font-size:0.9rem; line-height:1.7; }
+        .explain-card.show { display:block; }
+        .explain-card.correct-ex { background:#eafaf1; border:1px solid #a3e4bc; color:#145a32; }
+        .explain-card.wrong-ex { background:#fdedec; border:1px solid #f5b7b1; color:#922b21; }
+        .explain-card .ex-head { font-weight:700; margin-bottom:6px; font-size:0.95rem; }
+        .big-num { font-size:2rem; font-weight:800; color:#b22222; display:inline-block; margin:0 4px; vertical-align:middle; }
+        .big-num-blue { font-size:2rem; font-weight:800; color:#1a5276; display:inline-block; margin:0 4px; vertical-align:middle; }
+        .big-num-green { font-size:2rem; font-weight:800; color:#145a32; display:inline-block; margin:0 4px; vertical-align:middle; }
+        @media (max-width:768px) {
+            .toc { transform:translateX(-260px); } .toc.show { transform:translateX(0); }
+            .toc-toggle { display:flex; } .main { max-width:100%; margin:0 auto; } .card { padding:18px 14px; }
+        }
+    </style>
+</head>
+<body>
+<button class="toc-toggle" id="tocToggle" aria-label="目录" onclick="toggleToc()">☰</button>
+<div class="toc-overlay" id="tocOverlay" onclick="closeToc()"></div>
+<nav class="toc" id="toc"><div class="toc-title">📑 数字记忆 · 知识目录</div></nav>
+<div class="main" id="mainContent"></div>
+<script>
+const knowledgeData = [
+    // ==================== 模块1：行政处罚法数字 ====================
+    {
+        id: 'mod1', iconClass: 'icon-red', iconEmoji: '📋',
+        title: '一、行政处罚法 · 数字考点',
+        subtitle: '听证 · 简易程序 · 办案期限 · 追究时效 · 当场收缴',
+        items: [
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core',
+              title: '1. 听证程序数字——"大事才听证"',
+              content: '🔹 当事人申请听证：收到告知书后<span class="kh kh-red"><span class="big-num">5</span>日内</span>提出<br>🔹 行政机关通知听证：举行听证<span class="kh kh-red"><span class="big-num">7</span>日前</span>通知时间地点<br>🔹 听证适用范围：<span class="kh kh-red">吊销许可证件、责令停产停业、较大数额罚款</span>等较重处罚<br>🔹 听证费用：<span class="kh kh-green">行政机关承担</span>，当事人不花钱',
+              extra: '📌 口诀："5日申请7日通，吊销停业大额罚"。注意：行政拘留不属于听证范围！' },
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core',
+              title: '2. 简易程序数字——"当场罚"',
+              content: '🔹 对公民：<span class="kh kh-red"><span class="big-num">200</span>元以下</span>罚款或警告<br>🔹 对法人/组织：<span class="kh kh-red"><span class="big-num">3000</span>元以下</span>罚款或警告<br>🔹 当场处罚后<span class="kh kh-red"><span class="big-num">24</span>小时内</span>报所属机关备案（交警<span class="kh kh-blue">2日内</span>）<br>🔹 执法人员<span class="kh kh-red">不得少于2人</span>（2021年修订后统一要求）',
+              extra: '📌 注意区分：简易程序（当场处罚）=200元以下；当场收缴（收现金）=100元以下。两个"当场"数字不同！' },
+            { type: 'ki', badge: '数字', badgeClass: 'badge-num',
+              title: '3. 办案期限与追究时效',
+              content: '🔹 行政处罚案件办案期限：立案之日起<span class="kh kh-red"><span class="big-num">90</span>日内</span>作出决定<br>🔹 一般追究时效：违法行为在<span class="kh kh-red"><span class="big-num">2</span>年内</span>未被发现，不再处罚<br>🔹 特殊追究时效：涉及<span class="kh kh-red">生命健康安全、金融安全</span>且有危害后果的，延长至<span class="kh kh-red"><span class="big-num">5</span>年</span><br>🔹 治安管理处罚追究时效：<span class="kh kh-blue"><span class="big-num">6</span>个月</span>（特别法优先）',
+              extra: '📌 三个时效要分清：行政处罚一般2年、生命健康金融5年、治安管理6个月。' },
+            { type: 'ki', badge: '陷阱', badgeClass: 'badge-trap',
+              title: '4. 当场收缴罚款——罚缴分离的例外',
+              content: '🔹 依法给予<span class="kh kh-red"><span class="big-num">100</span>元以下</span>罚款的<br>🔹 不当场收缴<span class="kh kh-red">事后难以执行</span>的（如外地人、外国人）<br>🔹 在<span class="kh kh-red">边远、水上、交通不便</span>地区，当事人到银行缴纳确有困难，<span class="kh kh-red">经当事人提出</span><br>🔹 票据要求：必须出具<span class="kh kh-red">国务院或省级财政部门</span>统一制发的专用票据<br>🔹 执法人员应在<span class="kh kh-red"><span class="big-num">2</span>日内</span>将罚款交至行政机关',
+              extra: '📌 当场收缴≠简易程序。当场收缴是收钱的方式，简易程序是处罚的方式。' }
+        ],
+        quizzes: [
+            { q: '当事人申请听证的期限是收到告知书后多少日内？', opts: ['A. 3日', 'B. 5日', 'C. 7日', 'D. 10日'], correct: 1, type: 'single', quizIndex: 1,
+              d: 'A项错误：3日不是听证申请期限。\nB项正确：当事人应当在收到告知书后5日内提出听证申请。\nC项错误：7日是通知举行听证的期限。\nD项错误：10日不是法定期限。',
+              t: '听证申请=5日。口诀：我要听证（五日）！' },
+            { q: '行政机关应当在举行听证多少日前通知当事人时间、地点？', opts: ['A. 3日', 'B. 5日', 'C. 7日', 'D. 10日'], correct: 2, type: 'single', quizIndex: 2,
+              d: 'A项错误：3日不是法定期限。\nB项错误：5日是申请期限。\nC项正确：应当提前7日通知当事人。\nD项错误：10日不是法定期限。',
+              t: '通知听证=7日前。给人留一周准备时间。' },
+            { q: '行政处罚案件应当自立案之日起多少日内作出决定？', opts: ['A. 30日', 'B. 60日', 'C. 90日', 'D. 180日'], correct: 2, type: 'single', quizIndex: 3,
+              d: 'A项错误：30日是治安案件办案期限。\nB项错误：60日是行政复议申请期限。\nC项正确：行政处罚案件自立案之日起90日内作出决定。\nD项错误：无此规定。',
+              t: '行政处罚办案=90天。比治安案件（30天）长。' }
+        ]
+    },
+    // ==================== 模块2：行政强制法数字 ====================
+    {
+        id: 'mod2', iconClass: 'icon-blue', iconEmoji: '🔒',
+        title: '二、行政强制法 · 数字考点',
+        subtitle: '查封扣押 · 冻结存款 · 催告期 · 强制执行',
+        items: [
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core',
+              title: '1. 查封扣押期限——"30+30=60"',
+              content: '🔹 一般期限：<span class="kh kh-red"><span class="big-num">30</span>日</span><br>🔹 情况复杂经负责人批准可延长<span class="kh kh-red"><span class="big-num">30</span>日</span><br>🔹 最长不超过<span class="kh kh-red"><span class="big-num">60</span>日</span>（30+30）<br>🔹 法律另有规定的除外',
+              extra: '📌 口诀："查封扣押三十起，延长三十封顶六"。' },
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core',
+              title: '2. 冻结存款汇款期限——"和查封一样"',
+              content: '🔹 冻结存款、汇款的期限与查封扣押<span class="kh kh-red">完全相同</span><br>🔹 一般<span class="kh kh-red"><span class="big-num">30</span>日</span> + 延长<span class="kh kh-red"><span class="big-num">30</span>日</span> = 最长<span class="kh kh-red"><span class="big-num">60</span>日</span>',
+              extra: '📌 查封扣押和冻结存款，都是30+30=60天。记住一个等于记住两个。' },
+            { type: 'ki', badge: '数字', badgeClass: 'badge-num',
+              title: '3. 强制执行催告期',
+              content: '🔹 行政机关强制执行前应当催告当事人履行义务<br>🔹 催告期：<span class="kh kh-red"><span class="big-num">10</span>日</span><br>🔹 不得在<span class="kh kh-red">夜间、法定节假日</span>实施行政强制（紧急情况除外）',
+              extra: '📌 催告10日是给当事人的缓冲期，体现了"温情执法"。' }
+        ],
+        quizzes: [
+            { q: '查封扣押的期限最长不超过多少日？', opts: ['A. 30日', 'B. 45日', 'C. 60日', 'D. 90日'], correct: 2, type: 'single', quizIndex: 4,
+              d: 'A项错误：30日是一般期限，还可以延长。\nB项错误：45日不是法定期限。\nC项正确：一般30日+延长30日=最长60日。\nD项错误：90日不是。',
+              t: '查封扣押=30+30=60天封顶。' },
+            { q: '冻结存款的期限最长不超过多少日？', opts: ['A. 30日', 'B. 45日', 'C. 60日', 'D. 90日'], correct: 2, type: 'single', quizIndex: 5,
+              d: 'A项错误：30日是一般期限。\nB项错误：45日不是法定期限。\nC项正确：和查封扣押一样，最长60日。\nD项错误。',
+              t: '冻结和查封扣押一样，都是60天封顶。' }
+        ]
+    },
+    // ==================== 模块3：行政复议法数字 ====================
+    {
+        id: 'mod3', iconClass: 'icon-green', iconEmoji: '⚖️',
+        title: '三、行政复议法 · 数字考点',
+        subtitle: '申请期限 · 决定期限 · 审查受理',
+        items: [
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core',
+              title: '1. 复议申请期限——"60日"',
+              content: '🔹 公民、法人认为行政行为侵犯其合法权益，自<span class="kh kh-red">知道或应当知道</span>之日起<span class="kh kh-red"><span class="big-num">60</span>日内</span>提出<br>🔹 法律规定超过60日的除外（可以更长，不能更短）',
+              extra: '📌 口诀："复议申请六十天，知道之日起计算"。比行政诉讼（6个月）短得多！' },
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core',
+              title: '2. 复议决定期限——"普通60可延30，简易30不延"',
+              content: '<table class="info-table"><tr><th>程序类型</th><th>决定期限</th><th>能否延长</th><th>最长</th></tr><tr><td><span class="kh kh-red">普通程序</span></td><td><span class="kh kh-red"><span class="big-num">60</span>日</span></td><td>可延长<span class="kh kh-red">30日</span></td><td><span class="kh kh-red">90日</span></td></tr><tr><td><span class="kh kh-blue">简易程序</span></td><td><span class="kh kh-blue"><span class="big-num-blue">30</span>日</span></td><td><span class="kh kh-red">不能延长</span></td><td><span class="kh kh-blue">30日</span></td></tr></table>',
+              extra: '📌 口诀："普通60可延30=最长90，简易30不延长"。' },
+            { type: 'ki', badge: '数字', badgeClass: 'badge-num',
+              title: '3. 审查受理数字',
+              content: '🔹 复议机关收到申请后<span class="kh kh-red"><span class="big-num">5</span>日内</span>审查是否受理<br>🔹 受理后<span class="kh kh-red"><span class="big-num">7</span>日内</span>将申请书副本发送被申请人<br>🔹 被申请人收到副本后<span class="kh kh-red"><span class="big-num">10</span>日内</span>提出书面答复<br>🔹 申请材料不全：<span class="kh kh-red"><span class="big-num">5</span>日内</span>一次性告知补正',
+              extra: '📌 复议审查流程：5日审查→7日发送→10日答复。' }
+        ],
+        quizzes: [
+            { q: '公民申请行政复议的期限是多少日？', opts: ['A. 30日', 'B. 60日', 'C. 3个月', 'D. 6个月'], correct: 1, type: 'single', quizIndex: 6,
+              d: 'A项错误：30日是简易程序决定期限。\nB项正确：申请复议期限是60日。\nC项错误：3个月约90日。\nD项错误：6个月是行政诉讼起诉期限。',
+              t: '复议申请=60天。比诉讼6个月短。' },
+            { q: '行政复议普通程序的决定期限是多少日？', opts: ['A. 30日', 'B. 60日', 'C. 90日', 'D. 120日'], correct: 1, type: 'single', quizIndex: 7,
+              d: 'A项错误：30日是简易程序期限。\nB项正确：普通程序60日内作出决定，可延长30日。\nC项错误：90日是延长后的最长期限。\nD项错误。',
+              t: '复议普通决定=60天，可延30天=最长90天。' }
+        ]
+    },
+    // ==================== 模块4：行政许可法数字 ====================
+    {
+        id: 'mod4', iconClass: 'icon-yellow', iconEmoji: '📜',
+        title: '四、行政许可法 · 数字考点',
+        subtitle: '审查期限 · 延续申请 · 听证 · 补正告知',
+        items: [
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core',
+              title: '1. 许可审查期限——"三种许可三种期限"',
+              content: '<table class="info-table"><tr><th>许可类型</th><th>审查期限</th><th>能否延长</th><th>最长</th></tr><tr><td><span class="kh kh-red">一般许可</span></td><td><span class="kh kh-red"><span class="big-num">20</span>日</span></td><td>可延长<span class="kh kh-red">10日</span></td><td><span class="kh kh-red">30日</span></td></tr><tr><td><span class="kh kh-blue">统一办理</span></td><td><span class="kh kh-blue"><span class="big-num-blue">45</span>日</span></td><td>可延长<span class="kh kh-blue">15日</span></td><td><span class="kh kh-blue">60日</span></td></tr><tr><td><span class="kh kh-green">层级审查</span></td><td><span class="kh kh-green"><span class="big-num-green">20</span>日</span></td><td><span class="kh kh-red">不得延长</span></td><td><span class="kh kh-green">20日</span></td></tr></table>',
+              extra: '📌 口诀："一般20可延10=30，统一45可延15=60，层级20不延长"。' },
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core',
+              title: '2. 延续申请——"提前30天"',
+              content: '🔹 被许可人需要延续行政许可有效期的，应当在有效期届满<span class="kh kh-red"><span class="big-num">30</span>日前</span>提出申请<br>🔹 行政机关逾期未作决定的，<span class="kh kh-green">视为准予延续</span>',
+              extra: '📌 口诀："提前一个月（30日）续证，机关不理算默认同意"。' },
+            { type: 'ki', badge: '数字', badgeClass: 'badge-num',
+              title: '3. 补正告知与听证',
+              content: '🔹 申请材料不全：<span class="kh kh-red"><span class="big-num">5</span>日内</span>一次性告知需要补正的全部内容<br>🔹 逾期不告知的，自收到申请材料之日起<span class="kh kh-green">即为受理</span><br>🔹 许可听证：<span class="kh kh-red"><span class="big-num">5</span>日内</span>申请，<span class="kh kh-red"><span class="big-num">7</span>日前</span>通知，<span class="kh kh-red"><span class="big-num">20</span>日内</span>组织',
+              extra: '📌 许可听证与处罚听证的区别：许可听证可依职权启动，处罚听证仅依申请启动。许可听证组织期限20日，处罚听证无此规定。' }
+        ],
+        quizzes: [
+            { q: '行政许可的一般审查期限是多少日？', opts: ['A. 15日', 'B. 20日', 'C. 30日', 'D. 45日'], correct: 1, type: 'single', quizIndex: 8,
+              d: 'A项错误：15日不是许可审查期限。\nB项正确：一般审查20日，可延长10日。\nC项错误：30日是延长的最长期限。\nD项错误：45日是统一办理的期限。',
+              t: '一般许可=20天，可延10天=最长30天。' },
+            { q: '行政许可的统一办理期限是多少日？', opts: ['A. 20日', 'B. 30日', 'C. 45日', 'D. 60日'], correct: 2, type: 'single', quizIndex: 9,
+              d: 'A项错误：20日是一般审查期限。\nB项错误：30日不是统一办理期限。\nC项正确：统一办理45日，可延长15日。\nD项错误：60日是延长期满后的最长时限。',
+              t: '统一办理=45天，可延15天=最长60天。' },
+            { q: '行政许可的延续申请应在有效期届满多少日前提出？', opts: ['A. 15日', 'B. 20日', 'C. 30日', 'D. 60日'], correct: 2, type: 'single', quizIndex: 10,
+              d: 'A项错误：15日不是延续申请期限。\nB项错误：20日是许可决定期限。\nC项正确：延续申请应在有效期届满30日前提出。\nD项错误：60日是复议申请期限。',
+              t: '续证=提前30天（一个月）申请。' }
+        ]
+    },
+,
+    // ==================== 模块5：行政诉讼法数字 ====================
+    {
+        id: 'mod5', iconClass: 'icon-red', iconEmoji: '🏛️',
+        title: '五、行政诉讼法 · 数字考点',
+        subtitle: '起诉期限 · 审限 · 简易程序 · 管辖',
+        items: [
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core',
+              title: '1. 起诉期限——"直接6个月，复议后15日"',
+              content: '🔹 直接起诉：自知道或应当知道行政行为之日起<span class="kh kh-red"><span class="big-num">6</span>个月内</span><br>🔹 经复议后起诉：收到复议决定书之日起<span class="kh kh-red"><span class="big-num">15</span>日内</span><br>🔹 复议机关逾期不作决定：复议期满之日起<span class="kh kh-red"><span class="big-num">15</span>日内</span><br>🔹 不动产案件最长保护期：<span class="kh kh-red"><span class="big-num">20</span>年</span>；其他案件最长<span class="kh kh-red"><span class="big-num">5</span>年</span>',
+              extra: '📌 口诀："直接起诉半年整，复议之后半月内"。注意：6个月≠60天！' },
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core',
+              title: '2. 审限与简易程序',
+              content: '🔹 普通程序一审审限：<span class="kh kh-red"><span class="big-num">6</span>个月</span><br>🔹 简易程序审限：<span class="kh kh-red"><span class="big-num">45</span>日</span>内审结<br>🔹 简易程序适用范围：当场作出的行政行为、款额<span class="kh kh-red"><span class="big-num">2000</span>元以下</span>、政府信息公开案件<br>🔹 简易程序由<span class="kh kh-red">审判员一人</span>独任审理',
+              extra: '📌 行政诉讼简易45天，比行政复议简易30天长15天。' },
+            { type: 'ki', badge: '数字', badgeClass: 'badge-num',
+              title: '3. 被告举证与送达',
+              content: '🔹 被告收到起诉状副本后<span class="kh kh-red"><span class="big-num">15</span>日内</span>提交证据<br>🔹 法院立案后<span class="kh kh-red"><span class="big-num">5</span>日内</span>将起诉状副本发送被告<br>🔹 被告逾期不提交证据的，<span class="kh kh-red">视为没有相应证据</span>',
+              extra: '📌 被告15天交证据，过期不交=没证据=等着输。' }
+        ],
+        quizzes: [
+            { q: '公民直接向人民法院提起行政诉讼的期限是？', opts: ['A. 30日', 'B. 60日', 'C. 3个月', 'D. 6个月'], correct: 3, type: 'single', quizIndex: 11,
+              d: 'A项错误：30日是复议简易决定期限。\nB项错误：60日是复议申请期限。\nC项错误：旧法规定，现行法是6个月。\nD项正确：直接起诉期限为6个月。',
+              t: '直接起诉=6个月（半年）。比复议申请60天长得多。' },
+            { q: '经过行政复议后，不服复议决定提起行政诉讼的期限是？', opts: ['A. 7日', 'B. 15日', 'C. 30日', 'D. 60日'], correct: 1, type: 'single', quizIndex: 12,
+              d: 'A项错误：7日是听证通知期限。\nB项正确：复议后起诉期限为15日。\nC项错误：30日是复议简易决定期限。\nD项错误：60日是复议申请期限。',
+              t: '复议后起诉=15天（半个月）。抓紧时间！' },
+            { q: '行政诉讼简易程序的审限是？', opts: ['A. 30日', 'B. 45日', 'C. 60日', 'D. 3个月'], correct: 1, type: 'single', quizIndex: 13,
+              d: 'A项错误：30日是复议简易审限。\nB项正确：行政诉讼简易程序45日内审结。\nC项错误：60日是复议申请期限。\nD项错误：3个月不是简易审限。',
+              t: '诉讼简易=45天。复议简易=30天。两个都叫"简易"，但天数不同。' }
+        ]
+    },
+    // ==================== 模块6：治安管理处罚法数字 ====================
+    {
+        id: 'mod6', iconClass: 'icon-blue', iconEmoji: '🚔',
+        title: '六、治安管理处罚法 · 数字考点',
+        subtitle: '拘留期限 · 询问查证 · 追究时效 · 当场收缴',
+        items: [
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core',
+              title: '1. 行政拘留期限——"5/10/15/20"',
+              content: '🔹 单处拘留：<span class="kh kh-red"><span class="big-num">5</span>日以下、<span class="big-num">5-10</span>日、<span class="big-num">10-15</span>日</span>三个档次<br>🔹 两种以上违法行为均处拘留：合并执行最长<span class="kh kh-red"><span class="big-num">20</span>日</span><br>🔹 不执行拘留的情形：14-16岁、16-18岁初次、70岁以上、孕妇哺乳期妇女',
+              extra: '📌 口诀："单处最长15，合并封顶20"。注意：行政拘留合并20天 ≠ 刑事拘留37天。' },
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core',
+              title: '2. 询问查证时间——"8/24小时"',
+              content: '🔹 一般情况：<span class="kh kh-red"><span class="big-num">8</span>小时</span>内<br>🔹 案情复杂、可能适用拘留的：经批准可延长至<span class="kh kh-red"><span class="big-num">24</span>小时</span><br>🔹 注意：这不是继续盘问（留置），继续盘问是人民警察法的规定（24/48小时）',
+              extra: '📌 区分：询问查证最长24h（治安），继续盘问最长48h（警察法），拘传最长24h（刑诉）。' },
+            { type: 'ki', badge: '数字', badgeClass: 'badge-num',
+              title: '3. 追究时效与当场收缴',
+              content: '🔹 治安管理处罚追究时效：<span class="kh kh-red"><span class="big-num">6</span>个月</span>内未被公安机关发现，不再处罚<br>🔹 当场收缴罚款：<span class="kh kh-red"><span class="big-num">50</span>元以下</span>无异议；或<span class="kh kh-red">无固定住所</span>事后难以执行<br>🔹 派出所罚款权限：<span class="kh kh-red"><span class="big-num">500</span>元以下</span>',
+              extra: '📌 治安追究时效6个月，比行政处罚一般2年短得多。当场收缴50元以下（行政是100元以下）。' }
+        ],
+        quizzes: [
+            { q: '行政拘留处罚合并执行的，最长不超过多少日？', opts: ['A. 15日', 'B. 20日', 'C. 30日', 'D. 60日'], correct: 1, type: 'single', quizIndex: 14,
+              d: 'A项错误：15日是单个拘留的最长。\nB项正确：合并执行最长20日。\nC项错误：30日是治安办案期限。\nD项错误：60日是查封扣押期限。',
+              t: '多个拘留"打包"最多20天。' },
+            { q: '询问违反治安管理人的一般时间限制是多少小时？', opts: ['A. 4小时', 'B. 8小时', 'C. 12小时', 'D. 24小时'], correct: 1, type: 'single', quizIndex: 15,
+              d: 'A项错误。\nB项正确：一般情况下不超过8小时。\nC项错误：12小时是拘传一般期限。\nD项错误：24小时是最长期限。',
+              t: '治安询问=8小时起步，复杂可延到24小时。' },
+            { q: '治安管理处罚的追究时效是多少？', opts: ['A. 3个月', 'B. 6个月', 'C. 1年', 'D. 2年'], correct: 1, type: 'single', quizIndex: 16,
+              d: 'A项错误。\nB项正确：治安处罚追究时效6个月。\nC项错误。\nD项错误：2年是行政处罚一般时效。',
+              t: '治安案件6个月没发现就不罚了，比一般行政处罚2年短。' }
+        ]
+    },
+    // ==================== 模块7：国家赔偿法数字 ====================
+    {
+        id: 'mod7', iconClass: 'icon-green', iconEmoji: '💰',
+        title: '七、国家赔偿法 · 数字考点',
+        subtitle: '请求时效 · 决定期限 · 送达期限',
+        items: [
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core',
+              title: '1. 赔偿请求时效——"2年"',
+              content: '🔹 赔偿请求人请求国家赔偿的时效为<span class="kh kh-red"><span class="big-num">2</span>年</span><br>🔹 自知道或应当知道国家机关及其工作人员行使职权行为侵犯其权利之日起计算<br>🔹 <span class="kh kh-red">被羁押期间不计算在内</span>',
+              extra: '📌 口诀："国赔时效2年整，被关期间不计算"。比复议60天、诉讼6个月都长。' },
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core',
+              title: '2. 赔偿义务机关处理期限',
+              content: '🔹 收到赔偿申请后<span class="kh kh-red"><span class="big-num">2</span>个月内</span>作出是否赔偿的决定<br>🔹 决定赔偿：<span class="kh kh-red"><span class="big-num">10</span>日内</span>送达赔偿决定书<br>🔹 决定不予赔偿：<span class="kh kh-red"><span class="big-num">10</span>日内</span>书面通知并说明理由<br>🔹 逾期不作决定：期限届满之日起<span class="kh kh-red"><span class="big-num">3</span>个月内</span>可向法院起诉',
+              extra: '📌 时间链条：申请时效2年→机关决定2个月→不服起诉3个月。' },
+            { type: 'ki', badge: '数字', badgeClass: 'badge-num',
+              title: '3. 支付流程与费用',
+              content: '🔹 凭生效文书申请支付→赔偿义务机关<span class="kh kh-red"><span class="big-num">7</span>日内</span>向财政部门申请<br>🔹 财政部门<span class="kh kh-red"><span class="big-num">15</span>日内</span>支付赔偿金<br>🔹 申请国家赔偿<span class="kh kh-green">不收费</span>，赔偿金<span class="kh kh-green">不征税</span><br>🔹 死亡赔偿金+丧葬费=上年度职工年平均工资的<span class="kh kh-red"><span class="big-num">20</span>倍</span>',
+              extra: '📌 申请不要钱，赔偿金免税。死亡赔20倍是固定标准。' }
+        ],
+        quizzes: [
+            { q: '赔偿请求人请求国家赔偿的时效是多少年？', opts: ['A. 1年', 'B. 2年', 'C. 3年', 'D. 5年'], correct: 1, type: 'single', quizIndex: 17,
+              d: 'A项错误。\nB项正确：国家赔偿请求时效为2年。\nC项错误。\nD项错误：5年是特殊追究时效。',
+              t: '国赔时效=2年。被关的时间不算在2年里。' },
+            { q: '赔偿义务机关应当在收到赔偿申请之日起多久内作出决定？', opts: ['A. 1个月', 'B. 2个月', 'C. 3个月', 'D. 6个月'], correct: 1, type: 'single', quizIndex: 18,
+              d: 'A项错误。\nB项正确：赔偿义务机关应在2个月内作出决定。\nC项错误：3个月是对逾期不起诉的期限。\nD项错误。',
+              t: '赔不赔=2个月内给答复。' }
+        ]
+    },
+    // ==================== 模块8：人民警察法+警械武器条例数字 ====================
+    {
+        id: 'mod8', iconClass: 'icon-yellow', iconEmoji: '👮',
+        title: '八、人民警察法+警械武器 · 数字考点',
+        subtitle: '留置盘问 · 使用武器后报告 · 继续盘问',
+        items: [
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core',
+              title: '1. 继续盘问（留置）——"24/48小时"',
+              content: '🔹 留置时间：自带至公安机关之时起，一般不超过<span class="kh kh-red"><span class="big-num">24</span>小时</span><br>🔹 特殊情况经<span class="kh kh-red">县级以上公安机关</span>批准，可延长至<span class="kh kh-red"><span class="big-num">48</span>小时</span><br>🔹 批准继续盘问的，应当<span class="kh kh-red">立即</span>通知家属<br>🔹 注意："延长至48小时"≠"延长48小时"——前者是24+24=48，后者是24+48=72！',
+              extra: '📌 区分三个"询问/盘问"：治安询问查证8/24h、继续盘问24/48h、拘传12/24h。' },
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core',
+              title: '2. 使用武器后报告——"24小时"',
+              content: '🔹 人民警察使用武器后，应当<span class="kh kh-red"><span class="big-num">24</span>小时内</span>向所属机关报告<br>🔹 使用武器造成伤亡的：应及时抢救、保护现场、<span class="kh kh-red">立即</span>报告<br>🔹 使用武器的情况必须<span class="kh kh-red">书面报告</span>（口头不行）',
+              extra: '📌 口诀："开枪之后一整天（24h），书面报告必须交"。' },
+            { type: 'ki', badge: '数字', badgeClass: 'badge-num',
+              title: '3. 条例数字小结',
+              content: '🔹 条例共<span class="kh kh-red"><span class="big-num">17</span>条</span>，每年考<span class="kh kh-red"><span class="big-num">8-9</span>题</span>，性价比极高<br>🔹 1980年第一部→1995年现行→至今近30年未改<br>🔹 警械=<span class="kh kh-red">非致命</span>；武器=<span class="kh kh-red">致命</span>（枪支弹药）',
+              extra: '📌 这17条法条考前一定要通读一遍！题干基本都是原文挖空或换说法。' }
+        ],
+        quizzes: [
+            { q: '根据《人民警察法》，留置时间一般不超过多少小时？', opts: ['A. 8小时', 'B. 12小时', 'C. 24小时', 'D. 48小时'], correct: 2, type: 'single', quizIndex: 19,
+              d: 'A项错误：8小时是治安询问一般时间。\nB项错误：12小时是拘传一般时间。\nC项正确：留置一般不超过24小时。\nD项错误：48小时是延长后的最长时限。',
+              t: '留置=24小时起步，可延到48小时。' },
+            { q: '人民警察使用武器后，应当在多少小时内向所属机关报告？', opts: ['A. 12小时', 'B. 24小时', 'C. 48小时', 'D. 72小时'], correct: 1, type: 'single', quizIndex: 20,
+              d: 'A项错误：12小时是拘传一般期限。\nB项正确：使用武器后24小时内报告。\nC项错误：48小时是留置延长期限。\nD项错误。',
+              t: '开枪后=24小时内必须报告。' }
+        ]
+    },
+,
+    // ==================== 模块9：辅警条例数字 ====================
+    {
+        id: 'mod9', iconClass: 'icon-red', iconEmoji: '🛡️',
+        title: '九、深圳辅警条例 · 数字考点',
+        subtitle: '年龄 · 培训 · 层级 · 权限',
+        items: [
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core',
+              title: '1. 应聘条件——"20岁+大专"',
+              content: '🔹 年龄：年满<span class="kh kh-red"><span class="big-num">20</span>周岁</span>（不是18岁！）<br>🔹 学历：<span class="kh kh-red">大学专科以上</span>（退役士兵可放宽至<span class="kh kh-blue">高中</span>，但<span class="kh kh-blue">4年内</span>须取得大专）<br>🔹 招聘程序：公告→报名→资格审查→笔试→面试→心理体能测评→体检→公示→签合同',
+              extra: '📌 年龄是20周岁，比普通公务员（18岁）晚两年。' },
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core',
+              title: '2. 培训时间——"初90、年10、晋15"',
+              content: '🔹 勤务辅警<span class="kh kh-red">初任培训</span>：不少于<span class="kh kh-red"><span class="big-num">90</span>天</span><br>🔹 勤务辅警<span class="kh kh-red">年度培训</span>：不少于<span class="kh kh-red"><span class="big-num">10</span>天</span><br>🔹 勤务辅警<span class="kh kh-red">晋升培训</span>：不少于<span class="kh kh-red"><span class="big-num">15</span>天</span><br>🔹 文职辅警培训时间由市公安机关另行规定',
+              extra: '📌 口诀："初90、年10、晋15"——三个数字是高频考点。' },
+            { type: 'ki', badge: '数字', badgeClass: 'badge-num',
+              title: '3. 层级与权限',
+              content: '🔹 辅警层级：<span class="kh kh-red">一级至六级</span>辅警（一级最高，六级最低）<br>🔹 派出所罚款权限：<span class="kh kh-red"><span class="big-num">500</span>元以下</span><br>🔹 勤务辅警巡逻：无民警带领时<span class="kh kh-red">不得少于<span class="big-num">2</span>人</span><br>🔹 文职辅警可采用<span class="kh kh-blue">劳务派遣</span>方式招录，但应<span class="kh kh-red">严格控制规模</span>',
+              extra: '📌 辅警层级分六级，一级最高。派出所只能罚500元以内。' }
+        ],
+        quizzes: [
+            { q: '应聘辅警的最低年龄要求是多少周岁？', opts: ['A. 18周岁', 'B. 20周岁', 'C. 22周岁', 'D. 25周岁'], correct: 1, type: 'single', quizIndex: 21,
+              d: 'A项错误：18岁是普通公务员报考年龄。\nB项正确：应聘辅警应年满20周岁。\nC项错误。\nD项错误。',
+              t: '辅警要20岁才能考！不是18岁。' },
+            { q: '勤务辅警初任培训时间不少于多少天？', opts: ['A. 30天', 'B. 60天', 'C. 90天', 'D. 120天'], correct: 2, type: 'single', quizIndex: 22,
+              d: 'A项错误。\nB项错误。\nC项正确：初任培训不少于90天。\nD项错误。',
+              t: '初任培训=90天（三个月）。' }
+        ]
+    },
+    // ==================== 模块10：刑法数字 ====================
+    {
+        id: 'mod10', iconClass: 'icon-blue', iconEmoji: '⚔️',
+        title: '十、刑法 · 数字考点',
+        subtitle: '刑事责任年龄 · 追诉时效',
+        items: [
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core',
+              title: '1. 刑事责任年龄——"12/14/16"三个关键年龄',
+              content: '<table class="info-table"><tr><th>年龄阶段</th><th>刑事责任</th><th>说明</th></tr><tr><td><span class="kh kh-red">不满<span class="big-num">12</span>周岁</span></td><td><span class="kh kh-red">完全不负</span></td><td>任何犯罪都不负刑事责任</td></tr><tr><td><span class="kh kh-blue"><span class="big-num">12-14</span>周岁</span></td><td><span class="kh kh-blue">相对不负</span>（需最高检核准）</td><td>故意杀人、故意伤害致人重伤或死亡、强奸、抢劫、贩卖毒品、放火、爆炸、投放危险物质罪</td></tr><tr><td><span class="kh kh-green"><span class="big-num">14-16</span>周岁</span></td><td><span class="kh kh-green">相对负责</span></td><td>上述8种重罪需负责</td></tr><tr><td><span class="kh kh-red"><span class="big-num">16</span>周岁以上</span></td><td><span class="kh kh-red">完全负责</span></td><td>所有犯罪都要负责</td></tr></table>',
+              extra: '📌 口诀："12下无责，12-14特残忍需核准，14-16八重罪，16上全责"。' },
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core',
+              title: '2. 追诉时效——"5/10/15/20年"',
+              content: '<table class="info-table"><tr><th>法定最高刑</th><th>追诉期限</th></tr><tr><td>不满<span class="big-num">5</span>年有期徒刑</td><td><span class="kh kh-red"><span class="big-num">5</span>年</span></td></tr><tr><td><span class="big-num">5</span>年以上不满<span class="big-num">10</span>年</td><td><span class="kh kh-red"><span class="big-num">10</span>年</span></td></tr><tr><td><span class="big-num">10</span>年以上有期徒刑</td><td><span class="kh kh-red"><span class="big-num">15</span>年</span></td></tr><tr><td>无期徒刑、死刑</td><td><span class="kh kh-red"><span class="big-num">20</span>年</span>（最高检核准可追诉）</td></tr></table>',
+              extra: '📌 口诀："不五、不十、不十五、不二十"。"不"指"不满"的对应追诉年限。' }
+        ],
+        quizzes: [
+            { q: '完全负刑事责任的年龄是？', opts: ['A. 12周岁', 'B. 14周岁', 'C. 16周岁', 'D. 18周岁'], correct: 2, type: 'single', quizIndex: 23,
+              d: 'A项错误：12周岁以下完全不负。\nB项错误：14-16周岁只对8种重罪负责。\nC项正确：16周岁以上对所有犯罪负刑事责任。\nD项错误：18周岁是成年年龄。',
+              t: '16岁以上=完全负刑责。' }
+        ]
+    },
+    // ==================== 模块11：刑诉法数字 ====================
+    {
+        id: 'mod11', iconClass: 'icon-green', iconEmoji: '🔍',
+        title: '十一、刑事诉讼法 · 数字考点',
+        subtitle: '刑事拘留 · 取保候审 · 监视居住 · 拘传 · 审限',
+        items: [
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core',
+              title: '1. 刑事强制措施期限——"取12、监6、拘37"',
+              content: '<table class="info-table"><tr><th>强制措施</th><th>最长期限</th><th>记忆口诀</th></tr><tr><td>拘传</td><td><span class="kh kh-red">一般<span class="big-num">12</span>小时</span>，最长<span class="big-num">24</span>小时</td><td>十二二四</td></tr><tr><td>取保候审</td><td><span class="kh kh-red">最长<span class="big-num">12</span>个月</span></td><td>取十二</td></tr><tr><td>监视居住</td><td><span class="kh kh-red">最长<span class="big-num">6</span>个月</span></td><td>监六</td></tr><tr><td>刑事拘留</td><td><span class="kh kh-red">最长<span class="big-num">37</span>天</span>（3+4+30）</td><td>拘三七</td></tr></table>',
+              extra: '📌 刑事拘留37天怎么算？3日（公安提捕）+4日（检察院决定）+30日（特殊延长）=37天。' },
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core',
+              title: '2. 审理期限——"一审2月、简易20日、上诉10/5日"',
+              content: '<table class="info-table"><tr><th>程序</th><th>期限</th></tr><tr><td>一审公诉（一般）</td><td><span class="kh kh-red"><span class="big-num">2</span>个月</span>，最长<span class="big-num">3</span>个月</td></tr><tr><td>简易程序</td><td><span class="kh kh-red"><span class="big-num">20</span>日内</span>审结（3年以下）</td></tr><tr><td>上诉（判决）</td><td><span class="kh kh-red"><span class="big-num">10</span>日内</span></td></tr><tr><td>上诉（裁定）</td><td><span class="kh kh-red"><span class="big-num">5</span>日内</span></td></tr></table>',
+              extra: '📌 口诀："判决上诉十，裁定上诉五；一审两个月，简易二十天"。' }
+        ],
+        quizzes: [
+            { q: '刑事拘留的最长期限是多少天？', opts: ['A. 30天', 'B. 37天', 'C. 14天', 'D. 7天'], correct: 1, type: 'single', quizIndex: 24,
+              d: 'A项错误：30天是可延长的期限。\nB项正确：37天=3+4+30。\nC项错误。\nD项错误。',
+              t: '刑事拘留最长37天。' },
+            { q: '取保候审的最长期限是？', opts: ['A. 6个月', 'B. 12个月', 'C. 18个月', 'D. 24个月'], correct: 1, type: 'single', quizIndex: 25,
+              d: 'A项错误：6个月是监视居住。\nB项正确：取保候审最长12个月。\nC项错误。\nD项错误。',
+              t: '取保=12个月。' }
+        ]
+    },
+    // ==================== 对比记忆表 ====================
+    {
+        id: 'compare', iconClass: 'icon-yellow', iconEmoji: '📊',
+        title: '📊 数字对比记忆表',
+        subtitle: '易混淆数字大对比',
+        items: [
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core',
+              title: '1. 行政拘留 vs 刑事拘留',
+              content: '<table class="info-table"><tr><th>对比项</th><th>行政拘留</th><th>刑事拘留</th></tr><tr><td>性质</td><td>行政处罚</td><td>刑事强制措施</td></tr><tr><td>依据</td><td>治安管理处罚法</td><td>刑事诉讼法</td></tr><tr><td>最长期限</td><td><span class="kh kh-red"><span class="big-num">20</span>日</span>（合并）</td><td><span class="kh kh-red"><span class="big-num">37</span>日</span>（3+4+30）</td></tr></table>',
+              extra: '📌 行政20天，刑事37天。别搞混！' },
+            { type: 'ki', badge: '核心', badgeClass: 'badge-core',
+              title: '2. 行政复议 vs 行政诉讼起诉期限',
+              content: '<table class="info-table"><tr><th>对比项</th><th>行政复议</th><th>行政诉讼</th></tr><tr><td>申请/起诉期限</td><td><span class="kh kh-red"><span class="big-num">60</span>日</span></td><td><span class="kh kh-red">直接起诉<span class="big-num">6</span>个月</span></td></tr><tr><td>复议后起诉</td><td>—</td><td><span class="kh kh-red"><span class="big-num">15</span>日</span></td></tr><tr><td>审查范围</td><td>合法性+<span class="kh kh-green">合理性</span></td><td><span class="kh kh-red">仅合法性</span></td></tr></table>',
+              extra: '📌 复议60天，诉讼6个月。复议后起诉只有15天！' },
+            { type: 'ki', badge: '数字', badgeClass: 'badge-num',
+              title: '3. 各类"30日"期限汇总',
+              content: '<table class="info-table"><tr><th>事项</th><th>一般期限</th><th>延长</th><th>最长</th></tr><tr><td>查封扣押</td><td><span class="kh kh-red">30日</span></td><td>30日</td><td><span class="kh kh-red">60日</span></td></tr><tr><td>冻结存款</td><td><span class="kh kh-red">30日</span></td><td>30日</td><td><span class="kh kh-red">60日</span></td></tr><tr><td>复议决定（普通）</td><td><span class="kh kh-red">60日</span></td><td>30日</td><td><span class="kh kh-red">90日</span></td></tr><tr><td>治安办案期限</td><td><span class="kh kh-red">30日</span></td><td>30日</td><td><span class="kh kh-red">60日</span></td></tr></table>',
+              extra: '📌 查封扣押/冻结/治安办案都是30+30=60天；复议决定是60+30=90天。' },
+            { type: 'ki', badge: '陷阱', badgeClass: 'badge-trap',
+              title: '4. 询问查证 vs 继续盘问 vs 拘传',
+              content: '<table class="info-table"><tr><th>措施</th><th>适用法律</th><th>一般期限</th><th>最长</th></tr><tr><td>询问查证（治安）</td><td>治安管理处罚法</td><td><span class="kh kh-red">8小时</span></td><td><span class="kh kh-red">24小时</span></td></tr><tr><td>继续盘问（留置）</td><td>人民警察法</td><td><span class="kh kh-red">24小时</span></td><td><span class="kh kh-red">48小时</span></td></tr><tr><td>拘传（刑事）</td><td>刑事诉讼法</td><td><span class="kh kh-red">12小时</span></td><td><span class="kh kh-red">24小时</span></td></tr></table>',
+              extra: '📌 三个不同的"问"，三个不同的时间。治安询问8→24，留置24→48，拘传12→24。' }
+        ]
+    },
+    // ==================== 综合练习 ====================
+    {
+        id: 'practice', iconClass: 'icon-red', iconEmoji: '📝',
+        title: '综合练习 · 单选10 + 判断5 + 多选3',
+        subtitle: '数字专项综合检测',
+        quizzes: [
+            // ===== 单选题10道 =====
+            { q: '行政许可的一般审查期限是多少日？', opts: ['A. 15日', 'B. 20日', 'C. 30日', 'D. 45日'], correct: 1, type: 'single', quizIndex: 26,
+              d: 'A项错误：15日不是许可审查期限。\nB项正确：一般审查20日，可延长10日。\nC项错误：30日是延长期满后的最长时限。\nD项错误：45日是统一办理的期限。',
+              t: '一般许可=20天。' },
+            { q: '查封扣押的最长期限是多少日？', opts: ['A. 30日', 'B. 45日', 'C. 60日', 'D. 90日'], correct: 2, type: 'single', quizIndex: 27,
+              d: 'A项错误：30日是一般期限，还可延长。\nB项错误：45日不是法定期限。\nC项正确：30+30=60日封顶。\nD项错误。',
+              t: '查封扣押=60天封顶。' },
+            { q: '行政复议的申请期限是多少日？', opts: ['A. 30日', 'B. 60日', 'C. 3个月', 'D. 6个月'], correct: 1, type: 'single', quizIndex: 28,
+              d: 'A项错误：30日是简易程序决定期限。\nB项正确：复议申请期限是60日。\nC项错误。\nD项错误：6个月是行政诉讼期限。',
+              t: '复议申请=60天。' },
+            { q: '行政诉讼中，直接起诉的期限是？', opts: ['A. 30日', 'B. 60日', 'C. 3个月', 'D. 6个月'], correct: 3, type: 'single', quizIndex: 29,
+              d: 'A项错误。\nB项错误：60日是复议申请期限。\nC项错误：旧法规定。\nD项正确：直接起诉6个月。',
+              t: '直接起诉=6个月。' },
+            { q: '行政拘留合并执行最长不超过多少日？', opts: ['A. 15日', 'B. 20日', 'C. 30日', 'D. 37日'], correct: 1, type: 'single', quizIndex: 30,
+              d: 'A项错误：15日是单个拘留最长。\nB项正确：合并执行最长20日。\nC项错误：30日是治安办案期限。\nD项错误：37日是刑事拘留最长期限。',
+              t: '行政拘留合并=20天。' },
+            { q: '勤务辅警初任培训时间不少于多少天？', opts: ['A. 30天', 'B. 60天', 'C. 90天', 'D. 120天'], correct: 2, type: 'single', quizIndex: 31,
+              d: 'A项错误。\nB项错误。\nC项正确：不少于90天。\nD项错误。',
+              t: '初任培训=90天。' },
+            { q: '刑事拘留的最长期限是多少天？', opts: ['A. 30天', 'B. 37天', 'C. 14天', 'D. 7天'], correct: 1, type: 'single', quizIndex: 32,
+              d: 'A项错误。\nB项正确：37天=3+4+30。\nC项错误。\nD项错误。',
+              t: '刑事拘留=37天。' },
+            { q: '行政处罚的办案期限是立案之日起多少日内？', opts: ['A. 30日', 'B. 60日', 'C. 90日', 'D. 120日'], correct: 2, type: 'single', quizIndex: 33,
+              d: 'A项错误：30日是治安案件期限。\nB项错误。\nC项正确：90日内作出决定。\nD项错误。',
+              t: '行政处罚办案=90天。' },
+            { q: '治安管理处罚的追究时效是多少？', opts: ['A. 3个月', 'B. 6个月', 'C. 1年', 'D. 2年'], correct: 1, type: 'single', quizIndex: 34,
+              d: 'A项错误。\nB项正确：治安追究时效6个月。\nC项错误。\nD项错误：2年是行政处罚一般时效。',
+              t: '治安案件=6个月时效。' },
+            { q: '国家赔偿请求时效是多少年？', opts: ['A. 1年', 'B. 2年', 'C. 3年', 'D. 5年'], correct: 1, type: 'single', quizIndex: 35,
+              d: 'A项错误。\nB项正确：2年。\nC项错误。\nD项错误：5年是特殊追究时效。',
+              t: '国赔时效=2年。' },
+
+            // ===== 判断题5道 =====
+            { q: '听证申请期限是5日，通知听证是7日前。', opts: ['✅ 正确', '❌ 错误'], correct: 0, type: 'single', isTF: true, tfId: 'tf1',
+              d: 'A项正确：听证申请5日，通知7日前，符合法律规定。\nB项错误。',
+              t: '5日申请，7日通知——正确。' },
+            { q: '查封扣押的期限最长不超过90日。', opts: ['✅ 正确', '❌ 错误'], correct: 1, type: 'single', isTF: true, tfId: 'tf2',
+              d: 'A项错误：最长不超过60日（30+30），不是90日。\nB项正确：题干说法错误。',
+              t: '查封扣押=60天封顶，不是90天。' },
+            { q: '行政复议的普通程序决定期限是60日，可延长30日。', opts: ['✅ 正确', '❌ 错误'], correct: 0, type: 'single', isTF: true, tfId: 'tf3',
+              d: 'A项正确：复议普通程序60日，可延长30日，最长90日。\nB项错误。',
+              t: '复议普通=60+30=90天。正确。' },
+            { q: '取保候审的最长期限是6个月。', opts: ['✅ 正确', '❌ 错误'], correct: 1, type: 'single', isTF: true, tfId: 'tf4',
+              d: 'A项错误：取保候审最长12个月，6个月是监视居住的期限。\nB项正确：题干说法错误。',
+              t: '取保=12月，监视=6月。别搞反！' },
+            { q: '行政许可的延续申请应在有效期届满前20日内提出。', opts: ['✅ 正确', '❌ 错误'], correct: 1, type: 'single', isTF: true, tfId: 'tf5',
+              d: 'A项错误：延续申请应在有效期届满30日前提出，不是20日。\nB项正确：题干说法错误。',
+              t: '续证=提前30天，不是20天。' },
+
+            // ===== 多选题3道 =====
+            { q: '下列哪些期限是30日（可延长30日）？', opts: ['A. 查封扣押', 'B. 冻结存款', 'C. 复议申请', 'D. 治安办案期限'], correct: [0, 1, 3], type: 'multi', multi: true, quizIndex: 36,
+              d: 'A项正确：查封扣押30+30=60。\nB项正确：冻结存款30+30=60。\nC项错误：复议申请是60日，不能延长。\nD项正确：治安办案期限30日，可延长30日，最长60日。',
+              t: '查封扣押、冻结、治安办案都是30+30=60。复议申请是60天不能延。' },
+            { q: '下列哪些属于刑事强制措施？', opts: ['A. 拘传', 'B. 取保候审', 'C. 监视居住', 'D. 行政拘留', 'E. 逮捕'], correct: [0, 1, 2, 4], type: 'multi', multi: true, quizIndex: 37,
+              d: 'A项正确：拘传是刑事强制措施。\nB项正确：取保候审是刑事强制措施。\nC项正确：监视居住是刑事强制措施。\nD项错误：行政拘留是行政处罚，不是刑事强制措施。\nE项正确：逮捕是刑事强制措施。',
+              t: '拘传、取保、监视、逮捕=刑事强制措施。行政拘留=行政处罚。' },
+            { q: '下列哪些属于行政处罚的听证范围？', opts: ['A. 吊销许可证件', 'B. 责令停产停业', 'C. 较大数额罚款', 'D. 警告', 'E. 行政拘留'], correct: [0, 1, 2], type: 'multi', multi: true, quizIndex: 38,
+              d: 'A项正确：吊销许可证件可以申请听证。\nB项正确：责令停产停业可以申请听证。\nC项正确：较大数额罚款可以申请听证。\nD项错误：警告是最轻的处罚，不需要听证。\nE项错误：行政拘留不属于听证范围。',
+              t: '吊销、停业、大额罚款=要听证。警告和拘留=不用听证。' }
+        ]
+    }
+
+
+// ⬇️ 第2次输出结束，第3次将追加模块9-11（辅警/刑法/刑诉）+ 对比记忆表 + 综合练习
+
+];
+// ⬇️ 第1次输出结束，第2次将追加模块5-8
+</script>
+<script>
+function renderAll(){var m=document.getElementById('mainContent');var h='';knowledgeData.forEach(function(mod){h+='<div class="card" id="'+mod.id+'"><div class="section-title"><div class="icon '+mod.iconClass+'">'+mod.iconEmoji+'</div>'+mod.title+'</div>';if(mod.subtitle)h+='<div class="subtitle">'+mod.subtitle+'</div>';if(mod.items&&mod.items.length>0){h+='<div class="ki-grid">';mod.items.forEach(function(item){if(item.type==='table')h+=item.html;else if(item.type==='ki')h+=renderKI(item);});h+='</div>';}if(mod.quizzes&&mod.quizzes.length>0){mod.quizzes.forEach(function(q,qi){h+=renderQuiz(q,mod.id+'-q'+qi);});}h+='</div>';});m.innerHTML=h;generateTOC();}
+function renderKI(item){var h='<div class="ki-item">';h+='<div class="ki-title-row">'+(item.badge?'<span class="badge '+(item.badgeClass||'badge-num')+'">'+item.badge+'</span> ':'')+item.title+'</div>';h+='<div class="ki-content">'+item.content+'</div>';if(item.extra)h+='<div style="margin-top:6px;color:#5c5347;font-size:0.88rem;">📌 '+item.extra+'</div>';if(item.example){h+='<div class="example-block"><div class="ex-label">📖 生动案例</div><div class="ex-q">'+item.example.q+'</div><div class="ex-a">'+item.example.a+'</div></div>';}h+='</div>';return h;}
+function renderQuiz(q,qid){var qTypeLabel=q.multi?'【多选题】':'【单选题】';var h='<div class="quiz-wrap" data-qid="'+qid+'">';if(q.quizIndex){h+='<div class="q-type">📝 '+qTypeLabel+' · 第'+q.quizIndex+'题</div>';}else if(q.tfId){h+='<div class="q-type">📝 '+qTypeLabel+' · '+q.tfId+'</div>';}else{h+='<div class="q-type">📝 '+qTypeLabel+'</div>';}h+='<div class="q-text">'+q.q+'</div><ul class="opt-list">';for(var i=0;i<q.opts.length;i++){h+='<li data-idx="'+i+'" onclick="selectOpt(this,\''+qid+'\','+i+','+(q.multi||false)+')">'+q.opts[i]+'</li>';}h+='</ul><div class="btn-row"><button class="btn btn-primary" onclick="submitQuiz(\''+qid+'\','+JSON.stringify(q.correct)+','+(q.multi||false)+')">✅ 提交答案</button><button class="btn btn-outline" onclick="resetQuiz(\''+qid+'\')">🔄 重做</button></div><div class="explain-card" id="ex-'+qid+'"><div class="ex-head"></div><div class="ex-body"></div>';if(q.d){var detailHtml=q.d;detailHtml=detailHtml.replace(/\n/g,'<br>');detailHtml=detailHtml.replace(/([A-E])项正确：/g,'<span style="color:#145a32;">✅ $1项正确：</span>');detailHtml=detailHtml.replace(/([A-E])项错误：/g,'<span style="color:#b22222;">❌ $1项错误：</span>');h+='<div class="ex-detail" style="margin-top:10px;padding:10px 14px;background:#fff;border-radius:6px;font-size:0.88rem;line-height:1.8;display:none;">📋 <b>逐项解析：</b><br>'+detailHtml+'</div>';}h+='<div class="ex-tip">💡 <b>大白话理解：</b>'+q.t+'</div></div></div>';return h;}
+function selectOpt(el,qid,idx,multi){var w=el.closest('.quiz-wrap');if(w.classList.contains('submitted'))return;var o=w.querySelectorAll('.opt-list li');if(multi){el.classList.toggle('selected');}else{o.forEach(function(x){x.classList.remove('selected');});el.classList.add('selected');}}
+function submitQuiz(qid,correct,multi){var w=document.querySelector('[data-qid="'+qid+'"]');if(w.classList.contains('submitted'))return;w.classList.add('submitted');var o=w.querySelectorAll('.opt-list li');var ca=Array.isArray(correct)?correct:[correct];var si=[];for(var i=0;i<o.length;i++){if(o[i].classList.contains('selected'))si.push(i);}var ic;if(multi){ic=si.length===ca.length;for(var j=0;j<si.length;j++){if(ca.indexOf(si[j])===-1){ic=false;break;}}}else{ic=si.length===1&&si[0]===ca[0];}for(var k=0;k<o.length;k++){o[k].classList.add('disabled');if(ca.indexOf(k)!==-1)o[k].classList.add('correct');}if(!ic){for(var m=0;m<si.length;m++){if(ca.indexOf(si[m])===-1)o[si[m]].classList.add('wrong');}}var ex=document.getElementById('ex-'+qid);ex.classList.add('show');if(ic){ex.classList.add('correct-ex');ex.classList.remove('wrong-ex');ex.querySelector('.ex-head').textContent='🎉 回答正确！';ex.querySelector('.ex-body').textContent='';var ed=ex.querySelector('.ex-detail');if(ed)ed.style.display='block';}else{ex.classList.add('wrong-ex');ex.classList.remove('correct-ex');ex.querySelector('.ex-head').textContent='😞 回答错误';var lt=['A','B','C','D','E'];var cl=ca.map(function(c){return lt[c];}).join('、');ex.querySelector('.ex-body').innerHTML='正确答案是：<b>'+cl+'</b>';var ed2=ex.querySelector('.ex-detail');if(ed2)ed2.style.display='block';}}
+function resetQuiz(qid){var w=document.querySelector('[data-qid="'+qid+'"]');w.classList.remove('submitted');w.querySelectorAll('.opt-list li').forEach(function(o){o.classList.remove('selected','correct','wrong','disabled');});var ex=document.getElementById('ex-'+qid);ex.classList.remove('show','correct-ex','wrong-ex');}
+function generateTOC(){var toc=document.getElementById('toc');if(!toc)return;var th='<div class="toc-title">📑 数字记忆 · 知识目录</div>';var links='';knowledgeData.forEach(function(mod){links+='<a href="#'+mod.id+'">'+mod.title+'</a>';});toc.innerHTML=th+links;document.querySelectorAll('.toc a').forEach(function(link){link.addEventListener('click',function(){if(window.innerWidth<=768)closeToc();});});}
+function toggleToc(){document.getElementById('toc').classList.toggle('show');document.getElementById('tocOverlay').classList.toggle('show');}
+function closeToc(){document.getElementById('toc').classList.remove('show');document.getElementById('tocOverlay').classList.remove('show');}
+document.addEventListener('DOMContentLoaded',renderAll);
+</script>
+</body>
+</html>

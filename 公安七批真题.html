@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>深圳市第七批辅警招聘《公安素质测试》真题演练</title>
+    <style>
+        :root {
+            --bg: #fdf8f3;
+            --card-bg: #ffffff;
+            --text: #2c2416;
+            --text-light: #5c5347;
+            --accent: #b22222;
+            --highlight: #fff3cd;
+            --highlight-border: #f0c040;
+            --example-bg: #f0faf5;
+            --example-border: #a3e4bc;
+            --plain-box-bg: #ffffff;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+            --radius: 14px;
+            --radius-sm: 10px;
+            --font: 'PingFang SC','Microsoft YaHei','Hiragino Sans GB','Noto Sans SC',system-ui,-apple-system,sans-serif;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { background:var(--bg); font-family:var(--font); color:var(--text); line-height:1.7; }
+        .main { max-width:900px; margin:0 auto; padding:24px 16px 100px; }
+        .float-toc-btn { position:fixed; top:24px; left:24px; width:52px; height:52px; border-radius:50%;
+            background:var(--accent); color:white; border:none; font-size:24px; z-index:100; box-shadow:0 4px 14px rgba(0,0,0,0.2); cursor:pointer; }
+        .toc-panel { position:fixed; top:0; left:-300px; width:280px; height:100vh; background:white; border-right:2px solid #f0ebe0;
+            box-shadow:4px 0 16px rgba(0,0,0,0.1); z-index:99; overflow-y:auto; padding:20px; transition:left 0.3s; }
+        .toc-panel.open { left:0; }
+        .toc-panel h2 { font-size:18px; margin-bottom:12px; color:var(--accent); }
+        .toc-grid { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:16px; }
+        .toc-btn { width:36px; height:36px; border:1px solid #e9e4db; border-radius:8px; background:white; font-size:13px; cursor:pointer; }
+        .toc-btn.submitted { background:#f5f0e8; color:#b9b0a0; }
+        .toc-section-title { font-weight:bold; margin:12px 0 6px; color:var(--text-light); font-size:14px; }
+        .overlay { position:fixed; inset:0; background:rgba(0,0,0,0.25); z-index:98; display:none; }
+        .overlay.show { display:block; }
+        .timer-box { text-align:right; font-size:18px; margin-bottom:20px; color:var(--accent); font-weight:600; }
+        .start-btn { display:inline-block; padding:8px 20px; background:var(--accent); color:white; border:none; border-radius:20px; cursor:pointer; margin-left:12px; }
+        .card { background:var(--card-bg); border-radius:var(--radius); box-shadow:var(--shadow-md); border:1px solid #f0ebe0; padding:28px 30px; margin-bottom:28px; }
+        .card h2 { font-size:22px; margin-bottom:16px; border-left:5px solid var(--accent); padding-left:12px; }
+        .quiz-wrap { border:2px solid #f0ebe0; border-radius:var(--radius-sm); padding:18px 20px; margin-bottom:18px; background:#fffbf7; }
+        .quiz-wrap.submitted { pointer-events:none; opacity:0.95; }
+        .q-title { font-weight:700; margin-bottom:10px; font-size:16px; }
+        .opt-list { list-style:none; }
+        .opt-list li { border:2px solid #e9e4db; border-radius:25px; padding:10px 18px; margin-bottom:8px; cursor:pointer; transition:0.2s; background:white; }
+        .opt-list li:hover { border-color:#c0b090; }
+        .opt-list li.selected { border-color:#3b7ddd; background:#eaf1fb; }
+        .opt-list li.correct { border-color:#34a853; background:#eafaf1; }
+        .opt-list li.wrong { border-color:#ea4335; background:#fdedec; }
+        .explain-card { margin-top:12px; padding:14px 16px; border-radius:10px; background:var(--example-bg); border:1px solid var(--example-border); display:none; line-height:1.8; }
+        .explain-card.show { display:block; }
+        .plain-box { background:#ffffff; border:1px solid #e9e4db; border-radius:8px; padding:10px 14px; margin-top:8px; font-size:15px; }
+        .btn { display:inline-block; padding:12px 32px; border-radius:25px; font-size:16px; font-weight:600; cursor:pointer; border:none; }
+        .btn-primary { background:var(--accent); color:white; }
+        .module-footer { margin-top:16px; text-align:right; display:flex; align-items:center; justify-content:flex-end; gap:16px; }
+        .module-score { font-weight:bold; color:var(--accent); }
+        .result-box { margin-top:20px; padding:20px; background:var(--card-bg); border:2px solid var(--accent); border-radius:var(--radius); box-shadow:var(--shadow-md); text-align:center; font-size:1.2rem; font-weight:600; color:var(--accent); display:none; }
+        @media (max-width:768px) { .main { padding:16px 10px; } .card { padding:18px 14px; } }
+    </style>
+</head>
+<body>
+<div class="overlay" id="overlay" onclick="closeToc()"></div>
+<div class="toc-panel" id="tocPanel">
+    <h2>📋 题目导航</h2>
+    <div class="toc-section-title">单选题（1-50）</div>
+    <div class="toc-grid" id="tocSingle"></div>
+    <div class="toc-section-title">多选题（51-70）</div>
+    <div class="toc-grid" id="tocMulti"></div>
+    <div class="toc-section-title">判断题（71-90）</div>
+    <div class="toc-grid" id="tocJudge"></div>
+</div>
+<button class="float-toc-btn" onclick="toggleToc()">☰</button>
+
+<div class="main" id="mainContent">
+    <div class="timer-box" id="timerBox">
+        ⏱ 00:00
+        <button class="start-btn" id="startTimerBtn" onclick="startTimer()">▶ 开始考试</button>
+    </div>
+    <div id="module1"></div>
+    <div id="module2"></div>
+    <div id="module3"></div>
+    <div class="result-box" id="resultBox"></div>
+</div>
+
+<script>
+    // ========== 全局状态 ==========
+    var timerInterval = null;
+    var startTime = null;
+    var totalSeconds = 0;
+    var timerStarted = false;
+    var moduleSubmitted = { single: false, multi: false, judge: false };
+    var score = { single: 0, multi: 0, judge: 0 };
+    var correctCounts = { single: 0, multi: 0, judge: 0 };
+
+    function toggleToc() { document.getElementById('tocPanel').classList.toggle('open'); document.getElementById('overlay').classList.toggle('show'); }
+    function closeToc() { document.getElementById('tocPanel').classList.remove('open'); document.getElementById('overlay').classList.remove('show'); }
+
+    function formatTime(sec) { var m=Math.floor(sec/60), s=sec%60; return (m<10?'0'+m:m)+':'+(s<10?'0'+s:s); }
+    function startTimer() {
+        if (timerStarted) return;
+        timerStarted = true;
+        document.getElementById('startTimerBtn').style.display = 'none';
+        startTime = new Date();
+        timerInterval = setInterval(function(){
+            totalSeconds = Math.floor((new Date() - startTime) / 1000);
+            document.getElementById('timerBox').innerHTML = '⏱ ' + formatTime(totalSeconds);
+        }, 1000);
+    }
+
+    function renderOptions(quizIndex, opts, type) {
+        var labels = 'ABCDEF';
+        var html = '<ul class="opt-list" id="opt-'+quizIndex+'">';
+        for (var i=0; i<opts.length; i++) {
+            html += '<li onclick="selectOption(\''+quizIndex+'\','+i+',\''+type+'\')">'+labels[i]+'. '+opts[i]+'</li>';
+        }
+        html += '</ul>';
+        return html;
+    }
+    function selectOption(quizIndex, optIndex, type) {
+        if (document.getElementById('wrap-'+quizIndex).classList.contains('submitted')) return;
+        if (!timerStarted) startTimer();
+        var lis = document.querySelectorAll('#opt-'+quizIndex+' li');
+        if (type === 'single') {
+            for (var i=0; i<lis.length; i++) lis[i].classList.remove('selected');
+        }
+        lis[optIndex].classList.toggle('selected');
+    }
+
+    function beautifyExplain(d, t) {
+        var lines = d.split('\n');
+        var html = '';
+        for (var i = 0; i < lines.length; i++) {
+            var line = lines[i].trim();
+            if (!line) continue;
+            if (/^[A-F]项正确：/.test(line)) html += '✅ ' + line + '<br>';
+            else if (/^[A-F]项错误：/.test(line)) html += '❌ ' + line + '<br>';
+            else html += line + '<br>';
+        }
+        if (t) html += '<div class="plain-box"><strong>💡 大白话：</strong>' + t + '</div>';
+        return html;
+    }
+
+    function submitModule(type) {
+        if (moduleSubmitted[type]) return;
+        var questions = [];
+        if (type === 'single') questions = singleQuestions;
+        else if (type === 'multi') questions = multiQuestions;
+        else if (type === 'judge') questions = judgeQuestions;
+        else return;
+
+        var totalScorePerModule = 0;
+        var correctCount = 0;
+
+        for (var i = 0; i < questions.length; i++) {
+            var q = questions[i];
+            var wrap = document.getElementById('wrap-' + q.quizIndex);
+            if (!wrap) continue;
+
+            var selectedOpts = document.querySelectorAll('#opt-' + q.quizIndex + ' li.selected');
+            var userAnswer = [];
+            for (var j = 0; j < selectedOpts.length; j++) {
+                userAnswer.push(Array.prototype.indexOf.call(selectedOpts[j].parentNode.children, selectedOpts[j]));
+            }
+
+            var lis = document.querySelectorAll('#opt-' + q.quizIndex + ' li');
+            var correctSet = [];
+            if (type === 'judge') {
+                correctSet = [q.correct === 'A' ? 0 : 1];
+            } else {
+                correctSet = Array.isArray(q.correct) ? q.correct : [q.correct];
+            }
+
+            for (var k = 0; k < lis.length; k++) {
+                if (correctSet.indexOf(k) >= 0) lis[k].classList.add('correct');
+                else if (userAnswer.indexOf(k) >= 0 && correctSet.indexOf(k) < 0) lis[k].classList.add('wrong');
+            }
+
+            if (type === 'single' || type === 'judge') {
+                if (userAnswer.length === 1 && userAnswer[0] === correctSet[0]) {
+                    totalScorePerModule += 1;
+                    correctCount++;
+                }
+            } else if (type === 'multi') {
+                var hasWrong = false;
+                for (var u = 0; u < userAnswer.length; u++) {
+                    if (correctSet.indexOf(userAnswer[u]) < 0) { hasWrong = true; break; }
+                }
+                if (!hasWrong) {
+                    if (userAnswer.length === correctSet.length) {
+                        totalScorePerModule += 1.5;
+                        correctCount++;
+                    } else if (userAnswer.length < correctSet.length) {
+                        totalScorePerModule += userAnswer.length * 0.3;
+                    }
+                }
+            }
+
+            var exp = document.getElementById('exp-' + q.quizIndex);
+            if (exp) {
+                exp.innerHTML = beautifyExplain(q.d, q.t);
+                exp.classList.add('show');
+            }
+            wrap.classList.add('submitted');
+            var btn = document.getElementById('tocBtn-' + q.quizIndex);
+            if (btn) btn.classList.add('submitted');
+        }
+
+        moduleSubmitted[type] = true;
+        correctCounts[type] = correctCount;
+        score[type] = totalScorePerModule;
+
+        var scoreSpan = document.getElementById('score-' + type);
+        if (scoreSpan) {
+            scoreSpan.style.display = 'inline';
+            scoreSpan.innerHTML = '✅ 得分：' + totalScorePerModule.toFixed(1) + '分 | 正确率：' + correctCount + '/' + questions.length;
+        }
+        updateResult();
+    }
+
+    function updateResult() {
+        var total = score.single + score.multi + score.judge;
+        var totalCorrect = correctCounts.single + correctCounts.multi + correctCounts.judge;
+        var totalQuestions = 90;
+        var accuracy = totalQuestions > 0 ? (totalCorrect / totalQuestions * 100) : 0;
+        var mins = Math.floor(totalSeconds / 60);
+        var secs = totalSeconds % 60;
+        var timeStr = mins + '分' + (secs < 10 ? '0' : '') + secs + '秒';
+        var box = document.getElementById('resultBox');
+        if (moduleSubmitted.single || moduleSubmitted.multi || moduleSubmitted.judge) {
+            box.style.display = 'block';
+            box.innerHTML = '📊 总分：' + total.toFixed(1) + '分 | 整体正确率：' + accuracy.toFixed(1) + '% | 用时：' + timeStr;
+        }
+    }
+
+    // ========== 单选题数据（1-10） ==========
+    var singleQuestions = [
+        {
+            quizIndex: 1,
+            q: '人民警察对于上级命令的执行，以下做法不正确的是（ ）。',
+            opts: ['人民警察必须执行上级的命令', '人民警察认为命令有错误的，不得中止或改变命令的执行', '人民警察认为命令有错误，按照规定向上级提出意见，不被采纳的，必须服从该命令', '人民警察有权拒绝执行人民警察职责范围内的指令'],
+            correct: 3,
+            d: 'A项正确：服从命令是人民警察的义务。\nB项正确：认为命令有误，不可自行中止或改变，但可提出意见。\nC项正确：提出意见不被采纳时，仍须执行命令。\nD项错误：对于职责范围内的合法指令，人民警察必须执行，无权拒绝。题干问“不正确”，故选D。',
+            t: '警察对上级指令不能随便说不干，职责内必须服从，有意见可以提，但上级坚持就得执行。'
+        },
+        {
+            quizIndex: 2,
+            q: '辅警应当在公安机关及其人民警察的（ ）下开展警务辅助工作。',
+            opts: ['指挥和监督', '支持和配合', '指导和支持', '管制和教育'],
+            correct: 0,
+            d: 'A项正确：根据辅警管理相关规定，辅警在公安机关及人民警察的指挥和监督下开展工作。\nB项错误：辅警是辅助力量，不能是“支持和配合”的主导地位。\nC项错误：非“指导和支持”。\nD项错误：非“管制和教育”。',
+            t: '辅警干活要在警察的指挥和监督下，不能单干。'
+        },
+        {
+            quizIndex: 3,
+            q: '甲、乙为劫取财物将在河边散步的丙杀死，当场取得丙随身携带的现金2000余元，甲、乙随后从丙携带的名片上得知丙是某公司总经理，两人经谋划后，打电话给丙的妻子丁，声称丙已被绑架，威胁丁必须于次日中午12点将10万元现金放在指定地点，否则杀害丙，丁立即报警，甲、乙被抓获，关于对本案甲、乙二人的处理，下列说法正确的是（ ）。',
+            opts: ['以抢劫罪和绑架罪并罚', '以故意杀人罪、盗窃罪和绑架罪并罚', '以抢劫罪和敲诈勒索罪并罚', '以故意杀人罪，侵占罪和敲诈勒索罪并罚'],
+            correct: 2,
+            d: 'A项错误：丙已死亡，不构成绑架罪。\nB项错误：不构成盗窃罪。\nC项正确：甲、乙先抢劫杀人构成抢劫罪，后虚构绑架事实勒索财物构成敲诈勒索罪，应数罪并罚。\nD项错误：不构成侵占罪。',
+            t: '先杀人抢钱是抢劫，人死了再打电话骗家属说是绑架要钱，那是敲诈，两罪都要算。'
+        },
+        {
+            quizIndex: 4,
+            q: '黄某因打架被县公安局罚款500元，不服该处理结果而向公安局申请复议，在复议期内，县公安局将罚款500元改为罚款50元，黄某遂申请撤回复议申请，复议机关准许，但后来县公安局并没有返还已缴的罚款450元，黄某只好再次申请复议，复议机关应（ ）。',
+            opts: ['不予受理', '转送有关机关处理', '予以受理', '告知黄某向法院申请强制执行'],
+            correct: 2,
+            d: 'A项错误：县公安局改变原处罚后未履行返还义务，属于新的不作为，可再次复议。\nB项错误：无需转送。\nC项正确：复议机关应受理黄某对县公安局不返还罚款的复议申请。\nD项错误：复议是前置救济途径，非直接申请强制执行。',
+            t: '改了罚单却不退多交的钱，可以再告它不作为，复议机关要收。'
+        },
+        {
+            quizIndex: 5,
+            q: '在构建和谐警民关系中，公安机关及人民警察应不断提升（ ）和美誉度，做到公正、廉洁、文明，永远做人民群众的贴心人。',
+            opts: ['公信力', '执行力', '威慑力', '创新力'],
+            correct: 0,
+            d: 'A项正确：公信力是公安机关取信于民的基础，与美誉度并列为提升目标。\nB项错误：执行力是内部要求。\nC项错误：威慑力非和谐警民关系的核心。\nD项错误：创新力非本项主旨。',
+            t: '警察要让老百姓信得过，公信力和好名声很重要。'
+        },
+        {
+            quizIndex: 6,
+            q: '人民法院对于公开审判的案件，应当在开庭（ ）以前先期公布案由、被告人姓名、开庭时间和地点。',
+            opts: ['十日', '七日', '五日', '三日'],
+            correct: 3,
+            d: 'A项错误：十日非规定时限。\nB项错误：七日非规定时限。\nC项错误：五日非规定时限。\nD项正确：《刑事诉讼法》第187条，公开审判的案件，在开庭三日以前先期公布案由、被告人姓名、开庭时间和地点。',
+            t: '法院公开审案子，开庭三天前要贴公告。'
+        },
+        {
+            quizIndex: 7,
+            q: '关于公安机关技术侦察措施，下列说法正确的是（ ）。',
+            opts: ['因侦查犯罪的需要，公安机关可以自由决定是否采取技术侦察措施', '因侦查犯罪的需要，人民警察可以自由决定是否采取技术侦察措施', '因侦查犯罪的需要，办案民警可以决定是否采取技术侦察措施', '因侦查犯罪的需要，公安机关根据国家有关规定，经过严格的批准手续，可以采取技术侦察措施'],
+            correct: 3,
+            d: 'A项错误：不能“自由决定”，需经批准。\nB项错误：个人无权决定。\nC项错误：民警个人无权。\nD项正确：技术侦察需侦查需要、依法报批后方可实施。',
+            t: '监听监控不能随便搞，要按国家规定走审批。'
+        },
+        {
+            quizIndex: 8,
+            q: '根据《中华人民共和国行政许可法》，（ ）应当建立健全对行政机关实施行政许可的监督制度，加强对行政机关实施行政许可的监督检查。',
+            opts: ['市级以上人民政府', '县级以上人民政府', '市级以上人民检察院', '县级以上人民检察院'],
+            correct: 1,
+            d: 'A项错误：许可法规定为“县级以上人民政府”。\nB项正确：《行政许可法》第10条，县级以上人民政府应当建立健全监督制度。\nC项错误：检察院不是行政许可的监督主体。\nD项错误：检察院不是行政许可的监督主体。',
+            t: '县级以上政府要监督许可的实施，确保不乱来。'
+        },
+        {
+            quizIndex: 9,
+            q: '某市黑社会团体聚众扰乱车站、码头、民用航空站、运动场等公共场所秩序，该市公安民警经（ ）无效的，可以使用驱逐性、制服性警械。',
+            opts: ['警告', '训诫', '盘问', '劝阻'],
+            correct: 0,
+            d: 'A项正确：《人民警察使用警械和武器条例》第7条，经警告无效可使用驱逐性、制服性警械。\nB项错误：训诫非前置程序。\nC项错误：盘问是调查措施。\nD项错误：劝阻非法律程序。',
+            t: '要先喊话警告，不听才上警棍催泪弹。'
+        },
+        {
+            quizIndex: 10,
+            q: '张某为表达对社会的不满，持刀乱砍路人，民警赶到现场后，为制服张某，开枪击伤张某手臂，同时不慎将路人周某打伤。对此，下列说法不正确的是（ ）。',
+            opts: ['应当及时抢救受伤人员', '应当优先抢救路人周某', '应当及时保护现场', '应当及时通知受伤人员家属或其所在单位'],
+            correct: 1,
+            d: 'A项正确：无论嫌疑人还是路人，均应及时抢救。\nB项错误：抢救不分先后，“优先抢救路人”于法无据，应平等及时救治。\nC项正确：应保护现场。\nD项正确：应通知家属或单位。',
+            t: '开枪伤了人，不管是谁都要救，不能先挑着救。'
+        },
+               {
+            quizIndex: 11,
+            q: '人民警察使用警械和武器，应当以（ ）为原则。',
+            opts: ['制止违法犯罪行为', '尽量减少人员伤亡', '尽量减少财产损失', '以上选项都正确'],
+            correct: 3,
+            d: 'A项正确：制止违法犯罪行为是核心目的。\nB项正确：应当尽量减少人员伤亡。\nC项正确：应当尽量减少财产损失。\nD项正确：《人民警察使用警械和武器条例》第4条规定以上三项均为使用原则。',
+            t: '能用警械不用武器，能制止就行，少伤人少毁东西，三条都是原则。'
+        },
+        {
+            quizIndex: 12,
+            q: '人民警察甲涉嫌敲诈勒索、索贿受贿，对甲行为的处理正确的是（ ）。',
+            opts: ['应当给予行政处分', '可以降低警衔、取消警衔', '构成犯罪的，追究其刑事责任', '以上选项都正确'],
+            correct: 3,
+            d: 'A项正确：违法违纪应给予行政处分。\nB项正确：情节严重可降低或取消警衔。\nC项正确：构成犯罪的追究刑事责任。\nD项正确：以上三种处理方式均可依法适用。',
+            t: '警察犯法，行政处分、降衔、判刑，一样不落，全都要。'
+        },
+        {
+            quizIndex: 13,
+            q: '关于行政机关实施行政强制措施的一般程序，下列说法错误的是（ ）。',
+            opts: ['应当通知当事人到场', '由两名以上行政执法人员实施', '当事人拒绝在现场笔录上签名或者盖章的，应当邀请见证人到场', '当事人不到现场的，邀请见证人到场，由见证人和行政执法人员在现场笔录上签名或者盖章'],
+            correct: 2,
+            d: 'A项正确：一般应通知当事人到场。\nB项正确：应由两名以上执法人员实施。\nC项错误：当事人拒绝签名或盖章的，执法人员应在笔录上注明，而非必须邀请见证人到场。\nD项正确：当事人不到场的，应邀请见证人到场。',
+            t: '当事人不签字，执法人员在笔录上注明就行，不是非得找见证人。'
+        },
+        {
+            quizIndex: 14,
+            q: '关于人民警察的义务和纪律，下列说法错误的是（ ）。',
+            opts: ['人民警察必须按规定着装', '人民警察必须按规定佩带人民警察标志或持有人民警察证件', '人民警察必须保持举止端庄', '人民警察可以采取胁迫的方式获得犯罪嫌疑人口供'],
+            correct: 3,
+            d: 'A项正确：按规定着装是义务。\nB项正确：应佩带标志或持证件。\nC项正确：应保持举止端庄。\nD项错误：严禁刑讯逼供或以胁迫方式获取口供。',
+            t: '警察绝不能威胁恐吓嫌疑人来逼供，那是违法的。'
+        },
+        {
+            quizIndex: 15,
+            q: '关于交通管制和现场管制，下列说法正确的是（ ）。',
+            opts: ['二者均由县级以上人民政府公安机关根据情况决定是否实行', '实行现场管制时，可以对拒不服从的人员立即予以逮捕', '实行交通管制时，可以采取限制人员、车辆的通行等交通管理措施', '二者均需经上级公安机关和同级人民政府批准'],
+            correct: 2,
+            d: 'A项错误：交通管制可由县级以上公安机关决定，现场管制需上级批准。\nB项错误：拒不服从的可强行带离或拘留，非立即逮捕。\nC项正确：交通管制时可限制人员、车辆通行。\nD项错误：交通管制不须批准；现场管制须经批准。',
+            t: '交通管制公安自己就能定，现场管制要报上级和同级政府批。'
+        },
+        {
+            quizIndex: 16,
+            q: '申请人对行政拘留或者限制人身自由的行政强制措施不服申请行政复议后，因申请人同一违法行为涉嫌犯罪，该行政拘留或者限制人身自由的行政强制措施变更为刑事拘留时，下列说法正确的是（ ）。',
+            opts: ['行政复议终止', '行政复议中止', '行政复议机关应决定维持原行政强制措施', '行政复议机关应决定撤销原行政强制措施'],
+            correct: 0,
+            d: 'A项正确：行政强制措施变更为刑事拘留后，原行政案件转为刑事案件，行政复议终止。\nB项错误：非中止，是终止。\nC项错误：无需维持。\nD项错误：无需撤销。',
+            t: '行政拘留转成刑事拘留了，行政复议就自动结束。'
+        },
+        {
+            quizIndex: 17,
+            q: 'P市城乡规划主管部门核定该市一新建小区建设工程符合城市规划要求，验收合格，并核发《P市建设工程规划验收合格证》，范某等业主购房入住后认为规划验收不合格，向法院提起行政诉讼，法院经审查认为该规划验收行为缺少必要的材料，属于违法行政，法院应当（ ）。',
+            opts: ['撤销行政行为，因为行政行为依据不足', '确认违法，但不撤销行政行为，因为撤销会给社会公共利益造成重大损害', '确认无效，因为行政行为实施主体不具有行政主体资格', '驳回诉讼请求，因为小区已经投入使用'],
+            correct: 1,
+            d: 'A项错误：撤销会给已入住业主造成重大公共利益损害。\nB项正确：《行政诉讼法》第74条，行政行为应撤销但撤销会损害公共利益的，判决确认违法不撤销。\nC项错误：实施主体有资格。\nD项错误：不应驳回。',
+            t: '验收虽有问题，但小区已入住，撤销会让几百户无家可归，法院只能确认违法但不撤销。'
+        },
+        {
+            quizIndex: 18,
+            q: '下列选项中不可能为刑事赔偿义务机关的是（ ）。',
+            opts: ['公安局', '检察院', '水务局', '看守所'],
+            correct: 2,
+            d: 'A项正确：公安局可作赔偿义务机关。\nB项正确：检察院可作赔偿义务机关。\nC项错误：水务局是行政机关，不涉及刑事司法，不可能为刑事赔偿义务机关。\nD项正确：看守所可作赔偿义务机关。',
+            t: '水务局管水的，不抓人也不判案，不可能涉及刑事赔偿。'
+        },
+        {
+            quizIndex: 19,
+            q: '被处罚人不服行政拘留处罚决定，提起行政诉讼的，可以向公安机关提出暂缓执行行政拘留的申请，经批准，按每日行政拘留（ ）的标准交纳保证金，行政拘留的处罚决定暂缓执行。',
+            opts: ['五十元', '一百元', '二百元', '三百元'],
+            correct: 2,
+            d: 'A项错误：五十元不是法定标准。\nB项错误：一百元不是法定标准。\nC项正确：《治安管理处罚法》第107条，按每日行政拘留二百元的标准交纳保证金。\nD项错误：三百元不是法定标准。',
+            t: '想暂缓进拘留所，一天交200块押金。'
+        },
+        {
+            quizIndex: 20,
+            q: '某乡政府为了完成上级下达的竹材收购任务，发布红头文件决定向林农收取竹材收购押金，完不成任务就将押金转为罚款，致使500多户村民受到此种罚款处罚，关于该乡政府的处罚行为，下列说法不正确的是（ ）。',
+            opts: ['乡政府不具有行政处罚权', '乡政府的红头文件不能设定行政处罚', '乡政府设定行政处罚，必须在法律、法规、规则的规定范围内', '乡政府的该处罚行为无效'],
+            correct: 2,
+            d: 'A项正确：乡政府不具备行政处罚权。\nB项正确：红头文件无权设定行政处罚。\nC项错误：乡政府根本无权设定行政处罚，不在“法律、法规、规则的规定范围内”的问题，而是完全无权。\nD项正确：该行为无效。',
+            t: '乡政府压根没权罚老百姓，不是设定范围内的事，是完全没资格。'
+        },
+        {
+            quizIndex: 21,
+            q: '在行政许可的听证程序中，行政机关应当于举行听证的七日前将举行听证的时间、地点、通知申请人、利害关系人（ ）。',
+            opts: ['必要时予以公告', '不予公告', '并同时向社会公告', '依申请向社会公告'],
+            correct: 0,
+            d: 'A项正确：《行政许可法》第48条，听证告知申请人、利害关系人，必要时予以公告。\nB项错误：必要时可公告。\nC项错误：非“同时向社会公告”。\nD项错误：非“依申请”。',
+            t: '听证通知申请人和利害关系人就行，有必要才对外公告。'
+        },
+        {
+            quizIndex: 22,
+            q: '非法持有人民警察的警用标志、制式服装、警械、证件的个人和组织，由公安机关处十五日以下（ ）或者警告，可以并处违法所得五倍以下的罚款。',
+            opts: ['拘禁', '拘留', '逮捕', '拘传'],
+            correct: 1,
+            d: 'A项错误：拘禁非处罚种类。\nB项正确：《人民警察法》第36条，处十五日以下拘留或者警告。\nC项错误：逮捕是刑事强制措施。\nD项错误：拘传是刑事强制措施。',
+            t: '冒充警察用警服警械的，最多拘留15天。'
+        },
+        {
+            quizIndex: 23,
+            q: 'P省人民政府为了打造文明城市形象，对某事项的管理设定了临时性的许可，该临时性行政许可实施满（ ）需要继续实施的，应当提请本级人民代表大会及其常务委员会制定地方性法规。',
+            opts: ['三个月', '六个月', '一年', '二年'],
+            correct: 2,
+            d: 'A项错误：三个月过短。\nB项错误：六个月非规定时限。\nC项正确：《行政许可法》第15条，临时性许可实施满一年需继续实施的，应提请制定地方性法规。\nD项错误：二年非规定时限。',
+            t: '临时许可满一年的，要想继续用，必须走人大立法程序。'
+        },
+        {
+            quizIndex: 24,
+            q: '在刑事诉讼中，人民法院受理强制医疗的申请后，（ ）。',
+            opts: ['应当组成合议庭进行审理', '应当予以批准', '应当由院长独任审判', '可以通知被告人的法定代理人到场'],
+            correct: 0,
+            d: 'A项正确：《刑事诉讼法》第304条，人民法院受理强制医疗申请后，应当组成合议庭进行审理。\nB项错误：需审理后决定，非直接批准。\nC项错误：必须是合议庭，不得独任。\nD项错误：应当通知，非“可以”。',
+            t: '强制医疗案件必须合议庭审，不能一个人判。'
+        },
+        {
+            quizIndex: 25,
+            q: '根据《中华人民共和国人民警察使用警械和武器条例》，高压水枪（ ）。',
+            opts: ['属于警械', '属于武器', '既不属于警械，也不属于武器', '既属于警械，也属于武器'],
+            correct: 0,
+            d: 'A项正确：《条例》第3条，高压水枪属于警械中的驱逐性警械。\nB项错误：非武器。\nC项错误：属于警械。\nD项错误：仅属于警械。',
+            t: '高压水枪是警械，不是武器，属于驱散人群用的。'
+        },
+        {
+            quizIndex: 26,
+            q: '行政赔偿诉讼与其他行政诉讼的最大区别在于其（ ）制度。',
+            opts: ['复议前置', '反诉', '合议制', '调解'],
+            correct: 3,
+            d: 'A项错误：复议前置非行政赔偿特有。\nB项错误：行政诉讼无被告反诉。\nC项错误：合议制为共性。\nD项正确：行政赔偿诉讼可以调解，这是与其他行政诉讼的重要区别。',
+            t: '行政赔偿案件可以调解，普通行政案件不能调。'
+        },
+        {
+            quizIndex: 27,
+            q: '《中华人民共和国行政处罚法》是规范行政处罚（ ）的法律。',
+            opts: ['设定与实施', '主体与行为', '内容与程序', '过程与后果'],
+            correct: 0,
+            d: 'A项正确：《行政处罚法》第1条，规范和保障行政机关有效实施行政管理，规范行政处罚的设定和实施。\nB项错误：非主要表述。\nC项错误：不完整。\nD项错误：不完整。',
+            t: '行政处罚法管两件事：谁能设处罚、怎么实施处罚。'
+        },
+        {
+            quizIndex: 28,
+            q: '在行政处罚的听证程序中，行政机关可以在以下（ ）情况下，作出不举行听证的决定。',
+            opts: ['当事人被处以没收较大数额违法所得，向行政机关提出举行听证请求', '当事人被处以较大数额罚款，向行政机关提出举行听证请求', '当事人被处以责令停止违法行为，向行政机关提出举行听证请求', '当事人被处以责令停产停业，向行政机关提出举行听证请求'],
+            correct: 2,
+            d: 'A项错误：没收较大数额违法所得应告知听证权。\nB项错误：较大数额罚款应告知听证权。\nC项正确：责令停止违法行为不属于法定必须听证的范围，可决定不举行听证。\nD项错误：责令停产停业应告知听证权。',
+            t: '责令停产、大额罚款、没收大额违法所得的才需要听证，责令停止违法不需要。'
+        },
+        {
+            quizIndex: 29,
+            q: '下列情形不属于行政诉讼受案范围的是（ ）。',
+            opts: ['对行政机关的征用决定不服的', '对行政机关的调解不服的', '对行政机关行政许可决定不服的', '对行政机关不予信息公开的决定不服的'],
+            correct: 1,
+            d: 'A项正确：征用决定可诉。\nB项错误：行政调解不具有强制力，不属于行政诉讼受案范围。\nC项正确：行政许可决定可诉。\nD项正确：不予信息公开决定可诉。',
+            t: '政府调解不成功不能告，因为调解是自愿的，不是强制决定。'
+        },
+        {
+            quizIndex: 30,
+            q: '因不动产提起的行政诉讼，由（ ）人民法院管辖。',
+            opts: ['原告现居住地', '原告出生地', '不动产所在地', '被告所在地'],
+            correct: 2,
+            d: 'A项错误：非居住地管辖。\nB项错误：非出生地管辖。\nC项正确：《行政诉讼法》第20条，因不动产提起的诉讼，由不动产所在地法院专属管辖。\nD项错误：非被告所在地。',
+            t: '房子在哪儿，就去哪儿的法院告。'
+        },
+        {
+            quizIndex: 31,
+            q: '不服行政机关作出的行政处分或者其他人事处理决定的，当事人可以依照有关（ ）的规定提出申诉。',
+            opts: ['法律、行政法规', '部门规章', '行政规章', '人事政策'],
+            correct: 0,
+            d: 'A项正确：《公务员法》规定，不服行政处分可依照法律、行政法规提出申诉。\nB项错误：部门规章非申诉依据。\nC项错误：行政规章非申诉依据。\nD项错误：人事政策非法律依据。',
+            t: '内部处分不服，只能按法律、行政法规走申诉渠道。'
+        },
+        {
+            quizIndex: 32,
+            q: '人民警察涉嫌（ ）的，应当给予行政处分；构成犯罪的，依法追究刑事责任。',
+            opts: ['在网上发布或散布有损国家声誉的言论', '泄露警务工作秘密', '在办案过程中非法拘禁犯罪嫌疑人', '以上选项都正确'],
+            correct: 3,
+            d: 'A项正确：有损国家声誉应处分。\nB项正确：泄露秘密应处分。\nC项正确：非法拘禁应处分。\nD项正确：以上行为均应当给予行政处分，构成犯罪追究刑事责任。',
+            t: '乱说话、泄露秘密、非法拘禁，轻了处分重了判刑。'
+        },
+        {
+            quizIndex: 33,
+            q: '行政案件经复议由复议机关决定维持原具体行政行为，相对人提起行政诉讼的，被告是（ ）。',
+            opts: ['复议机关', '作出原具体行政行为的机关', '复议机关和作出原具体行政行为的机关', '原告起诉时选择的机关'],
+            correct: 2,
+            d: 'A项错误：复议维持的，原机关和复议机关为共同被告。\nB项错误：不能只诉原机关。\nC项正确：《行政诉讼法》第26条，复议机关决定维持原行政行为的，原机关和复议机关为共同被告。\nD项错误：不能选择。',
+            t: '复议维持了，两家都当被告，谁也不能跑。'
+        },
+        {
+            quizIndex: 34,
+            q: '下列行政处罚中，适用简易程序的是（ ）。',
+            opts: ['拘留', '没收非法财物30元', '暂扣许可证', '对某法人罚款960元'],
+            correct: 1,
+            d: 'A项错误：拘留不适用简易程序。\nB项正确：没收非法财物30元属轻微处罚，可适用简易程序。\nC项错误：暂扣许可证不适用简易程序。\nD项错误：对法人罚款超过3000元不适用简易程序，但960元未超限，但题干要求选最符合条件的，B项更典型。',
+            t: '金额小的、处罚轻的可以当场决定，没收30块这种小事不需要走一大套程序。'
+        },
+        {
+            quizIndex: 35,
+            q: '在刑事诉讼法庭审判过程中，对诉讼参与人或者旁听人员违反法庭秩序，情节严重的，可处以罚款、拘留，罚款、拘留必须经（ ）批准。',
+            opts: ['审判长', '庭长', '院长', '审判委员会'],
+            correct: 2,
+            d: 'A项错误：审判长无权直接批准。\nB项错误：庭长无权。\nC项正确：《刑事诉讼法》第199条，罚款、拘留必须经院长批准。\nD项错误：非审判委员会。',
+            t: '法庭上罚款、拘留，要院长点头。'
+        },
+        {
+            quizIndex: 36,
+            q: '某休息日上午，一名交警穿着休闲服陪母亲在菜市场买菜，恰遇一名成年男子正举刀行凶，该交警（ ）。',
+            opts: ['应当上前制止犯罪', '打电话报警后可以立即离开行凶现场', '可以不予理睬，因为不属于交警职责范围', '可以不予理睬，因为不属于交警职责范围且不在工作时间内'],
+            correct: 0,
+            d: 'A项正确：《人民警察法》第19条，人民警察在非工作时间，遇有其职责范围内的紧急情况，应当履行职责。\nB项错误：不能离开。\nC项错误：不能不理。\nD项错误：不能不理。',
+            t: '警察下班遇到杀人，必须上，不管是交警还是刑警。'
+        },
+        {
+            quizIndex: 37,
+            q: '行政机关依法冻结存款、汇款的，向当事人交付的冻结决定书可不载明的事项是（ ）。',
+            opts: ['冻结的账号和数额', '申请行政复议或者提起行政诉讼的途径和期限', '行政机关的名称、印章和日期', '行政机关的职权'],
+            correct: 3,
+            d: 'A项正确：应载明账号数额。\nB项正确：应载明复议诉讼途径。\nC项正确：应载明机关名称印章。\nD项错误：机关职权不是法定必须载明事项。',
+            t: '冻结通知书写清楚冻了多少钱、怎么告、谁冻的，不用写自己有什么权力。'
+        },
+        {
+            quizIndex: 38,
+            q: '公民甲为了报复乙，捏造事实，向检察院举报乙利用领导职务便利挪用公款中饱私囊，意图使乙受到刑事追究，以下说法正确的是（ ）。',
+            opts: ['应对甲从重处罚', '应对甲加重处罚', '甲系检举失实，不是诬告陷害', '以上选项都不正确'],
+            correct: 3,
+            d: 'A项错误：诬告陷害罪本身不从重。\nB项错误：非加重情节。\nC项错误：甲捏造事实意图使乙受刑事追究，构成诬告陷害罪，非检举失实。\nD项正确：以上选项均不正确。',
+            t: '捏造假事告人想让人坐牢，就是诬告陷害罪，不是检举错了。'
+        },
+        {
+            quizIndex: 39,
+            q: '某日，张三无证摆摊卖西瓜，遇城市管理巡逻队执勤，若执法人员甲对其进行城市管理法规宣传教育，执法人员乙对其辱骂，执法人员丙将其西瓜摔烂在地，执法人员丁对其殴打，则根据《中华人民共和国国家赔偿法》，执法人员（ ）不应当承担国家赔偿责任。',
+            opts: ['甲', '乙', '丙', '丁'],
+            correct: 0,
+            d: 'A项正确：宣传教育是正当执法行为，不产生国家赔偿。\nB项错误：辱骂属违法，可能承担赔偿责任。\nC项错误：摔烂西瓜造成财产损失，应赔偿。\nD项错误：殴打侵害人身权，应赔偿。',
+            t: '讲道理不赔，骂人、砸西瓜、打人都可能引起国家赔偿。'
+        },
+        {
+            quizIndex: 40,
+            q: '下列犯罪中，只能以不作为形式构成的是（ ）。',
+            opts: ['妨碍传染病防治罪', '放火罪', '滥用职权罪', '遗弃罪'],
+            correct: 3,
+            d: 'A项错误：妨碍传染病防治罪可作为也可不作为。\nB项错误：放火罪是作为犯罪。\nC项错误：滥用职权罪是作为犯罪。\nD项正确：遗弃罪是指负有扶养义务的人拒绝扶养，只能以不作为形式构成。',
+            t: '遗弃罪就是该管不管，只能坐着不动犯这个罪。'
+        },
+        {
+            quizIndex: 41,
+            q: '公安机关的阶级属性，体现在（ ）。',
+            opts: ['公安机关是国家意志的忠实执行者', '公安机关具有武装性', '公安机关保持政治中立', '公安机关具有行政、刑事、司法的性质'],
+            correct: 0,
+            d: 'A项正确：公安机关是人民民主专政的工具，体现了其阶级属性。\nB项错误：武装性非阶级属性。\nC项错误：公安不能“政治中立”，必须坚持党的领导。\nD项错误：是性质描述非阶级属性。',
+            t: '公安的阶级属性就是它是国家的刀把子，忠实执行国家意志。'
+        },
+        {
+            quizIndex: 42,
+            q: '行为人有两种以上违反治安管理行为的，其处罚分别决定，合并执行；行政拘留合并处罚并执行的，最长不超过（ ）日。',
+            opts: ['七', '十', '十五', '二十'],
+            correct: 3,
+            d: 'A项错误：七日过短。\nB项错误：十日过短。\nC项错误：十五日是单个拘留上限。\nD项正确：《治安管理处罚法》第16条，合并执行最长不超过二十日。',
+            t: '好几个拘留加起来最多关20天。'
+        },
+        {
+            quizIndex: 43,
+            q: '行政许可有效期届满未延续的，行政机关应当依法办理有关行政许可的（ ）手续。',
+            opts: ['撤销', '注销', '撤回', '吊销'],
+            correct: 1,
+            d: 'A项错误：撤销针对违法取得的许可。\nB项正确：《行政许可法》第70条，有效期届满未延续的，应当办理注销手续。\nC项错误：撤回针对合法许可的收回。\nD项错误：吊销是行政处罚。',
+            t: '许可过期不续，就注销掉，不是撤销也不是吊销。'
+        },
+        {
+            quizIndex: 44,
+            q: '当地公安机关或者人民警察所属机关接到人民警察使用武器造成犯罪分子或者无辜人员伤亡的报告后，应当及时进行勘验、调查，并及时通知（ ）。',
+            opts: ['当地人民法院', '当地人民政府', '上级公安机关', '当地人民检察院'],
+            correct: 3,
+            d: 'A项错误：法院非通知对象。\nB项错误：政府非直接通知对象。\nC项错误：上级公安也需通知，但法律明确规定通知检察院。\nD项正确：《人民警察使用警械和武器条例》第12条，使用武器造成人员伤亡的，应及时通知当地人民检察院。',
+            t: '开枪打死打伤人，必须通知检察院来监督。'
+        },
+        {
+            quizIndex: 45,
+            q: '人民警察询问不满（ ）周岁的违反治安管理行为人，应当通知其父母或者其他监护人到场。',
+            opts: ['十四', '十五', '十八', '十六'],
+            correct: 3,
+            d: 'A项错误：十四周岁非规定年龄。\nB项错误：十五周岁非规定年龄。\nC项错误：十八周岁是成年年龄，但治安管理对16周岁以下有特别保护。\nD项正确：《治安管理处罚法》第84条，询问不满十六周岁的违反治安管理行为人，应当通知其父母或者其他监护人到场。',
+            t: '问未满16岁的未成年人，必须叫家长来。'
+        },
+        {
+            quizIndex: 46,
+            q: '关于行政复议的执行，下列说法正确的是（ ）。',
+            opts: ['被申请人不履行行政复议决定的，人民法院应当强制执行', '被申请人不履行行政复议决定的，有关上级行政机关应当强制执行', '申请人不履行最终裁决的行政复议的，行政机关可以对其提起诉讼', '申请人逾期不起诉又不履行变更具体行政行为的行政复议决定的，可以由行政复议机关依法强制执行'],
+            correct: 3,
+            d: 'A项错误：被申请人不履行的，由复议机关或上级机关责令履行。\nB项错误：非上级机关强制执行。\nC项错误：对申请人不履行，行政机关可申请法院执行或依法强制执行。\nD项正确：复议机关变更原行为的，复议机关可依法强制执行或申请法院执行。',
+            t: '复议改了处罚，你不交又不告，复议机关可以自己来硬的。'
+        },
+        {
+            quizIndex: 47,
+            q: '甲企业拒不缴纳应缴税款并在收到催告书后向税务机关进行了陈述和申辩，按照相关规定，税务机关（ ）。',
+            opts: ['可以听取甲企业的意见', '应当充分听取甲企业的意见', '不必听取甲企业的意见', '应当酌情听取甲企业的意见'],
+            correct: 1,
+            d: 'A项错误：不是“可以”，是“应当”。\nB项正确：《行政强制法》第36条，当事人收到催告书后有权陈述和申辩，行政机关应当充分听取当事人的意见。\nC项错误：必须听取。\nD项错误：非酌情。',
+            t: '企业申辩了，税务机关必须认真听，不是想听就听。'
+        },
+        {
+            quizIndex: 48,
+            q: '下列行政处罚，程序合法的是（ ）。',
+            opts: ['小李因打架斗殴受到了治安管理处罚，他为自己的行为辩解，公安人员认为其认错态度不好，于是在权限范围内选择了最重的处罚', '税务局工作人员王某拟对一起偷税案件处罚，当事人按照法律规定要举行听证，税务局领导决定由王某主持听证，另两名工作人员协助其工作', '小张骑自行车载人被交警发现，交警在对小张出具了罚款20元的通知单后，当场收缴罚款', '便衣警察对某夜总会进行调查，发现该夜总会向顾客提供色情服务，遂决定进行处罚，夜总会经理要求其出示工作证件，便衣警察予以拒绝'],
+            correct: 2,
+            d: 'A项错误：不得因当事人申辩而加重处罚。\nB项错误：听证主持应由非本案调查人员担任。\nC项正确：20元以下罚款可当场收缴。\nD项错误：执法应出示证件。',
+            t: '20块罚款现场收可以；申辩不能加重罚、听证不能自己主持、查案要亮证。'
+        },
+        {
+            quizIndex: 49,
+            q: '朱某和冯某是同村村民，因琐事发生口角，冯某仗势纠集人马将朱某狠揍一顿，朱某怀恨在心，伺机报复。一日，朱某见冯某8岁的儿子甲在村头玩耍，便回家让11岁的儿子乙拿着弹弓到村头射击甲的眼睛，乙听从父令，将甲的左眼射伤，导致甲左眼失明，对于朱某的行为（ ）。',
+            opts: ['以故意伤害罪处罚', '以故意伤害罪的教唆犯处罚', '以传授犯罪方法罪处罚', '因乙不满14周岁，故对朱某不予处罚'],
+            correct: 0,
+            d: 'A项正确：朱某利用未成年儿子实施伤害行为，属于间接正犯，构成故意伤害罪。\nB项错误：不是教唆犯，是间接正犯。\nC项错误：非传授犯罪方法。\nD项错误：利用未成年人犯罪不能免责。',
+            t: '让自己小孩去打人，等于自己动手，按故意伤害罪判。'
+        },
+        {
+            quizIndex: 50,
+            q: '下列情形，被侵害人可行使特殊防卫权的是( )。',
+            opts: ['正在实施赌博行为', '正在实施抢夺行为', '正在盗窃巨额财产', '正在进行暴力绑架'],
+            correct: 3,
+            d: 'A项错误：赌博非严重暴力犯罪。\nB项错误：抢夺非严重暴力犯罪。\nC项错误：盗窃非严重暴力犯罪。\nD项正确：《刑法》第20条第3款，对正在进行行凶、杀人、抢劫、强奸、绑架等严重危及人身安全的暴力犯罪，可以行使特殊防卫权。',
+            t: '碰见绑架这种要命的暴力犯罪，防卫打死人也不犯法。'
+        }
+    ];
+
+// ========== 多项选择题数据（51-70题）==========
+var multiQuestions = [
+    {
+        quizIndex: 51,
+        q: '犯罪嫌疑人正在实施下列（ ）行为时，人民警察依照国家有关规定可以使用武器。',
+        opts: ['持枪抢劫路人', '携带炸药劫机', '入屋盗窃', '电信诈骗', '持枪劫持火车'],
+        correct: [0, 1, 4],
+        d: 'A项正确：持枪抢劫路人属于严重危及人身安全的暴力犯罪，经警告无效可使用武器。\nB项正确：携带炸药劫机属于严重暴力犯罪，可使用武器。\nC项错误：入屋盗窃不属于可使用武器的紧急情形。\nD项错误：电信诈骗不属于可使用武器的情形。\nE项正确：持枪劫持火车属于严重暴力犯罪，可使用武器。',
+        t: '持枪抢劫、炸药劫机、持枪劫火车这种要命的暴力犯罪才能开枪，小偷小摸电信诈骗不能用枪。'
+    },
+    {
+        quizIndex: 52,
+        q: '人民检察院在审查起诉刑事案件的时候，必须查明的事项有（ ）。',
+        opts: ['有无遗漏罪行和其他应当追究刑事责任的人', '是否属于不应追究刑事责任的', '有无附带民事诉讼', '侦查活动是否合法', '犯罪事实、情节是否清楚，证据是否确定、充分，犯罪性质和罪名的认定是否正确'],
+        correct: [0, 1, 2, 3, 4],
+        d: '全选：《刑事诉讼法》第171条规定了人民检察院审查起诉时必须查明的上述全部事项。',
+        t: '检察院审查起诉五件事：漏没漏人、该不该追、有没有附带民事、侦查合不合法、事实证据定性对不对。'
+    },
+    {
+        quizIndex: 53,
+        q: '某县教育局接到群众举报，称某培训班为了竞争生源而扣留学生，教育局工作人员立即立案调查，对该培训班进行了2小时的搜查，并在现场拿走了账本以及两本书。次日上午，该局相关人员再次返回培训班，对现场所有物品进行拍照录像。之后，该局作出责令停办的行政处罚决定书。关于该案，下列说法正确的是（ ）。',
+        opts: ['教育局工作人员在搜查时应该出示行政执法证件，并制作笔录', '搜查时不出示执法证件的，该培训班有权拒绝接受调查', '拿走账本的行为属于先行登记保存的行为，应该列出证据登记保存清单', '该培训班有要求听证的权利', '该局相关人员再次返回培训班，对现场所有物品进行拍照录像的行为属于调查取证，执法人员不得少于两人'],
+        correct: [0, 1, 2, 3, 4],
+        d: 'A项正确：执法时应出示证件并制作笔录。\nB项正确：不出示证件，当事人有权拒绝。\nC项正确：拿走账本属于先行登记保存，应列清单。\nD项正确：责令停办属于较重的行政处罚，当事人有权要求听证。\nE项正确：调查取证时执法人员不得少于两人。',
+        t: '教育局执法要亮证、做笔录、登记保存列清单；培训班有权听证；拍照录像取证要两人以上。'
+    },
+    {
+        quizIndex: 54,
+        q: '下列属于行政诉讼的证据的有（ ）。',
+        opts: ['视听资料', '电子数据', '鉴定意见', '勘验笔录', '现场笔录'],
+        correct: [0, 1, 2, 3, 4],
+        d: '全选：《行政诉讼法》第33条规定了上述全部证据种类。',
+        t: '行政官司的证据包括：录音录像、电子数据、鉴定意见、勘验笔录、现场笔录，全都算。'
+    },
+    {
+        quizIndex: 55,
+        q: '《中华人民共和国行政许可法》规定，公民特定资格的考试依法由（ ）实施，公开举行。',
+        opts: ['行政机关', '专业公司', '培训机构', '行业组织', '自律协会'],
+        correct: [0, 3],
+        d: 'A项正确：行政机关可组织实施资格考试。\nB项错误：专业公司不能组织资格考试。\nC项错误：培训机构不能组织资格考试。\nD项正确：《行政许可法》第54条，公民特定资格的考试依法由行政机关或行业组织实施。\nE项错误：自律协会非行业组织。',
+        t: '资格考试要么政府组织，要么行业组织来，不能交给公司或培训机构。'
+    },
+    {
+        quizIndex: 56,
+        q: '根据《中华人民共和国国家赔偿法》，国家行政赔偿责任的条件有（ ）。',
+        opts: ['损害因公民自己的行为而造成', '损害是行政机关及其工作人员行使职权而造成的', '损害是直接的，现实已经产生的', '赔偿是法律已经规定的', '无需赔偿精神损失'],
+        correct: [1, 2, 3],
+        d: 'A项错误：自己行为造成的不赔。\nB项正确：职权行为造成的损害才可能赔偿。\nC项正确：必须是直接的、现实的损害。\nD项正确：赔偿必须有法律依据。\nE项错误：特定情形下精神损失也应当赔偿。',
+        t: '国家赔偿三个条件：是行政机关干坏事造成的、实际已经发生的损失、法律明确规定要赔。'
+    },
+    {
+        quizIndex: 57,
+        q: '党对公安工作的领导内容包括（ ）。',
+        opts: ['政治领导', '思想领导', '组织领导', '决策领导', '法治领导'],
+        correct: [0, 1, 2, 3],
+        d: 'A项正确：政治领导是党对公安工作领导的首要内容。\nB项正确：思想领导是党的领导的重要内容。\nC项正确：组织领导是党的领导的组织保障。\nD项正确：决策领导是党的领导的重要体现。\nE项错误：法治领导非标准的领导内容表述。',
+        t: '党管公安四个方面：政治、思想、组织、决策。'
+    },
+    {
+        quizIndex: 58,
+        q: '关于行政复议申请人，下列说法正确的是（ ）。',
+        opts: ['申请人可以书面申请行政复议', '申请人可以口头申请行政复议', '申请人可以委托代理人代为参加行政复议', '申请人可以是法人', '申请人可以是国家机关'],
+        correct: [0, 1, 2, 3, 4],
+        d: 'A项正确：书面申请是法定的申请方式。\nB项正确：口头申请也是法定方式。\nC项正确：可委托代理人。\nD项正确：法人可作为申请人。\nE项正确：国家机关也可以作为申请人。',
+        t: '复议申请可以书面也可以口头，能找代理人，个人、公司、机关都能当申请人。'
+    },
+    {
+        quizIndex: 59,
+        q: '甲县人民政府在强行拆除乙厂未经批准建造的房屋时，未及时通知乙厂，也未制作拆除物品清单，导致厂内物品被毁损。该强制拆除行为后因违反法定程序被法院判决确认违法，乙厂遂向法院提起行政诉讼，要求甲县人民政府赔偿建房投入和物品损失。下列说法不正确的是（ ）。',
+        opts: ['乙厂具有原告资格', '乙厂提起行政赔偿诉讼的时效自该强制拆除行为确认违法之日起计算', '因乙厂被拆房屋为违法建筑，乙厂的请求不成立', '因甲县人民政府的拆除行为只存在程序违法，乙厂的请求不成立', '乙厂提起行政赔偿诉讼的时效为两年'],
+        correct: [1, 2, 3],
+        d: 'A项正确：乙厂作为被拆除方，具有原告资格。\nB项错误：时效自知道或应当知道权利受侵害之日起算，非自确认违法之日。\nC项错误：违法建筑被拆不赔建房投入，但物品毁损应赔。\nD项错误：程序违法也可能产生赔偿责任。\nE项正确：行政赔偿诉讼时效为两年。',
+        t: '违法建筑建房费不赔，但程序违法导致物品损坏也得赔；时效从知道受侵害开始算，两年内。'
+    },
+    {
+        quizIndex: 60,
+        q: '公安机关外部执法监督中的国家权利机关监督制度，是指（ ）依法对公安机关及其人民警察执法活动进行监督和检查的制度。',
+        opts: ['中国共产党各级委员会', '各级人民代表大会', '各级人民代表大会常务委员会', '中央人民政府', '地方各级人民政府'],
+        correct: [1, 2],
+        d: 'A项错误：党委不属于国家权力机关。\nB项正确：各级人大是国家权力机关。\nC项正确：各级人大常委会是国家权力机关的常设机构。\nD项错误：政府是行政机关。\nE项错误：政府是行政机关。',
+        t: '国家权力机关监督就两个：人大和人大常委会。'
+    },
+    {
+        quizIndex: 61,
+        q: '公安机关的人民警察依法当场盘问有违法犯罪嫌疑的人员，有下列（ ）情形之一的，可将其带至公安机关，经批准后对其继续盘问。',
+        opts: ['被指控有盗窃大额财物行为的', '被指控有吸食毒品行为的', '有现场作案嫌疑的', '有作案嫌疑身份不明的', '携带的财物有可能是赃物的'],
+        correct: [0, 1, 2, 3, 4],
+        d: '全选：《人民警察法》第9条规定了上述全部可以继续盘问的情形。',
+        t: '被指认偷东西、吸毒、现场嫌疑、身份不明、携带可疑物品，这五种情况都可以带回去继续盘问。'
+    },
+    {
+        quizIndex: 62,
+        q: '《中华人民共和国行政处罚法》第十六条规定，其他规范性文件不得设定行政处罚，以下文件属于该"其他规范性文件"范围的有（ ）。',
+        opts: ['各级党委制定的规定性文件或者党政机关联合下发的文件', '依法设有地方性法规、授权法规、自治条例、单行条例制定权的市的人大及其常委会制定的规范性文件', '依法设有规章制定权的市的人大及其常委会制定的规范性文件', '人民政府派出机构制定的规范性文件', '乡规民约'],
+        correct: [0, 2, 3, 4],
+        d: 'A项正确：党委文件属于其他规范性文件。\nB项错误：有立法权的地方人大文件是地方性法规。\nC项正确：人大制定的非立法性文件也属其他规范性文件。\nD项正确：派出机构文件属于其他规范性文件。\nE项正确：乡规民约属于其他规范性文件。',
+        t: '除了正儿八经的法律法规规章，其他红头文件、乡规民约都不能设处罚。'
+    },
+    {
+        quizIndex: 63,
+        q: '公安机关因侦查犯罪的需要，必要时，按照国家相关规定，可以优先使用机关、团体企业事业组织和个人的（ ）。',
+        opts: ['场地', '建筑物', '交通工具', '通信工具', '以上选项都正确'],
+        correct: [0, 1, 2, 3, 4],
+        d: '全选：《人民警察法》第13条规定了公安机关因侦查犯罪需要，可以优先使用上述全部财产资源。',
+        t: '办案有紧急需要，政府可以先用你的地方、房子、车子、通讯工具，用完归还并给补偿。'
+    },
+    {
+        quizIndex: 64,
+        q: '下列罪名属于危害公共安全犯罪的有（ ）。',
+        opts: ['聚众冲击国家机关罪', '非法携带武器参加游行、示威罪', '爆炸罪', '危险物品肇事罪', '资敌罪'],
+        correct: [1, 2, 3],
+        d: 'A项错误：聚众冲击国家机关罪属于妨害社会管理秩序罪。\nB项正确：非法携带武器参加游行、示威罪属于危害公共安全罪。\nC项正确：爆炸罪属于危害公共安全罪。\nD项正确：危险物品肇事罪属于危害公共安全罪。\nE项错误：资敌罪属于危害国家安全罪。',
+        t: '爆炸、携带武器游行、危险物品肇事都是危害公共安全的；冲击国家机关和资敌是其他类罪名。'
+    },
+    {
+        quizIndex: 65,
+        q: '人民警察必须做到（ ）。',
+        opts: ['秉公执法，办事公道', '模范遵守社会公德', '礼貌待人，文明执勤', '尊重人民群众的风俗习惯', '以上选项都正确'],
+        correct: [0, 1, 2, 3, 4],
+        d: '全选：《人民警察法》第20条规定了人民警察必须履行的上述全部义务。',
+        t: '警察必须公正执法、守公德、讲礼貌、尊重群众风俗，全都要做到。'
+    },
+    {
+        quizIndex: 66,
+        q: '关于公安机关办理治安案件的扣押程序，下列说法正确的有（ ）。',
+        opts: ['对与案件有关的需要作为证据的物品，可以扣押', '对被侵害人或者善意第三人合法占有的财产，不得扣押', '对与案件无关的物品，不得扣押', '对扣押的物品，应当会同在场见证人和被扣押物品持有人查点清楚，当场开列清单', '对扣押的物品，应当妥善保管，不得挪作他用'],
+        correct: [0, 1, 2, 3, 4],
+        d: '全选：《治安管理处罚法》第89条规定了上述全部扣押程序要求。',
+        t: '扣押东西五个要点：与案有关的可扣、被害人和善意第三人的不扣、无关的不扣、当场清点列清单、妥善保管不乱用。'
+    },
+    {
+        quizIndex: 67,
+        q: '行为人有下列（ ）行为之一的，应当对其给予治安管理处罚。',
+        opts: ['阻碍人民警察调查取证', '公然侮辱正在执行职务的人民警察', '阻碍人民警察执行追捕进入有关场所', '对执行紧急任务的警车故意设置障碍', '询问前来搜查的警察是否有搜查证'],
+        correct: [0, 1, 2, 3],
+        d: 'A项正确：阻碍调查取证应处罚。\nB项正确：公然侮辱应处罚。\nC项正确：阻碍进入场所应处罚。\nD项正确：设置障碍应处罚。\nE项错误：询问是否有搜查证是合法权利，不应处罚。',
+        t: '妨碍警察干活、骂警察、拦着不让进、给警车设障碍都要被罚；问有没有搜查证是正当权利，不罚。'
+    },
+    {
+        quizIndex: 68,
+        q: '根据《中华人民共和国人民警察使用警械和武器》，以下属于约束性警械的有（ ）。',
+        opts: ['警绳', '警棍', '手铐', '脚镣'],
+        correct: [0, 2, 3],
+        d: 'A项正确：警绳属于约束性警械。\nB项错误：警棍属于驱逐性、制服性警械。\nC项正确：手铐属于约束性警械。\nD项正确：脚镣属于约束性警械。\nE项错误：非全部正确。',
+        t: '约束性警械就是捆人用的：警绳、手铐、脚镣；警棍是打人驱散用的。'
+    },
+    {
+        quizIndex: 69,
+        q: '人民警察必须依靠人民的支持，（ ）。',
+        opts: ['保持同人民的密切联系', '倾听人民的意见和建议', '接受人民的监督', '维护人民的利益', '全心全意为人民服务'],
+        correct: [0, 1, 2, 3, 4],
+        d: '全选：《人民警察法》第3条规定了人民警察必须依靠人民的支持，并履行上述全部职责。',
+        t: '警察必须联系群众、听意见、受监督、维护群众利益、为人民服务，全都要做到。'
+    },
+    {
+        quizIndex: 70,
+        q: '行政强制措施由（ ）规定的行政机关在法定职权范围内实施。',
+        opts: ['法律', '法规', '政策', '规章', '惯例'],
+        correct: [0, 1],
+        d: 'A项正确：法律可以规定行政强制措施的实施机关。\nB项正确：法规可以规定行政强制措施的实施机关。\nC项错误：政策不能设定行政强制措施。\nD项错误：规章一般不能设定行政强制措施，更不能规定实施机关。\nE项错误：惯例不能作为法律依据。',
+        t: '只有法律和法规有权规定谁能实施行政强制措施，政策和规章不行。'
+    }
+];
+
+
+
+    // ========== 渲染模块一 ==========
+    function renderModule1() {
+        var html = '<div class="card"><h2>一、单选题（1-50题，每题1分，共50分）</h2>';
+        for (var i = 0; i < singleQuestions.length; i++) {
+            var q = singleQuestions[i];
+            html += '<div class="quiz-wrap" id="wrap-' + q.quizIndex + '">';
+            html += '<div class="q-title">' + q.quizIndex + '. ' + q.q + '</div>';
+            html += renderOptions(q.quizIndex, q.opts, 'single');
+            html += '<div class="explain-card" id="exp-' + q.quizIndex + '"></div>';
+            html += '</div>';
+        }
+        html += '<div class="module-footer">';
+        html += '<span class="module-score" id="score-single" style="display:none;"></span>';
+        html += '<button class="btn btn-primary" onclick="submitModule(\'single\')">✅ 提交本模块</button>';
+        html += '</div></div>';
+        document.getElementById('module1').innerHTML = html;
+
+        var tocHtml = '';
+        for (var j = 1; j <= 50; j++) {
+            tocHtml += '<button class="toc-btn" onclick="scrollToQuiz(' + j + ');closeToc();" id="tocBtn-' + j + '">' + j + '</button>';
+        }
+        document.getElementById('tocSingle').innerHTML = tocHtml;
+    }
+
+// ========== 渲染多选题模块 ==========
+function renderModule2() {
+    var html = '<div class="card"><h2>二、多选题（51-70题，每题1.5分，共30分）</h2>';
+    html += '<p style="color:var(--text-light);font-size:0.9rem;margin-bottom:12px;">📌 得分规则：全对得1.5分；少选且无错选，每个正确选项得0.3分；错选不得分。</p>';
+    for (var i = 0; i < multiQuestions.length; i++) {
+        var q = multiQuestions[i];
+        html += '<div class="quiz-wrap" id="wrap-' + q.quizIndex + '">';
+        html += '<div class="q-title">' + q.quizIndex + '. ' + q.q + ' <span style="color:#b7950b;font-size:0.8rem;">（多选）</span></div>';
+        html += renderOptions(q.quizIndex, q.opts, 'multi');
+        html += '<div class="explain-card" id="exp-' + q.quizIndex + '"></div>';
+        html += '</div>';
+    }
+    html += '<div class="module-footer">';
+    html += '<span class="module-score" id="score-multi" style="display:none;"></span>';
+    html += '<button class="btn btn-primary" onclick="submitModule(\'multi\')">✅ 提交本模块</button>';
+    html += '</div></div>';
+    document.getElementById('module2').innerHTML = html;
+
+    var tocHtml = '';
+    for (var j = 51; j <= 70; j++) {
+        tocHtml += '<button class="toc-btn" onclick="scrollToQuiz(' + j + ');closeToc();" id="tocBtn-' + j + '">' + j + '</button>';
+    }
+    document.getElementById('tocMulti').innerHTML = tocHtml;
+}
+
+    function scrollToQuiz(idx) {
+        var el = document.getElementById('wrap-' + idx);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    // 初始化
+    renderModule1();
+    renderModule2();
+</script>
+</body>
+</html>
