@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>深圳市情·第一次学习</title>
+<style>
+:root { --bg: #fdf8f3; --card-bg: #ffffff; --text: #2c2416; --text-light: #5c5347; --accent: #b22222; --highlight: #fff3cd; --highlight-border: #f0c040; --example-bg: #f0faf5; --example-border: #a3e4bc; --shadow-sm: 0 1px 3px rgba(0,0,0,0.05); --shadow-md: 0 4px 16px rgba(0,0,0,0.08); --radius: 14px; --radius-sm: 10px; --font: 'PingFang SC','Microsoft YaHei','Hiragino Sans GB','Noto Sans SC',system-ui,-apple-system,sans-serif; }
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 20px; }
+body { font-family: var(--font); background: var(--bg); color: var(--text); line-height: 1.75; padding: 12px; font-size: 16px; -webkit-font-smoothing: antialiased; }
+a { color: var(--accent); text-decoration: none; }
+.toc-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.35); z-index:98; }
+.toc-overlay.show { display:block; }
+.toc { position:fixed; top:16px; left:16px; width:230px; max-height:calc(100vh - 32px); background:var(--card-bg); border-radius:var(--radius); box-shadow:0 8px 30px rgba(0,0,0,0.12); padding:18px 14px; overflow-y:auto; z-index:100; font-size:0.84rem; transition:transform 0.3s; }
+.toc.hidden { transform:translateX(-260px); }
+.toc-title { font-weight:700; margin-bottom:10px; color:var(--accent); font-size:1rem; display:flex; align-items:center; gap:6px; position:sticky; top:0; background:var(--card-bg); padding-bottom:8px; border-bottom:1px solid #f0ebe0; }
+.toc a { display:block; padding:7px 10px; border-radius:6px; margin:2px 0; color:var(--text-light); transition:all 0.2s; font-size:0.82rem; }
+.toc a:hover,.toc a.active { background:#fdedec; color:var(--accent); font-weight:600; }
+.toc-toggle { position:fixed; top:16px; left:16px; width:42px; height:42px; border-radius:50%; background:var(--accent); color:#fff; border:none; font-size:1.3rem; cursor:pointer; z-index:101; display:none; box-shadow:0 4px 14px rgba(178,34,34,0.3); align-items:center; justify-content:center; }
+.main { max-width:820px; margin:0 auto 0 270px; display:flex; flex-direction:column; gap:20px; padding-bottom:40px; }
+.card { background:var(--card-bg); border-radius:var(--radius); padding:22px 26px; box-shadow:var(--shadow-md); border:1px solid #f0ebe0; }
+.section-title { font-size:1.45rem; font-weight:700; margin-bottom:4px; display:flex; align-items:center; gap:10px; }
+.section-title .icon { width:34px; height:34px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; flex-shrink:0; }
+.icon-red { background:#fdedec; color:#b22222; } .icon-blue { background:#eaf2f8; color:#1a5276; }
+.icon-green { background:#eafaf1; color:#145a32; } .icon-yellow { background:#fef9e7; color:#b7950b; }
+.subtitle { color:var(--text-light); font-size:0.9rem; margin-bottom:18px; padding-left:44px; }
+.ki-grid { display:flex; flex-direction:column; gap:14px; }
+.ki-item { border:1px solid #f0ebe0; border-radius:var(--radius-sm); padding:14px 18px; background:#fefefe; }
+.ki-title-row { font-weight:700; font-size:1rem; margin-bottom:6px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.badge { font-size:0.7rem; padding:3px 10px; border-radius:14px; font-weight:600; letter-spacing:0.3px; white-space:nowrap; }
+.badge-core { background:#fdedec; color:#b22222; } .badge-num { background:#eaf2f8; color:#1a5276; } .badge-case { background:#eafaf1; color:#145a32; } .badge-trap { background:#fef9e7; color:#b7950b; }
+.ki-content { color:var(--text-light); font-size:0.92rem; }
+.kh { display:inline-block; background:var(--highlight); border:1px solid var(--highlight-border); padding:2px 8px; border-radius:4px; font-weight:600; color:#7d6608; margin:0 2px; font-size:0.9rem; }
+.kh-red { background:#fdedec; border-color:#f5b7b1; color:#922b21; } .kh-blue { background:#eaf2f8; border-color:#aed6f1; color:#1a5276; } .kh-green { background:#eafaf1; border-color:#a3e4bc; color:#145a32; }
+.example-block { background:var(--example-bg); border-left:3px solid var(--example-border); border-radius:0 var(--radius-sm) var(--radius-sm) 0; padding:12px 16px; margin-top:10px; font-size:0.9rem; color:#1e5a3a; }
+.example-block .ex-label { font-weight:700; font-size:0.75rem; text-transform:uppercase; letter-spacing:0.5px; color:#1e8449; margin-bottom:4px; }
+.example-block .ex-q { font-weight:600; color:#145a32; margin-bottom:3px; }
+.example-block .ex-a { color:#2d6a4f; }
+.info-table { width:100%; border-collapse:collapse; margin:8px 0; font-size:0.88rem; }
+.info-table th { background:#fef9e7; text-align:left; padding:10px 14px; font-weight:700; border-bottom:2px solid #f0c040; color:#7d6608; }
+.info-table td { padding:10px 14px; border-bottom:1px solid #f0ebe0; vertical-align:top; }
+.info-table tr:hover td { background:#fefdf9; }
+.quiz-wrap { border:2px solid #f0ebe0; border-radius:var(--radius-sm); padding:18px 20px; margin-top:12px; background:#fefefe; }
+.quiz-wrap .q-type { font-size:0.78rem; font-weight:700; color:var(--accent); margin-bottom:4px; }
+.quiz-wrap .q-text { font-weight:600; margin-bottom:12px; font-size:0.98rem; }
+.opt-list { list-style:none; display:flex; flex-direction:column; gap:7px; }
+.opt-list li { padding:10px 14px; border-radius:var(--radius-sm); cursor:pointer; border:2px solid #e9e4db; transition:all 0.2s; background:#fdfdfc; font-size:0.9rem; user-select:none; }
+.opt-list li:hover { border-color:#c0b090; background:#fefdf9; }
+.opt-list li.selected { border-color:#1a5276; background:#eaf2f8; font-weight:600; }
+.opt-list li.correct { border-color:#1e8449 !important; background:#eafaf1 !important; color:#145a32 !important; }
+.opt-list li.wrong { border-color:#b22222 !important; background:#fdedec !important; color:#922b21 !important; }
+.opt-list li.disabled { pointer-events:none; opacity:0.85; }
+.btn-row { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
+.btn { display:inline-block; padding:10px 22px; border-radius:25px; font-weight:600; cursor:pointer; border:none; font-size:0.88rem; }
+.btn-primary { background:var(--accent); color:#fff; } .btn-primary:hover { background:#8b1a1a; }
+.btn-outline { background:#fff; color:var(--accent); border:2px solid var(--accent); } .btn-outline:hover { background:#fdedec; }
+.explain-card { margin-top:12px; padding:14px 18px; border-radius:var(--radius-sm); display:none; font-size:0.9rem; line-height:1.7; }
+.explain-card.show { display:block; }
+.explain-card.correct-ex { background:#eafaf1; border:1px solid #a3e4bc; color:#145a32; }
+.explain-card.wrong-ex { background:#fdedec; border:1px solid #f5b7b1; color:#922b21; }
+.explain-card .ex-head { font-weight:700; margin-bottom:6px; font-size:0.95rem; }
+@media (max-width:768px) { .toc { transform:translateX(-260px); } .toc.show { transform:translateX(0); } .toc-toggle { display:flex; } .main { max-width:100%; margin:0 auto; } .card { padding:18px 14px; } }
+</style>
+</head>
+<body>
+<button class="toc-toggle" id="tocToggle" aria-label="目录" onclick="toggleToc()">☰</button>
+<div class="toc-overlay" id="tocOverlay" onclick="closeToc()"></div>
+<nav class="toc" id="toc"><div class="toc-title">📑 知识目录</div></nav>
+<div class="main" id="mainContent"></div>
+<script>
+/* ========== 知识数据（后续追加时，请将最后的 ]; 替换为 , 然后粘贴新模块，末尾再补上 ];） ========== */
+var knowledgeData = [
+    // 模块1：鹏城别称与大鹏所城
+    {
+        id: 'mod1',
+        title: '鹏城别称与大鹏所城',
+        iconClass: 'icon-red',
+        iconEmoji: '🐦',
+        subtitle: '考点：别称由来、建城朝代、历史地位',
+        items: [
+            {
+                type: 'ki',
+                badge: '核心',
+                badgeClass: 'badge-core',
+                title: '深圳别称“鹏城”的由来',
+                content: '深圳别称<span class="kh kh-red">鹏城</span>，源于<span class="kh kh-blue">大鹏所城</span>。大鹏所城是<span class="kh kh-green">明清时期</span>的海防军事要塞，建于<span class="kh kh-blue">明代洪武年间</span>。'
+            },
+            {
+                type: 'ki',
+                badge: '考点',
+                badgeClass: 'badge-num',
+                title: '大鹏所城的历史地位',
+                content: '1. 鸦片战争的<span class="kh kh-red">肇始地</span>（打响了反抗英国殖民入侵的第一枪）。<br>2. 深圳<span class="kh kh-red">唯一</span>的国家级重点文物保护单位。<br>3. 有<span class="kh kh-yellow">“沿海所城，大鹏为最”</span>之称。',
+                extra: '明代洪武年间建，鸦片战争第一枪在此打响，深圳唯一国保单位。'
+            }
+        ],
+        quizzes: [
+            {
+                q: '深圳别称“鹏城”的由来是？',
+                opts: ['A. 源自大鹏展翅的神话', 'B. 源自大鹏所城', 'C. 源自大鹏湾', 'D. 源自大鹏鸟'],
+                correct: 1,
+                quizIndex: 1,
+                d: 'A项错误：并非神话，而是由具体的历史遗迹衍生而来。\nB项正确：大鹏所城是深圳别称的直接来源。\nC项错误：大鹏湾是地理概念，不是别称由来。\nD项错误：大鹏鸟是虚构生物，与地名无关。',
+                t: '鹏城这个名称是从明代的大鹏所城来的，不是神话也不是海湾。'
+            },
+            {
+                q: '大鹏所城是深圳唯一的国家级重点文物保护单位。',
+                opts: ['✅ 正确', '❌ 错误'],
+                correct: 0,
+                isTF: true,
+                tfId: 'tf1',
+                d: 'A项正确：大鹏所城确实是深圳唯一的国家级文保单位。\nB项错误：与事实相反。',
+                t: '记住，深圳只有这一个国家级文保，就在大鹏所城，其他地方都没有。'
+            }
+        ]
+    },
+    // 模块2：深圳历史区划演变
+    {
+        id: 'mod2',
+        title: '深圳历史区划演变',
+        iconClass: 'icon-blue',
+        iconEmoji: '📅',
+        subtitle: '考点：1979改市、1980特区、1990设区、新区转正等关键节点排序',
+        items: [
+            {
+                type: 'ki',
+                badge: '时间线',
+                badgeClass: 'badge-num',
+                title: '重要时间节点',
+                content: '<span class="kh kh-red">1979年</span>：宝安县改名为深圳市。<br><span class="kh kh-red">1980年</span>：设立深圳经济特区。<br><span class="kh kh-blue">1990年</span>：撤销特区管理体制，设罗湖、福田、南山三区。<br>之后：撤销宝安县，设宝安、龙岗两区。<br><span class="kh kh-blue">1997年</span>：设盐田区。<br><span class="kh kh-green">2007/2009年</span>：设光明新区、坪山新区。<br><span class="kh kh-green">2011年</span>：设龙华新区、大鹏新区。<br><span class="kh kh-blue">2016年</span>：龙华、坪山转正为行政区。<br><span class="kh kh-blue">2018年9月</span>：光明区成立。<br><span class="kh kh-blue">2018年12月</span>：深汕特别合作区成立。',
+                extra: '记忆口诀：改市建区再撤销，田南湖宝龙，盐田有光山，龙华有大鹏，九华坪山转正，光明转正，身上汕尾。'
+            }
+        ],
+        quizzes: [
+            {
+                q: '以下深圳区划演变节点，按时间先后排序正确的是：<br>①宝安县改名为深圳市<br>②设立深圳经济特区<br>③撤销特区管理体制，设立罗湖、福田、南山三区<br>④龙华新区、坪山新区转正为行政区',
+                opts: ['A. ①②③④', 'B. ②①③④', 'C. ①②④③', 'D. ②①④③'],
+                correct: 0,
+                quizIndex: 2,
+                d: 'A项正确：顺序为1979年①→1980年②→1990年③→2016年④。\nB项错误：②在①之后。\nC项错误：④应在③之后。\nD项错误：②在①之后，且④在③之后。',
+                t: '改市79年，建特区80年，撤管设区90年，龙华坪山转正2016年，顺序就是①②③④。'
+            },
+            {
+                q: '深圳经济特区设立于哪一年？',
+                opts: ['A. 1979年', 'B. 1980年', 'C. 1990年', 'D. 2016年'],
+                correct: 1,
+                quizIndex: 3,
+                d: 'A项错误：1979年是宝安改名为深圳市的年份，不是特区设立年份。\nB项正确：1980年深圳等四个经济特区正式设立。\nC项错误：1990年是撤销特区管理体制的年份。\nD项错误：2016年是龙华、坪山转正的年份。',
+                t: '79改市，80特区，90撤管，这三个年份最容易混，一定要记清楚。'
+            }
+        ]
+    },
+    // 模块3：市花市树
+    {
+        id: 'mod3',
+        title: '深圳市花与市树',
+        iconClass: 'icon-green',
+        iconEmoji: '🌸',
+        subtitle: '考点：市花名称、花期、市树原设与增设',
+        items: [
+            {
+                type: 'ki',
+                badge: '核心',
+                badgeClass: 'badge-core',
+                title: '市花：乐杜鹃（三角梅）',
+                content: '深圳市花为<span class="kh kh-red">乐杜鹃</span>，又称三角梅。花期长，从<span class="kh kh-blue">冬季一直开到次年六月</span>，一年有三季花期。'
+            },
+            {
+                type: 'ki',
+                badge: '考点',
+                badgeClass: 'badge-num',
+                title: '市树：荔枝与红树',
+                content: '最初市树为<span class="kh kh-green">荔枝树</span>。后来增设<span class="kh kh-green">红树</span>为第二市树。红树能生长在水中，对海岸生态保护有重要作用。',
+                extra: '注意：荔枝是老市树，红树是第二市树，现在深圳市树有两种。'
+            }
+        ],
+        quizzes: [
+            {
+                q: '深圳的市花是？',
+                opts: ['A. 木棉花', 'B. 紫荆花', 'C. 乐杜鹃（三角梅）', 'D. 凤凰花'],
+                correct: 2,
+                quizIndex: 4,
+                d: 'A项错误：木棉花是广州的市花。\nB项错误：紫荆花是香港的区花。\nC项正确：乐杜鹃即三角梅，是深圳的市花。\nD项错误：凤凰花并非深圳市花。',
+                t: '深圳的市花是三角梅，也叫乐杜鹃，花期超长，从冬天开到夏天。'
+            },
+            {
+                q: '关于深圳的市树，以下说法正确的有？',
+                opts: ['A. 最初市树为荔枝树', 'B. 目前只有荔枝树一种', 'C. 红树是第二市树，能生长在水中', 'D. 红树是深圳海岸的生态保护植物'],
+                correct: [0, 2, 3],
+                multi: true,
+                quizIndex: '多1',
+                d: 'A项正确：荔枝树是最初确定的市树。\nB项错误：后来增设了红树，现在市树有两种。\nC项正确：红树确实能生长在水中，是第二市树。\nD项正确：红树对海岸生态保护有重要作用。',
+                t: '深圳现在有两种市树：荔枝和红树，红树是后来加的，能在水里长，保护海岸。'
+            },
+            {
+                q: '红树是深圳的市花。',
+                opts: ['✅ 正确', '❌ 错误'],
+                correct: 1,
+                isTF: true,
+                tfId: 'tf2',
+                d: 'A项错误：红树是市树，不是市花。\nB项正确：题目混淆了市花和市树。',
+                t: '花是乐杜鹃，树有荔枝和红树，花和树要分清楚。'
+            }
+        ]
+    },
+    // 模块4：城市核心功能定位
+    {
+        id: 'mod4',
+        title: '城市核心功能定位',
+        iconClass: 'icon-red',
+        iconEmoji: '🏙️',
+        subtitle: '考点：全国性经济中心、先进制造基地、国际科技创新承载地',
+        items: [
+            {
+                type: 'ki',
+                badge: '核心',
+                badgeClass: 'badge-core',
+                title: '三大核心功能定位',
+                content: '<span class="kh kh-red">全国性经济中心</span>：GDP全国城市第三。<br><span class="kh kh-blue">全国先进制造基地</span>：比亚迪、大疆、OPPO、vivo等。<br><span class="kh kh-green">国际科技创新重要承载地</span>：华为、大疆等科技企业云集。',
+                extra: '注意区分：中国特色社会主义先行示范区是地位，不是核心功能定位。'
+            }
+        ],
+        quizzes: [
+            {
+                q: '以下哪项不属于深圳的城市核心功能定位？',
+                opts: ['A. 全国性经济中心', 'B. 共同富裕示范区', 'C. 全国先进制造基地', 'D. 国际科技创新重要承载地'],
+                correct: 1,
+                quizIndex: 5,
+                d: 'A项正确：全国性经济中心是深圳的核心功能定位之一。\nB项错误：共同富裕示范区是浙江省，不是深圳。\nC项正确：深圳拥有比亚迪等先进制造。\nD项正确：深圳是科技创新的重要承载地。',
+                t: '深圳是先行示范区，共同富裕示范区在浙江，两者不能搞混。'
+            },
+            {
+                q: '下列属于深圳城市核心功能定位的有？',
+                opts: ['A. 全国性经济中心', 'B. 中国特色社会主义先行示范区', 'C. 全国先进制造基地', 'D. 国际科技创新重要承载地', 'E. 共同富裕示范区'],
+                correct: [0, 2, 3],
+                multi: true,
+                quizIndex: '多2',
+                d: 'A项正确：深圳是全国的三大经济中心之一。\nB项错误：先行示范区是地位，不是核心功能定位。\nC项正确：深圳被定位为全国先进制造基地。\nD项正确：深圳是粤港澳大湾区国际科技创新中心的重要承载地。\nE项错误：共同富裕示范区是浙江。',
+                t: '核心功能定位是“经济中心+先进制造+科创承载”，先行示范区是另一顶帽子。'
+            },
+            {
+                q: '深圳是全国唯一的共同富裕示范区。',
+                opts: ['✅ 正确', '❌ 错误'],
+                correct: 1,
+                isTF: true,
+                tfId: 'tf3',
+                d: 'A项错误：共同富裕示范区是浙江，不是深圳。\nB项正确：题目混淆了深圳与浙江的定位。',
+                t: '牢记：浙江是共同富裕示范区，深圳是中国特色社会主义先行示范区。'
+            }
+        ]
+    },
+    // 模块5：先行示范区与三步走
+    {
+        id: 'mod5',
+        title: '先行示范区与三步走',
+        iconClass: 'icon-blue',
+        iconEmoji: '🏁',
+        subtitle: '考点：5大发力点、2025/2030/2050目标、现代化时间表',
+        items: [
+            {
+                type: 'ki',
+                badge: '核心',
+                badgeClass: 'badge-core',
+                title: '五大发力点',
+                content: '高质量发展、法治体系建设、文明建设、民生改善、可持续发展。<br>记忆口诀：<span class="kh kh-red">高法治文明民生可持续</span>。'
+            },
+            {
+                type: 'ki',
+                badge: '数字',
+                badgeClass: 'badge-num',
+                title: '三步走战略',
+                content: '<span class="kh kh-blue">2025年</span>：建成全球影响力的经济中心城市和现代化大都市。<br><span class="kh kh-blue">2030年</span>：建成创新创业创意之都，率先实现社会主义现代化。<br><span class="kh kh-blue">2050年</span>：成为竞争力、创新力、影响力卓越的全球标杆城市。',
+                extra: '现代化时间：2025基本实现（比全国早10年），2030率先实现（比全国早20年）。'
+            }
+        ],
+        quizzes: [
+            {
+                q: '深圳先行示范区建设三步走中，2030年的目标不包括以下哪项？',
+                opts: ['A. 建成创新创业创意之都', 'B. 率先实现社会主义现代化', 'C. 建成全民共享和美宜居新家园', 'D. 建成全球影响力的经济中心城市'],
+                correct: 3,
+                quizIndex: 6,
+                d: 'A项正确：2030年目标包含创新创业创意之都。\nB项正确：2030年率先实现社会主义现代化。\nC项正确：2030年目标是全民共享和美宜居新家园。\nD项错误：全球影响力的经济中心城市是2025年的目标。',
+                t: '2025年经济中心，2030年创新之都+率先现代化，2050年全球标杆。'
+            },
+            {
+                q: '深圳先行示范区的五个发力点包括？',
+                opts: ['A. 高质量发展', 'B. 科技创新', 'C. 法治体系建设', 'D. 民生改善', 'E. 可持续发展'],
+                correct: [0, 2, 3, 4],
+                multi: true,
+                quizIndex: '多3',
+                d: 'A项正确：高质量发展是五个发力点之一。\nB项错误：科技创新属于核心功能定位，不在五个发力点中。\nC项正确：法治是发力点之一。\nD项正确：民生是发力点之一。\nE项正确：可持续发展是发力点之一。',
+                t: '五个发力点是“高法治文明民生可持续”，科技创新是另一个体系。'
+            },
+            {
+                q: '深圳计划于2025年基本实现社会主义现代化。',
+                opts: ['✅ 正确', '❌ 错误'],
+                correct: 0,
+                isTF: true,
+                tfId: 'tf4',
+                d: 'A项正确：2025年深圳基本实现社会主义现代化，比全国目标早10年。\nB项错误：与事实相反。',
+                t: '深圳现代化速度领先全国：2025基本，2030率先，分别早10年和20年。'
+            }
+        ]
+    },
+    // 模块6：生态与城市空间格局
+    {
+        id: 'mod6',
+        title: '生态空间与城市空间格局',
+        iconClass: 'icon-green',
+        iconEmoji: '🌳',
+        subtitle: '考点：四带八片多廊、一核多心网络化',
+        items: [
+            {
+                type: 'ki',
+                badge: '核心',
+                badgeClass: 'badge-core',
+                title: '生态空间格局：四带八片多廊',
+                content: '深圳生态空间格局合称为<span class="kh kh-green">四带八片多廊</span>。四带：生态带、景观带；八片：连片的生态区域；多廊：生态走廊（如骑行绿道、慢行绿道）。'
+            },
+            {
+                type: 'ki',
+                badge: '考点',
+                badgeClass: 'badge-num',
+                title: '城市空间格局：一核多心网络化',
+                content: '城市空间格局为<span class="kh kh-red">一核多心网络化</span>。<br>一核（都市核心区）由<span class="kh kh-blue">福田罗湖中心</span>和<span class="kh kh-blue">南山前海中心</span>组成。<br>多心：多个功能中心。<br>网络化：通过软硬件设施实现各中心快速联通。',
+                extra: '注意区分：一主两副是深圳都市圈的布局，一核多心是城市内部空间格局。'
+            }
+        ],
+        quizzes: [
+            {
+                q: '深圳的城市空间格局合称为？',
+                opts: ['A. 一主两副', 'B. 四带八片多廊', 'C. 一核多心网络化', 'D. 一主两副一级四轴'],
+                correct: 2,
+                quizIndex: 7,
+                d: 'A项错误：一主两副是深圳都市圈的副中心布局。\nB项错误：四带八片多廊是生态空间格局。\nC项正确：一核多心网络化是深圳城市空间格局。\nD项错误：一主两副一级四轴是深圳都市圈的总体发展布局。',
+                t: '城市内部格局叫“一核多心网络化”，都市圈叫“一主两副一级四轴”，不要记混。'
+            },
+            {
+                q: '深圳都市核心区由哪两个中心组成？',
+                opts: ['A. 福田中心和罗湖中心', 'B. 福田罗湖中心和南山前海中心', 'C. 宝安中心和龙岗中心', 'D. 南山中心和福田中心'],
+                correct: 1,
+                quizIndex: 8,
+                d: 'A项错误：缺少南山前海中心。\nB项正确：核心区包括福田罗湖中心和南山前海中心。\nC项错误：宝安龙岗是行政区，不是核心区。\nD项错误：遗漏了罗湖。',
+                t: '深圳的“一核”就是福田罗湖+南山前海，两个中心合起来才是核心。'
+            },
+            {
+                q: '深圳的生态空间格局是“一主两副”。',
+                opts: ['✅ 正确', '❌ 错误'],
+                correct: 1,
+                isTF: true,
+                tfId: 'tf5',
+                d: 'A项错误：一主两副是都市圈布局，生态空间格局是四带八片多廊。\nB项正确：题目张冠李戴。',
+                t: '生态是四带八片多廊，城市空间是一核多心网络化，都市圈是一主两副一级四轴。'
+            }
+        ]
+    },
+    // 模块7：深圳都市圈规划
+    {
+        id: 'mod7',
+        title: '深圳都市圈规划',
+        iconClass: 'icon-yellow',
+        iconEmoji: '🔗',
+        subtitle: '考点：都市圈范围、“一主两副、一级四轴”布局、副中心、增长极',
+        items: [
+            {
+                type: 'ki',
+                badge: '核心',
+                badgeClass: 'badge-core',
+                title: '都市圈范围与布局',
+                content: '范围：深圳、<span class="kh kh-blue">东莞全域</span>、<span class="kh kh-blue">惠州全域</span>、<span class="kh kh-green">深汕特别合作区</span>、<span class="kh kh-yellow">河源等部分地区</span>。<br>布局：<span class="kh kh-red">一主两副、一级四轴</span>。'
+            },
+            {
+                type: 'ki',
+                badge: '数字',
+                badgeClass: 'badge-num',
+                title: '一主两副与一级',
+                content: '一主：<span class="kh kh-red">深圳</span>为主中心。<br>两副：<span class="kh kh-blue">东莞、惠州</span>为副中心。<br>一级：<span class="kh kh-green">深汕特别合作区</span>作为增长极。'
+            },
+            {
+                type: 'ki',
+                badge: '考点',
+                badgeClass: 'badge-case',
+                title: '四轴发展轴线',
+                content: '1. 深圳-东莞-广州发展轴<br>2. 深圳-惠州发展轴<br>3. 深圳-惠州-汕尾协同发展轴<br>4. 深圳与珠江口西岸都市圈协同发展轴<br>（注意：四轴不包括珠海单独作为一轴，而是与西岸都市圈协同）'
+            }
+        ],
+        quizzes: [
+            {
+                q: '以下哪个城市不属于深圳都市圈的副中心？',
+                opts: ['A. 东莞', 'B. 惠州', 'C. 珠海', 'D. 以上均不是'],
+                correct: 2,
+                quizIndex: 9,
+                d: 'A项正确：东莞是深圳都市圈的两个副中心之一。\nB项正确：惠州是深圳都市圈的另一个副中心。\nC项错误：珠海是珠江口西岸都市圈的核心，不属于深圳都市圈的副中心。\nD项错误：C是错误选项。',
+                t: '深圳都市圈的副中心是东莞和惠州，珠海是西岸的，不是这个圈子里的。'
+            },
+            {
+                q: '深圳都市圈“一主两副一级四轴”中的“一级”指什么？',
+                opts: ['A. 东莞', 'B. 惠州', 'C. 深汕特别合作区', 'D. 河源'],
+                correct: 2,
+                quizIndex: 10,
+                d: 'A项错误：东莞是副中心。\nB项错误：惠州是副中心。\nC项正确：深汕特别合作区是增长极（一级）。\nD项错误：河源是部分地区纳入，不是增长极。',
+                t: '“一级”就是增长极——深汕特别合作区，其他都是副中心或外围。'
+            },
+            {
+                q: '深圳都市圈的四轴发展不包括以下哪一项？',
+                opts: ['A. 深圳-东莞-广州发展轴', 'B. 深圳-惠州发展轴', 'C. 深圳-珠海-澳门发展轴', 'D. 深圳-惠州-汕尾协同发展轴'],
+                correct: 2,
+                quizIndex: 11,
+                d: 'A项正确：深莞穗发展轴是四轴之一。\nB项正确：深惠发展轴是四轴之一。\nC项错误：虽然没有直接提珠海-澳门单独轴，但原轴线为“深圳与珠江口西岸都市圈协同发展轴”，并不单独点名珠海。\nD项正确：深惠汕协同发展轴是四轴之一。',
+                t: '四轴中跟西岸的合作是整体“西岸都市圈”，没有单独点出珠海。要记住原文表述。'
+            }
+        ]
+    },
+    // 模块8：深港合作三大平台
+    {
+        id: 'mod8',
+        title: '深港合作三大平台',
+        iconClass: 'icon-red',
+        iconEmoji: '🤝',
+        subtitle: '考点：前海（现代服务业）、河套（科技创新）、沙头角（旅游消费）',
+        items: [
+            {
+                type: 'ki',
+                badge: '核心',
+                badgeClass: 'badge-core',
+                title: '三大平台及分工',
+                content: '<span class="kh kh-red">前海深港现代服务业合作平台</span>：金融、法律、商贸物流等。<br><span class="kh kh-blue">河套深港科技创新合作区</span>：科技创新为主题。<br><span class="kh kh-green">沙头角深港国际旅游消费合作区</span>：旅游和消费。',
+                extra: '易混点：前海≠科技，河套≠旅游，沙头角≠现代服务业。'
+            }
+        ],
+        quizzes: [
+            {
+                q: '以下哪项深港合作平台与功能对应错误？',
+                opts: ['A. 前海——现代服务业', 'B. 河套——科技创新', 'C. 沙头角——国际航运', 'D. 沙头角——旅游消费'],
+                correct: 2,
+                quizIndex: 12,
+                d: 'A项正确：前海聚焦现代服务业。\nB项正确：河套定位科技创新。\nC项错误：沙头角定位旅游消费，不是国际航运。\nD项正确：沙头角确实定位旅游消费。',
+                t: '前海搞金融法律，河套搞科技，沙头角就是让香港人过来消费旅游的。'
+            },
+            {
+                q: '河套是深港现代服务业合作区。',
+                opts: ['✅ 正确', '❌ 错误'],
+                correct: 1,
+                isTF: true,
+                tfId: 'tf6',
+                d: 'A项错误：现代服务业合作区是前海，河套是科技创新合作区。\nB项正确：题目混淆了河套与前海的功能。',
+                t: '河套=科技，前海=服务业，沙头角=消费，别搞反了。'
+            }
+        ]
+    },
+    // 模块9：深汕特别合作区产业与民生七优
+    {
+        id: 'mod9',
+        title: '深汕特别合作区与民生七优',
+        iconClass: 'icon-blue',
+        iconEmoji: '⚡',
+        subtitle: '考点：一主三辅产业体系、民生七优具体内容',
+        items: [
+            {
+                type: 'ki',
+                badge: '核心',
+                badgeClass: 'badge-core',
+                title: '深汕特别合作区产业体系',
+                content: '主导：<span class="kh kh-red">新能源汽车</span>为主链（比亚迪等）。<br>三大辅助产业链：<span class="kh kh-blue">新型储能</span>、<span class="kh kh-green">新材料</span>、<span class="kh kh-yellow">智能制造机器人</span>。<br>合称：<span class="kh kh-red">一主三辅</span>。'
+            },
+            {
+                type: 'ki',
+                badge: '记忆',
+                badgeClass: 'badge-trap',
+                title: '民生七优（深圳七项重点民生）',
+                content: '幼有善育、学有优教、劳有厚得、病有良医、老有厚德、住有宜居、弱有众扶。<br>口诀：<span class="kh kh-red">老小病弱上学工作买房</span>。',
+                extra: '注意不要和20+8产业集群混淆，那是产业政策，这是民生工程。'
+            }
+        ],
+        quizzes: [
+            {
+                q: '深汕特别合作区的“一主三辅”产业体系中，哪些属于辅助产业？',
+                opts: ['A. 新型储能', 'B. 新材料', 'C. 智能制造机器人', 'D. 新能源汽车'],
+                correct: [0, 1, 2],
+                multi: true,
+                quizIndex: '多4',
+                d: 'A项正确：新型储能是三大辅助产业之一。\nB项正确：新材料是辅助产业之一。\nC项正确：智能制造机器人是辅助产业之一。\nD项错误：新能源汽车是主导产业，不是辅助产业。',
+                t: '新能源汽车是主角，其他三个是配角，别把主链选进辅助里。'
+            },
+            {
+                q: '下列哪一项不属于深圳“民生七优”的内容？',
+                opts: ['A. 住有宜居', 'B. 创有空间', 'C. 幼有善育', 'D. 劳有厚得'],
+                correct: 1,
+                quizIndex: 13,
+                d: 'A项正确：住有宜居是民生七优之一。\nB项错误：创有空间不属于民生七优，是干扰项。\nC项正确：幼有善育是七优之一。\nD项正确：劳有厚得是七优之一。',
+                t: '民生七优里没有“创有空间”，那是想象出来的。口诀:老小病弱上学工作买房。'
+            },
+            {
+                q: '民生七优中包括“老有厚德”“病有良医”“弱有众扶”等七项。',
+                opts: ['✅ 正确', '❌ 错误'],
+                correct: 0,
+                isTF: true,
+                tfId: 'tf7',
+                d: 'A项正确：这都是民生七优中的标准表述。\nB项错误：表述正确。',
+                t: '没错，这些关键词都是原话，记忆时结合口诀就行。'
+            }
+        ]
+    },
+    // 模块10：十四五成就（多项全国第一）
+    {
+        id: 'mod10',
+        title: '深圳“十四五”成就·多项全国第一',
+        iconClass: 'icon-yellow',
+        iconEmoji: '🏆',
+        subtitle: '考点：GDP增速、工业双第一、外贸、专精特新、PCT、研发投入、商事主体、医保等第一',
+        items: [
+            {
+                type: 'ki',
+                badge: '核心指标',
+                badgeClass: 'badge-core',
+                title: '经济与工业第一',
+                content: '<span class="kh kh-red">GDP年均增长5.5%</span>：一线城市首位。<br><span class="kh kh-blue">规模以上工业总产值、增加值</span>：全国“双第一”。<br><span class="kh kh-green">外贸进出口总额</span>：跃居全国城市首位。'
+            },
+            {
+                type: 'ki',
+                badge: '创新数据',
+                badgeClass: 'badge-num',
+                title: '创新与研发第一',
+                content: '<span class="kh kh-blue">国家级专精特新“小巨人”企业</span>数量：全国首位。<br><span class="kh kh-red">研发投入强度6.67%</span>：全国城市首位；企业研发投入总量：长期稳居全国第一。<br><span class="kh kh-green">深港穗创新集群</span>：全球创新指数第一。<br><span class="kh kh-red">PCT国际专利申请量</span>：<span class="kh kh-blue">连续22年</span>全国第一。<br><span class="kh kh-yellow">研发人员全时当量</span>：47.4万人，全国城市首位。'
+            },
+            {
+                type: 'ki',
+                badge: '民生与交通',
+                badgeClass: 'badge-case',
+                title: '城市活力第一',
+                content: '<span class="kh kh-green">商事主体数量</span>：稳居全国首位。<br><span class="kh kh-blue">地铁客流强度</span>：全国超大城市首位。<br><span class="kh kh-red">汽车产量</span>：全国城市首位。<br><span class="kh kh-yellow">基本医保参保率</span>：一线城市首位。'
+            }
+        ],
+        quizzes: [
+            {
+                q: '下列关于深圳“十四五”成就的说法，错误的是哪一项？',
+                opts: [
+                    'A. GDP年均增长5.5%，在一线城市中增速最快',
+                    'B. 规模以上工业总产值和增加值居全国第一',
+                    'C. 外贸进出口总额居全国城市首位',
+                    'D. PCT国际专利申请量连续20年全国第一'
+                ],
+                correct: 3,
+                quizIndex: 14,
+                d: 'A项正确：5.5%的增速确实是一线城市首位。\nB项正确：工业总产值和增加值实现全国双第一。\nC项正确：外贸进出口总额跃居全国城市首位。\nD项错误：PCT国际专利申请量是连续22年全国第一，不是20年。',
+                t: 'PCT专利是连续22年，20年这个数字是错的，数字一定要记准。'
+            },
+            {
+                q: '以下哪些领域在“十四五”期间位居全国城市首位？（多选）',
+                opts: [
+                    'A. 商事主体数量',
+                    'B. 研发人员全时当量',
+                    'C. 地铁客流强度',
+                    'D. 基本医保参保率'
+                ],
+                correct: [0, 1, 2, 3],
+                multi: true,
+                quizIndex: '多5',
+                d: 'A项正确：商事主体数量全国首位。\nB项正确：研发人员全时当量全国城市首位。\nC项正确：地铁客流强度全国超大城市首位。\nD项正确：基本医保参保率一线城市首位，也可视为全国领先。注意题目问的是全国城市首位，医保是一线城市首位，但选项整体应选。',
+                t: '这四个全是深圳的第一，分别代表企业活跃度、研发人力、交通和社保，都是城市竞争力体现。'
+            }
+        ]
+    },
+    // 模块11：十五运会深圳要点
+    {
+        id: 'mod11',
+        title: '十五运会与深圳健儿',
+        iconClass: 'icon-red',
+        iconEmoji: '🏅',
+        subtitle: '考点：首金得主、闭幕式地点、18金50奖牌',
+        items: [
+            {
+                type: 'ki',
+                badge: '首金',
+                badgeClass: 'badge-core',
+                title: '首金与闭幕式',
+                content: '<span class="kh kh-red">倪旭林、聂毅德</span>在男子双人双桨决赛中为深圳赢下首金，也是广东代表团首金。<br>闭幕式在<span class="kh kh-blue">深圳前海欢乐剧场</span>举行。<br>记忆口诀：<span class="kh kh-green">“你的首金深圳你的”</span>（倪聂）。'
+            },
+            {
+                type: 'ki',
+                badge: '奖牌',
+                badgeClass: 'badge-num',
+                title: '深圳贡献的奖牌',
+                content: '深圳健儿为广东代表团贡献了<span class="kh kh-red">18枚金牌</span>、18枚银牌、14枚铜牌，合计<span class="kh kh-red">50枚奖牌</span>。<br>记忆：<span class="kh kh-yellow">1850年鸦片战争</span>打响第一枪，1850—18金50奖牌，象征深圳从“东亚病夫”到运动健儿的崛起。'
+            }
+        ],
+        quizzes: [
+            {
+                q: '为深圳赢得十五运会首枚金牌的运动员是？',
+                opts: [
+                    'A. 全红婵和陈芋汐',
+                    'B. 倪旭林和聂毅德',
+                    'C. 樊振东',
+                    'D. 张雨霏'
+                ],
+                correct: 1,
+                quizIndex: 15,
+                d: 'A项错误：全红婵和陈芋汐是跳水运动员，未涉及此次首金。\nB项正确：倪旭林和聂毅德在男子双人双桨项目夺金。\nC项错误：樊振东是乒乓球选手。\nD项错误：张雨霏是游泳选手。',
+                t: '口诀：“你的（倪）首金深圳你的（聂）”，记住是双人双桨，深圳靠海，划船有优势。'
+            },
+            {
+                q: '十五运会闭幕式在深圳前海欢乐剧场举行。',
+                opts: ['✅ 正确', '❌ 错误'],
+                correct: 0,
+                isTF: true,
+                tfId: 'tf8',
+                d: 'A项正确：选择欢乐剧场，寓意全运会欢乐圆满结束。\nB项错误：表述正确。',
+                t: '记住前海欢乐剧场，开心的结束嘛，地点就在前海。'
+            },
+            {
+                q: '深圳运动员在十五届全运会上为广东代表团贡献的总奖牌数是？',
+                opts: [
+                    'A. 30枚',
+                    'B. 40枚',
+                    'C. 50枚',
+                    'D. 60枚'
+                ],
+                correct: 2,
+                quizIndex: 16,
+                d: 'A项错误：不是30枚。\nB项错误：不是40枚。\nC项正确：合计50枚（18金18银14铜）。\nD项错误：不是60枚。',
+                t: '利用1850记忆：18金50奖牌，记住这两个数就不会错。'
+            }
+        ]
+    },
+    // 模块12：十五五规划与中央经济工作会议
+    {
+        id: 'mod12',
+        title: '十五五规划与中央经济工作会议',
+        iconClass: 'icon-blue',
+        iconEmoji: '📊',
+        subtitle: '考点：收官/开局年、稳中求进、两个统筹、三保底线、八项重点任务、两新两重',
+        items: [
+            {
+                type: 'ki',
+                badge: '时间节点',
+                badgeClass: 'badge-num',
+                title: '十四五收官与十五五开局',
+                content: '<span class="kh kh-red">2025年</span>是“十四五”收官之年。<br><span class="kh kh-red">2026年</span>是“十五五”规划开始之年。<br>会议总结过去五年成就，并部署来年经济工作。'
+            },
+            {
+                type: 'ki',
+                badge: '政策基调',
+                badgeClass: 'badge-core',
+                title: '总基调与两个统筹',
+                content: '总基调：<span class="kh kh-red">稳中求进</span>。<br>两个更好统筹：<span class="kh kh-blue">国内经济与国际经贸斗争</span>、<span class="kh kh-blue">发展和安全</span>。<br>宏观政策：<span class="kh kh-green">积极财政政策</span>+<span class="kh kh-green">适度宽松货币政策</span>。<br>三保底线：保基本民生、保工资、保运转。'
+            },
+            {
+                type: 'ki',
+                badge: '重点任务',
+                badgeClass: 'badge-trap',
+                title: '八项重点任务与要点',
+                content: '口诀：<span class="kh kh-red">健谈外调，劳民心虚</span><br>即：改革攻坚、双碳引领、对外开放、协调发展、守牢底线、民生为大、创新驱动、<span class="kh kh-red">内需主导（首要任务）</span>。<br>两新政策：大规模设备更新、消费品以旧换新。<br>两重项目：国家重大战略实施、重点领域安全能力建设。<br>就业是民生之本，重点群体：高校毕业生、农民工、退役军人。'
+            }
+        ],
+        quizzes: [
+            {
+                q: '中央经济工作会议明确的2026年经济工作总基调是？',
+                opts: [
+                    'A. 保持稳定',
+                    'B. 稳中求进',
+                    'C. 高质量发展',
+                    'D. 高速增长'
+                ],
+                correct: 1,
+                quizIndex: 17,
+                d: 'A项错误：不是简单保持稳定，而是要稳中进取。\nB项正确：稳中求进是历年经济工作的总基调。\nC项错误：高质量发展是现阶段的主题，但不是总基调。\nD项错误：已经不再强调高速增长。',
+                t: '只要看到“总基调”三个字，答案就是稳中求进，这是固定搭配。'
+            },
+            {
+                q: '下列属于中央经济工作会议提出的“八项重点任务”的有？（多选）',
+                opts: [
+                    'A. 改革攻坚',
+                    'B. 扩大出口',
+                    'C. 民生为大',
+                    'D. 内需主导',
+                    'E. 协调发展'
+                ],
+                correct: [0, 2, 3, 4],
+                multi: true,
+                quizIndex: '多6',
+                d: 'A项正确：改革攻坚是八项任务之一。\nB项错误：八项中是“对外开放”，不是“扩大出口”，范围不同。\nC项正确：民生为大为任务之一。\nD项正确：内需主导是首要任务。\nE项正确：协调发展是任务之一。',
+                t: '口诀“健谈外调劳民心虚”对应的就是这些，注意“外”是对外开放，不是单纯出口。'
+            },
+            {
+                q: '“两重”项目指的是大规模设备更新和消费品以旧换新。',
+                opts: ['✅ 正确', '❌ 错误'],
+                correct: 1,
+                isTF: true,
+                tfId: 'tf9',
+                d: 'A项错误：“两重”是国家重大战略实施和重点领域安全能力建设；大规模设备更新和以旧换新是“两新”。\nB项正确：题干张冠李戴。',
+                t: '“两新”是设备和消费品更新，“两重”是国家大战略，两件事完全不同。'
+            }
+        ]
+    },
+    // 模块13：综合改革试点45周年文件
+    {
+        id: 'mod13',
+        title: '深圳综合改革试点45周年',
+        iconClass: 'icon-green',
+        iconEmoji: '📜',
+        subtitle: '考点：四个经济特区、原则、三个一批、四个先行、四大任务',
+        items: [
+            {
+                type: 'ki',
+                badge: '历史',
+                badgeClass: 'badge-core',
+                title: '经济特区的设立',
+                content: '1979年广东福建试办出口特区；<span class="kh kh-red">1980年</span>设立四个经济特区：<span class="kh kh-blue">深圳、珠海、厦门、汕头</span>（口诀：神猪闷头）。<br>2025年是深圳经济特区建立<span class="kh kh-red">45周年</span>，也是综合改革试点实施<span class="kh kh-red">5周年</span>。'
+            },
+            {
+                type: 'ki',
+                badge: '文件要点',
+                badgeClass: 'badge-num',
+                title: '深化改革创新扩大开放意见',
+                content: '原则：<span class="kh kh-green">顶层设计同基层探索有机结合</span>。<br>机制：研究制定<span class="kh kh-blue">授权事项清单的工作机制</span>。<br>三个一批：推出一批改革措施、落地一批创新试验、深化一批开放举措。<br><span class="kh kh-red">四个先行</span>：教科人领域改革；四链融合；粤港澳合作；现代化国际化创新型城市。<br><span class="kh kh-red">四大任务</span>：教科人一体化；虚拟赋能实体；高水平开放型经济新体制；社会治理。'
+            },
+            {
+                type: 'ki',
+                badge: '其他',
+                badgeClass: 'badge-case',
+                title: '科技与教育亮点',
+                content: '企业是创新主体，政府起组织作用。<br>科技领军企业发挥<span class="kh kh-blue">“出题人”</span>作用。<br>科研经费：<span class="kh kh-green">预算加负面清单</span>管理。<br>高校：探索<span class="kh kh-green">小型而精</span>的办学模式。'
+            }
+        ],
+        quizzes: [
+            {
+                q: '2025年深圳经济特区建立多少周年？',
+                opts: [
+                    'A. 40周年',
+                    'B. 42周年',
+                    'C. 45周年',
+                    'D. 50周年'
+                ],
+                correct: 2,
+                quizIndex: 18,
+                d: 'A项错误：40周年是2020年。\nB项错误：42周年是2022年。\nC项正确：1980年设立，2025年正好45周年。\nD项错误：50周年是2030年。',
+                t: '80年成立，25年就是45周年，同时记住综合改革试点是2020年开始，五周年。'
+            },
+            {
+                q: '以下哪些属于深圳综合改革试点文件中的“四大任务”？（多选）',
+                opts: [
+                    'A. 统筹推进教育科技人才体制一体化改革',
+                    'B. 推动虚拟经济赋能实体经济',
+                    'C. 建设高水平开放型经济新体制',
+                    'D. 扩大土地财政规模',
+                    'E. 强化社会治理'
+                ],
+                correct: [0, 1, 2, 4],
+                multi: true,
+                quizIndex: '多7',
+                d: 'A项正确：对应教科人一体化改革。\nB项正确：虚拟经济赋能实体经济是任务之一。\nC项正确：建设开放型经济新体制。\nD项错误：文件不涉及扩大土地财政。\nE项正确：强化社会治理是四大任务之一。',
+                t: '四大任务：教科人、虚拟赋能实体、高水平开放、社会治理。'
+            },
+            {
+                q: '深圳综合改革试点坚持的原则是顶层设计同基层探索有机结合。',
+                opts: ['✅ 正确', '❌ 错误'],
+                correct: 0,
+                isTF: true,
+                tfId: 'tf10',
+                d: 'A项正确：这正是文件明确提出的原则。\nB项错误：表述正确。',
+                t: '没错，就是“顶层设计+基层探索”，上下结合。'
+            }
+        ]
+    },
+    {
+        id: 'mod_final',
+        title: '🎯 综合练习·30题串联',
+        iconClass: 'icon-red',
+        iconEmoji: '🏁',
+        subtitle: '跨模块综合检测，覆盖全部深圳市情考点，每题均为单选题。',
+        items: [],
+        quizzes: [
+            {
+                q: '深圳的别称“鹏城”源自下列哪项？',
+                opts: ['A. 大鹏湾', 'B. 大鹏鸟', 'C. 大鹏所城', 'D. 鹏程万里'],
+                correct: 2,
+                quizIndex: 1,
+                d: 'A项错误：大鹏湾是深圳的一个海湾，不是别称由来。\nB项错误：大鹏鸟是传说生物，与地名无关。\nC项正确：大鹏所城是深圳别名鹏城的直接来源。\nD项错误：鹏程万里是成语，不是实体地名。',
+                t: '鹏城就是从大鹏所城来的，一个有历史的地方，不是神话也不是海湾。'
+            },
+            {
+                q: '大鹏所城建于哪个朝代？',
+                opts: ['A. 元代', 'B. 明代洪武年间', 'C. 清代早期', 'D. 唐代'],
+                correct: 1,
+                quizIndex: 2,
+                d: 'A项错误：不是元代。\nB项正确：大鹏所城建于明代洪武年间。\nC项错误：不是清代。\nD项错误：不是唐代。',
+                t: '记住明代，而且是洪武年间，时间早，地位重。'
+            },
+            {
+                q: '大鹏所城的历史地位不包括以下哪项？',
+                opts: ['A. 鸦片战争的肇始地', 'B. 深圳唯一的国家级文保单位', 'C. 清代海防军事要塞', 'D. 深圳经济特区的起源地'],
+                correct: 3,
+                quizIndex: 3,
+                d: 'A项正确：大鹏所城打响了鸦片战争第一枪。\nB项正确：是深圳唯一的国家级文物保护单位。\nC项正确：明清时期的海防要塞，当然包括清代。\nD项错误：经济特区起源是1979年宝安改市，与大鹏所城无直接关系。',
+                t: '大鹏所城跟特区起源没有关系，别把历史和改革开放的事混在一起。'
+            },
+            {
+                q: '1979年和1980年对深圳而言，分别发生了什么大事？',
+                opts: ['A. 1979年设立经济特区，1980年改名深圳市', 'B. 1979年宝安县改名深圳市，1980年设立经济特区', 'C. 1979年撤销特区，1980年设市', 'D. 1979年设市辖区，1980年成立深汕合作区'],
+                correct: 1,
+                quizIndex: 4,
+                d: 'A项错误：年份对应事件颠倒。\nB项正确：79年改市，80年建特区，顺序正确。\nC项错误：撤销特区是1990年的事。\nD项错误：设市辖区是90年，深汕合作区是2018年。',
+                t: '79改市，80特区，这是两个最基本的年份，不能记反。'
+            },
+            {
+                q: '以下事件按时间排序正确的是：①设立罗湖、福田、南山三区 ②龙华新区、坪山新区转正 ③设立盐田区 ④撤销宝安县设宝安、龙岗区',
+                opts: ['A. ①④③②', 'B. ④①③②', 'C. ①③④②', 'D. ④③①②'],
+                correct: 0,
+                quizIndex: 5,
+                d: 'A项正确：①1990年设三区→④1992年撤宝安县设两区→③1997年设盐田区→②2016年转正。\nB项错误：④在①之后。\nC项错误：③在④之前。\nD项错误：④在①之前，但③在④之前也不对。',
+                t: '90设三区，92撤宝安设两区，97盐田，16转正，按年份自然排就能对上。'
+            },
+            {
+                q: '深圳的市花是以下哪种？',
+                opts: ['A. 木棉花', 'B. 紫荆花', 'C. 凤凰花', 'D. 乐杜鹃（三角梅）'],
+                correct: 3,
+                quizIndex: 6,
+                d: 'A项错误：木棉花是广州的市花。\nB项错误：紫荆花是香港的区花。\nC项错误：凤凰花并非深圳市花。\nD项正确：乐杜鹃就是三角梅，是深圳市花。',
+                t: '记住乐杜鹃，不是其他城市的市花。'
+            },
+            {
+                q: '关于深圳市树，下列说法错误的是？',
+                opts: ['A. 最初市树为荔枝树', 'B. 后来增设了红树作为第二市树', 'C. 红树能生长在水中，对海岸生态有保护作用', 'D. 现在深圳市树只有红树一种'],
+                correct: 3,
+                quizIndex: 7,
+                d: 'A项正确：荔枝是最早的市树。\nB项正确：红树是后来增加的。\nC项正确：红树确实能长在水中，保护海岸。\nD项错误：现在深圳市树有两种，荔枝和红树，并非只有红树。',
+                t: '市树有俩，荔枝是老的，红树是新的，一个都不能少。'
+            },
+            {
+                q: '以下哪一项不属于深圳的城市核心功能定位？',
+                opts: ['A. 全国性经济中心', 'B. 中国特色社会主义先行示范区', 'C. 全国先进制造基地', 'D. 国际科技创新重要承载地'],
+                correct: 1,
+                quizIndex: 8,
+                d: 'A项正确：全国性经济中心是核心功能。\nB项错误：先行示范区是地位，不是核心功能定位。\nC项正确：先进制造基地是核心功能之一。\nD项正确：国际科创承载地是核心功能之一。',
+                t: '先行示范区是帽子，核心功能是经济、制造、科创这三个。'
+            },
+            {
+                q: '深圳先行示范区建设的五个发力点不包括？',
+                opts: ['A. 高质量发展', 'B. 科技创新', 'C. 法治体系建设', 'D. 可持续发展'],
+                correct: 1,
+                quizIndex: 9,
+                d: 'A项正确：高质量发展是五个发力点之一。\nB项错误：科技创新属于核心功能定位，不在五个发力点之中。\nC项正确：法治是发力点。\nD项正确：可持续发展是发力点。',
+                t: '五个发力点是:高质量发展、法治、文明、民生、可持续，没有单独的科技创新。'
+            },
+            {
+                q: '根据三步走战略，深圳2030年的目标不包括？',
+                opts: ['A. 建成创新创业创意之都', 'B. 率先实现社会主义现代化', 'C. 建成全球影响力的经济中心城市', 'D. 建成全民共享和美宜居新家园'],
+                correct: 2,
+                quizIndex: 10,
+                d: 'A项正确：2030年目标是创新之都。\nB项正确：2030年率先实现现代化。\nC项错误：全球影响力经济中心城市是2025年的目标。\nD项正确：2030年包含和美宜居新家园。',
+                t: '2025年经济中心，2030年创新之都+率先现代化，2050年全球标杆。'
+            },
+            {
+                q: '深圳的生态空间格局合称为？',
+                opts: ['A. 一核多心网络化', 'B. 一主两副', 'C. 四带八片多廊', 'D. 一主三辅'],
+                correct: 2,
+                quizIndex: 11,
+                d: 'A项错误：一核多心网络化是城市空间格局。\nB项错误：一主两副是都市圈布局。\nC项正确：四带八片多廊是生态空间格局。\nD项错误：一主三辅是深汕产业体系。',
+                t: '生态格局叫四带八片多廊，记住“多廊”就是生态走廊。'
+            },
+            {
+                q: '深圳城市空间格局中的“一核”指的是？',
+                opts: ['A. 福田中心', 'B. 南山前海中心', 'C. 福田罗湖中心和南山前海中心', 'D. 宝安中心'],
+                correct: 2,
+                quizIndex: 12,
+                d: 'A项错误：只是核心的一部分。\nB项错误：同样只是一部分。\nC项正确：核心区由福田罗湖中心和南山前海中心共同组成。\nD项错误：宝安不属于核心区。',
+                t: '一核是两个中心合起来：福田罗湖+南山前海。'
+            },
+            {
+                q: '深圳都市圈的两个副中心是？',
+                opts: ['A. 广州和珠海', 'B. 东莞和惠州', 'C. 惠州和珠海', 'D. 东莞和汕尾'],
+                correct: 1,
+                quizIndex: 13,
+                d: 'A项错误：广州、珠海均非都市圈副中心。\nB项正确：东莞和惠州被定位为两个副中心。\nC项错误：珠海不是。\nD项错误：汕尾不是副中心，深汕是增长极。',
+                t: '深圳是主中心，东莞和惠州是副中心，深汕是增长极。'
+            },
+            {
+                q: '在深圳都市圈四轴发展布局中，不包括以下哪条轴线？',
+                opts: ['A. 深圳-东莞-广州发展轴', 'B. 深圳-惠州发展轴', 'C. 深圳-珠海-澳门发展轴', 'D. 深圳-惠州-汕尾协同发展轴'],
+                correct: 2,
+                quizIndex: 14,
+                d: 'A项正确：这是四轴之一。\nB项正确：四轴之一。\nC项错误：原文是“深圳与珠江口西岸都市圈协同发展轴”，并未单独列出珠海-澳门轴。\nD项正确：四轴之一。',
+                t: '西岸是一个整体都市圈，没有单独提珠海，表述要准确。'
+            },
+            {
+                q: '前海深港合作平台的定位是？',
+                opts: ['A. 国际旅游消费', 'B. 科技创新', 'C. 现代服务业', 'D. 人工智能'],
+                correct: 2,
+                quizIndex: 15,
+                d: 'A项错误：沙头角的定位是旅游消费。\nB项错误：河套的定位是科技创新。\nC项正确：前海聚焦现代服务业（金融、法律等）。\nD项错误：没有单独的人工智能合作平台。',
+                t: '前海搞服务，河套搞科技，沙头角搞消费，三兄弟分工明确。'
+            },
+            {
+                q: '深汕特别合作区的产业体系中，“一主”指的是？',
+                opts: ['A. 新型储能', 'B. 智能制造机器人', 'C. 新材料', 'D. 新能源汽车'],
+                correct: 3,
+                quizIndex: 16,
+                d: 'A项错误：新型储能是辅助产业。\nB项错误：智能制造是辅助产业。\nC项错误：新材料是辅助产业。\nD项正确：新能源汽车是主导产业。',
+                t: '新能源车是主角，其他三个是辅助。'
+            },
+            {
+                q: '下列哪项不属于深圳“民生七优”的内容？',
+                opts: ['A. 住有宜居', 'B. 创有空间', 'C. 学有优教', 'D. 弱有众扶'],
+                correct: 1,
+                quizIndex: 17,
+                d: 'A项正确：住有宜居是七优之一。\nB项错误：民生七优中没有“创有空间”，属干扰项。\nC项正确：学有优教是七优之一。\nD项正确：弱有众扶是七优之一。',
+                t: '民生七优只关心生活保障，没有“创有空间”这种产业政策用语。'
+            },
+            {
+                q: '“十四五”期间深圳GDP年均增速为5.5%，这个成绩属于什么水平？',
+                opts: ['A. 全国城市首位', 'B. 珠三角城市首位', 'C. 一线城市首位', 'D. 广东省首位'],
+                correct: 2,
+                quizIndex: 18,
+                d: 'A项错误：并未强调全国首位，只强调一线城市中领先。\nB项错误：原文无此表述。\nC项正确：原文明确“在一线城市中能排首位”。\nD项错误：原文未提及广东省首位。',
+                t: '记住是一线城市里的第一名，体量大还能保持增速，不容易。'
+            },
+            {
+                q: '深圳的PCT国际专利申请量已连续多少年居全国第一位？',
+                opts: ['A. 12年', 'B. 16年', 'C. 20年', 'D. 22年'],
+                correct: 3,
+                quizIndex: 19,
+                d: 'A项错误：数字不对。\nB项错误：数字不对。\nC项错误：20年是常见陷阱。\nD项正确：连续22年，数据截至15五初期。',
+                t: 'PCT连续22年全国第一，20年那个选项是坑。'
+            },
+            {
+                q: '“十四五”成就中，以下哪项不是全国城市首位？',
+                opts: ['A. 商事主体数量', 'B. 研发人员全时当量', 'C. 地铁客流强度', 'D. 公共财政收入'],
+                correct: 3,
+                quizIndex: 20,
+                d: 'A项正确：商事主体数量全国首位。\nB项正确：研发人员全时当量全国城市首位。\nC项正确：地铁客流强度全国超大城市首位。\nD项错误：原文未提及公共财政收入全国首位，属于陷阱。',
+                t: '前三项都在讲义中明确提过第一，财政收入没提，不能自己联想。'
+            },
+            {
+                q: '为深圳赢得十五运会首枚金牌的运动员是？',
+                opts: ['A. 全红婵和樊振东', 'B. 倪旭林和聂毅德', 'C. 苏炳添和谢震业', 'D. 陈清晨和贾一凡'],
+                correct: 1,
+                quizIndex: 21,
+                d: 'A项错误：虽为广东健儿，但非此项目首金得主。\nB项正确：倪旭林和聂毅德在男子双人双桨中夺金。\nC项错误：是田径选手，未参加该项目。\nD项错误：是羽毛球选手。',
+                t: '“你的首金深圳你的”，谐音记住了：倪（你）聂（你的）。'
+            },
+            {
+                q: '十五运会闭幕式的举办地是？',
+                opts: ['A. 深圳湾体育中心', 'B. 宝安体育场', 'C. 前海欢乐剧场', 'D. 大运中心'],
+                correct: 2,
+                quizIndex: 22,
+                d: 'A项错误：不是深圳湾体育中心。\nB项错误：不是宝安体育场。\nC项正确：为了体现欢乐圆满，选址前海欢乐剧场。\nD项错误：不是大运中心。',
+                t: '开心的结束就在欢乐剧场。'
+            },
+            {
+                q: '深圳运动员在十五运会上为广东代表团贡献的金牌数和总奖牌数分别是？',
+                opts: ['A. 15金、40枚奖牌', 'B. 18金、50枚奖牌', 'C. 20金、60枚奖牌', 'D. 10金、30枚奖牌'],
+                correct: 1,
+                quizIndex: 23,
+                d: 'A项错误：数据不对。\nB项正确：18枚金牌，合计50枚奖牌。\nC项错误：数据夸大。\nD项错误：数据偏少。',
+                t: '18金50奖牌，结合1850鸦片战争年份来记。'
+            },
+            {
+                q: '2025年在国家规划中属于哪个阶段？',
+                opts: ['A. 十三五开局之年', 'B. 十四五收官之年', 'C. 十五五开局之年', 'D. 十四五中期评估年'],
+                correct: 1,
+                quizIndex: 24,
+                d: 'A项错误：十三五早已结束。\nB项正确：2025年是十四五规划的收官之年。\nC项错误：十五五开局是2026年。\nD项错误：不是中期评估。',
+                t: '25年十四五结束，26年十五五开始。'
+            },
+            {
+                q: '中央经济工作会议为2026年经济工作确定的总基调是？',
+                opts: ['A. 高速增长', 'B. 稳中求进', 'C. 深化改革', 'D. 稳中向好'],
+                correct: 1,
+                quizIndex: 25,
+                d: 'A项错误：已不再提高速增长。\nB项正确：总基调一直是稳中求进。\nC项错误：改革是任务，不是总基调。\nD项错误：稳中向好是判断，不是总基调。',
+                t: '只要看到“总基调”，闭眼选稳中求进。'
+            },
+            {
+                q: '会议提出的“两个更好统筹”具体指什么？',
+                opts: ['A. 发展与安全、区域与城乡', 'B. 国内经济与国际经贸斗争、发展与安全', 'C. 城市与乡村、经济与社会', 'D. 投资与消费、进口与出口'],
+                correct: 1,
+                quizIndex: 26,
+                d: 'A项错误：遗漏了国内经济与国际经贸斗争。\nB项正确：一个是统筹国内经济与国际经贸斗争，一个是统筹发展和安全。\nC项错误：完全不对。\nD项错误：非这两个统筹。',
+                t: '今年多了“国际经贸斗争”这个统筹，安全与发展也不能忘。'
+            },
+            {
+                q: '“两新”政策指的是什么？',
+                opts: ['A. 新型城镇化和新农村建设', 'B. 大规模设备更新和消费品以旧换新', 'C. 新能源和新材料', 'D. 新基建和新消费'],
+                correct: 1,
+                quizIndex: 27,
+                d: 'A项错误：并非指城镇化和新农村。\nB项正确：两新就是设备更新和消费品以旧换新。\nC项错误：新能源新材料是产业领域。\nD项错误：新基建新消费是另一概念。',
+                t: '“两新”跟老百姓更相关：企业换设备，个人换家电汽车。'
+            },
+            {
+                q: '我国首批设立的四个经济特区不包括下列哪个城市？',
+                opts: ['A. 深圳', 'B. 珠海', 'C. 厦门', 'D. 海南'],
+                correct: 3,
+                quizIndex: 28,
+                d: 'A项正确：深圳是首批四个特区之一。\nB项正确：珠海是其中之一。\nC项正确：厦门是其中之一。\nD项错误：海南是后来设立的经济特区，不是首批。',
+                t: '首批四个：深圳、珠海、厦门、汕头（神猪闷头），没有海南。'
+            },
+            {
+                q: '深圳综合改革试点文件中提出的机制是？',
+                opts: ['A. 负面清单管理机制', 'B. 授权事项清单工作机制', 'C. 容错纠错机制', 'D. 项目审批绿色通道'],
+                correct: 1,
+                quizIndex: 29,
+                d: 'A项错误：负面清单是科研经费管理方式。\nB项正确：该机制旨在明确授权事项，法有授权才可为。\nC项错误：文件未提容错纠错机制。\nD项错误：未提绿色通道。',
+                t: '授权事项清单，让开放更透明，不该管的不管。'
+            },
+            {
+                q: '文件强调在科研领域，科技领军企业要发挥什么作用？',
+                opts: ['A. 投资人', 'B. 出题人', 'C. 评卷人', 'D. 监督人'],
+                correct: 1,
+                quizIndex: 30,
+                d: 'A项错误：企业虽然也投资，但这里特指“出题人”角色。\nB项正确：科技领军企业作为出题人，牵头破解重大技术难题。\nC项错误：不是评卷人。\nD项错误：不是监督人。',
+                t: '企业是出题人，也就是提出关键技术需求，然后组织攻关。'
+            }
+        ]
+    }
+
+];
+
+
+/* ========== 渲染引擎 ========== */
+function renderAll(){var m=document.getElementById('mainContent');var h='';knowledgeData.forEach(function(mod){h+='<div class="card" id="'+mod.id+'"><div class="section-title"><div class="icon '+mod.iconClass+'">'+mod.iconEmoji+'</div>'+mod.title+'</div>';if(mod.subtitle)h+='<div class="subtitle">'+mod.subtitle+'</div>';if(mod.items&&mod.items.length>0){h+='<div class="ki-grid">';mod.items.forEach(function(item){if(item.type==='table')h+=item.html;else if(item.type==='ki')h+=renderKI(item);});h+='</div>';}if(mod.quizzes&&mod.quizzes.length>0){mod.quizzes.forEach(function(q,qi){h+=renderQuiz(q,mod.id+'-q'+qi);});}h+='</div>';});m.innerHTML=h;generateTOC();}
+function renderKI(item){var h='<div class="ki-item">';h+='<div class="ki-title-row">'+(item.badge?'<span class="badge '+(item.badgeClass||'badge-num')+'">'+item.badge+'</span> ':'')+item.title+'</div>';h+='<div class="ki-content">'+item.content+'</div>';if(item.extra)h+='<div style="margin-top:6px;color:#5c5347;font-size:0.88rem;">📌 '+item.extra+'</div>';if(item.example){h+='<div class="example-block"><div class="ex-label">📖 生动案例</div><div class="ex-q">'+item.example.q+'</div><div class="ex-a">'+item.example.a+'</div></div>';}h+='</div>';return h;}
+function renderQuiz(q,qid){var qTypeLabel=q.multi?'【多选题】':'【单选题】';var h='<div class="quiz-wrap" data-qid="'+qid+'">';if(q.quizIndex){h+='<div class="q-type">📝 '+qTypeLabel+' · 第'+q.quizIndex+'题</div>';}else if(q.tfId){h+='<div class="q-type">📝 '+qTypeLabel+' · '+q.tfId+'</div>';}else{h+='<div class="q-type">📝 '+qTypeLabel+'</div>';}h+='<div class="q-text">'+q.q+'</div><ul class="opt-list">';for(var i=0;i<q.opts.length;i++){h+='<li data-idx="'+i+'" onclick="selectOpt(this,\''+qid+'\','+i+','+(q.multi||false)+')">'+q.opts[i]+'</li>';}h+='</ul><div class="btn-row"><button class="btn btn-primary" onclick="submitQuiz(\''+qid+'\','+JSON.stringify(q.correct)+','+(q.multi||false)+')">✅ 提交答案</button><button class="btn btn-outline" onclick="resetQuiz(\''+qid+'\')">🔄 重做</button></div><div class="explain-card" id="ex-'+qid+'"><div class="ex-head"></div><div class="ex-body"></div>';if(q.d){var detailHtml=q.d;detailHtml=detailHtml.replace(/\n/g,'<br>');detailHtml=detailHtml.replace(/([A-E])项正确：/g,'<span style="color:#145a32;">✅ $1项正确：</span>');detailHtml=detailHtml.replace(/([A-E])项错误：/g,'<span style="color:#b22222;">❌ $1项错误：</span>');detailHtml=detailHtml.replace(/([A-E])项可诉：/g,'<span style="color:#145a32;">✅ $1项可诉：</span>');detailHtml=detailHtml.replace(/([A-E])项不可诉：/g,'<span style="color:#b22222;">❌ $1项不可诉：</span>');detailHtml=detailHtml.replace(/([A-E])项相符：/g,'<span style="color:#145a32;">✅ $1项相符：</span>');detailHtml=detailHtml.replace(/([A-E])项不符：/g,'<span style="color:#b22222;">❌ $1项不符：</span>');detailHtml=detailHtml.replace(/<b>([A-E])<\/b>：正确/g,'<span style="color:#145a32;">✅ $1选项</b>：正确</span>');detailHtml=detailHtml.replace(/<b>([A-E])<\/b>：错误/g,'<span style="color:#b22222;">❌ $1选项</b>：错误</span>');h+='<div class="ex-detail" style="margin-top:10px;padding:10px 14px;background:#fff;border-radius:6px;font-size:0.88rem;line-height:1.8;display:none;">📋 <b>逐项解析：</b><br>'+detailHtml+'</div>';}h+='<div class="ex-tip">💡 <b>大白话理解：</b>'+q.t+'</div></div></div>';return h;}
+function selectOpt(el,qid,idx,multi){var w=el.closest('.quiz-wrap');if(w.classList.contains('submitted'))return;var o=w.querySelectorAll('.opt-list li');if(multi){el.classList.toggle('selected');}else{o.forEach(function(x){x.classList.remove('selected');});el.classList.add('selected');}}
+function submitQuiz(qid,correct,multi){var w=document.querySelector('[data-qid="'+qid+'"]');if(w.classList.contains('submitted'))return;w.classList.add('submitted');var o=w.querySelectorAll('.opt-list li');var ca=Array.isArray(correct)?correct:[correct];var si=[];for(var i=0;i<o.length;i++){if(o[i].classList.contains('selected'))si.push(i);}var ic;if(multi){ic=si.length===ca.length;for(var j=0;j<si.length;j++){if(ca.indexOf(si[j])===-1){ic=false;break;}}}else{ic=si.length===1&&si[0]===ca[0];}for(var k=0;k<o.length;k++){o[k].classList.add('disabled');if(ca.indexOf(k)!==-1)o[k].classList.add('correct');}if(!ic){for(var m=0;m<si.length;m++){if(ca.indexOf(si[m])===-1)o[si[m]].classList.add('wrong');}}var ex=document.getElementById('ex-'+qid);ex.classList.add('show');if(ic){ex.classList.add('correct-ex');ex.classList.remove('wrong-ex');ex.querySelector('.ex-head').textContent='🎉 回答正确！';ex.querySelector('.ex-body').textContent='';var ed=ex.querySelector('.ex-detail');if(ed)ed.style.display='block';}else{ex.classList.add('wrong-ex');ex.classList.remove('correct-ex');ex.querySelector('.ex-head').textContent='😞 回答错误';var lt=['A','B','C','D','E'];var cl=ca.map(function(c){return lt[c];}).join('、');ex.querySelector('.ex-body').innerHTML='正确答案是：<b>'+cl+'</b>';var ed2=ex.querySelector('.ex-detail');if(ed2)ed2.style.display='block';}}
+function resetQuiz(qid){var w=document.querySelector('[data-qid="'+qid+'"]');w.classList.remove('submitted');w.querySelectorAll('.opt-list li').forEach(function(o){o.classList.remove('selected','correct','wrong','disabled');});var ex=document.getElementById('ex-'+qid);ex.classList.remove('show','correct-ex','wrong-ex');}
+function generateTOC(){var toc=document.getElementById('toc');if(!toc)return;var th='<div class="toc-title">📑 知识目录</div>';var links='';knowledgeData.forEach(function(mod){links+='<a href="#'+mod.id+'">'+mod.title+'</a>';});toc.innerHTML=th+links;document.querySelectorAll('.toc a').forEach(function(link){link.addEventListener('click',function(){if(window.innerWidth<=768)closeToc();});});}
+function toggleToc(){document.getElementById('toc').classList.toggle('show');document.getElementById('tocOverlay').classList.toggle('show');}
+function closeToc(){document.getElementById('toc').classList.remove('show');document.getElementById('tocOverlay').classList.remove('show');}
+document.addEventListener('DOMContentLoaded',renderAll);
+</script>
+</body>
+</html>
