@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>心理状态自测</title>
+    <style>
+        :root {
+            --bg: #f5f0eb;
+            --card-bg: #ffffff;
+            --text: #2c2416;
+            --text-light: #5c5347;
+            --accent: #2c3e50;
+            --yes-color: #2980b9;
+            --no-color: #7f8c8d;
+            --shadow: 0 2px 8px rgba(0,0,0,0.05);
+            --radius: 12px;
+            --font: 'PingFang SC','Microsoft YaHei','Hiragino Sans GB',sans-serif;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: var(--font); background: var(--bg); color: var(--text); line-height: 1.6; padding: 16px; -webkit-font-smoothing: antialiased; }
+        .container { max-width: 680px; margin: 0 auto; }
+        .header { background: var(--card-bg); border-radius: var(--radius); padding: 24px 20px; margin-bottom: 20px; box-shadow: var(--shadow); text-align: center; }
+        .header h1 { font-size: 1.8rem; color: var(--accent); margin-bottom: 6px; }
+        .header p { color: var(--text-light); font-size: 0.9rem; }
+        .progress { display: flex; justify-content: space-between; align-items: center; background: var(--card-bg); border-radius: var(--radius); padding: 12px 18px; margin-bottom: 16px; box-shadow: var(--shadow); position: sticky; top: 8px; z-index: 10; }
+        .progress-bar { flex: 1; height: 6px; background: #e0dcd5; border-radius: 3px; margin: 0 12px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--accent); width: 0%; transition: width 0.3s; }
+        .question-card { background: var(--card-bg); border-radius: var(--radius); padding: 18px 20px; margin-bottom: 12px; box-shadow: var(--shadow); display: flex; align-items: center; justify-content: space-between; }
+        .question-text { flex: 1; margin-right: 12px; font-size: 0.95rem; }
+        .q-num { font-weight: 700; color: var(--accent); margin-right: 6px; }
+        .options { display: flex; gap: 10px; flex-shrink: 0; }
+        .opt-btn { width: 52px; height: 36px; border-radius: 8px; border: 2px solid #d0ccc3; background: #fff; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; color: var(--text); }
+        .opt-btn:hover { border-color: var(--accent); }
+        .opt-btn.selected-yes { background: var(--yes-color); color: #fff; border-color: var(--yes-color); }
+        .opt-btn.selected-no { background: var(--no-color); color: #fff; border-color: var(--no-color); }
+        .btn-group { display: flex; gap: 12px; justify-content: center; margin-top: 30px; }
+        .btn { display: block; padding: 14px 0; border-radius: 30px; border: none; color: #fff; font-weight: 700; font-size: 1.1rem; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.1); flex: 1; max-width: 250px; }
+        .btn-submit { background: var(--accent); }
+        .btn-random { background: #8e44ad; }
+        .btn:hover { opacity: 0.9; }
+        .result-area { background: var(--card-bg); border-radius: var(--radius); padding: 20px; margin-top: 24px; box-shadow: var(--shadow); display: none; }
+        .result-area h2 { color: var(--accent); margin-bottom: 14px; }
+        .dim-item { margin-bottom: 14px; }
+        .dim-name { font-weight: 700; margin-bottom: 4px; }
+        .dim-desc { font-size: 0.9rem; color: var(--text-light); }
+        @media (max-width: 480px) {
+            .question-card { flex-direction: column; align-items: flex-start; }
+            .options { margin-top: 8px; }
+            .btn-group { flex-direction: column; align-items: center; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>🧠 心理状态自测</h1>
+        <p>请根据自己的实际情况，对每道题选择“是”或“否”。答案无对错，凭第一感觉选择即可。</p>
+    </div>
+    <div class="progress">
+        <span id="answeredCount">0</span> / <span id="totalQuestions">311</span> 题已答
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    </div>
+    <div id="questionsContainer"></div>
+    <div class="btn-group">
+        <button class="btn btn-random" id="randomFillBtn">🎲 一键随机填答（测试用）</button>
+        <button class="btn btn-submit" id="submitBtn">📊 提交分析</button>
+    </div>
+    <div class="result-area" id="resultArea"></div>
+</div>
+
+<script>
+// ---------- 计时 ----------
+var pageLoadTime = new Date();
+
+// ---------- 题目数据 ----------
+var questions = [];
+
+// 批量添加题目（手动整合所有311题）
+(function() {
+    var raw = [
+        {id:1, text:"我喜欢忙忙碌碌过日子。", dim:"impulse", reverse:false},
+        {id:2, text:"公安工作是一个高危险的职业。", dim:"anxiety", reverse:false},
+        {id:3, text:"我一直在换工作。", dim:"impulse", reverse:false},
+        {id:4, text:"我总是对新的工作表现一般。", dim:"depression", reverse:false},
+        {id:5, text:"我的胃口很好。", dim:"somatic", reverse:true},
+        {id:6, text:"我早上起来的时候，多半觉得睡眠充足，头脑清醒。", dim:"anxiety", reverse:true},
+        {id:7, text:"我很容易被吵醒。", dim:"anxiety", reverse:false},
+        {id:8, text:"我工作时不愿意有人在一旁参观。", dim:"social", reverse:false},
+        {id:9, text:"我喜欢看报纸上的犯罪新闻。", dim:"impulse", reverse:false},
+        {id:10, text:"我的脚下经常是暖和的。", dim:"somatic", reverse:true},
+        {id:11, text:"有时我常感到困难重重，无法克服。", dim:"depression", reverse:false},
+        {id:12, text:"我常想“我要在能成为一个小孩子就好了”。", dim:"depression", reverse:false},
+        {id:13, text:"我时常遇到一些所谓的专家，他们并不比我高明。", dim:"impulse", reverse:false},
+        {id:14, text:"我经常未经医生开处方乱吃药。", dim:"health_anxiety", reverse:false},
+        {id:15, text:"我的日常生活中，充满了使我感兴趣的事情。", dim:"depression", reverse:true},
+        {id:16, text:"我现在工作（学习）能力，和从前差不多。", dim:"depression", reverse:true},
+        {id:17, text:"我总感觉喉咙里好像有一块东西堵着似的。", dim:"somatic", reverse:false},
+        {id:18, text:"我喜欢很多人在一起工作。", dim:"social", reverse:true},
+        {id:19, text:"我家里人对我已选择的工作（或者将要选择的职业）不满意。", dim:"social", reverse:false},
+        {id:20, text:"我睡得不好，容易被惊醒。", dim:"anxiety", reverse:false},
+        {id:21, text:"我觉得我全身上下都疼。", dim:"somatic", reverse:false},
+        {id:22, text:"有时我也讲假话。", dim:"honesty", reverse:false, honesty:true},
+        {id:23, text:"我喜欢看侦探小说或者神秘小说。", dim:"impulse", reverse:false},
+        {id:24, text:"我每个月至少有一、二次拉肚子。", dim:"somatic", reverse:false},
+        {id:25, text:"偶尔我会想到一些坏的说不出口的事。", dim:"impulse", reverse:false},
+        {id:26, text:"工作是我生活中的头等大事。", dim:"anxiety", reverse:false},
+        {id:27, text:"我深信生活对我是残酷的。", dim:"depression", reverse:false},
+        {id:28, text:"我的父亲是一个好人。", dim:"social", reverse:true},
+        {id:29, text:"我很少有大便不通的毛病。", dim:"somatic", reverse:true},
+        {id:30, text:"我的性生活是满意的。", dim:"depression", reverse:true},
+        {id:31, text:"我喜欢竞争较强的职业。", dim:"impulse", reverse:false},
+        {id:32, text:"我有时非常想离开家。", dim:"social", reverse:false},
+        {id:33, text:"有时我会哭一阵笑一阵，连自己也不能控制。", dim:"impulse", reverse:false},
+        {id:34, text:"恶心和呕吐的毛病常常使我苦恼。", dim:"somatic", reverse:false},
+        {id:35, text:"似乎没有一个人真正了解我。", dim:"social", reverse:false},
+        {id:36, text:"我对自己要求过于苛求。", dim:"anxiety", reverse:false},
+        {id:37, text:"在陌生人面前，我感到不自在。", dim:"social", reverse:false},
+        {id:38, text:"当我处境困难的时候，我觉得最好是不开口。", dim:"social", reverse:false},
+        {id:39, text:"有时我觉得有鬼附在身上。", dim:"depression", reverse:false},
+        {id:40, text:"有时我真想骂人。", dim:"honesty", reverse:false, honesty:true},
+        {id:41, text:"我经常注意到自己身体的变化。", dim:"somatic", reverse:false},
+        {id:42, text:"每隔几个晚上我就做恶梦。", dim:"anxiety", reverse:false},
+        {id:43, text:"我发现我很难把注意力集中到一件工作中。", dim:"anxiety", reverse:false},
+        {id:44, text:"我曾经有过很特别、很奇怪的体验。", dim:"depression", reverse:false},
+        {id:45, text:"我时常咳嗽。", dim:"somatic", reverse:false},
+        {id:46, text:"假如不是有人和我作对，我一定会有更大的成就。", dim:"impulse", reverse:false},
+        {id:47, text:"运气比努力更重要。", dim:"depression", reverse:false},
+        {id:48, text:"我很少担心自己的健康。", dim:"health_anxiety", reverse:true},
+        {id:49, text:"我从来没有为了我的性方面的行为出过事。", dim:"depression", reverse:true},
+        {id:50, text:"我小的时候，有一段时间我也干过小偷小摸的事。", dim:"honesty", reverse:false, honesty:true},
+        {id:51, text:"有时我真想摔东西。", dim:"impulse", reverse:false},
+        {id:52, text:"有很多时候我宁愿坐着空想，而不愿做任何事情。", dim:"depression", reverse:false},
+        {id:53, text:"警察的工作很刺激。", dim:"impulse", reverse:false},
+        {id:54, text:"我曾一连几天，几个星期，几个月什么也不想干，因为总是提不起精神。", dim:"depression", reverse:false},
+        {id:55, text:"我相信爬的越高，摔得越重。", dim:"depression", reverse:false},
+        {id:56, text:"我无法忍受闲着无事情干。", dim:"anxiety", reverse:false},
+        {id:57, text:"我的判断力比以往任何时候都好。", dim:"depression", reverse:true},
+        {id:58, text:"每星期至少有一、二次，我突然觉得无缘无故地全身发热。", dim:"somatic", reverse:false},
+        {id:59, text:"我不喜欢看爱情电影或者小说。", dim:"social", reverse:false},
+        {id:60, text:"当我与人相处的时候听到别人谈论稀奇古怪的事，我就心烦。", dim:"social", reverse:false},
+        {id:61, text:"最好所有的法律全部不要。", dim:"impulse", reverse:false},
+        {id:62, text:"有时候我常见得我的灵魂离开了我的身体。", dim:"depression", reverse:false},
+        {id:63, text:"朋友说我工作太拼命了。", dim:"anxiety", reverse:false},
+        {id:64, text:"我的身体和我大多数朋友一样地健康。", dim:"somatic", reverse:true},
+        {id:65, text:"遇到同学或不常见朋友。除非他们先向我打招呼，不然我就装作没看见。", dim:"social", reverse:false},
+        {id:66, text:"我能看到我旁边的人看不到的东西、动物和人。", dim:"depression", reverse:false},
+        {id:67, text:"我很想在动物身上做实验。", dim:"impulse", reverse:false},
+        {id:68, text:"认识我的人差不多都喜欢我。", dim:"social", reverse:true},
+        {id:69, text:"我从来没有因为胸部痛或心痛而感到苦恼。", dim:"somatic", reverse:true},
+        {id:70, text:"天气好，心情也好。", dim:"depression", reverse:true},
+        {id:71, text:"我小时候曾经因为胡闹而受到学校的处分。", dim:"honesty", reverse:false, honesty:true},
+        {id:72, text:"我和别人一见面就熟了。（自来熟）", dim:"social", reverse:true},
+        {id:73, text:"一切事情由老天爷安排好了。", dim:"depression", reverse:false},
+        {id:74, text:"我不是每天都看报纸上的每一篇社论。", dim:"anxiety", reverse:false},
+        {id:75, text:"我喜欢看推理性小说。", dim:"impulse", reverse:false},
+        {id:76, text:"我从未有过正常的生活。", dim:"depression", reverse:false},
+        {id:77, text:"有时我会不停地做一件事情。直到别人不耐烦为止。", dim:"impulse", reverse:false},
+        {id:78, text:"我爱我的父亲。", dim:"social", reverse:true},
+        {id:79, text:"即使是周末我也要早起。", dim:"anxiety", reverse:false},
+        {id:80, text:"我能在我周围看到其他人所看不到的东西、动物和人。", dim:"depression", reverse:false},
+        {id:81, text:"我希望我能像别人那样快乐。", dim:"depression", reverse:false},
+        {id:82, text:"上中学时，我最喜欢语文。", dim:"social", reverse:true},
+        {id:83, text:"我觉得许多人喜欢夸大自己的不幸，以便得到别人的同情和帮助。", dim:"social", reverse:false},
+        {id:84, text:"我有时候会发怒。", dim:"honesty", reverse:false, honesty:true},
+        {id:85, text:"我的空间推理能力比一般人强。", dim:"impulse", reverse:true},
+        {id:86, text:"我时常感到悲观失望。", dim:"depression", reverse:false},
+        {id:87, text:"我有时捉弄动物。", dim:"impulse", reverse:false},
+        {id:88, text:"和人争辩的时候，我常争不过别人。", dim:"social", reverse:false},
+        {id:89, text:"我相信自己同周围的人一样精明能干。", dim:"depression", reverse:true},
+        {id:90, text:"近来，我常有失望的感觉。", dim:"depression", reverse:false},
+        {id:91, text:"有时我对别人的东西，如鞋、手套等所强烈吸引，虽然这些东西对我毫无用处，但我总想摸摸它或把它偷来。", dim:"impulse", reverse:false},
+        {id:92, text:"如果可能，最好是不工作。", dim:"depression", reverse:false},
+        {id:93, text:"我确实缺少自信心。", dim:"social", reverse:false},
+        {id:94, text:"我愿做一名花匠。", dim:"social", reverse:true},
+        {id:95, text:"我总觉得人生是有价值的。", dim:"depression", reverse:true},
+        {id:96, text:"要使大多数人相信事实的真相，是要经过一番辩论的。", dim:"social", reverse:false},
+        {id:97, text:"有时我将今天应该做的事，拖到明天去做。", dim:"impulse", reverse:false},
+        {id:98, text:"警察的工作对我很有吸引力。", dim:"impulse", reverse:false},
+        {id:99, text:"我不在乎别人拿我开玩笑。", dim:"social", reverse:true},
+        {id:100, text:"我觉得大多数人为了向上爬而不得不说谎的。", dim:"social", reverse:false},
+        {id:101, text:"许多事情，我做过以后就后悔了。", dim:"anxiety", reverse:false},
+        {id:102, text:"我喜欢去宗教场所。", dim:"social", reverse:true},
+        {id:103, text:"一次想做很多事情，因此显得不专心。", dim:"impulse", reverse:false},
+        {id:104, text:"我几乎没有和家里人吵过嘴。", dim:"social", reverse:true},
+        {id:105, text:"我相信善有善报，恶有恶报。", dim:"social", reverse:true},
+        {id:106, text:"我认为最难的是控制我自己。", dim:"impulse", reverse:false},
+        {id:107, text:"我很少有肌肉抽筋或颤抖的毛病。", dim:"somatic", reverse:true},
+        {id:108, text:"我似乎对什么事情都不在乎。", dim:"depression", reverse:false},
+        {id:109, text:"我身体不舒服的时候，我有时发脾气。", dim:"impulse", reverse:false},
+        {id:110, text:"我喜欢摩托车和汽车。", dim:"impulse", reverse:false},
+        {id:111, text:"我总觉得我自己好像做错了什么事或犯了什么罪。", dim:"depression", reverse:false},
+        {id:112, text:"我经常是快乐的。", dim:"depression", reverse:true},
+        {id:113, text:"有些人太霸道，即使我明知他们是对的，也要和他们对着干。", dim:"impulse", reverse:false},
+        {id:114, text:"有人想害我。", dim:"depression", reverse:false},
+        {id:115, text:"我从来没有为寻求刺激而去做危险事。", dim:"impulse", reverse:true},
+        {id:116, text:"我时常认为必须坚持那些我认为正确的事。", dim:"impulse", reverse:false},
+        {id:117, text:"我相信法制。", dim:"social", reverse:true},
+        {id:118, text:"我常觉得头上好像有一根绷得紧紧的带子。", dim:"somatic", reverse:false},
+        {id:119, text:"我相信人死后会有“来世”。", dim:"social", reverse:true},
+        {id:120, text:"大部分人之所以是诚实的，主要是因为怕被人识破。", dim:"social", reverse:false},
+        {id:121, text:"我在上学的时候，有时因胡闹而被领导叫去。", dim:"honesty", reverse:false, honesty:true},
+        {id:122, text:"我在外边和朋友们一起吃饭的时候，比在家规矩得多。", dim:"social", reverse:false},
+        {id:123, text:"我相信有人暗算我。", dim:"depression", reverse:false},
+        {id:124, text:"我似乎和我周围的人一样精明能干。", dim:"depression", reverse:true},
+        {id:125, text:"任何人只要他有能力，而且愿意努力工作是能成功的。", dim:"depression", reverse:true},
+        {id:126, text:"大多数人不惜用不正当的手段谋取利益，而不愿失掉机会。", dim:"social", reverse:false},
+        {id:127, text:"我知道我的烦恼是谁造成的。", dim:"anxiety", reverse:false},
+        {id:128, text:"看到血的时候，我既不害怕，也不难受。", dim:"somatic", reverse:true},
+        {id:129, text:"我自己时常弄不清为什么会这样爱生气和发牢骚。", dim:"impulse", reverse:false},
+        {id:130, text:"我曾经因为某些事情而大哭。", dim:"depression", reverse:false},
+        {id:131, text:"我从来没有吐过血，或咯过血。", dim:"somatic", reverse:true},
+        {id:132, text:"我不为得病而担心。", dim:"health_anxiety", reverse:true},
+        {id:133, text:"有时我的思想过于奔放。甚至都来不及表达出来。", dim:"impulse", reverse:false},
+        {id:134, text:"假如我能不买票看电影，而且不会被人发觉，我可能会去做的。", dim:"honesty", reverse:false, honesty:true},
+        {id:135, text:"如果别人待我好，我常常怀疑他们别有用心。", dim:"social", reverse:false},
+        {id:136, text:"我相信我的家庭生活，和我所认识的许多人一样幸福快乐。", dim:"social", reverse:true},
+        {id:137, text:"批语和责骂都使我非常伤心。", dim:"anxiety", reverse:false},
+        {id:138, text:"有时，我仿佛觉得我必须伤害自己或别人。", dim:"impulse", reverse:false},
+        {id:139, text:"我的行为多半受到周围人的习惯所支配。", dim:"social", reverse:false},
+        {id:140, text:"有时我觉得自己真是毫无用处。", dim:"depression", reverse:false},
+        {id:141, text:"有时我想借故和别人打架。", dim:"impulse", reverse:false},
+        {id:142, text:"我喜欢到处乱逛，如果不这样，就不高兴。", dim:"impulse", reverse:false},
+        {id:143, text:"由于我经常不能当机立断，因而失去许多良机。", dim:"anxiety", reverse:false},
+        {id:144, text:"当我正在做一件重要事情的时候，如果有人向我请教或打扰我，我会不耐烦的。", dim:"impulse", reverse:false},
+        {id:145, text:"做游戏的时候，我只愿意赢而不愿输。", dim:"impulse", reverse:false},
+        {id:146, text:"有些食物一想起来就要呕吐。", dim:"somatic", reverse:false},
+        {id:147, text:"有人一直想毒死我。", dim:"depression", reverse:false},
+        {id:148, text:"大多数晚上我睡觉时，不受什么思想干扰。", dim:"anxiety", reverse:true},
+        {id:149, text:"近几年来大部分时间，我的身体都很好。", dim:"somatic", reverse:true},
+        {id:150, text:"我从来没有过抽疯的毛病。", dim:"somatic", reverse:true},
+        {id:151, text:"现在我的体重既没增加也没有减轻。", dim:"somatic", reverse:true},
+        {id:152, text:"有一段时间，我自己做过的事情全不记得了。", dim:"depression", reverse:false},
+        {id:153, text:"我常见得我时常无缘无故地受到惩罚。", dim:"depression", reverse:false},
+        {id:154, text:"我很容易哭。", dim:"depression", reverse:false},
+        {id:155, text:"我不能像从前那样理解我所读的东西了。", dim:"depression", reverse:false},
+        {id:156, text:"在我一生中，我从来没有感觉到现在这么好。", dim:"depression", reverse:true},
+        {id:157, text:"我痛恨别人以不正当的手段捉弄我，使我不得不认输。", dim:"impulse", reverse:false},
+        {id:158, text:"我不容易疲倦。", dim:"somatic", reverse:true},
+        {id:159, text:"我喜欢研究和阅读与我目前工作相关的东西。", dim:"anxiety", reverse:true},
+        {id:160, text:"我喜欢结识一些重要人物，这样会使我感到自己也很重要。", dim:"social", reverse:false},
+        {id:161, text:"我的脑子有点毛病。", dim:"health_anxiety", reverse:false},
+        {id:162, text:"我不怕管钱。", dim:"anxiety", reverse:true},
+        {id:163, text:"我不在乎别人对我有什么看法。", dim:"social", reverse:true},
+        {id:164, text:"在聚会当中，如果有人出风头，我会感到很不舒服。", dim:"social", reverse:false},
+        {id:165, text:"我时常需要努力使自己不显出怕羞的样子。", dim:"social", reverse:false},
+        {id:166, text:"我过去喜欢上学。", dim:"depression", reverse:true},
+        {id:167, text:"我从来没有昏倒过。", dim:"somatic", reverse:true},
+        {id:168, text:"我很少头昏眼花。", dim:"somatic", reverse:true},
+        {id:169, text:"我母亲是个好人。", dim:"social", reverse:true},
+        {id:170, text:"我的记忆力似乎还不错。", dim:"somatic", reverse:true},
+        {id:171, text:"有关性方面的问题，使我烦恼。", dim:"anxiety", reverse:false},
+        {id:172, text:"当我遇到生人的时候就不知道说什么好了。", dim:"social", reverse:false},
+        {id:173, text:"我怕自己会发疯。", dim:"anxiety", reverse:false},
+        {id:174, text:"我拒绝把钱给乞丐。", dim:"social", reverse:false},
+        {id:175, text:"我时常听到说话的声音，而又不知道从哪里来。", dim:"depression", reverse:false},
+        {id:176, text:"我的听觉显然和大多数人一样好。", dim:"somatic", reverse:true},
+        {id:177, text:"我曾经想过死。", dim:"depression", reverse:false},
+        {id:178, text:"当我要做一件事的时候，我常发觉我的手在发抖。", dim:"somatic", reverse:false},
+        {id:179, text:"我能阅读很长的时间，而眼睛不觉得累。", dim:"somatic", reverse:true},
+        {id:180, text:"许多时候，我觉得浑身无力。", dim:"somatic", reverse:false},
+        {id:181, text:"我很少头痛。", dim:"somatic", reverse:true},
+        {id:182, text:"有时，我难为情的时候，会出很多的汗，这使我非常苦恼。", dim:"somatic", reverse:false},
+        {id:183, text:"我走路时保持平衡，并不困难。", dim:"somatic", reverse:true},
+        {id:184, text:"我没哮喘这一类病。", dim:"somatic", reverse:true},
+        {id:185, text:"我所认识的人里不是个个都喜欢我。", dim:"honesty", reverse:false, honesty:true},
+        {id:186, text:"我喜欢到我从来没有到过的地方。", dim:"impulse", reverse:true},
+        {id:187, text:"有人一直想抢我的东西。", dim:"depression", reverse:false},
+        {id:188, text:"我们应该把有关“性”方面的主要知识告诉孩子。", dim:"social", reverse:true},
+        {id:189, text:"有人想窃取我的思想和计划。", dim:"depression", reverse:false},
+        {id:190, text:"但愿将来我不会像现在这样害羞。", dim:"social", reverse:false},
+        {id:191, text:"我相信我是一个被遣责的人。", dim:"depression", reverse:false},
+        {id:192, text:"有时我控制不住我自己，想要偷点东西。", dim:"impulse", reverse:false},
+        {id:193, text:"我很相信神，其程度超过多数人。", dim:"social", reverse:true},
+        {id:194, text:"我喜欢许多不同种类的游戏和娱乐。", dim:"depression", reverse:true},
+        {id:195, text:"我喜欢和异性说笑。", dim:"social", reverse:true},
+        {id:196, text:"我相信我的罪恶是可饶恕的。", dim:"depression", reverse:true},
+        {id:197, text:"每一种东西吃起来味道都是一样。", dim:"somatic", reverse:false},
+        {id:198, text:"别人经常注意我的相貌。", dim:"social", reverse:false},
+        {id:199, text:"我白天能睡觉，晚上却睡不着。", dim:"anxiety", reverse:false},
+        {id:200, text:"走路时，我很小心地跨过人行道上的接缝。", dim:"anxiety", reverse:false},
+        {id:201, text:"我曾经醉酒。", dim:"honesty", reverse:false, honesty:true},
+        {id:202, text:"和别人的家庭比较，我的家庭缺乏爱和温暖。", dim:"depression", reverse:false},
+        {id:203, text:"我时常感到自己在为某些事而担忧。", dim:"anxiety", reverse:false},
+        {id:204, text:"当看到动物受折磨的时候，我并不觉得特别难受。", dim:"impulse", reverse:false},
+        {id:205, text:"我爱我的母亲。", dim:"social", reverse:true},
+        {id:206, text:"我父母经常反对那些和我交往的人。", dim:"social", reverse:false},
+        {id:207, text:"有时我也会说说人家的闲话。", dim:"honesty", reverse:false, honesty:true},
+        {id:208, text:"有人告诉我，我在睡觉中起来走路（梦游）。", dim:"somatic", reverse:false},
+        {id:209, text:"我从来没有感到心慌气短。", dim:"somatic", reverse:true},
+        {id:210, text:"我喜欢谈论两性方面的事。", dim:"social", reverse:true},
+        {id:211, text:"有时阻止别人做某些事，并不是因为那种事有多大影响，而是在“道义”上我应该干预他。", dim:"impulse", reverse:false},
+        {id:212, text:"我很容易生气，但很快就平静下来。", dim:"impulse", reverse:false},
+        {id:213, text:"我已经独立自主，不再受家庭的约束。", dim:"social", reverse:true},
+        {id:214, text:"我有很多心事。", dim:"anxiety", reverse:false},
+        {id:215, text:"我的亲属几乎都同情我。", dim:"depression", reverse:true},
+        {id:216, text:"有时我十分烦燥，坐立不安。", dim:"anxiety", reverse:false},
+        {id:217, text:"我曾经失恋过。", dim:"honesty", reverse:false, honesty:true},
+        {id:218, text:"我时常梦到一些不可告人的事。", dim:"anxiety", reverse:false},
+        {id:219, text:"我相信我的神经并不过敏。", dim:"anxiety", reverse:true},
+        {id:220, text:"我几乎没有什么疼痛。", dim:"somatic", reverse:true},
+        {id:221, text:"我的做事方法容易被人误解。", dim:"social", reverse:false},
+        {id:222, text:"我的父母和家里人对我过于挑剔。", dim:"social", reverse:false},
+        {id:223, text:"我脖子（颈）上时常出现红斑。", dim:"somatic", reverse:false},
+        {id:224, text:"我有理由妒忌我家里的某些人。", dim:"impulse", reverse:false},
+        {id:225, text:"我有时会无缘无故地，甚至在不顺利的时候也会觉得非常快乐。", dim:"depression", reverse:true},
+        {id:226, text:"人应当各管各的事。", dim:"social", reverse:true},
+        {id:227, text:"有些人所做的事，虽然我认为是错的，但我仍然能够友好地对待他们。", dim:"social", reverse:true},
+        {id:228, text:"在选举的时候，有时我会选出我不熟悉的人。", dim:"impulse", reverse:false},
+        {id:229, text:"报纸上只有“漫画”最有趣。", dim:"depression", reverse:false},
+        {id:230, text:"凡是我所做的事，我都指望能够成功。", dim:"anxiety", reverse:false},
+        {id:231, text:"我相信有神。", dim:"social", reverse:true},
+        {id:232, text:"做什么事情，我都感到难以开头。", dim:"depression", reverse:false},
+        {id:233, text:"即使在冷天，我也很容易出汗。", dim:"somatic", reverse:false},
+        {id:234, text:"我对自己十分自信。", dim:"depression", reverse:true},
+        {id:235, text:"对任何人都不信任，是比较安全的。", dim:"depression", reverse:false},
+        {id:236, text:"每星期至少有一两次事情使我十分兴奋。", dim:"depression", reverse:true},
+        {id:237, text:"人多的时候，我不知道说些什么话好。", dim:"social", reverse:false},
+        {id:238, text:"在我心情不好的时候，总会有一些事使我高兴。", dim:"depression", reverse:true},
+        {id:239, text:"我能使别人很容易怕我，有时我故意这样做来寻开心。", dim:"impulse", reverse:false},
+        {id:240, text:"我离家外出的时候，从来不担心家里门窗是否关好、锁好了。", dim:"anxiety", reverse:true},
+        {id:241, text:"我对别人相对来说比较宽容。", dim:"social", reverse:true},
+        {id:242, text:"我有时精力充沛。", dim:"depression", reverse:true},
+        {id:243, text:"我的视力和往年一样好。", dim:"somatic", reverse:true},
+        {id:244, text:"有人控制着我的思想。", dim:"depression", reverse:false},
+        {id:245, text:"我喜欢小孩子。", dim:"social", reverse:true},
+        {id:246, text:"我每天喝特别多的水。", dim:"somatic", reverse:false},
+        {id:247, text:"我很少注意到我有耳鸣现象。", dim:"somatic", reverse:true},
+        {id:248, text:"我确信别人正在议论我。", dim:"social", reverse:false},
+        {id:249, text:"偶尔我听了下流的笑话也会发笑。", dim:"honesty", reverse:false, honesty:true},
+        {id:250, text:"我经常把工作带回家。", dim:"anxiety", reverse:false},
+        {id:251, text:"我独自一个人的时候，感到更快乐。", dim:"social", reverse:false},
+        {id:252, text:"使我害怕的事比我的朋友们少得多。", dim:"anxiety", reverse:true},
+        {id:253, text:"恶心呕吐的毛病使我苦恼。", dim:"somatic", reverse:false},
+        {id:254, text:"当一个罪犯可以通过能言善辩的律师开脱罪责时，我对法律感到厌恶。", dim:"impulse", reverse:false},
+        {id:255, text:"我总是在很紧张的情况下工作。", dim:"anxiety", reverse:false},
+        {id:256, text:"在我这一生中，至少有一两次我觉得有人用催眠术指使我做了一些事。", dim:"depression", reverse:false},
+        {id:257, text:"我不愿意同人讲话，除非他先开口。", dim:"social", reverse:false},
+        {id:258, text:"有人一直想要影响我的思想。", dim:"depression", reverse:false},
+        {id:259, text:"我从来没有犯过法。", dim:"social", reverse:false},
+        {id:260, text:"我有时会产生杀了某个人的想法。", dim:"impulse", reverse:false},
+        {id:261, text:"有些时候，我会无缘无故地觉得非常愉快。", dim:"depression", reverse:true},
+        {id:262, text:"我认为我比大多数人更重感情。", dim:"social", reverse:true},
+        {id:263, text:"许多时候，生活对我来说是一件吃力的事。", dim:"depression", reverse:false},
+        {id:264, text:"在学校里，要我在班上发言，是非常困难的。", dim:"social", reverse:false},
+        {id:265, text:"即使和人们在一起，我还是经常感到孤单。", dim:"depression", reverse:false},
+        {id:266, text:"由于没有保管好自己的贵重物品而引起别人偷窃，这种人应当和小偷一样受责备。", dim:"impulse", reverse:false},
+        {id:267, text:"偶尔我会想到一些坏得说不出口的事。", dim:"honesty", reverse:false, honesty:true},
+        {id:268, text:"一紧张，我就感到心率过快。", dim:"anxiety", reverse:false},
+        {id:269, text:"我想差不多每个人，都会为了避免麻烦说点假话。", dim:"honesty", reverse:false, honesty:true},
+        {id:270, text:"我比大多数人更敏感。", dim:"anxiety", reverse:false},
+        {id:271, text:"遇到犯罪行为，大多数人，都是内心不愿意挺身而出。", dim:"social", reverse:false},
+        {id:272, text:"我很容易感到不知所措。", dim:"anxiety", reverse:false},
+        {id:273, text:"我为金钱和事业忧虑。", dim:"anxiety", reverse:false},
+        {id:274, text:"有时我会哭一阵，笑一阵，连自己也不能控制。", dim:"impulse", reverse:false},
+        {id:275, text:"我的母亲或父亲时常要我服从她或他，我认为这是不合理的。", dim:"impulse", reverse:false},
+        {id:276, text:"我几乎从来不做梦。", dim:"somatic", reverse:true},
+        {id:277, text:"我很容易对其他人感到不耐烦。", dim:"impulse", reverse:false},
+        {id:278, text:"我几乎整天都在为某件事或某个人而焦虑。", dim:"anxiety", reverse:false},
+        {id:279, text:"我所操心的事，远远超过了我所应该操心的。", dim:"anxiety", reverse:false},
+        {id:280, text:"有时我会兴奋的难以入睡。", dim:"anxiety", reverse:false},
+        {id:281, text:"有时我的听觉太灵敏了，反而使我感到烦恼。", dim:"somatic", reverse:false},
+        {id:282, text:"别人对我所说的话，我立刻就忘记了。", dim:"social", reverse:true},
+        {id:283, text:"哪怕是琐碎小事中，我也再三考虑后才去做。", dim:"anxiety", reverse:false},
+        {id:284, text:"我经常做恐怖梦。", dim:"anxiety", reverse:false},
+        {id:285, text:"我有一个习惯，喜欢数一些不重要的东西，像路上的电线杆等等。", dim:"anxiety", reverse:false},
+        {id:286, text:"我没有真正想伤害我的仇人。", dim:"impulse", reverse:true},
+        {id:287, text:"我提防那些对我过分亲近的人。", dim:"social", reverse:false},
+        {id:288, text:"我有一些奇怪和特别的念头。", dim:"depression", reverse:false},
+        {id:289, text:"到一个陌生的地方，我喜欢查找地图。", dim:"anxiety", reverse:true},
+        {id:290, text:"当我必须短期离家出门的时候，我会感到心神不宁。", dim:"anxiety", reverse:false},
+        {id:291, text:"我怕一些东西或人，虽然我明知他们是不会伤害我的。", dim:"anxiety", reverse:false},
+        {id:292, text:"如果屋子里已经有人聚在一起谈话，这时要我一个人进去，我一点也不怕。", dim:"social", reverse:true},
+        {id:293, text:"我遇到心爱的人，通常会直截了当表示自己的想法。", dim:"social", reverse:true},
+        {id:294, text:"我似乎比别人更难于集中注意力。", dim:"anxiety", reverse:false},
+        {id:295, text:"有好几次我放弃正在做的事，因为我感到自己的能力太差了。", dim:"depression", reverse:false},
+        {id:296, text:"我脑子里时常出现一些坏的、可怕的字眼，却又无法摆脱它们。", dim:"anxiety", reverse:false},
+        {id:297, text:"有时一些无关紧要的念头缠着我，使我好多天都感到不安。", dim:"anxiety", reverse:false},
+        {id:298, text:"几乎每天都有使我害怕的事情发生。", dim:"anxiety", reverse:false},
+        {id:299, text:"以前我常感到恐惧。", dim:"anxiety", reverse:false},
+        {id:300, text:"我总是将事情看得严重些。", dim:"anxiety", reverse:false},
+        {id:301, text:"我比大多数人更敏感。", dim:"anxiety", reverse:false},
+        {id:302, text:"有人用侮辱性的和下流的话议论我。", dim:"social", reverse:false},
+        {id:303, text:"我呆在屋里总感到不安。", dim:"anxiety", reverse:false},
+        {id:304, text:"夜间走路，我比别人看得更清楚。", dim:"somatic", reverse:true},
+        {id:305, text:"即使和别人在一起，我仍经常感到孤单。", dim:"depression", reverse:false},
+        {id:306, text:"有时我的头脑似乎比平时迟钝。", dim:"depression", reverse:false},
+        {id:307, text:"人们常使我失望。", dim:"social", reverse:false},
+        {id:308, text:"只要我开始做一件事，就很难放下，哪怕是暂时的。", dim:"impulse", reverse:false},
+        {id:309, text:"我不愿意让人家知道我对于事物的态度。", dim:"social", reverse:false},
+        {id:310, text:"工作中如果与领导意见不一致，我会坚持己见。", dim:"impulse", reverse:false},
+        {id:311, text:"有时为了避免和某些人相遇，我会绕道而行。", dim:"social", reverse:false}
+    ];
+    questions = raw;
+})();
+
+// 用户答案数组
+var userAnswers = new Array(questions.length).fill(-1);
+
+// 渲染所有题目
+function renderQuestions() {
+    var container = document.getElementById('questionsContainer');
+    var html = '';
+    for (var i = 0; i < questions.length; i++) {
+        var q = questions[i];
+        html += '<div class="question-card" data-qid="' + i + '">';
+        html += '<div class="question-text"><span class="q-num">' + q.id + '.</span> ' + q.text + '</div>';
+        html += '<div class="options">';
+        html += '<button class="opt-btn opt-yes" onclick="selectAnswer(' + i + ', 1, this)">是</button>';
+        html += '<button class="opt-btn opt-no"  onclick="selectAnswer(' + i + ', 0, this)">否</button>';
+        html += '</div></div>';
+    }
+    container.innerHTML = html;
+    document.getElementById('totalQuestions').textContent = questions.length;
+}
+
+// 选择答案
+function selectAnswer(qIndex, value, btn) {
+    userAnswers[qIndex] = value;
+    var card = btn.closest('.question-card');
+    var yesBtn = card.querySelector('.opt-yes');
+    var noBtn = card.querySelector('.opt-no');
+    yesBtn.classList.remove('selected-yes');
+    noBtn.classList.remove('selected-no');
+    if (value === 1) {
+        yesBtn.classList.add('selected-yes');
+    } else {
+        noBtn.classList.add('selected-no');
+    }
+    updateProgress();
+}
+
+// 更新进度条
+function updateProgress() {
+    var answered = 0;
+    for (var i = 0; i < userAnswers.length; i++) {
+        if (userAnswers[i] !== -1) answered++;
+    }
+    document.getElementById('answeredCount').textContent = answered;
+    var percent = (answered / questions.length) * 100;
+    document.getElementById('progressFill').style.width = percent + '%';
+}
+
+// 一键随机填答
+document.getElementById('randomFillBtn').addEventListener('click', function() {
+    for (var i = 0; i < questions.length; i++) {
+        var randomVal = Math.random() < 0.5 ? 0 : 1;
+        var card = document.querySelector('[data-qid="' + i + '"]');
+        if (!card) continue;
+        var btn = randomVal === 1 ? card.querySelector('.opt-yes') : card.querySelector('.opt-no');
+        selectAnswer(i, randomVal, btn);
+    }
+    updateProgress();
+    alert('已随机生成所有答案！可点击“提交分析”查看结果。');
+});
+
+// 提交分析
+document.getElementById('submitBtn').addEventListener('click', function() {
+    var allAnswered = true;
+    for (var i = 0; i < userAnswers.length; i++) {
+        if (userAnswers[i] === -1) {
+            allAnswered = false;
+            break;
+        }
+    }
+    if (!allAnswered) {
+        // 检查未答题目
+        var missing = '';
+        for (var j = 0; j < userAnswers.length; j++) {
+            if (userAnswers[j] === -1) {
+                missing += questions[j].id + '、';
+            }
+        }
+        alert('还有以下题目未作答：' + missing.slice(0, -1) + '。请答完所有题后提交。');
+        return;
+    }
+
+    var submitTime = new Date();
+    var timeTaken = Math.round((submitTime - pageLoadTime) / 1000); // 秒
+
+    // 维度定义
+    var dims = ['anxiety','depression','somatic','social','impulse','health_anxiety'];
+    var scores = {};
+    var maxScores = {};
+    for (var d = 0; d < dims.length; d++) {
+        scores[dims[d]] = 0;
+        maxScores[dims[d]] = 0;
+    }
+
+    var honestyCount = 0;
+    var honestyDeny = 0;
+
+    for (var i = 0; i < questions.length; i++) {
+        var q = questions[i];
+        if (q.honesty) {
+            honestyCount++;
+            if (userAnswers[i] === 0) honestyDeny++;
+        }
+        if (dims.indexOf(q.dim) !== -1) {
+            maxScores[q.dim]++;
+            if (!q.reverse && userAnswers[i] === 1) scores[q.dim]++;
+            if (q.reverse && userAnswers[i] === 0) scores[q.dim]++;
+        }
+    }
+
+    var honestyRatio = honestyCount > 0 ? (honestyDeny / honestyCount) : 0;
+    var invalidHonesty = honestyRatio > 0.7;
+    var invalidTime = timeTaken < 90;
+
+    // 结果构建
+    var html = '<h2>📋 分析结果</h2>';
+    html += '<p>您已完成全部 <b>' + questions.length + '</b> 题，用时 <b>' + timeTaken + '</b> 秒。</p>';
+
+    if (invalidHonesty || invalidTime) {
+        html += '<div style="background:#fff3cd; border:1px solid #ffc107; padding:10px 14px; border-radius:8px; margin:12px 0;">';
+        html += '<strong>⚠️ 测试有效性提示：</strong><br>';
+        if (invalidHonesty) html += '· 您在部分基础诚实题上否认过多，作答可能不够真实。<br>';
+        if (invalidTime) html += '· 您的作答时间过短（' + timeTaken + '秒），可能未认真思考。<br>';
+        html += '本次结果仅供参考，建议重新认真作答。';
+        html += '</div>';
+    }
+
+    var dimNames = {
+        'anxiety': '焦虑倾向',
+        'depression': '抑郁倾向',
+        'somatic': '躯体关注',
+        'social': '社交回避',
+        'impulse': '冲动控制',
+        'health_anxiety': '健康焦虑'
+    };
+    var dimDesc = {
+        'anxiety': {
+            high: '您表现出较明显的焦虑倾向，容易紧张、担忧、睡眠不佳。建议学习放松技巧，必要时寻求专业帮助。',
+            mid: '您有一定程度的焦虑情绪，生活中可能经常感到压力，可尝试调整节奏，适度运动。',
+            low: '您焦虑水平较低，情绪较为平稳，能够较好应对日常压力。'
+        },
+        'depression': {
+            high: '您可能存在情绪低落、兴趣减退、自我否定等倾向，建议关注心理健康，必要时寻求专业支持。',
+            mid: '您有时可能感到情绪不佳或动力不足，可尝试增加积极活动和社交互动。',
+            low: '您情绪状态良好，对生活保持积极态度，拥有较好的心理弹性。'
+        },
+        'somatic': {
+            high: '您对身体信号高度敏感，常感到各种不适，但可能并非器质性问题，注意身心平衡，学习放松。',
+            mid: '您对身体变化有一定关注，适度注意即可，不必过度担忧影响到生活。',
+            low: '您对身体状况不太敏感，整体感觉健康，较少受躯体不适困扰。'
+        },
+        'social': {
+            high: '您在社交场合可能感到不自在，倾向于回避人际交往，可逐步尝试开放自己，从小范围社交开始。',
+            mid: '您在社交中有时会感到拘束或紧张，但总体上能够应对日常交往，可练习社交技巧。',
+            low: '您善于社交，与人相处轻松自然，能够自如地表达自己。'
+        },
+        'impulse': {
+            high: '您有时难以控制冲动，易怒或行为反复，可练习自我觉察和冷静技巧，增强自控力。',
+            mid: '您偶尔会表现出冲动行为，但基本在可控范围内，注意情绪管理即可。',
+            low: '您自控能力较强，情绪和行为较为稳定，不易冲动行事。'
+        },
+        'health_anxiety': {
+            high: '您对健康状况过度关注，可能频繁检查身体或担心患病，建议科学看待健康，避免过度焦虑。',
+            mid: '您对健康有一定担忧，适度关注是正常的，但别让它占据太多精力。',
+            low: '您对健康保持平常心，不会过度忧虑，具有良好的健康心态。'
+        }
+    };
+
+    html += '<div style="margin-top:20px;">';
+    for (var d = 0; d < dims.length; d++) {
+        var dim = dims[d];
+        var score = scores[dim];
+        var max = maxScores[dim];
+        var ratio = max > 0 ? (score / max) : 0;
+        var level = ratio >= 0.7 ? '高风险' : (ratio >= 0.4 ? '中等' : '正常');
+        var desc = ratio >= 0.7 ? dimDesc[dim].high : (ratio >= 0.4 ? dimDesc[dim].mid : dimDesc[dim].low);
+        var barColor = ratio >= 0.7 ? '#e74c3c' : (ratio >= 0.4 ? '#f39c12' : '#27ae60');
+
+        html += '<div style="margin-bottom:16px;">';
+        html += '<div style="font-weight:700; margin-bottom:4px;">' + dimNames[dim] + '：' + level + '（得分率 ' + (ratio*100).toFixed(0) + '%）</div>';
+        html += '<div style="height:8px; background:#e0dcd5; border-radius:4px; margin:4px 0;"><div style="height:100%; width:' + (ratio*100) + '%; background:' + barColor + '; border-radius:4px;"></div></div>';
+        html += '<div style="font-size:0.9rem; color:#5c5347;">' + desc + '</div>';
+        html += '</div>';
+    }
+    html += '</div>';
+
+    var highCount = 0;
+    for (var d2 = 0; d2 < dims.length; d2++) {
+        var r = maxScores[dims[d2]] > 0 ? (scores[dims[d2]] / maxScores[dims[d2]]) : 0;
+        if (r >= 0.7) highCount++;
+    }
+    html += '<div style="margin-top:20px; padding:14px; background:#eaf2f8; border-radius:8px;">';
+    html += '<strong>💡 综合建议：</strong><br>';
+    if (highCount >= 3) {
+        html += '您的多个心理维度得分较高，提示当前可能处于较高压力水平，建议您关注自身心理健康，必要时可寻求专业心理咨询或评估。';
+    } else if (highCount >= 1) {
+        html += '您在部分维度上得分偏高，可针对相应方面进行调整，保持良好生活习惯，适当减压。';
+    } else {
+        html += '您目前心理状态整体良好，请继续保持积极乐观的生活态度。';
+    }
+    html += '</div>';
+    html += '<div style="text-align:right; font-size:0.85rem; color:#5c5347; margin-top:12px;">⏱ 提交用时：' + timeTaken + ' 秒</div>';
+
+    var resultArea = document.getElementById('resultArea');
+    resultArea.innerHTML = html;
+    resultArea.style.display = 'block';
+    window.scrollTo({ top: resultArea.offsetTop - 20, behavior: 'smooth' });
+});
+
+// 初始化
+renderQuestions();
+updateProgress();
+</script>
+</body>
+</html>
